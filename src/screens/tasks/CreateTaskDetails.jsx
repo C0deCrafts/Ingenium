@@ -1,5 +1,6 @@
 import {Text, View, StyleSheet, SafeAreaView} from "react-native";
 
+
 function CreateTaskDetails(){
 
     return (

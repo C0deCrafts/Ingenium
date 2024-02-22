@@ -2,7 +2,6 @@ import {Text, View, StyleSheet, SafeAreaView} from "react-native";
 import CustomBackButton from "../../components/CustomBackButton";
 import {useNavigation} from "@react-navigation/native";
 import {COLOR} from "../../constants/styleSettings";
-
 function Inbox(){
     const navigation = useNavigation(); // useNavigation-Hook verwenden
 

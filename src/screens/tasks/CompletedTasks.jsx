@@ -1,5 +1,4 @@
 import {Text, View, StyleSheet, SafeAreaView} from "react-native";
-
 function CompletedTasks(){
 
     return (

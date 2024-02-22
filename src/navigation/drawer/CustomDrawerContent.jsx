@@ -1,4 +1,3 @@
-import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, SafeAreaView, View, Image, Linking} from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useTabContext } from "../context/TabContext";
@@ -32,7 +31,7 @@ const CustomDrawerContent = ({navigation}) => {
                         />
                         <Text style={currentRoute === 'Dashboard_Tab' ? styles.drawerItemTextSelected : styles.drawerItemText}>Dashboard</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Timetable_Tab')}
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Timetable_Tab','Timetable_Stack')}
                                       style={currentRoute === 'Timetable_Tab' ? styles.drawerItemsSelected : styles.drawerItems}
                     >
                         <Icon name={currentRoute === 'Timetable_Tab' ? ICONS.TIMETABLE.ACTIVE : ICONS.TIMETABLE.INACTIVE}
@@ -40,7 +39,7 @@ const CustomDrawerContent = ({navigation}) => {
                               color={COLOR.ICONCOLOR_INACTIVE}/>
                         <Text style={currentRoute === 'Timetable_Tab' ? styles.drawerItemTextSelected : styles.drawerItemText}>Stundenplan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab')}
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab','Task_Stack')}
                                       style={currentRoute === 'Notification_Tab' ? styles.drawerItemsSelected : styles.drawerItems}
                     >
                         <Icon name={currentRoute === 'Notification_Tab' ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}

@@ -1,6 +1,6 @@
 import {Text, View, StyleSheet, SafeAreaView} from "react-native";
-
 function CreateList(){
+
 
     return (
         <SafeAreaView  style={styles.container}>

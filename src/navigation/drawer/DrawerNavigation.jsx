@@ -2,16 +2,19 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Contact, ProfileSettings, Settings} from "../../screens";
 import BottomTabNavigator from "../tab/BottomTabNavigator";
 import CustomDrawerContent from "./CustomDrawerContent";
+import {useTabContext} from "../context/TabContext";
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
+    const {drawerEnabled, setDrawerEnabled} = useTabContext();
 
     return (
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props}/>}
-                          screenOptions={{
+                          screenOptions={() => ({
                               headerShown: false, // disable default header
-                          }}
+                              swipeEnabled: drawerEnabled,
+                          })}
         >
             {/* Wenn keine spezifischen Aktionen bei Fokus benötigt werden, können die listeners entfernt werden */}
             <Drawer.Screen name="Dashboard_Drawer" component={BottomTabNavigator} />
