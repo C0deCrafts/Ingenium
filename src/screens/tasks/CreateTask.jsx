@@ -8,7 +8,7 @@ function CreateTask({navigation}){
             <View style={styles.content}>
                 <Text>Create Task</Text>
             </View>
-            <CustomButton title={"Create Task Details"} onPressFunction={()=>{navigation.navigate("CreateTaskDetails_Screen")}}/>
+            <CustomButton title={"Create Task Details"} onPressFunction={()=>{navigation.push("CreateTaskDetails_Screen")}}/>
         </SafeAreaView>
     )
 }

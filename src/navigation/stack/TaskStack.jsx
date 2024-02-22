@@ -1,18 +1,14 @@
 import {createStackNavigator} from "@react-navigation/stack";
 import {
     CompletedTasks,
-    CreateList,
-    Inbox,
+    CreateList, CreateTask, CreateTaskDetails, EditTask, EditTaskDetails,
+    Inbox, ListTasks,
     TasksMain
 } from "../../screens";
-import {useTabContext} from "../context/TabContext";
-import {useCallback} from "react";
-import {useFocusEffect} from "@react-navigation/native";
-import CreateTaskStack from "./CreateTaskStack";
-import ListTasksStack from "./ListTasksStack";
 
 const Stack = createStackNavigator();
-function TaskStack({ navigation }){
+
+function TaskStack({navigation}) {
     /*const { currentRoute } = useTabContext();
 
     useFocusEffect(
@@ -29,10 +25,13 @@ function TaskStack({ navigation }){
                              headerShown: false
                          }}
         >
-            <Stack.Screen name="Task_Stack" component={TasksMain} />
+            <Stack.Screen name="Task_Stack" component={TasksMain}/>
             <Stack.Screen name="Inbox_Stack" component={Inbox}/>
-            <Stack.Screen name="ListTasks_Stack" component={ListTasksStack}/>
-            <Stack.Screen name="CreateTask_Stack" component={CreateTaskStack}/>
+            <Stack.Screen name="ListTasks_Screen" component={ListTasks}/>
+            <Stack.Screen name="EditTask_Screen" component={EditTask}/>
+            <Stack.Screen name="EditTaskDetails_Screen" component={EditTaskDetails}/>
+            <Stack.Screen name="CreateTask_Screen" component={CreateTask}/>
+            <Stack.Screen name="CreateTaskDetails_Screen" component={CreateTaskDetails}/>
             <Stack.Screen name="CreateList_Stack" component={CreateList}/>
             <Stack.Screen name="CompletedTasks_Stack" component={CompletedTasks}/>
         </Stack.Navigator>

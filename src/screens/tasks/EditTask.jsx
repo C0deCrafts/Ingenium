@@ -1,19 +1,19 @@
 import {Text, View, StyleSheet, SafeAreaView} from "react-native";
 import CustomButton from "../../components/CustomButton";
 
-function ListTasks({navigation}){
+function EditTask({navigation}){
 
     return (
         <SafeAreaView  style={styles.container}>
             <View style={styles.content}>
-                <Text>List Tasks</Text>
+                <Text>EditTask</Text>
             </View>
-            <CustomButton title={"Punkte im falschen Screen, ist dann im Overlay"} onPressFunction={()=>{navigation.push("EditTask_Screen")}}/>
+            <CustomButton title={"Details"} onPressFunction={()=>{navigation.push("EditTaskDetails_Screen")}} />
         </SafeAreaView>
     )
 }
 
-export default ListTasks;
+export default EditTask;
 
 const styles = StyleSheet.create({
     container: {

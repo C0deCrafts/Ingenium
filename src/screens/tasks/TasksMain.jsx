@@ -10,11 +10,11 @@ function TasksMain({navigation}){
             <View style={styles.content}>
                 <Text>Aufgaben</Text>
             </View>
-            <CustomButton title={"List tasks"} onPressFunction={()=>{navigation.navigate("ListTasks_Stack")}}/>
-            <CustomButton title={"Inbox Stack"} onPressFunction={()=>{navigation.navigate("Inbox_Stack")}}/>
-            <CustomButton title={"Completed Task"} onPressFunction={()=>{navigation.navigate("CompletedTasks_Stack")}}/>
-            <CustomButton title={"CreateTask Stack"} onPressFunction={()=>{navigation.navigate("CreateTask_Stack")}}/>
-            <CustomButton title={"Create List"} onPressFunction={()=>{navigation.navigate("CreateList_Stack")}}/>
+            <CustomButton title={"Alle"} onPressFunction={()=>{navigation.navigate("ListTasks_Screen")}}/>
+            <CustomButton title={"Inbox"} onPressFunction={()=>{navigation.navigate("Inbox_Stack")}}/>
+            <CustomButton title={"Erledigt"} onPressFunction={()=>{navigation.navigate("CompletedTasks_Stack")}}/>
+            <CustomButton title={"Neue Aufgabe"} onPressFunction={()=>{navigation.navigate("CreateTask_Screen")}}/>
+            <CustomButton title={"Neue Liste"} onPressFunction={()=>{navigation.navigate("CreateList_Stack")}}/>
         </SafeAreaView>
     )
 }

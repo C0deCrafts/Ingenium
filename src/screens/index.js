@@ -5,6 +5,7 @@ export { default as Timetable } from "./timetable/Timetable";
 export { default as Dashboard } from "./dashboard/Dashboard";
 export { default as Inbox } from "./tasks/Inbox";
 export { default as ListTasks } from "./tasks/ListTasks";
+export { default as EditTask } from "./tasks/EditTask";
 export { default as EditTaskDetails } from "./tasks/EditTaskDetails";
 export { default as CreateTask } from "./tasks/CreateTask";
 export { default as CreateList } from "./tasks/CreateList";
