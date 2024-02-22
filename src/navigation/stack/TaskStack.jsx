@@ -13,7 +13,7 @@ import ListTasksStack from "./ListTasksStack";
 
 const Stack = createStackNavigator();
 function TaskStack({ navigation }){
-    const { currentRoute } = useTabContext();
+    /*const { currentRoute } = useTabContext();
 
     useFocusEffect(
         useCallback(() => {
@@ -21,7 +21,7 @@ function TaskStack({ navigation }){
                 navigation.navigate('Inbox_Stack');
             }
         }, [currentRoute, navigation])
-    );
+    );*/
     //console.log(currentRoute + "ist nicht TAB sondern Drawer also Taskstack")
     return (
         <Stack.Navigator initialRouteName="Task_Stack"
