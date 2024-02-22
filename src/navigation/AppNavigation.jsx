@@ -7,7 +7,7 @@ import LoginNavigation from "./LoginNavigation";
 
 function AppNavigation() {
     // Hier kann die Logik für die Überprüfung des Benutzer-Login-Status eingefügt werden
-    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const [userLoggedIn, setUserLoggedIn] = useState(true);
 
     return(
         <TabProvider>

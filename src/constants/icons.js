@@ -43,7 +43,7 @@
  * @property {Object} SETTINGS - Settings icon
  * @property {string} SETTINGS.ACTIVE - Active settings icon
  * @property {string} SETTINGS.INACTIVE - Inactive settings icon
- * @property {Object} TASKS - Tasks icon
+ * @property {Object} TASKS - TasksMain icon
  * @property {string} TASKS.ACTIVE - Active tasks icon
  * @property {string} TASKS.INACTIVE - Inactive tasks icon
  * @property {Object} TIMETABLE - Timetable icon
