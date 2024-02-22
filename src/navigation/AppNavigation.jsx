@@ -2,7 +2,6 @@ import {NavigationContainer} from "@react-navigation/native";
 import {navigationRef, TabProvider} from "./context/TabContext";
 import {StatusBar} from "react-native";
 import DrawerNavigation from "./drawer/DrawerNavigation";
-import RootNavigator from "./LoginNavigation";
 import {useState} from "react";
 import LoginNavigation from "./LoginNavigation";
 
