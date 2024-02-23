@@ -5,7 +5,7 @@ import TimetableStack from "../stack/TimetableStack";
 import {useTabContext} from "../context/TabContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
