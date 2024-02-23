@@ -1,18 +1,23 @@
 import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import {ICONS as ICON} from "../constants/icons";
 import Icon from "./Icon";
-import {COLOR, SIZES} from "../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
+import {useTheme} from "../constants/context/ThemeContext";
 
 function CustomBackButton({onPress}) {
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
+
+
     return (
         <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.titleContainer} onPress={onPress}>
                 <Icon name={ICON.BACK.ACTIVE}
                       size={SIZES.BACK_BUTTON_ICON_SIZE}
-                      color={COLOR.ICONCOLOR}
+                      color={isDarkMode ? DARKMODE.ICONCOLOR : LIGHTMODE.ICONCOLOR}
                 />
                 <View>
-                    <Text style={styles.headerTitle}>Zurück</Text>
+                    <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>Zurück</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -30,9 +35,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
     },
-    headerTitle: {
+    headerTitleLight: {
         fontSize: SIZES.BACK_HEADER_FONTSIZE,
-        color: COLOR.DRAWER_HEADER_LABEL_COLOR,
+        color: LIGHTMODE.DRAWER_HEADER_LABEL_COLOR,
+        marginLeft: 5,
+    },
+    headerTitleDark: {
+        fontSize: SIZES.BACK_HEADER_FONTSIZE,
+        color: DARKMODE.DRAWER_HEADER_LABEL_COLOR,
         marginLeft: 5,
     }
 

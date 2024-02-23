@@ -5,7 +5,8 @@ import TimetableStack from "../stack/TimetableStack";
 import {useTabContext} from "../context/TabContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {COLOR, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {useTheme} from "../../constants/context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +43,9 @@ const Tab = createBottomTabNavigator();
  * - `tabBarIcon`: Renders an icon for the tab.
  */
 function ButtonTabNavigator() {
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
+
     const {navigateAndSetSelectedTab} = useTabContext();
 
     const badge = 3; //notification symbol + wert
@@ -50,7 +54,7 @@ function ButtonTabNavigator() {
         <Tab.Navigator initialRouteName="Dashboard_Tab" screenOptions={{
             headerShown: false,
             tabBarStyle: {
-                backgroundColor: COLOR.BACKGROUNDCOLOR,
+                backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,
                 borderTopWidth: 0, //border IOS
                 elevation: 0, //border Android
                 height: SIZES.BOTTOM_TAB_BAR_HEIGHT
@@ -58,8 +62,8 @@ function ButtonTabNavigator() {
             tabBarLabelStyle: {
               fontSize: SIZES.BOTTOM_TAB_LABEL_SIZE,
             },
-            tabBarActiveTintColor: COLOR.ICONCOLOR_ACTIVE,
-            tabBarInactiveTintColor: COLOR.ICONCOLOR_INACTIVE,
+            tabBarActiveTintColor: isDarkMode ? DARKMODE.ICONCOLOR_ACTIVE : LIGHTMODE.ICONCOLOR_ACTIVE,
+            tabBarInactiveTintColor: isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE,
         }}>
             <Tab.Screen name="Timetable_Tab"
                         component={TimetableStack}
