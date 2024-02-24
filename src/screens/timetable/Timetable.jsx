@@ -1,5 +1,4 @@
 import {Text, View, StyleSheet} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
