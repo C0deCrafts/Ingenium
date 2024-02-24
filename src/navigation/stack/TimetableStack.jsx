@@ -7,7 +7,9 @@ function TimetableStack(){
     return (
         <Stack.Navigator initialRouteName="Timetable_Stack"
                          screenOptions={{
-                             headerShown: false
+                             headerShown: false,
+                             animationEnabled: false,
+                             gestureEnabled: true
                          }}
         >
             <Stack.Screen name="Timetable_Stack" component={Timetable} />

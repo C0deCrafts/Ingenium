@@ -1,23 +1,31 @@
 import {Text, View, StyleSheet} from "react-native";
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import CustomButton from "../../components/CustomButton";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
+import CustomBackButton from "../../components/CustomBackButton";
 
-function Dashboard({navigation}){
+
+function ListTasks({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const handleGoBack = () => {
+        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+    };
+
+
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <CustomDrawerHeader onPress={()=> navigation.openDrawer()}/>
+            <CustomBackButton onPress={handleGoBack}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
-                <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
+                <Text style={isDarkMode ? styles.textDark : styles.textLight}>List Tasks</Text>
             </View>
+            <CustomButton title={"Punkte im falschen Screen, ist dann im Overlay"} onPressFunction={()=>{navigation.push("EditTask_Screen")}}/>
         </View>
     )
 }
 
-export default Dashboard;
+export default ListTasks;
 
 const styles = StyleSheet.create({
     containerLight: {

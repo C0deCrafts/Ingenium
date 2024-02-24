@@ -1,100 +1,137 @@
-import React from 'react';
-import {Text, TouchableOpacity, StyleSheet, SafeAreaView, View, Image, Linking} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
+import * as WebBrowser from "expo-web-browser"
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useTabContext } from "../context/TabContext";
-import {COLOR, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
+import {useTheme} from "../../constants/context/ThemeContext";
 
 const CustomDrawerContent = ({navigation}) => {
+    const insets = useSafeAreaInsets();
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
+
     const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
+    const styles = getStyles(insets);
 
     return (
-        <SafeAreaView style={styles.drawerContainer}>
+        <View style={isDarkMode ? styles.drawerContainerDark : styles.drawerContainerLight}>
             <View style={styles.drawerHeader}>
                 <TouchableOpacity onPress={navigation.closeDrawer}>
                     <Icon name={ICONS.CLOSE.INACTIVE}
                           size={SIZES.CLOSE_BUTTON_ICON_SIZE}
-                          color={COLOR.ICONCOLOR_INACTIVE}
+                          color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}
                     />
                 </TouchableOpacity>
             </View>
             <DrawerContentScrollView contentContainerStyle={styles.drawerContent}>
                 {/* benutzerdefinierten Drawer-Items zur navigation zwischen Drawer und Tab */}
-                <View style={styles.drawerSection}>
+                <View style={isDarkMode ? styles.drawerSectionDark : styles.drawerSectionLight}>
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Dashboard_Tab')}
-                                      style={currentRoute === 'Dashboard_Tab' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'Dashboard_Tab'
+                                          ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                          : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
                         <Icon name={currentRoute === 'Dashboard_Tab' ? ICONS.DASHBOARD.ACTIVE : ICONS.DASHBOARD.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}
 
                         />
-                        <Text style={currentRoute === 'Dashboard_Tab' ? styles.drawerItemTextSelected : styles.drawerItemText}>Dashboard</Text>
+                        <Text style={currentRoute === 'Dashboard_Tab' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Dashboard</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Timetable_Tab')}
-                                      style={currentRoute === 'Timetable_Tab' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'Timetable_Tab'
+                                          ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                          : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
                         <Icon name={currentRoute === 'Timetable_Tab' ? ICONS.TIMETABLE.ACTIVE : ICONS.TIMETABLE.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Timetable_Tab' ? styles.drawerItemTextSelected : styles.drawerItemText}>Stundenplan</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={currentRoute === 'Timetable_Tab' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Stundenplan</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab')}
-                                      style={currentRoute === 'Notification_Tab' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'Notification_Tab'
+                                          ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                          : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
-                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}
+                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Notification_Tab' ? styles.drawerItemTextSelected : styles.drawerItemText}>Aufgaben</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={currentRoute === 'Notification_Tab' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Aufgaben</Text>
                     </TouchableOpacity>
 
                     {/* Drawer-Items zur navigation zu einzelnen screens */}
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('ProfileSettings_Drawer')}
-                                      style={currentRoute === 'ProfileSettings_Drawer' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'ProfileSettings_Drawer'
+                                              ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                              : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
                         <Icon name={currentRoute === 'ProfileSettings_Drawer' ? ICONS.ACCOUNT_SETTINGS.ACTIVE : ICONS.ACCOUNT_SETTINGS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'ProfileSettings_Drawer' ? styles.drawerItemTextSelected : styles.drawerItemText}>Profil bearbeiten</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={currentRoute === 'ProfileSettings_Drawer' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Profil bearbeiten</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Settings_Drawer')}
-                                      style={currentRoute === 'Settings_Drawer' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'Settings_Drawer'
+                                              ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                              : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
                         <Icon name={currentRoute === 'Settings_Drawer' ? ICONS.SETTINGS.ACTIVE : ICONS.SETTINGS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Settings_Drawer' ? styles.drawerItemTextSelected : styles.drawerItemText}>Einstellungen</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={currentRoute === 'Settings_Drawer' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Einstellungen</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.drawerSection}>
-                    <TouchableOpacity onPress={() => Linking.openURL("https://ilias.ingenium.co.at/")} style={styles.drawerItems}>
+                <View style={isDarkMode ? styles.drawerSectionDark : styles.drawerSectionLight}>
+                    <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync("https://ilias.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LINK.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={styles.drawerItemText}>ILIAS</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>ILIAS</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Linking.openURL("https://www.ingenium.co.at/")} style={styles.drawerItems}>
+                    <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync("https://www.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LINK.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={styles.drawerItemText}>Ingenium Education</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Ingenium Education</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.drawerSection}>
+                <View style={isDarkMode ? styles.drawerSectionDark : styles.drawerSectionLight}>
                     <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Contact_Drawer')}
-                                      style={currentRoute === 'Contact_Drawer' ? styles.drawerItemsSelected : styles.drawerItems}
+                                      style={currentRoute === 'Contact_Drawer'
+                                          ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
+                                          : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
+                    }
                     >
                         <Icon name={currentRoute === 'Contact_Drawer' ? ICONS.CONTACT.ACTIVE : ICONS.CONTACT.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Contact_Drawer' ? styles.drawerItemTextSelected : styles.drawerItemText}>Kontakt</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={currentRoute === 'Contact_Drawer' ?
+                            isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
+                            isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Kontakt</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}} style={styles.drawerItems}>
+                    <TouchableOpacity onPress={() => {}} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LOGOUT.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
-                              color={COLOR.ICONCOLOR_INACTIVE}/>
-                        <Text style={styles.drawerItemText}>Abmelden</Text>
+                              color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
+                        <Text style={isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Abmelden</Text>
                     </TouchableOpacity>
                 </View>
             </DrawerContentScrollView>
@@ -105,58 +142,98 @@ const CustomDrawerContent = ({navigation}) => {
                 />
             </View>
 
-        </SafeAreaView>
+        </View>
     );
 };
 
 export default CustomDrawerContent;
 
-const styles = StyleSheet.create({
-    drawerContainer: {
-        flex: 1,
-        backgroundColor: COLOR.BACKGROUNDCOLOR,
-    },
-    drawerHeader: {
-        paddingTop: 35,
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-    },
-    drawerContent: {
-        flex: 1,
-        //justifyContent: "center",
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-    },
-    drawerSection: {
-        backgroundColor: COLOR.BOX_COLOR,
-        marginBottom: 30,
-        borderRadius: SIZES.BORDER_RADIUS
-    },
-    drawerItems: {
-        flexDirection: "row",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: COLOR.BACKGROUNDCOLOR
-    },
-    drawerItemsSelected: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderLeftWidth: 5,
-        borderLeftColor: COLOR.ICONCOLOR_ACTIVE,
-        borderBottomWidth: 1,
-        borderBottomColor: COLOR.BACKGROUNDCOLOR
-    },
-    drawerItemText: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-    },
-    drawerItemTextSelected: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-    },
-    footer: {
-        alignItems: 'center',
-        paddingBottom: 35
-    }
-});
+function getStyles(insets) {
+    return StyleSheet.create({
+        drawerContainerLight: {
+            flex: 1,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top + 30,
+        },
+        drawerContainerDark: {
+            flex: 1,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top + 30,
+        },
+        drawerHeader: {
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        },
+        drawerContent: {
+            flex: 1,
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        },
+        drawerSectionLight: {
+            backgroundColor: LIGHTMODE.BOX_COLOR,
+            marginBottom: 30,
+            borderRadius: SIZES.BORDER_RADIUS
+        },
+        drawerSectionDark: {
+            backgroundColor: DARKMODE.BOX_COLOR,
+            marginBottom: 30,
+            borderRadius: SIZES.BORDER_RADIUS
+        },
+        drawerItemsLight: {
+            flexDirection: "row",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsDark: {
+            flexDirection: "row",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: DARKMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsSelectedLight: {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderLeftWidth: 5,
+            borderLeftColor: LIGHTMODE.ICONCOLOR_ACTIVE,
+            borderBottomWidth: 1,
+            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsSelectedDark: {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderLeftWidth: 5,
+            borderLeftColor: DARKMODE.ICONCOLOR_ACTIVE,
+            borderBottomWidth: 1,
+            borderBottomColor: DARKMODE.BACKGROUNDCOLOR
+        },
+        drawerItemTextLight: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: LIGHTMODE.TEXT_COLOR
+        },
+        drawerItemTextDark: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: DARKMODE.TEXT_COLOR
+        },
+        drawerItemTextSelectedLight: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: LIGHTMODE.TEXT_COLOR
+        },
+        drawerItemTextSelectedDark: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: DARKMODE.TEXT_COLOR
+        },
+        footer: {
+            alignItems: 'center',
+            paddingBottom: 35
+        }
+    })
+}

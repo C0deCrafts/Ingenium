@@ -1,23 +1,31 @@
 import {Text, View, StyleSheet} from "react-native";
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
-import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
+import CustomButton from "../../components/CustomButton";
 import {useTheme} from "../../constants/context/ThemeContext";
+import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
+import CustomBackButton from "../../components/CustomBackButton";
 
-function Dashboard({navigation}){
+
+function EditTask({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const handleGoBack = () => {
+        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+    };
+
+
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <CustomDrawerHeader onPress={()=> navigation.openDrawer()}/>
+            <CustomBackButton onPress={handleGoBack}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
-                <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
+                <Text style={isDarkMode ? styles.textDark : styles.textLight}>EditTask</Text>
             </View>
+            <CustomButton title={"Details"} onPressFunction={()=>{navigation.push("EditTaskDetails_Screen")}} />
         </View>
     )
 }
 
-export default Dashboard;
+export default EditTask;
 
 const styles = StyleSheet.create({
     containerLight: {

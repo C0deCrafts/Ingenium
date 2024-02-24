@@ -4,14 +4,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export const LIGHTMODE = {
-
-}
-
-export const DARKMODE = {
-
-}
-
-export const COLOR = {
     BACKGROUNDCOLOR_OLD: "#F9F9F9",
     BACKGROUNDCOLOR: "#F2F2F2",
     BUTTONCOLOR: "#009FE3",
@@ -30,9 +22,40 @@ export const COLOR = {
     INPUT_BOX_COLOR: "#FFFFFF",
 
     TEXTINPUT_COLOR: "#000000",
+    TEXT_COLOR: "#000000",
     CURSOR_COLOR: "#009FE3",
 
     PLACEHOLDER_TEXTCOLOR: "rgba(99 108 112 / 0.7)",
+}
+
+export const DARKMODE = {
+    BACKGROUNDCOLOR_OLD: "#020302",
+    BACKGROUNDCOLOR: "#242426",
+    BUTTONCOLOR: "#009FE3",
+    BUTTONLABEL: "#FFFFFF",
+
+    BOX_COLOR: "#1C1C1E",
+
+    BORDER_COLOR: "#242426",
+
+    DRAWER_HEADER_LABEL_COLOR: "#FFFFFF",
+
+    ICONCOLOR: "#FFFFFF",
+    ICONCOLOR_ACTIVE: "#009FE3",
+    ICONCOLOR_INACTIVE: "#FFFFFF",
+
+    INPUT_BOX_COLOR: "#343434",
+
+    TEXTINPUT_COLOR: "#FFFFFF",
+    TEXT_COLOR: "#FFFFFF",
+    CURSOR_COLOR: "#009FE3",
+
+    PLACEHOLDER_TEXTCOLOR: "rgba(99 108 112 / 0.7)",
+}
+
+export const COLOR = {
+    BUTTONCOLOR: "#009FE3",
+    BUTTONLABEL: "#FFFFFF",
 }
 
 export const SIZES = {

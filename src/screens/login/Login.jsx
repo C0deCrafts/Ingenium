@@ -1,7 +1,10 @@
-import {Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Linking} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import * as Linking from "expo-linking"
 import CustomButton from "../../components/CustomButton";
-import {COLOR, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomInputField from "../../components/CustumInputField";
+import {useTheme} from "../../constants/context/ThemeContext";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -10,6 +13,12 @@ Bildschirm navigieren. Es stellt praktisch eine Schnittstelle bereit, um zwische
 zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
 */
 function Login({navigation}){
+    const insets = useSafeAreaInsets();
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
+
+    const styles = getStyles(insets);
+
     const forgotPassword = () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
         const body = "Sehr geehrtes Support-Team,\n" +
@@ -26,10 +35,10 @@ function Login({navigation}){
     }
 
     return (
-        <SafeAreaView>
+        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <View style={styles.container}>
-                <Text>Willkommen an Board</Text>
-                <Text>Nutze deine Ilias Zugangsdaten für den Login</Text>
+                <Text style={isDarkMode ? styles.textDark : styles.textLight}>Willkommen an Board</Text>
+                <Text style={isDarkMode ? styles.textDark : styles.textLight}>Nutze deine Ilias Zugangsdaten für den Login</Text>
             </View>
             <View>
                 <CustomInputField placeholder="Benutzername" keyboardType={"default"} maxTextInputLength={25}/>
@@ -45,38 +54,47 @@ function Login({navigation}){
             <CustomButton title={"Login"} onPressFunction={()=> console.log("Pressed")}/>
 
             <View style={[styles.container, styles.footer]}>
-                <Text>Keinen Account?</Text>
+                <Text style={isDarkMode ? styles.textDark : styles.textLight}>Keinen Account?</Text>
                 <TouchableOpacity onPress={()=>{navigation.navigate("NoAccount")}}>
                     <Text style={styles.textButton}>Kontaktiere Ingenium</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </View>
 
     )
 }
 
 export default Login;
 
-const styles = StyleSheet.create({
-    container: {
-        //flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    textInput: {
-        fontSize: 42,
-        color: "black",
-        borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: COLOR.BORDER_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        backgroundColor: COLOR.INPUT_BOX_COLOR,
-    },
-    textButton: {
-        fontWeight: SIZES.BUTTON_LABEL_WEIGHT,
-        color: COLOR.BUTTONCOLOR,
-        marginLeft: 5,
-    },
-    footer: {
-        flexDirection: "row"
-    }
-})
+function getStyles(insets) {
+    return StyleSheet.create({
+        containerLight: {
+            flex: 1,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top,
+        },
+        containerDark: {
+            flex: 1,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top,
+        },
+        container: {
+            justifyContent: "center",
+            alignItems: "center"
+        },
+        textLight: {
+            color: LIGHTMODE.TEXT_COLOR,
+        },
+        textDark: {
+            color: DARKMODE.TEXT_COLOR,
+        },
+        textButton: {
+            fontWeight: SIZES.BUTTON_LABEL_WEIGHT,
+            color: COLOR.BUTTONCOLOR,
+            marginLeft: 5,
+        },
+        footer: {
+            flexDirection: "row"
+        }
+    })
+}

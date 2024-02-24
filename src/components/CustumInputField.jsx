@@ -1,17 +1,21 @@
 import {StyleSheet, TextInput, View} from "react-native";
-import {COLOR, SIZES} from "../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
+import {useTheme} from "../constants/context/ThemeContext";
 
 function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword}){
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
+
     return (
-        <View style={styles.container}>
+        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <TextInput
-                style={styles.input}
+                style={isDarkMode ? styles.inputDark : styles.inputLight}
                 placeholder={placeholder}
                 keyboardType={keyboardType}
                 secureTextEntry={isPassword}
                 maxLength={maxTextInputLength}
-                placeholderTextColor={COLOR.PLACEHOLDER_TEXTCOLOR}
-                selectionColor={COLOR.CURSOR_COLOR}
+                placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
+                selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
             />
         </View>
     )
@@ -20,18 +24,32 @@ function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPass
 export default CustomInputField;
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLOR.INPUT_BOX_COLOR,
+    containerLight: {
+        backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
         marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
         borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: COLOR.BORDER_COLOR,
+        borderColor: LIGHTMODE.BORDER_COLOR,
         justifyContent: "center",
         height: 50,
     },
-    input: {
+    containerDark: {
+        backgroundColor: DARKMODE.INPUT_BOX_COLOR,
+        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+        borderRadius: SIZES.BORDER_RADIUS,
+        borderWidth: SIZES.BORDER_WIDTH,
+        borderColor: DARKMODE.BORDER_COLOR,
+        justifyContent: "center",
+        height: 50,
+    },
+    inputLight: {
         fontSize: SIZES.TEXTINPUT_SIZE,
-        color: COLOR.TEXTINPUT_COLOR,
+        color: LIGHTMODE.TEXTINPUT_COLOR,
+        textAlign: "center",
+    },
+    inputDark: {
+        fontSize: SIZES.TEXTINPUT_SIZE,
+        color: DARKMODE.TEXTINPUT_COLOR,
         textAlign: "center",
     }
 })
