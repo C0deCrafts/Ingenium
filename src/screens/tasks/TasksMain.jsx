@@ -5,6 +5,8 @@ import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
+import {useTasks} from "../../constants/context/TasksContext";
+import SquareIcon from "../../components/SquareIcon";
 
 
 function TasksMain({navigation}) {
@@ -12,21 +14,56 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
     const styles = getStyles(insets);
+    const {taskLists} = useTasks();
+
+    //extract all tasks from the taskslist
+    const allTasks = taskLists.flatMap(list => list.tasks);
+
+    //TASK PREVIEW
+    //implement a function to sort tasks by dueDate ascending for the task preview
+    //implement that the only tasks with done: true are shown
+
+    function handleTaskCompleted() {
+        //logic which sets the task property done to true
+        //removes the task from the list
+        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed")
+    }
+
 
     return (
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
                 {/*DrawerHeader for Tasks*/}
                 <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
-                {/*Current View*/}
+
+                {/*Outer View Container*/}
                 <View style={[isDarkMode ? styles.contentDark : styles.contentLight, styles.contentContainer]}>
+
                     {/*Tasks*/}
                     <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Meine
-                        Aufgaben</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
+                            Meine Aufgaben
+                        </Text>
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
+                            bounces={false}
+                            contentContainerStyle={styles.scrollViewContentContainer}
                         >
+                            {
+                                allTasks.map(task => {
+                                    return (
+                                        <View
+                                        key={task.id}
+                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
+                                        >
+                                            <Pressable onPress={handleTaskCompleted}>
+                                                <Icon name={ICONS.TASKICONS.CIRCLE} color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK} size={20}/>
+                                            </Pressable>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight]}>{task.title}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ScrollView>
                     </View>
 
@@ -36,15 +73,15 @@ function TasksMain({navigation}) {
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
                             onPress={() => navigation.navigate("CompletedTasks_Stack")}
                         >
-                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
                             <Icon name={ICONS.TASKICONS.COMPLETED} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_NORMAL}/>
+                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
                             onPress={() => navigation.navigate("Inbox_Stack")}
                         >
-                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
                             <Icon name={ICONS.TASKICONS.INBOX} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_NORMAL}/>
+                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -66,9 +103,27 @@ function TasksMain({navigation}) {
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
+                            bounces={false}
+                            contentContainerStyle={styles.scrollViewContentContainer}
                         >
+                            {
+                                taskLists.map(list => {
+                                    return (
+                                        <Pressable
+                                            //here the id of the list needs to be passed to the next Screen, so there the right list is shown
+                                            onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                            key={list.id}
+                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
+                                        >
+                                            <SquareIcon name={list.icon} color={list.color}/>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight]}>{list.title}</Text>
+                                        </Pressable>
+                                    )
+                                })
+                            }
                         </ScrollView>
                     </View>
+
                     {/*Round button for adding Lists and Tasks*/}
                     <TouchableOpacity
                         style={styles.roundButton}
@@ -143,7 +198,7 @@ function getStyles(insets)  {
             width: '45%',
             justifyContent: "center",
             rowGap: 5,
-            padding: 10
+            padding: 20
         },
         roundButton: {
             height: 60,
@@ -155,6 +210,26 @@ function getStyles(insets)  {
             position: "absolute",
             left: (windowWidth / 2) - 30,
             bottom: insets.bottom,
+        },
+        scrollViewContentContainer: {
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+        },
+        listItemContainerLight: {
+            backgroundColor: LIGHTMODE.BOX_COLOR,
+            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR,
+        },
+        listItemContainerDark: {
+            backgroundColor: DARKMODE.BOX_COLOR,
+            borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
+        },
+        listItemContainer: {
+            paddingHorizontal: 10,
+            paddingVertical: 12,
+            borderBottomWidth: 1,
+            flexDirection: "row",
+            alignItems: "center",
+            columnGap: 20
         }
     })
 }
