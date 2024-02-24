@@ -1,11 +1,11 @@
-import {Text, View, StyleSheet, TouchableOpacity, Image, Platform, Alert} from "react-native";
+import {ActionSheetIOS, Alert, Platform, Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
 import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import MapView, {Marker} from 'react-native-maps';
-import * as Linking from "expo-linking"
+import * as Linking from "expo-linking";
 
 function Contact({navigation}) {
     const {theme} = useTheme();
@@ -15,47 +15,49 @@ function Contact({navigation}) {
     const mail = "office@ingenium.co.at";
     const address = "Herrengasse 26 - Jungferngasse 1\nA- 8010 Graz"
 
+    const socialMediaLinks = {
+        facebook: "https://www.facebook.com/ingeniumeducation",
+        instagram: "https://www.instagram.com/ingenium.education/",
+        linkedIn: "https://linkedin.com/company/ingeniumeducation",
+        youtube: "https://www.youtube.com/@ingenium.education"
+    };
+
     const latitude = 47.0694893973945;
     const longitude = 15.440459310880366;
 
-    const openMapChoice = (latitude, longitude) => {
+    const openNavigationOptions = (latitude, longitude) => {
         if (Platform.OS === 'ios') {
-            // Für iOS: Benutzer wählt zwischen Apple Karten und Google Maps
-            Alert.alert(
-                "Navigation starten",
-                "Wähle eine Navigations-App:",
-                [
-                    {
-                        text: "Apple Karten",
-                        onPress: () => Linking.openURL(`http://maps.apple.com/?daddr=${latitude},${longitude}&dirflg=d`)
-                    },
-                    {
-                        text: "Google Maps",
-                        onPress: () => {
-                            const url = `comgooglemaps://?daddr=${latitude},${longitude}&directionsmode=driving`;
-                            Linking.canOpenURL(url).then((supported) => {
-                                if (supported) {
-                                    Linking.openURL(url);
-                                } else {
-                                    // Falls Google Maps nicht installiert ist, öffnen Sie die Webversion.
-                                    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`);
-                                }
-                            });
-                        }
-                    },
-                    {
-                        text: "Abbrechen",
-                        style: "cancel"
+            const options = ['Apple Karten', 'Google Maps', 'Abbrechen'];
+            const cancelButtonIndex = 2;
+
+            ActionSheetIOS.showActionSheetWithOptions(
+                {
+                    options,
+                    cancelButtonIndex,
+                },
+                (buttonIndex) => {
+                    if (buttonIndex === 0) {
+                        // Apple Karten
+                        Linking.openURL(`https://maps.apple.com/?daddr=${latitude},${longitude}&dirflg=d`);
+                    } else if (buttonIndex === 1) {
+                        // Google Maps
+                        const url = `comgooglemaps://?daddr=${latitude},${longitude}&directionsmode=driving`;
+                        Linking.canOpenURL(url).then((supported) => {
+                            if (supported) {
+                                Linking.openURL(url);
+                            } else {
+                                Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`);
+                            }
+                        });
                     }
-                ],
-                {cancelable: true}
+                }
             );
         } else {
-            // Für Android: Öffnet direkt Google Maps, da Apple Karten nicht verfügbar ist
+            // Android-spezifische Logik
             const url = `geo:${latitude},${longitude}?q=${latitude},${longitude}`;
             Linking.openURL(url);
         }
-    };
+    }
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -70,6 +72,7 @@ function Contact({navigation}) {
                     </View>
                     <View>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(`tel:${phoneNumber}`);
                         }} style={styles.contactContainerButton}>
                             <Icon name={ICONS.PHONE.ACTIVE}
                                   size={SIZES.CONTACT_ICON_SIZE}
@@ -78,6 +81,7 @@ function Contact({navigation}) {
                             <Text style={isDarkMode ? styles.textDark : styles.textLight}>{phoneNumber}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(`mailto:${mail}`);
                         }} style={styles.contactContainerButton}>
                             <Icon name={ICONS.MAIL.ACTIVE}
                                   size={SIZES.CONTACT_ICON_SIZE}
@@ -85,7 +89,9 @@ function Contact({navigation}) {
                             />
                             <Text style={isDarkMode ? styles.textDark : styles.textLight}>{mail}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => openMapChoice(latitude,longitude)}
+                        <TouchableOpacity onPress={() => {
+                            openNavigationOptions(latitude, longitude);
+                        }}
                                           style={styles.contactContainerButton}>
                             <Icon name={ICONS.NAVIGATION.ACTIVE}
                                   size={SIZES.CONTACT_ICON_SIZE}
@@ -102,32 +108,37 @@ function Contact({navigation}) {
                                      latitudeDelta: 0.01,
                                      longitudeDelta: 0.01,
                                  }}
-                        >
+                                 onPress={() => {
+                                     openNavigationOptions(latitude, longitude);
+                                 }}>
                             <Marker coordinate={{
                                 latitude: latitude,
                                 longitude: longitude,
                             }}
-                                    onPress={() => openMapChoice(latitude,longitude)}
                             />
                         </MapView>
                     </View>
                     <View style={styles.sozialMediaContent}>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(socialMediaLinks.instagram);
                         }}>
                             <Image source={require("../../assets/icons/instagram logo_icon.png")}
                                    style={{width: 50, height: 50}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(socialMediaLinks.facebook);
                         }}>
                             <Image source={require("../../assets/icons/facebook logo_icon.png")}
                                    style={{width: 50, height: 50}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(socialMediaLinks.linkedIn);
                         }}>
                             <Image source={require("../../assets/icons/linkedin logo_icon.png")}
                                    style={{width: 50, height: 50}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
+                            Linking.openURL(socialMediaLinks.youtube);
                         }}>
                             <Image source={require("../../assets/icons/video_youtube_icon.png")}
                                    style={{width: 50, height: 50}}/>
@@ -168,21 +179,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: LIGHTMODE.BOX_COLOR,
         justifyContent: "space-between",
+        borderRadius: SIZES.BORDER_RADIUS,
     },
     boxDark: {
         flex: 1,
         backgroundColor: DARKMODE.BOX_COLOR,
         justifyContent: "space-between",
+        borderRadius: SIZES.BORDER_RADIUS,
     },
     textLight: {
         color: LIGHTMODE.TEXT_COLOR,
         fontSize: SIZES.TEXT_SIZE,
-        marginLeft: 8,
+        marginLeft: 5,
+        textDecorationLine: 'underline',
     },
     textDark: {
         color: DARKMODE.TEXT_COLOR,
         fontSize: SIZES.TEXT_SIZE,
-        marginLeft: 8,
+        marginLeft: 5,
+        textDecorationLine: 'underline',
     },
     contactContainerButton: {
         flexDirection: "row",
