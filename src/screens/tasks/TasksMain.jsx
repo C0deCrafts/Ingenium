@@ -18,7 +18,11 @@ function TasksMain({navigation}) {
                 <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
                 {/*Current View*/}
                 <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
-                    <Text style={isDarkMode ? styles.textDark : styles.textLight}>Aufgaben</Text>
+                    {/*Tasks*/}
+
+                    {/*CompletedTasks and Inbox*/}
+
+                    {/*TaskLists*/}
                 </View>
             </View>
     )
