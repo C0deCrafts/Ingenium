@@ -95,8 +95,8 @@ export const ICONS = {
         INACTIVE: require('../assets/icons/logout.png'),
     },
     MAIL: {
-        ACTIVE: require('../assets/icons/mail-outline.png'),
-        INACTIVE: require('../assets/icons/mail-outline.png')
+        ACTIVE: require('../assets/icons/mail_outline.png'),
+        INACTIVE: require('../assets/icons/mail_outline.png')
     },
     NAVIGATION: {
         ACTIVE: require('../assets/icons/navigation_outline.png'),
