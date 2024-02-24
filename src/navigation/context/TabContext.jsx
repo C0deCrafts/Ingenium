@@ -13,8 +13,19 @@ export const TabProvider = ({ children }) => {
 
     const navigateAndSetSelectedTab = (routeName, stackName) => {
         setCurrentRoute(routeName); // Allgemeiner Zustand für aktuelle Route
+
         if (navigationRef.isReady()) {
-            navigationRef.navigate(routeName);
+            if (stackName) {
+                // Wenn ein stackName angegeben ist, führe einen Reset durch, um den Stack zu diesem Tab zurückzusetzen
+                navigationRef.reset({
+                    index: 0,
+                    routes: [{name: stackName, params: {screen: routeName}}],
+                });
+            } else {
+                // Wenn kein stackName angegeben ist, navigiere zur Route
+                navigationRef.navigate(routeName);
+            }
+
         }
     };
 

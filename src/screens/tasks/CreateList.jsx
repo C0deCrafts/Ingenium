@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, SafeAreaView} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 function CreateList(){
@@ -7,11 +7,11 @@ function CreateList(){
 
 
     return (
-        <SafeAreaView  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Create List</Text>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

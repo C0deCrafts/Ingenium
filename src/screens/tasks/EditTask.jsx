@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, SafeAreaView} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import CustomButton from "../../components/CustomButton";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
@@ -9,12 +9,12 @@ function EditTask({navigation}){
     const isDarkMode = theme === DARKMODE;
 
     return (
-        <SafeAreaView  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>EditTask</Text>
             </View>
             <CustomButton title={"Details"} onPressFunction={()=>{navigation.push("EditTaskDetails_Screen")}} />
-        </SafeAreaView>
+        </View>
     )
 }
 

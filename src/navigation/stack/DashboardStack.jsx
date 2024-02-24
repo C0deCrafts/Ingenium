@@ -6,7 +6,9 @@ function DashboardStack(){
     return (
         <Stack.Navigator initialRouteName="Dashboard_Stack"
                          screenOptions={{
-                             headerShown: false
+                             headerShown: false,
+                             animationEnabled: false,
+                             gestureEnabled: true
                          }}
         >
             <Stack.Screen name="Dashboard_Stack" component={Dashboard} />

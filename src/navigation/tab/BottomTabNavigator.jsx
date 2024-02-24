@@ -69,7 +69,7 @@ function ButtonTabNavigator() {
                         component={TimetableStack}
                         listeners={{
                             focus: () => {
-                                navigateAndSetSelectedTab("Timetable_Tab")
+                                navigateAndSetSelectedTab("Timetable_Tab", "Timetable_Stack")
                             },
                         }}
                         options={{
@@ -86,7 +86,7 @@ function ButtonTabNavigator() {
                         component={DashboardStack}
                         listeners={{
                             focus: () => {
-                                navigateAndSetSelectedTab("Dashboard_Tab")
+                                navigateAndSetSelectedTab("Dashboard_Tab", "Dashboard_Stack")
                             },
                         }}
                         options={{
@@ -103,7 +103,7 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                navigateAndSetSelectedTab("Notification_Tab")
+                                navigateAndSetSelectedTab("Notification_Tab", "Task_Stack")
                             },
                         }}
                         options={{

@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, SafeAreaView} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
@@ -8,12 +8,12 @@ function Dashboard({navigation}){
     const isDarkMode = theme === DARKMODE;
 
     return (
-        <SafeAreaView  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomDrawerHeader onPress={()=> navigation.openDrawer()}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

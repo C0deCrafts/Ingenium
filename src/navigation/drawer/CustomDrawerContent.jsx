@@ -1,4 +1,5 @@
-import {Text, TouchableOpacity, StyleSheet, SafeAreaView, View, Image, Linking} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View, Image, Linking} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useTabContext } from "../context/TabContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -7,13 +8,15 @@ import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../constants/context/ThemeContext";
 
 const CustomDrawerContent = ({navigation}) => {
+    const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
+    const styles = getStyles(insets);
 
     return (
-        <SafeAreaView style={isDarkMode ? styles.drawerContainerDark : styles.drawerContainerLight}>
+        <View style={isDarkMode ? styles.drawerContainerDark : styles.drawerContainerLight}>
             <View style={styles.drawerHeader}>
                 <TouchableOpacity onPress={navigation.closeDrawer}>
                     <Icon name={ICONS.CLOSE.INACTIVE}
@@ -40,7 +43,7 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Dashboard</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Timetable_Tab','Timetable_Stack')}
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Timetable_Tab')}
                                       style={currentRoute === 'Timetable_Tab'
                                           ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
                                           : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
@@ -53,7 +56,7 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Stundenplan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab','Task_Stack')}
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab')}
                                       style={currentRoute === 'Notification_Tab'
                                           ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
                                           : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
@@ -138,95 +141,98 @@ const CustomDrawerContent = ({navigation}) => {
                 />
             </View>
 
-        </SafeAreaView>
+        </View>
     );
 };
 
 export default CustomDrawerContent;
 
-const styles = StyleSheet.create({
-    drawerContainerLight: {
-        flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-    },
-    drawerContainerDark: {
-        flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-    },
-    drawerHeader: {
-        paddingTop: 35,
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-    },
-    drawerContent: {
-        flex: 1,
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-    },
-    drawerSectionLight: {
-        backgroundColor: LIGHTMODE.BOX_COLOR,
-        marginBottom: 30,
-        borderRadius: SIZES.BORDER_RADIUS
-    },
-    drawerSectionDark: {
-        backgroundColor: DARKMODE.BOX_COLOR,
-        marginBottom: 30,
-        borderRadius: SIZES.BORDER_RADIUS
-    },
-    drawerItemsLight: {
-        flexDirection: "row",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
-    },
-    drawerItemsDark: {
-        flexDirection: "row",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: DARKMODE.BACKGROUNDCOLOR
-    },
-    drawerItemsSelectedLight: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderLeftWidth: 5,
-        borderLeftColor: LIGHTMODE.ICONCOLOR_ACTIVE,
-        borderBottomWidth: 1,
-        borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
-    },
-    drawerItemsSelectedDark: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderLeftWidth: 5,
-        borderLeftColor: DARKMODE.ICONCOLOR_ACTIVE,
-        borderBottomWidth: 1,
-        borderBottomColor: DARKMODE.BACKGROUNDCOLOR
-    },
-    drawerItemTextLight: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-        color: LIGHTMODE.TEXT_COLOR
-    },
-    drawerItemTextDark: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-        color: DARKMODE.TEXT_COLOR
-    },
-    drawerItemTextSelectedLight: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-        color: LIGHTMODE.TEXT_COLOR
-    },
-    drawerItemTextSelectedDark: {
-        fontSize: SIZES.DRAWER_LABEL_SIZE,
-        marginLeft: 10,
-        color: DARKMODE.TEXT_COLOR
-    },
-    footer: {
-        alignItems: 'center',
-        paddingBottom: 35
-    }
-});
+function getStyles(insets) {
+    return StyleSheet.create({
+        drawerContainerLight: {
+            flex: 1,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top + 30,
+        },
+        drawerContainerDark: {
+            flex: 1,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingTop: insets.top + 30,
+        },
+        drawerHeader: {
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        },
+        drawerContent: {
+            flex: 1,
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        },
+        drawerSectionLight: {
+            backgroundColor: LIGHTMODE.BOX_COLOR,
+            marginBottom: 30,
+            borderRadius: SIZES.BORDER_RADIUS
+        },
+        drawerSectionDark: {
+            backgroundColor: DARKMODE.BOX_COLOR,
+            marginBottom: 30,
+            borderRadius: SIZES.BORDER_RADIUS
+        },
+        drawerItemsLight: {
+            flexDirection: "row",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsDark: {
+            flexDirection: "row",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: DARKMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsSelectedLight: {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderLeftWidth: 5,
+            borderLeftColor: LIGHTMODE.ICONCOLOR_ACTIVE,
+            borderBottomWidth: 1,
+            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR
+        },
+        drawerItemsSelectedDark: {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderLeftWidth: 5,
+            borderLeftColor: DARKMODE.ICONCOLOR_ACTIVE,
+            borderBottomWidth: 1,
+            borderBottomColor: DARKMODE.BACKGROUNDCOLOR
+        },
+        drawerItemTextLight: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: LIGHTMODE.TEXT_COLOR
+        },
+        drawerItemTextDark: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: DARKMODE.TEXT_COLOR
+        },
+        drawerItemTextSelectedLight: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: LIGHTMODE.TEXT_COLOR
+        },
+        drawerItemTextSelectedDark: {
+            fontSize: SIZES.DRAWER_LABEL_SIZE,
+            marginLeft: 10,
+            color: DARKMODE.TEXT_COLOR
+        },
+        footer: {
+            alignItems: 'center',
+            paddingBottom: 35
+        }
+    })
+}

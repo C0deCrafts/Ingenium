@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, SafeAreaView, Switch} from "react-native";
+import {Text, View, StyleSheet, Switch} from "react-native";
 import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
@@ -10,7 +10,7 @@ function Settings({navigation}){
     const isDarkMode = theme === DARKMODE;
 
     return (
-        <SafeAreaView  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomDrawerHeader title="Einstellungen" onPress={()=> navigation.openDrawer()}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Einstellungen</Text>
@@ -26,7 +26,7 @@ function Settings({navigation}){
                     />
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

@@ -9,6 +9,8 @@ import {useTabContext} from "../context/TabContext";
 
 const Stack = createStackNavigator();
 
+//inbox evt?? navigationRef.navigate('Timetable_Tab', { screen: 'Timetable_Stack' });
+
 function TaskStack() {
     const {drawerEnabled, setDrawerEnabled} = useTabContext();
 
@@ -17,7 +19,9 @@ function TaskStack() {
     return (
         <Stack.Navigator initialRouteName="Task_Stack"
                          screenOptions={{
-                             headerShown: false
+                             headerShown: false,
+                             animationEnabled: false,
+                             gestureEnabled: true
                          }}
 
         >

@@ -3,10 +3,15 @@ import Icon from "./Icon";
 import {ICONS} from "../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
 import {useTheme} from "../constants/context/ThemeContext";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 function CustomDrawerHeader({title, onPress}){
+    const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    // Rufe die getStyles-Funktion mit den aktuellen Insets auf
+    const styles = getStyles(insets);
 
     return (
         <View style={styles.headerContainer}>
@@ -25,25 +30,27 @@ function CustomDrawerHeader({title, onPress}){
 
 export default CustomDrawerHeader;
 
-const styles = StyleSheet.create({
-    headerContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-        paddingTop: SIZES.PADDING_TOP_DRAWER_HEADER_FROM_SAFEAREAVIEW,
-    },
-    titleContainer: {
-        flex: 1,
-        alignItems: "flex-end"
-    },
-    headerTitleLight: {
-        fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
-        fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
-        color: LIGHTMODE.TEXT_COLOR,
-    },
-    headerTitleDark: {
-        fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
-        fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
-        color: DARKMODE.TEXT_COLOR,
-    }
-})
+function getStyles(insets) {
+   return StyleSheet.create({
+        headerContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            paddingTop: insets.top + 30,
+        },
+        titleContainer: {
+            flex: 1,
+            alignItems: "flex-end"
+        },
+        headerTitleLight: {
+            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
+            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
+            color: LIGHTMODE.TEXT_COLOR,
+        },
+        headerTitleDark: {
+            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
+            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
+            color: DARKMODE.TEXT_COLOR,
+        }
+    })
+}

@@ -4,8 +4,8 @@ import {ThemeProvider} from "./src/constants/context/ThemeContext";
 
 export default function App() {
     return (
-        <ThemeProvider>
-            <AppNavigation/>
-        </ThemeProvider>
+            <ThemeProvider>
+                <AppNavigation/>
+            </ThemeProvider>
     );
 }

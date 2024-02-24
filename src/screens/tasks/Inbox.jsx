@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, SafeAreaView} from "react-native";
+import {Text, View, StyleSheet} from "react-native";
 import CustomBackButton from "../../components/CustomBackButton";
 import {useNavigation} from "@react-navigation/native";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
@@ -14,12 +14,12 @@ function Inbox(){
     };
 
     return (
-        <SafeAreaView  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomBackButton onPress={handleGoBack}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
