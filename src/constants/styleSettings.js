@@ -96,5 +96,10 @@ export const SIZES = {
     BACK_HEADER_FONTSIZE: 18,
 
     MARGIN_BOTTOM: windowHeight * 0.10,
-    MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05
+    MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05,
+
+    //used for styling the main content of screens
+    SCREEN_HEADER: 25,
+    SCREEN_TEXT_NORMAL: 18,
+    SCREEN_TEXT_SMALL: 16,
 }
