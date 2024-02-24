@@ -62,7 +62,7 @@ const CustomDrawerContent = ({navigation}) => {
                                           : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
                     }
                     >
-                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}
+                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
                         <Text style={currentRoute === 'Notification_Tab' ?
