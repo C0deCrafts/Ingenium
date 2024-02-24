@@ -1,4 +1,5 @@
-import {Text, TouchableOpacity, StyleSheet, View, Image, Linking} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
+import * as WebBrowser from "expo-web-browser"
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useTabContext } from "../context/TabContext";
@@ -99,13 +100,13 @@ const CustomDrawerContent = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={isDarkMode ? styles.drawerSectionDark : styles.drawerSectionLight}>
-                    <TouchableOpacity onPress={() => Linking.openURL("https://ilias.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
+                    <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync("https://ilias.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LINK.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
                         <Text style={isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>ILIAS</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Linking.openURL("https://www.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
+                    <TouchableOpacity onPress={() => WebBrowser.openBrowserAsync("https://www.ingenium.co.at/")} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LINK.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>

@@ -1,4 +1,5 @@
-import {Text, View, StyleSheet, TouchableOpacity, Linking} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import * as Linking from "expo-linking"
 import CustomButton from "../../components/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomInputField from "../../components/CustumInputField";
