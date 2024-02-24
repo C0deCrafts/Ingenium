@@ -3,40 +3,33 @@ import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import CustomButton from "../../components/CustomButton";
 import {useTheme} from "../../constants/context/ThemeContext";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 function TasksMain({navigation}) {
+    const insets = useSafeAreaInsets();
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
+    const styles = getStyles(insets);
 
     return (
-            <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-                <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
 
+            <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+                {/*DrawerHeader for Tasks*/}
+                <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
+                {/*Current View*/}
                 <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                     <Text style={isDarkMode ? styles.textDark : styles.textLight}>Aufgaben</Text>
                 </View>
-                <CustomButton title={"Alle"} onPressFunction={() => {
-                    navigation.navigate("ListTasks_Screen")
-                }}/>
-                <CustomButton title={"Inbox"} onPressFunction={() => {
-                    navigation.navigate("Inbox_Stack")
-                }}/>
-                <CustomButton title={"Erledigt"} onPressFunction={() => {
-                    navigation.navigate("CompletedTasks_Stack")
-                }}/>
-                <CustomButton title={"Neue Aufgabe"} onPressFunction={() => {
-                    navigation.navigate("CreateTask_Screen")
-                }}/>
-                <CustomButton title={"Neue Liste"} onPressFunction={() => {
-                    navigation.navigate("CreateList_Stack")
-                }}/>
             </View>
     )
 }
 
 export default TasksMain;
 
-const styles = StyleSheet.create({
+
+
+function getStyles(insets)  {
+    return StyleSheet.create({
         containerLight: {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
@@ -64,3 +57,4 @@ const styles = StyleSheet.create({
             color: DARKMODE.TEXT_COLOR,
         }
     })
+}
