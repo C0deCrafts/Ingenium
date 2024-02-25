@@ -1,23 +1,37 @@
-import {Text, View, StyleSheet, ScrollView, Dimensions, Pressable, TouchableOpacity} from "react-native";
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import {Text, View, StyleSheet, ScrollView, Dimensions, Pressable, TouchableOpacity, Modal} from "react-native";
+
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
-import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
+import {useState} from "react";
+import {useTheme} from "../../constants/context/ThemeContext";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+
+import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
+import AddTaskModal from "../../components/AddTaskModal";
+
+
+
 
 
 function TasksMain({navigation}) {
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+
+    //providing a safe area
     const insets = useSafeAreaInsets();
+    const styles = getStyles(insets);
+
+    //theme context provider
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const styles = getStyles(insets);
+
     const {taskLists} = useTasks();
 
     //extract all tasks from the taskslist
     const allTasks = taskLists.flatMap(list => list.tasks);
+
 
     //TASK PREVIEW
     //implement a function to sort tasks by dueDate ascending for the task preview
@@ -26,68 +40,93 @@ function TasksMain({navigation}) {
     function handleTaskCompleted() {
         //logic which sets the task property done to true
         //removes the task from the list
-        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed")
+        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed");
     }
 
+    function handleOpenModal() {
+        setModalIsVisible(true);
+    }
+
+    function handleCloseModal() {
+        setModalIsVisible(false);
+    }
+
+    function handleCreateList() {
+        setModalIsVisible(false);
+        navigation.navigate("CreateList_Stack");
+    }
+
+    function handleCreateTask() {
+        setModalIsVisible(false);
+        navigation.navigate("CreateTask_Screen");
+    }
 
     return (
+            <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
-                {/*DrawerHeader for Tasks*/}
-                <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
+            {/*DrawerHeader for Tasks*/}
+            <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
 
-                {/*Outer View Container*/}
-                <View style={[isDarkMode ? styles.contentDark : styles.contentLight, styles.contentContainer]}>
+            {/*Outer View Container*/}
+            <View style={[isDarkMode ? styles.contentDark : styles.contentLight, styles.contentContainer]}>
 
-                    {/*Tasks*/}
-                    <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
-                            Meine Aufgaben
-                        </Text>
-                        <ScrollView
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
-                            showsVerticalScrollIndicator={false}
-                            bounces={false}
-                            contentContainerStyle={styles.scrollViewContentContainer}
-                        >
-                            {
-                                allTasks.map(task => {
-                                    return (
-                                        <View
+                {/*Tasks*/}
+                <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
+                        Meine Aufgaben
+                    </Text>
+                    <ScrollView
+                        style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
+                        showsVerticalScrollIndicator={false}
+                        bounces={false}
+                        contentContainerStyle={styles.scrollViewContentContainer}
+                    >
+                        {
+                            allTasks.map(task => {
+                                return (
+                                    <View
                                         key={task.id}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        >
-                                            <Pressable onPress={handleTaskCompleted}>
-                                                <Icon name={ICONS.TASKICONS.CIRCLE} color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK} size={20}/>
-                                            </Pressable>
-                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight]}>{task.title}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ScrollView>
-                    </View>
+                                    >
+                                        <Pressable onPress={handleTaskCompleted}>
+                                            <Icon name={ICONS.TASKICONS.CIRCLE}
+                                                  color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
+                                                  size={20}/>
+                                        </Pressable>
+                                        <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{task.title}</Text>
+                                    </View>
+                                )
+                            })
+                        }
+                    </ScrollView>
+                </View>
 
-                    {/*CompletedTasks and Inbox*/}
-                    <View style={styles.cardButtonContainer}>
-                        <TouchableOpacity
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("CompletedTasks_Stack")}
-                        >
-                            <Icon name={ICONS.TASKICONS.COMPLETED} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_NORMAL}/>
-                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("Inbox_Stack")}
-                        >
-                            <Icon name={ICONS.TASKICONS.INBOX} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_NORMAL}/>
-                            <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
-                        </TouchableOpacity>
-                    </View>
+                {/*CompletedTasks and Inbox*/}
+                <View style={styles.cardButtonContainer}>
+                    <TouchableOpacity
+                        style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
+                        onPress={() => navigation.navigate("CompletedTasks_Stack")}
+                    >
+                        <Icon name={ICONS.TASKICONS.COMPLETED}
+                              color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                              size={SIZES.SCREEN_TEXT_NORMAL}/>
+                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
+                        onPress={() => navigation.navigate("Inbox_Stack")}
+                    >
+                        <Icon name={ICONS.TASKICONS.INBOX}
+                              color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                              size={SIZES.SCREEN_TEXT_NORMAL}/>
+                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    {/*TaskLists*/}
-                    <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-                        <View style={styles.headerWithIcon}>
+                {/*TaskLists*/}
+                <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+                    <View style={styles.headerWithIcon}>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                             Meine Listen
                         </Text>
@@ -99,40 +138,49 @@ function TasksMain({navigation}) {
                             <Icon name={ICONS.TASKICONS.MORE_OUTLINE} size={SIZES.SCREEN_HEADER}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
                         </TouchableOpacity>
-                        </View>
-                        <ScrollView
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
-                            showsVerticalScrollIndicator={false}
-                            bounces={false}
-                            contentContainerStyle={styles.scrollViewContentContainer}
-                        >
-                            {
-                                taskLists.map(list => {
-                                    return (
-                                        <Pressable
-                                            //here the id of the list needs to be passed to the next Screen, so there the right list is shown
-                                            onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
-                                            key={list.id}
-                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        >
-                                            <SquareIcon name={list.icon} color={list.color}/>
-                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight]}>{list.title}</Text>
-                                        </Pressable>
-                                    )
-                                })
-                            }
-                        </ScrollView>
                     </View>
-
-                    {/*Round button for adding Lists and Tasks*/}
-                    <TouchableOpacity
-                        style={styles.roundButton}
-                        onPress={() => console.log("Add new List / Task was pressed")}
+                    <ScrollView
+                        style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
+                        showsVerticalScrollIndicator={false}
+                        bounces={false}
+                        contentContainerStyle={styles.scrollViewContentContainer}
                     >
-                        <Icon name={ICONS.TASKICONS.ADD} size={40} color={COLOR.BUTTONLABEL} />
-                    </TouchableOpacity>
+                        {
+                            taskLists.map(list => {
+                                return (
+                                    <Pressable
+                                        //here the id of the list needs to be passed to the next Screen, so there the right list is shown
+                                        onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                        key={list.id}
+                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
+                                    >
+                                        <SquareIcon name={list.icon} color={list.color}/>
+                                        <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{list.title}</Text>
+                                    </Pressable>
+                                )
+                            })
+                        }
+                    </ScrollView>
                 </View>
+
+                {/*Round button for navigating to the AddTaskOrListScreen*/}
+                <TouchableOpacity
+                    style={styles.roundButton}
+                    onPress={handleOpenModal}
+                >
+                    <Icon name={ICONS.TASKICONS.ADD} size={40} color={COLOR.BUTTONLABEL}/>
+                </TouchableOpacity>
+
+                {modalIsVisible && <AddTaskModal
+                    visible={modalIsVisible}
+                    onCloseModal={handleCloseModal}
+                    onCreateList={handleCreateList}
+                    onCreateTask={handleCreateTask}
+                />}
             </View>
+            </View>
+            </>
     )
 }
 
