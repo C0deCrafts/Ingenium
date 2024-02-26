@@ -1,20 +1,44 @@
-import {Text, View, StyleSheet, Modal} from "react-native";
+import {View, StyleSheet, Modal, TouchableOpacity} from "react-native";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomButton from "./CustomButton";
+import Icon from "./Icon";
+import {ICONS} from "../constants/icons";
+import {COLOR, SIZES} from "../constants/styleSettings";
 
+/**
+ * ### AddTaskModal Component
+ * A fullScreen Modal View which displays Buttons for creating a Task 'Neue Aufgabe'
+ * and a List 'Neue Liste'.
+ * As well as a button for closing the Modal.
+ *
+ * The Modal takes following parameters:
+ * @param onPressCloseModal {function}  handles the press of Modals round 'Close' Button
+ * @param onPressCreateTask {function}  handles the press of Modals 'Neue Aufgabe' Button
+ * @param onPressCreateList {function}  handles the press of Modals 'Neue Liste' Button
+ * @param visible {boolean} a boolean value which handles the visibility of the Modal
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, visible}) {
+    //providing a safe area
+    const insets = useSafeAreaInsets();
+    const styles = getStyles(insets);
 
-function AddTaskModal({onCloseModal, onCreateTask, onCreateList, visible}) {
     return (
-
             <Modal
                 visible={visible}
                 animationType={"slide"}
             >
                 <View style={styles.contentContainer}>
                     <View style={styles.buttonContainer}>
-                        <CustomButton title={"Neue Liste"} onPressFunction={onCreateList}/>
-                        <CustomButton title={"Neue Aufgabe"} onPressFunction={onCreateTask}/>
-                        {/**/}
-                        <CustomButton title={"Schließen"} onPressFunction={onCloseModal}/>
+                        <CustomButton title={"Neue Liste"} onPressFunction={onPressCreateList}/>
+                        <CustomButton title={"Neue Aufgabe"} onPressFunction={onPressCreateTask}/>
+                        <TouchableOpacity
+                            onPress={onPressCloseModal}
+                            style={styles.roundButton}
+                        >
+                            <Icon name={ICONS.TASKICONS.CLOSE} size={20} color={COLOR.BUTTONLABEL}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -24,17 +48,31 @@ function AddTaskModal({onCloseModal, onCreateTask, onCreateList, visible}) {
 
 export default AddTaskModal;
 
-const styles = StyleSheet.create({
-    contentContainer: {
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-
-    },
-    buttonContainer: {
-        rowGap: 20,
-        width: '50%',
-        //add insets instead of padding
-        paddingBottom: 200
-    }
-});
+function getStyles(insets) {
+    return StyleSheet.create({
+        contentContainer: {
+            flex: 1,
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+            /*insets + 80 because this is the height of BottomTabBar which
+            is not visible in this component, but it's height needs
+            to be taken into account*/
+            paddingBottom: insets.bottom + 80,
+            paddingTop: insets.top,
+        },
+        buttonContainer: {
+            rowGap: 25,
+            width: '50%',
+        },
+        roundButton: {
+            height: 60,
+            width: 60,
+            borderRadius: 30,
+            backgroundColor: COLOR.BUTTONCOLOR,
+            justifyContent: "center",
+            alignItems: "center",
+            alignSelf: "center"
+        }
+    });
+}
