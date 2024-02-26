@@ -196,9 +196,8 @@ function TasksMain({navigation}) {
                 Only when modalIsVisible is set to true*/}
                 {modalIsVisible && <AddTaskModal
                     visible={modalIsVisible}
-                    onCloseModal={handleCloseModal}
-                    onCreateList={handleCreateList}
-                    onCreateTask={handleCreateTask}
+                    onPressCreateList={handleCreateList}
+                    onPressCreateTask={handleCreateTask}
                     onPressCloseModal={handleCloseModal}
                 />}
             </View>
