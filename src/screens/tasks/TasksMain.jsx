@@ -35,7 +35,7 @@ function TasksMain({navigation}) {
 
     //TASK PREVIEW
     //implement a function to sort tasks by dueDate ascending for the task preview
-    //implement that the only tasks with done: true are shown
+    //implement that only tasks with done: true are shown
 
     function handleTaskCompleted() {
         //logic which sets the task property done to true
@@ -43,19 +43,39 @@ function TasksMain({navigation}) {
         console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed");
     }
 
+
+    /**
+     * is called on Press of the Round Button 'Add' in TasksMain Screen
+     * shows the Modal, by setting the state of its visibility to true
+     */
     function handleOpenModal() {
         setModalIsVisible(true);
+        console.log('the insets size:' + insets.bottom);
     }
 
+    /**
+     * is called on Press of the Round Button 'Close' in AddTask Component
+     * hides the Modal, by setting the state of its visibility to false
+     */
     function handleCloseModal() {
         setModalIsVisible(false);
     }
 
+    /**
+     * is called on Press of the 'Neue Liste' Button in
+     * the AddTaskModal Component
+     * hides the Modal and navigates to the CreateList Screen
+     */
     function handleCreateList() {
         setModalIsVisible(false);
         navigation.navigate("CreateList_Stack");
     }
 
+    /**
+     * is called on Press of the 'Neue Aufgabe' Button in
+     * the AddTaskModal Component
+     * hides the Modal and navigates to the CreatTask Screen
+     */
     function handleCreateTask() {
         setModalIsVisible(false);
         navigation.navigate("CreateTask_Screen");
@@ -169,14 +189,17 @@ function TasksMain({navigation}) {
                     style={styles.roundButton}
                     onPress={handleOpenModal}
                 >
-                    <Icon name={ICONS.TASKICONS.ADD} size={40} color={COLOR.BUTTONLABEL}/>
+                    <Icon name={ICONS.TASKICONS.ADD} size={35} color={COLOR.BUTTONLABEL}/>
                 </TouchableOpacity>
 
+                {/*Conditional rendering of the AddTaskModal Component
+                Only when modalIsVisible is set to true*/}
                 {modalIsVisible && <AddTaskModal
                     visible={modalIsVisible}
                     onCloseModal={handleCloseModal}
                     onCreateList={handleCreateList}
                     onCreateTask={handleCreateTask}
+                    onPressCloseModal={handleCloseModal}
                 />}
             </View>
             </View>
