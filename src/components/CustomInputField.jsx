@@ -1,13 +1,15 @@
 import {StyleSheet, TextInput, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
 import {useTheme} from "../constants/context/ThemeContext";
+import BoxIcon from "./BoxIcon";
 
-function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword}){
+function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, iconColor, iconBoxBackgroundColor}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+            <BoxIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
             <TextInput
                 style={isDarkMode ? styles.inputDark : styles.inputLight}
                 placeholder={placeholder}
@@ -26,30 +28,26 @@ export default CustomInputField;
 const styles = StyleSheet.create({
     containerLight: {
         backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
-        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
-        borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: LIGHTMODE.BORDER_COLOR,
-        justifyContent: "center",
-        height: 50,
+        flexDirection: "row",
+        padding: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
-        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
-        borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: DARKMODE.BORDER_COLOR,
-        justifyContent: "center",
-        height: 50,
+        flexDirection: "row",
+        padding: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputLight: {
-        fontSize: SIZES.TEXTINPUT_SIZE,
+        fontSize: SIZES.TEXTINPUT_SIZE_TASKS,
         color: LIGHTMODE.TEXTINPUT_COLOR,
-        textAlign: "center",
+        textAlign: "left",
+        paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputDark: {
-        fontSize: SIZES.TEXTINPUT_SIZE,
+        fontSize: SIZES.TEXTINPUT_SIZE_TASKS,
         color: DARKMODE.TEXTINPUT_COLOR,
-        textAlign: "center",
-    }
+        textAlign: "left",
+        paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
+    },
 })

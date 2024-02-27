@@ -46,7 +46,7 @@ export const DARKMODE = {
     ICONCOLOR_ACTIVE: "#009FE3",
     ICONCOLOR_INACTIVE: "#FFFFFF",
 
-    INPUT_BOX_COLOR: "#343434",
+    INPUT_BOX_COLOR: "#1C1C1E",
 
     TEXTINPUT_COLOR: "#FFFFFF",
     TEXT_COLOR: "#FFFFFF",
@@ -76,7 +76,6 @@ export const SIZES = {
     BOTTOM_TAB_LABEL_SIZE: 12,
     BOTTOM_TAB_BAR_HEIGHT: 80,
 
-
     BACK_BUTTON_ICON_SIZE: 28,
     BACK_BUTTON_LABEL_SIZE: 18,
 
@@ -97,6 +96,7 @@ export const SIZES = {
     BORDER_WIDTH: 1,
 
     TEXTINPUT_SIZE: 18,
+    TEXTINPUT_SIZE_TASKS: 25,
     TEXT_SIZE: 18,
 
     SPACING_HORIZONTAL_DEFAULT: 20,
@@ -111,9 +111,13 @@ export const SIZES = {
 
     MARGIN_BOTTOM: windowHeight * 0.10,
     MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05,
+    MARGIN_TOP_FROM_BACKBUTTON_HEADER: windowHeight * 0.03,
+
+    SPACES_VERTICAL_BETWEEN_BOXES: 10,
 
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
+    SCREEN_HEADER_WEIGHT: "700",
     SCREEN_TEXT_NORMAL: 18,
     SCREEN_TEXT_SMALL: 16,
 }

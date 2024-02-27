@@ -158,7 +158,7 @@ export const ICONS = {
         SAD: require('../assets/icons/sad-outline.png'),
         SMILE: require('../assets/icons/smile-outline.png'),
         SOUND: require('../assets/icons/sound-outline.png'),
-        SURPRIDED: require('../assets/icons/surprised-outline.png'),
+        SURPRISED: require('../assets/icons/surprised-outline.png'),
         TEXT: require('../assets/icons/text.png'),
         TIME: require('../assets/icons/time-outline.png'),
         WORK: require('../assets/icons/work-outline.png'),

@@ -2,9 +2,9 @@ import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomInputField from "../../components/CustumInputField";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import CustomInputFieldLogin from "../../components/CustomInputFieldLogin";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -41,8 +41,8 @@ function Login({navigation}){
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Nutze deine Ilias Zugangsdaten für den Login</Text>
             </View>
             <View>
-                <CustomInputField placeholder="Benutzername" keyboardType={"default"} maxTextInputLength={25}/>
-                <CustomInputField placeholder="Password" keyboardType={"default"} isPassword={true} maxTextInputLength={25}/>
+                <CustomInputFieldLogin placeholder="Benutzername" keyboardType={"default"} maxTextInputLength={25}/>
+                <CustomInputFieldLogin placeholder="Password" keyboardType={"default"} isPassword={true} maxTextInputLength={25}/>
             </View>
 
             <View style={styles.container}>
