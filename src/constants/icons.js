@@ -94,9 +94,21 @@ export const ICONS = {
         ACTIVE: require('../assets/icons/logout.png'),
         INACTIVE: require('../assets/icons/logout.png'),
     },
+    MAIL: {
+        ACTIVE: require('../assets/icons/mail_outline.png'),
+        INACTIVE: require('../assets/icons/mail_outline.png')
+    },
+    NAVIGATION: {
+        ACTIVE: require('../assets/icons/navigation_outline.png'),
+        INACTIVE: require('../assets/icons/navigation_outline.png')
+    },
     NOTIFICATION: {
         ACTIVE: require('../assets/icons/bell.png'),
         INACTIVE: require('../assets/icons/bell-outline.png'),
+    },
+    PHONE: {
+        ACTIVE: require('../assets/icons/phone-outline.png'),
+        INACTIVE: require('../assets/icons/phone-outline.png'),
     },
     SETTINGS: {
         ACTIVE: require('../assets/icons/cog.png'),
