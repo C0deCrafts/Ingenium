@@ -3,7 +3,8 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomButton from "./CustomButton";
 import Icon from "./Icon";
 import {ICONS} from "../constants/icons";
-import {COLOR, SIZES} from "../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
+import {useTheme} from "../constants/context/ThemeContext";
 
 /**
  * ### AddTaskModal Component
@@ -23,13 +24,16 @@ function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, 
     //providing a safe area
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
+    const { theme } = useTheme();
+    const isDarkMode = theme === DARKMODE;
 
     return (
             <Modal
                 visible={visible}
                 animationType={"slide"}
+                transparent={true}
             >
-                <View style={styles.contentContainer}>
+                <View style={isDarkMode ? styles.contentContainerDark : styles.contentContainerLight}>
                     <View style={styles.buttonContainer}>
                         <CustomButton title={"Neue Liste"} onPressFunction={onPressCreateList}/>
                         <CustomButton title={"Neue Aufgabe"} onPressFunction={onPressCreateTask}/>
@@ -50,7 +54,7 @@ export default AddTaskModal;
 
 function getStyles(insets) {
     return StyleSheet.create({
-        contentContainer: {
+        contentContainerLight: {
             flex: 1,
             justifyContent: "flex-end",
             alignItems: "flex-end",
@@ -60,6 +64,19 @@ function getStyles(insets) {
             to be taken into account*/
             paddingBottom: insets.bottom + 80,
             paddingTop: insets.top,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR_TRANSPARENT,
+        },
+        contentContainerDark: {
+            flex: 1,
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+            /*insets + 80 because this is the height of BottomTabBar which
+            is not visible in this component, but it's height needs
+            to be taken into account*/
+            paddingBottom: insets.bottom + 80,
+            paddingTop: insets.top,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR_TRANSPARENT,
         },
         buttonContainer: {
             rowGap: 25,
@@ -73,6 +90,6 @@ function getStyles(insets) {
             justifyContent: "center",
             alignItems: "center",
             alignSelf: "center"
-        }
+        },
     });
 }
