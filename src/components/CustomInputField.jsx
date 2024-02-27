@@ -18,6 +18,7 @@ function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPass
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
+                returnKeyType="done"
             />
         </View>
     )
