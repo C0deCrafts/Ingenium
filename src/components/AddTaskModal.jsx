@@ -37,7 +37,7 @@ function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, 
                             onPress={onPressCloseModal}
                             style={styles.roundButton}
                         >
-                            <Icon name={ICONS.TASKICONS.CLOSE} size={20} color={COLOR.BUTTONLABEL}/>
+                            <Icon name={ICONS.TASKICONS.CLOSE} size={35} color={COLOR.BUTTONLABEL}/>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -75,7 +75,7 @@ export const SIZES = {
     BOTTOM_TAB_BAR_HEIGHT: 80,
 
 
-    BACK_BUTTON_ICON_SIZE: 20,
+    BACK_BUTTON_ICON_SIZE: 28,
     BACK_BUTTON_LABEL_SIZE: 18,
 
     CLOSE_BUTTON_ICON_SIZE: 50,
@@ -112,6 +112,7 @@ export const SIZES = {
 
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
+    SCREEN_HEADER_WEIGHT: "700",
     SCREEN_TEXT_NORMAL: 18,
     SCREEN_TEXT_SMALL: 16,
 }
