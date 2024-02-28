@@ -32,7 +32,7 @@ export default CustomBackButton;
 function getStyles(insets) {
     return StyleSheet.create({
         headerContainer: {
-            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            //paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             paddingTop: insets.top + 30,
         },
         titleContainer: {

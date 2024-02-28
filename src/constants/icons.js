@@ -86,6 +86,10 @@ export const ICONS = {
         ACTIVE: require('../assets/icons/menu.png'),
         INACTIVE: require('../assets/icons/menu.png'),
     },
+    FORWARD: {
+        ACTIVE: require('../assets/icons/arrow_forward.png'),
+        INACTIVE: require('../assets/icons/arrow_forward.png'),
+    },
     LINK: {
         ACTIVE: require('../assets/icons/web.png'),
         INACTIVE: require('../assets/icons/web.png'),

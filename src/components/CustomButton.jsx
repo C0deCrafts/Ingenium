@@ -14,7 +14,7 @@ export default CustomButton;
 const styles = StyleSheet.create({
     buttonStyle: {
         backgroundColor: COLOR.BUTTONCOLOR,
-        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+        //marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
         justifyContent: "center",
         height: 50,

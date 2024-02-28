@@ -26,7 +26,7 @@ export default CustomInputFieldLogin;
 const styles = StyleSheet.create({
     containerLight: {
         backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
-        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+        //marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
         borderWidth: SIZES.BORDER_WIDTH,
         borderColor: LIGHTMODE.BORDER_COLOR,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
-        marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+        //marginHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         borderRadius: SIZES.BORDER_RADIUS,
         borderWidth: SIZES.BORDER_WIDTH,
         borderColor: DARKMODE.BORDER_COLOR,

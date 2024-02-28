@@ -72,11 +72,13 @@ function getStyles(insets) {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
             paddingTop: insets.top,
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         },
         containerDark: {
             flex: 1,
             backgroundColor: DARKMODE.BACKGROUNDCOLOR,
             paddingTop: insets.top,
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         },
         container: {
             justifyContent: "center",

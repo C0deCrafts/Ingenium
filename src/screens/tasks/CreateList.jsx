@@ -8,6 +8,7 @@ import BoxIcon from "../../components/BoxIcon";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/ColorPickerButtons";
 import {useState} from "react";
+import CustomButton from "../../components/CustomButton";
 function CreateList({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -27,6 +28,7 @@ function CreateList({navigation}){
     const handleGoBack = () => {
         navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
     };
+
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomBackButton onPress={handleGoBack}/>
@@ -79,6 +81,14 @@ function CreateList({navigation}){
                         {/* Abstandshalter für letzten Button */}
                         <View style={{ width: 15, height: '100%' }}></View>
                     </ScrollView>
+                </View>
+                <View style={styles.buttonBox}>
+                    <View  style={styles.buttonOne}>
+                        <CustomButton title={"Speichern"} onPressFunction={()=> console.log("Speichern gedrückt")}/>
+                    </View>
+                    <View  style={styles.buttonTwo}>
+                        <CustomButton title={"Abbrechen"} onPressFunction={()=> handleGoBack()}/>
+                    </View>
                 </View>
             </View>
         </View>
@@ -138,5 +148,19 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.BORDER_RADIUS,
         flexDirection: "row",
         padding: 15
+    },
+    buttonBox: {
+        flexDirection: "row",
+        marginTop: 40
+    },
+    buttonOne: {
+        flex: 1,
+        marginRight: 10,
+        height: 50,
+    },
+    buttonTwo: {
+        flex: 1,
+        height: 50,
+        marginLeft: 10
     }
 })
