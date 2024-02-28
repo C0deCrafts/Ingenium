@@ -23,15 +23,26 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    //task context provider hook
-    const {taskLists, dispatch} = useTasks();
+    //task context provider hook which provides a the taskListsState
+    //and a dispatchFunction to change the state based on actions
+    const {taskListsState, dispatch} = useTasks();
 
-    function handleTaskCompleted() {
+    /**
+     * Is called on Press of the round Button next to a task in the taskslist
+     * will toggle the property done of a task
+     * and the task will disappear from the taskslist in the UI as it only shows tasks
+     * which are not yet done
+     * @param taskId
+     */
+    function handleTaskCompleted(taskId) {
         //logic which sets the task property done to true --> implemented in the tasksreducer function
         //the task should not be visible in the list anymore
-        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed");
+        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed on task with id: ", taskId);
+        dispatch({
+            type: 'TOGGLED_TASK_DONE',
+            taskId: taskId,
+        })
     }
-
 
     /**
      * is called on Press of the Round Button 'Add' in TasksMain Screen
@@ -96,7 +107,7 @@ function TasksMain({navigation}) {
                         contentContainerStyle={styles.scrollViewContentContainer}
                     >
                         {
-                            [...taskLists]
+                            [...taskListsState]
                             .flatMap(list => list.tasks)
                             .filter(task => !task.done)
                             .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
@@ -108,7 +119,7 @@ function TasksMain({navigation}) {
                                     >
                                         <Pressable
                                             style={styles.taskCompletedButton}
-                                            onPress={handleTaskCompleted}>
+                                            onPress={() => handleTaskCompleted(task.id)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
                                                   size={20}/>
@@ -173,7 +184,7 @@ function TasksMain({navigation}) {
                         contentContainerStyle={styles.scrollViewContentContainer}
                     >
                         {
-                            taskLists.map(list => {
+                            taskListsState.map(list => {
                                 return (
                                     <Pressable
                                         //here the id of the list needs to be passed to the next Screen, so there the right list is shown
