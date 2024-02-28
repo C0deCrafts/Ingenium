@@ -12,10 +12,6 @@ import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
 import AddTaskModal from "../../components/AddTaskModal";
 
-
-
-
-
 function TasksMain({navigation}) {
     const [modalIsVisible, setModalIsVisible] = useState(false);
 
@@ -23,23 +19,16 @@ function TasksMain({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    //theme context provider
+    //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {taskLists} = useTasks();
-
-    //extract all tasks from the taskslist
-    const allTasks = taskLists.flatMap(list => list.tasks);
-
-
-    //TASK PREVIEW
-    //implement a function to sort tasks by dueDate ascending for the task preview
-    //implement that only tasks with done: true are shown
+    //task context provider hook
+    const {taskLists, dispatch} = useTasks();
 
     function handleTaskCompleted() {
-        //logic which sets the task property done to true
-        //removes the task from the list
+        //logic which sets the task property done to true --> implemented in the tasksreducer function
+        //the task should not be visible in the list anymore
         console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed");
     }
 
@@ -95,6 +84,11 @@ function TasksMain({navigation}) {
                     <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                         Meine Aufgaben
                     </Text>
+                    {/*Here the taskLists state is taken and a shallow copy is created using the spread syntax.
+                    On the copy by chaining the array methods: flatMap, filter, sort and map
+                    it is achieved that all tasks, of all lists with the property done = false are shown sorted in an ascending
+                    order by dueDate.
+                    This adheres to the principle of immutability of state variables*/}
                     <ScrollView
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                         showsVerticalScrollIndicator={false}
@@ -102,19 +96,32 @@ function TasksMain({navigation}) {
                         contentContainerStyle={styles.scrollViewContentContainer}
                     >
                         {
-                            allTasks.map(task => {
+                            [...taskLists]
+                            .flatMap(list => list.tasks)
+                            .filter(task => !task.done)
+                            .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
+                            .map(task => {
                                 return (
                                     <View
                                         key={task.id}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
                                     >
-                                        <Pressable onPress={handleTaskCompleted}>
+                                        <Pressable
+                                            style={styles.taskCompletedButton}
+                                            onPress={handleTaskCompleted}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
                                                   size={20}/>
                                         </Pressable>
-                                        <Text
-                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{task.title}</Text>
+                                        <View style={styles.taskTitleDateColumn}>
+                                            <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                {task.title}
+                                            </Text>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS,styles.dueDate]}>
+                                                fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
+                                            </Text>
+                                        </View>
                                     </View>
                                 )
                             })
@@ -131,7 +138,7 @@ function TasksMain({navigation}) {
                         <Icon name={ICONS.TASKICONS.COMPLETED}
                               color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                               size={SIZES.SCREEN_TEXT_NORMAL}/>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Erledigt</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
@@ -140,7 +147,7 @@ function TasksMain({navigation}) {
                         <Icon name={ICONS.TASKICONS.INBOX}
                               color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                               size={SIZES.SCREEN_TEXT_NORMAL}/>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Inbox</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -172,11 +179,11 @@ function TasksMain({navigation}) {
                                         //here the id of the list needs to be passed to the next Screen, so there the right list is shown
                                         onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
                                         key={list.id}
-                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
+                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer, styles.listItemContainerTaskList]}
                                     >
                                         <SquareIcon name={list.icon} color={list.color}/>
                                         <Text
-                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{list.title}</Text>
+                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
                                     </Pressable>
                                 )
                             })
@@ -237,14 +244,19 @@ function getStyles(insets)  {
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
-            fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
         textDark: {
             color: DARKMODE.TEXT_COLOR,
         },
+        textXS: {
+            fontSize: 12,
+        },
+        textNormal: {
+            fontSize: SIZES.SCREEN_TEXT_NORMAL,
+        },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
-            fontWeight: "bold",
+            fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
             paddingBottom: 5,
         },
         headerWithIcon: {
@@ -265,7 +277,7 @@ function getStyles(insets)  {
             height: 80,
         },
         cardButton: {
-            width: '45%',
+            width: '48%',
             justifyContent: "center",
             rowGap: 5,
             padding: 20
@@ -282,7 +294,7 @@ function getStyles(insets)  {
             bottom: insets.bottom,
         },
         scrollViewContentContainer: {
-            paddingHorizontal: 20,
+            paddingHorizontal: 10,
             paddingVertical: 10,
         },
         listItemContainerLight: {
@@ -294,12 +306,22 @@ function getStyles(insets)  {
             borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
         },
         listItemContainer: {
-            paddingHorizontal: 10,
+            paddingHorizontal: 5,
             paddingVertical: 12,
-            borderBottomWidth: 1,
             flexDirection: "row",
+            columnGap: 20,
+            borderBottomWidth: 1,
+        },
+        listItemContainerTaskList: {
             alignItems: "center",
-            columnGap: 20
-        }
+        },
+        taskCompletedButton: {
+            paddingTop: 2
+        },
+        taskTitleDateColumn: {
+            flexDirection: "column",
+            alignItems: "flex-start",
+            rowGap: 5
+        },
     })
 }
