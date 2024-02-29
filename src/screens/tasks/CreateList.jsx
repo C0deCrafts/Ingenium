@@ -10,6 +10,9 @@ import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
 
+//ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
+//und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
+
 /**
  * CreateList component for creating a new list.
  *
