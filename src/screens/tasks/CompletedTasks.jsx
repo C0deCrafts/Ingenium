@@ -1,12 +1,12 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomBackButtonWithTitle from "../../components/CustomBackButtonWithSideElement";
+import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithSideElement from "../../components/CustomBackButtonWithSideElement";
+import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -95,8 +95,13 @@ function CompletedTasks({navigation}){
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
                                                 {task.title}
                                             </Text>
-                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS,styles.dueDate]}>
-                                                Erledigt am ... (Logik implementieren)
+                                            <Text style={[
+                                                isDarkMode ? styles.textDark : styles.textLight,
+                                                styles.textXS,
+                                                styles.dueDate,
+                                                styles.textItalic
+                                            ]}>
+                                                Erledigt: ... (Logik implementieren)
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
