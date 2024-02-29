@@ -89,6 +89,7 @@ export const SIZES = {
     DRAWER_LABEL_SIZE: 18,
 
     BUTTON_LABEL_SIZE: 18,
+    BUTTON_SMALL_LABEL_SIZE: 14,
     BUTTON_LABEL_WEIGHT: "600",
 
     BORDER_RADIUS: 4,
@@ -98,6 +99,7 @@ export const SIZES = {
     TEXT_SIZE: 18,
 
     SPACING_HORIZONTAL_DEFAULT: 20,
+    SPACING_VERTICAL_DEFAULT: 20,
 
     PADDING_TOP_DRAWER_HEADER_FROM_SAFEAREAVIEW: 40,
     PADDING_TOP_BACK_HEADER_FROM_SAFEAREAVIEW: 49,
@@ -109,6 +111,11 @@ export const SIZES = {
 
     MARGIN_BOTTOM: windowHeight * 0.10,
     MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05,
+
+    SQUARE_ICON_SIZE: 24,
+
+    //Size of Icon which appears when deleting lists / tasks
+    DELETE_ICON_SIZE: 24,
 
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
