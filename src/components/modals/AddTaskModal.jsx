@@ -66,15 +66,6 @@ function getStyles(insets) {
             rowGap: 25,
             width: '50%',
         },
-        roundButton: {
-            height: 60,
-            width: 60,
-            borderRadius: 30,
-            backgroundColor: COLOR.BUTTONCOLOR,
-            justifyContent: "center",
-            alignItems: "center",
-            alignSelf: "center"
-        },
         roundButtonPosition: {
             alignSelf: "center"
         }
