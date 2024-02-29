@@ -15,7 +15,7 @@ import {COLOR, SIZES} from "../constants/styleSettings";
  *
  * @param name - The name of the icon to display should match one of
  * the names listed in the 'icon.js' file under 'TASKICONS'.
- * @param color - The color of the Icon.
+ * @param color - The backgroundColor of the Square behind the Icon.
  * @returns {JSX.Element} - A JSX element which renders the Icon.
  *
  * ### Example
@@ -28,7 +28,7 @@ import {COLOR, SIZES} from "../constants/styleSettings";
 function SquareIcon({name, color}) {
     return (
         <View style={[{backgroundColor: color}, styles.square]}>
-            <Icon name={name} size={24} color={COLOR.BUTTONLABEL}/>
+            <Icon name={name} size={SIZES.SQUARE_ICON_SIZE} color={COLOR.BUTTONLABEL}/>
         </View>
     );
 }
