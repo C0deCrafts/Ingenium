@@ -3,9 +3,51 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import BoxIcon from "../BoxIcon";
 
+/**
+ * ## CustomInputField Component
+ *
+ * This component represents a custom input field with an optional icon.
+ * It allows users to input text and provides visual feedback based on the current theme (dark/light).
+ *
+ * @param {string} placeholder - The placeholder text for the input field.
+ * @param {string} keyboardType - The keyboard type for the input field (e.g., "default", "numeric", "email-address").
+ * @param {number} maxTextInputLength - The maximum length of the text input.
+ * @param {boolean} isPassword - Determines whether the input is a password field (default is false).
+ * @param {string} iconName - The name of the icon to be displayed.
+ * @param {string} iconColor - The color of the icon.
+ * @param {string} iconBoxBackgroundColor - The background color of the icon's box.
+ *
+ * @example
+ * // Inside your component's render method, use the CustomInputField component like this:
+ * <CustomInputField
+ *   placeholder="Enter your text"
+ *   keyboardType="default"
+ *   maxTextInputLength={50}
+ *   isPassword={false}
+ *   iconName="user-icon"
+ *   iconColor="#000000"
+ *   iconBoxBackgroundColor="#FFFFFF"
+ * />
+ */
 function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, iconColor, iconBoxBackgroundColor}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    // Check if the keyboardType prop has a valid value or not
+    const validKeyboardTypes = [
+        "default",
+        "number-pad",
+        "decimal-pad",
+        "numeric",
+        "email-address",
+        "phone-pad",
+        "url",
+        "visible-password",
+        "ascii-capable",
+        "numbers-and-punctuation",
+        "name-phone-pad"
+    ];
+    const inputKeyboardType = validKeyboardTypes.includes(keyboardType) ? keyboardType : "default";
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -13,7 +55,7 @@ function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPass
             <TextInput
                 style={isDarkMode ? styles.inputDark : styles.inputLight}
                 placeholder={placeholder}
-                keyboardType={keyboardType}
+                keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword}
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}

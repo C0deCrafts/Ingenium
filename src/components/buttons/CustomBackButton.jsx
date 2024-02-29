@@ -5,6 +5,19 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
+/**
+ * ## CustomBackButton Component
+ *
+ * This component represents a custom back button used in stack navigation headers.
+ * It allows users to navigate back to the previous screen when pressed.
+ * The appearance of the button is determined by the current theme (dark/light).
+ *
+ * @param {Function} onPress - Function to be called when the button is pressed.
+ *
+ * @example
+ * // Inside your stack navigation header component, use the CustomBackButton component like this:
+ * <CustomBackButton onPress={() => navigation.goBack()} />
+ */
 function CustomBackButton({onPress}) {
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
@@ -32,7 +45,6 @@ export default CustomBackButton;
 function getStyles(insets) {
     return StyleSheet.create({
         headerContainer: {
-            //paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             paddingTop: insets.top + 30,
         },
         titleContainer: {

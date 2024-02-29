@@ -1,26 +1,46 @@
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import React, {forwardRef, Fragment, useCallback, useMemo} from 'react';
+import {View, StyleSheet, Text, ScrollView,Dimensions} from 'react-native';
+import {forwardRef, Fragment, useCallback} from 'react';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBoxButton from "../buttons/CustomBoxButton";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {testDataSelectList} from "../../constants/userData";
-import {Dimensions} from 'react-native';
 
-
-const SelectListModal = forwardRef((props, ref) => {
+/**
+ * ### SelectListModal Component
+ *
+ * This component displays a modal bottom sheet containing a selectable list.
+ * The list items are rendered using CustomBoxButton component.
+ * The appearance of the modal and list items are determined by the current theme (dark/light).
+ *
+ * @param {Function} onSelect - Function to handle item selection from the list
+ * @param {Function} ref - Forwarded ref function
+ * @returns {JSX.Element} - SelectListModal component
+ *
+ * @example
+ * // Create a ref to access the SelectListModal component's methods
+ * const selectListModalRef = useRef(null);
+ * // Define a function to handle item selection from the list
+ * const handleSelect = (selectedItem) => {
+ *     console.log("Selected item:", selectedItem);
+ *     // Additional logic for handling selected item
+ * };
+ * //Render the SelectListModal component
+ * <SelectListModal ref={selectListModalRef} onSelect={handleSelect} />
+ */
+const SelectListModal = forwardRef(({onSelect}, ref) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
     const testData = testDataSelectList;
 
-    // Bildschirmhöhe ermitteln
+    // Determine screen height
     const {height: screenHeight} = Dimensions.get('window');
-    const modalHeight = screenHeight * 0.6; // 60% der Bildschirmhöhe
-    // Box für die Listenelemente an das ModalHeight anpassen
+    const modalHeight = screenHeight * 0.6; // 60% of screen height
+    // Adjust box height to fit modal height
     const listBoxMaxHeight = modalHeight - 150;
-
     const snapPoints = [modalHeight];
-    // renders
+
+    // This code renders a backdrop for the bottom sheet modal, which darkens the background when the modal is opened for a better user experience.
     const renderBackdrop = useCallback(
         (props) => (
             <BottomSheetBackdrop
@@ -53,9 +73,9 @@ const SelectListModal = forwardRef((props, ref) => {
                                     iconBoxBackgroundColor={item.iconBoxBackgroundColor}
                                     iconColor={item.iconColor}
                                     showForwardIcon={false}
-                                    onPress={() => props.onSelect(item.buttonTextLeft)}
+                                    onPress={() => onSelect(item.buttonTextLeft)}
                                 />
-                                {/* Fügen Sie den Border hinzu, außer nach dem letzten Element */}
+                                {/* Adds a border, except after the last element */}
                                 {index !== testData.length - 1 && (
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 )}
