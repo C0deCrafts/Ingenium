@@ -130,6 +130,7 @@ export const ICONS = {
         BUG: require('../assets/icons/bug-outline.png'),
         CHAT: require('../assets/icons/chat-outline.png'),
         CIRCLE: require('../assets/icons/circle-outline.png'),
+        CIRCLE_DONE: require('../assets/icons/circle-done.png'),
         CLOSE: require('../assets/icons/close.png'),
         CODE: require('../assets/icons/code-outline.png'),
         COLOR_PALETTE: require('../assets/icons/color-palette-outline.png'),
