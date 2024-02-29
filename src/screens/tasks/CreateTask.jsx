@@ -28,7 +28,10 @@ function CreateList({navigation}) {
     * When the user clicks on the "Liste" button, this function is triggered,
     * which opens the select list modal.
     */
-    const handlePresentModalPress = () => selectListModalRef.current?.present();
+    const handlePresentModalPress = () => {
+        Keyboard.dismiss();
+        selectListModalRef.current?.present();
+    }
 
     /*
     * Function to handle the selection of a list from the modal
