@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
-import CustomBackButton from "../../components/CustomBackButton";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 
 function CreateTaskDetails({navigation}){
