@@ -29,7 +29,17 @@ import BoxIcon from "../BoxIcon";
  *   iconBoxBackgroundColor="#FFFFFF"
  * />
  */
-function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, iconColor, iconBoxBackgroundColor}){
+function CustomInputField({
+                              placeholder,
+                              keyboardType,
+                              maxTextInputLength,
+                              isPassword,
+                              iconName,
+                              iconColor,
+                              iconBoxBackgroundColor,
+                              onChangeText,
+                              value,
+}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -60,6 +70,8 @@ function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPass
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
+                onChangeText={onChangeText}
+                value={value}
                 returnKeyType="done"
             />
         </View>

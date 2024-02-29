@@ -26,6 +26,7 @@ function CreateList({navigation}) {
     // State variables for icon box color and icon name
     const [iconBoxColor, setIconBoxColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
     const [iconName, setIconName] = useState(USER_ICONS.LIST);
+    const [listName, setListName] = useState('');
 
     /*
     * Extract icon names and user colors from constants:
@@ -67,6 +68,8 @@ function CreateList({navigation}) {
                                       iconName={iconName}
                                       iconBoxBackgroundColor={iconBoxColor}
                                       iconColor={"white"}
+                                      onChangeText={(listName) => setListName(listName)}
+                                      value={listName}
                     />
                 </View>
                 {/* Icon selection */}
@@ -119,7 +122,7 @@ function CreateList({navigation}) {
                 {/* Optional buttons for saving and canceling */}
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern gedrückt")}/>
+                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern der Liste: " + listName + " gedrückt")}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
@@ -136,23 +139,23 @@ const styles = StyleSheet.create({
     // Container styles for light and dark mode
     containerLight: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     // Content styles for light and dark mode
     contentLight: {
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-        padding: SIZES.SPACING_HORIZONTAL_DEFAULT,
         marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER
     },
     contentDark: {
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-        padding: SIZES.SPACING_HORIZONTAL_DEFAULT,
         marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER
     },
     // Header text styles
