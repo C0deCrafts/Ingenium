@@ -42,8 +42,8 @@ const SelectListModal = forwardRef((props, ref) => {
             handleIndicatorStyle={isDarkMode ? {backgroundColor: DARKMODE.BACKGROUNDCOLOR} : {backgroundColor: LIGHTMODE.BACKGROUNDCOLOR}}
         >
             <View style={styles.contentContainer}>
-                <Text style={styles.containerHeadline}>Liste auswählen</Text>
-                <View style={[styles.listBox, { maxHeight: listBoxMaxHeight }]}>
+                <Text style={isDarkMode ? styles.containerHeadlineDark : styles.containerHeadlineLight}>Liste auswählen</Text>
+                <View style={[isDarkMode ? styles.listBoxDark : styles.listBoxLight, { maxHeight: listBoxMaxHeight }]}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {testData.map((item, index) => (
                             <Fragment key={item.id}>
@@ -72,13 +72,26 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
     },
-    containerHeadline: {
+    containerHeadlineLight: {
+        color: LIGHTMODE.TEXT_COLOR,
         fontSize: SIZES.SCREEN_HEADER,
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
         padding: 20
     },
-    listBox: {
-        backgroundColor: "white",
+    containerHeadlineDark: {
+        color: DARKMODE.TEXT_COLOR,
+        fontSize: SIZES.SCREEN_HEADER,
+        fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+        padding: 20
+    },
+    listBoxLight: {
+        backgroundColor: LIGHTMODE.BOX_COLOR,
+        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        padding: 10,
+        borderRadius: SIZES.BORDER_RADIUS,
+    },
+    listBoxDark: {
+        backgroundColor: DARKMODE.BOX_COLOR,
         marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         padding: 10,
         borderRadius: SIZES.BORDER_RADIUS,

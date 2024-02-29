@@ -38,7 +38,7 @@ function CreateList({navigation}){
     };
 
     return (
-        <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomBackButton onPress={handleGoBack}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
@@ -46,10 +46,12 @@ function CreateList({navigation}){
                 </Text>
 
                 <View style={styles.spacing}></View>
-                    <View style={styles.textInputBoxes}>
-                        <View style={[isDarkMode ? styles.textInputBoxDark : styles.textInputBoxLight, styles.border]}>
+                    <View style={isDarkMode ? styles.textInputBoxesDark : styles.textInputBoxesLight}>
+                        <View style={[isDarkMode ? styles.textInputBoxDark : styles.textInputBoxLight,
+                                      isDarkMode ? styles.borderDark : styles.borderLight]}>
                             <TextInput
                                 placeholder={"Titel"}
+                                placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                 style={isDarkMode ? styles.inputDark : styles.inputLight}
                                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                 onChangeText={(text) => setTitle(text)}
@@ -57,6 +59,7 @@ function CreateList({navigation}){
                         </View>
                         <View style={isDarkMode ? styles.textInputBoxNotesDark : styles.textInputBoxNotesLight}>
                             <TextInput placeholder={"Notizen"}
+                                       placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                        style={isDarkMode ? styles.inputDarkNotes : styles.inputLightNotes}
                                        selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                        maxLength={1000}
@@ -116,12 +119,12 @@ const styles = StyleSheet.create({
     containerLight: {
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     contentLight: {
         flex: 1,
@@ -149,8 +152,12 @@ const styles = StyleSheet.create({
     spacing: {
         marginVertical: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
     },
-    textInputBoxes: {
-        backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
+    textInputBoxesLight: {
+        backgroundColor: LIGHTMODE.BOX_COLOR,
+        borderRadius: SIZES.BORDER_RADIUS
+    },
+    textInputBoxesDark: {
+        backgroundColor: DARKMODE.BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS
     },
     textInputBoxLight: {
@@ -165,9 +172,14 @@ const styles = StyleSheet.create({
     textInputBoxNotesDark: {
         padding: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
-    border: {
+    borderLight: {
         borderBottomWidth: 1,
         borderColor: LIGHTMODE.BACKGROUNDCOLOR,
+        marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
+    },
+    borderDark: {
+        borderBottomWidth: 1,
+        borderColor: DARKMODE.BACKGROUNDCOLOR,
         marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputLight: {
