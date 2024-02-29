@@ -110,7 +110,7 @@ function getStyles(insets) {
             paddingTop: insets.top + 10,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             flex: 1,
-            rowGap: 10
+            rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
@@ -160,7 +160,7 @@ function getStyles(insets) {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            columnGap: 20,
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
             borderBottomWidth: 1,
         },
         taskTitleDateColumn: {
