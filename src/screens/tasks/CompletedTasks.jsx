@@ -72,7 +72,10 @@ function CompletedTasks({navigation}){
                     bounces={false}
                     contentContainerStyle={styles.scrollViewContentContainer}
                 >
-                    {
+                    {   /*
+                        shows tasks of all taskLists which have the property done === true
+                        ordered by date ascending
+                        */
                         [...taskListsState]
                             .flatMap(list => list.tasks)
                             .filter(task => task.done)
@@ -181,7 +184,6 @@ function getStyles(insets) {
             borderBottomWidth: 1,
         },
         taskTitleDateColumn: {
-            flexDirection: "column",
             alignItems: "flex-end",
             rowGap: 5
         },
