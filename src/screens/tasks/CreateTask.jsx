@@ -120,7 +120,7 @@ function CreateList({navigation}) {
                 {/* Optional buttons for saving and canceling */}
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern gedrückt")}/>
+                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern gedrückt - Titel: " + title + ", Notizen: " + notes + ", Ausgewählte Liste: " + selectedList)}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
