@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView, Dimensions, Pressable, TouchableOpacity, Modal} from "react-native";
+import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity} from "react-native";
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
@@ -137,13 +137,13 @@ function TasksMain({navigation}) {
                                         key={task.id}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
                                     >
-                                        <Pressable
+                                        <TouchableOpacity
                                             style={styles.taskCompletedButton}
                                             onPress={() => handleTaskCompleted(task.id)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
                                                   size={20}/>
-                                        </Pressable>
+                                        </TouchableOpacity>
                                         <View style={styles.taskTitleDateColumn}>
                                             <Text
                                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
@@ -225,30 +225,31 @@ function TasksMain({navigation}) {
                                             <TouchableOpacity>
                                              <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.DELETE_ICON_SIZE}/>
                                             </TouchableOpacity>
-                                            <Pressable
-                                                //here the id of the list needs to be passed to the next Screen, so there the right list is shown
-                                                onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                            <View
                                                 style={styles.editTaskListItem}
                                             >
                                                 <SquareIcon name={list.icon} color={list.color}/>
                                                 <Text
                                                     style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
-                                            </Pressable>
+                                            </View>
                                         </View>
                                     )
                                 } else {
                                     {/*regular taskList item*/}
                                     return (
-                                        <Pressable
+                                        <TouchableOpacity
                                             //here the id of the list needs to be passed to the next Screen, so there the right list is shown
                                             onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
                                             key={list.id}
-                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer, styles.listItemContainerTaskList]}
+                                            style={[
+                                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                styles.listItemContainer,
+                                                styles.listItemContainerTaskList]}
                                         >
                                             <SquareIcon name={list.icon} color={list.color}/>
                                             <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
-                                        </Pressable>
+                                        </TouchableOpacity>
                                     )
                                 }
                             })

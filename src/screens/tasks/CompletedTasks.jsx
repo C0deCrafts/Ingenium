@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, Pressable, ScrollView} from "react-native";
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButtonWithTitle from "../../components/CustomBackButtonWithTitle";
@@ -66,7 +66,7 @@ function CompletedTasks({navigation}){
                             .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
                             .map(task => {
                                 return (
-                                    <Pressable
+                                    <TouchableOpacity
                                         key={task.id}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
                                         onPress={() => handleTaskNotCompleted(task.id)}
@@ -83,7 +83,7 @@ function CompletedTasks({navigation}){
                                                 Erledigt am ... (Logik implementieren)
                                             </Text>
                                         </View>
-                                    </Pressable>
+                                    </TouchableOpacity>
                                 )
                             })
                     }
