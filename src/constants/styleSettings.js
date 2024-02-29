@@ -11,7 +11,7 @@ export const LIGHTMODE = {
 
     BOX_COLOR: "#FFFFFF",
 
-    BORDER_COLOR: "#000000",
+    BORDER_COLOR: "#F2F2F2",
 
     DRAWER_HEADER_LABEL_COLOR: "#000000",
 
@@ -117,10 +117,13 @@ export const SIZES = {
     //Size of Icon which appears when deleting lists / tasks
     DELETE_ICON_SIZE: 24,
 
+    //Size of Icon which appears when entering edit mode for lists / tasks
+    MORE_ICON_SIZE: 30,
+
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
     SCREEN_HEADER_WEIGHT: "700",
     SCREEN_TEXT_NORMAL: 18,
-    SCREEN_TEXT_SMALL: 16,
+    SCREEN_TEXT_SMALL: 15,
     SCREEN_TEXT_XS: 12,
 }
