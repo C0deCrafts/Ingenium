@@ -21,7 +21,7 @@ export const useTasks = () => {
 //variable initialized with the imported dummydata for taskLists
 const taskListsData = dummyDataTasks;
 
-//less data to test the reducer function
+//less data to test the reducer functions
 const testData = [
     {
         id: 1,
@@ -62,7 +62,7 @@ export const TasksProvider = ({children}) => {
      */
     const [taskListsState, dispatch] = useReducer(
         tasksReducer,
-        testData
+        taskListsData
     );
 
 
