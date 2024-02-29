@@ -1,12 +1,12 @@
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../components/buttons/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithTitle from "../../components/CustomBackButtonWithSideElement";
+import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import {useState} from "react";
-import CustomBackButtonWithSideElement from "../../components/CustomBackButtonWithSideElement";
-import CustomButtonSmall from "../../components/CustomButtonSmall";
+import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
@@ -34,20 +34,59 @@ function ListTasks({route, navigation}){
     //access the parameter listId passed from the TasksMain Screen
     const {listId} = route.params;
 
+    /**
+     * is called on press of the Back Button
+     * navigates back to the TasksMain Screen
+     */
     const handleGoBack = () => {
         navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
     };
 
+    /**
+     * is called on press of the edit Task Button
+     * navigates to the EditTask Screen
+     */
+    function handleNavigateToEditTask() {
+        navigation.push("EditTask_Screen");
+    }
+
+    /**
+     * is called on press of the more Button
+     * opens the edit mode in the screen, which enables the user
+     * to delete tasks or navigate to the EditTask Screen
+     */
     function handleCloseEditingTasks() {
         setEditTasksIsActive(false);
     }
 
+    /**
+     * is called on press of the 'Fertig' button
+     * closes the edit mode for the tasks
+     */
     function handleOpenEditingTasks() {
         setEditTasksIsActive(true);
     }
 
-    function handleTaskDone() {
-        console.log("Handle task done was pressed");
+    /**
+     * Is called on Press of the round Button next to a task in the taskslist.
+     * Will toggle the property done of a task
+     * and the task will disappear from the taskslist in the UI as it only shows tasks
+     * which are not yet done.
+     * @param taskId the id of the task which was pressed
+     */
+    function handleTaskCompleted(taskId) {
+        dispatch({
+            type: 'TOGGLED_TASK_DONE',
+            taskId: taskId,
+        })
+    }
+
+
+    /**
+     * Deletes the task
+     */
+    function handleDeleteTask() {
+
     }
 
 
@@ -72,9 +111,6 @@ function ListTasks({route, navigation}){
             {/*show Tasks of List with id which was passed by the route param listId
             need to show only tasks of this list
             need to show tasks sorted ascending by dueDate*/
-
-
-
             }
                 <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>Alle</Text>
                 <ScrollView
@@ -92,42 +128,99 @@ function ListTasks({route, navigation}){
                                 if(editTasksIsActive) {
                                    return (
                                        /*TaskBox editTasksIsActive === true*/
-                                       <Text>{task.title}</Text>
+                                       <View
+                                           style={styles.taskContainer}
+                                           key={task.id}
+                                       >
+                                            <View
+                                                style={[
+                                                    isDarkMode? styles.taskBoxDark : styles.taskBoxLight,
+                                                    styles.taskBoxEditActive
+                                                ]}
+                                            >
+                                                <TouchableOpacity
+                                                    onPress={handleDeleteTask}
+                                                >
+                                                    <Icon name={ICONS.TASKICONS.MINUS}
+                                                          color={COLOR.ICONCOLOR_CUSTOM_RED}
+                                                          size={SIZES.EDIT_TASKS_ICON_SIZE}
+                                                    />
+                                                </TouchableOpacity>
+                                                <View
+                                                    style={styles.taskTitleDateColumnEditActive}
+                                                >
+                                                    <Text
+                                                        style={[
+                                                            isDarkMode ? styles.textDark : styles.textLight,
+                                                            styles.textNormal,
+                                                            styles.textCentered
+                                                        ]}>
+                                                        {task.title}
+                                                    </Text>
+                                                    <Text style={[
+                                                        isDarkMode ? styles.textDark : styles.textLight,
+                                                        styles.textXS,
+                                                        styles.textItalic
+                                                    ]}>
+                                                        fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
+                                                    </Text>
+                                                </View>
+                                                <TouchableOpacity
+                                                    onPress={handleNavigateToEditTask}
+                                                >
+                                                    <Icon name={ICONS.TASKICONS.MORE}
+                                                          color={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                                          size={SIZES.EDIT_TASKS_ICON_SIZE}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                       </View>
                                    );
 
                                 } else {
                                     return (
                                         /*TaskBox editTasksIsActive === false*/
-                                        <View style={styles.tasksContainer}>
+                                        <View
+                                            style={styles.taskContainer}
+                                            key={task.id}
+                                        >
                                             <View style={[isDarkMode? styles.taskBoxDark : styles.taskBoxLight]}>
                                                 <View style={[
-                                                    styles.taskUpperContainerEditNotActive,
+                                                    styles.taskUpperBoxEditNotActive,
                                                     isDarkMode ? styles.borderDark : styles.borderLight,
                                                 ]}>
                                                     <TouchableOpacity
-                                                        onPress={handleTaskDone}>
+                                                        onPress={() => handleTaskCompleted(task.id)}>
                                                         <Icon
                                                             name={ICONS.TASKICONS.CIRCLE}
                                                             color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                             size={20}
                                                         />
                                                     </TouchableOpacity>
-                                                    <View style={[
-                                                        styles.taskTitleDateColumn,
-                                                    ]}
+                                                    <View style={styles.taskTitleDateColumnEditNotActive}
                                                     >
-                                                        <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                        <Text style={[
+                                                            isDarkMode? styles.textDark : styles.textLight,
+                                                            styles.textNormal,
+                                                        ]}>
                                                             {task.title}
                                                         </Text>
-                                                        <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textXS]}>
+                                                        <Text style={[
+                                                            isDarkMode? styles.textDark : styles.textLight,
+                                                            styles.textXS,
+                                                            styles.textItalic
+                                                        ]}>
                                                             fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
                                                         </Text>
                                                     </View>
                                                 </View>
                                                 <View
-                                                    style={[styles.taskLowerContainerEditNotActive]}
+                                                    style={[styles.taskLowerBoxEditNotActive]}
                                                 >
-                                                        <Text style={[styles.textSmall, isDarkMode? styles.textDark : styles.textLight]}>
+                                                        <Text style={[
+                                                            styles.textSmall,
+                                                            isDarkMode? styles.textDark : styles.textLight
+                                                            ]}>
                                                             {task.notes}
                                                         </Text>
                                                 </View>
@@ -176,12 +269,18 @@ function getStyles(insets) {
         textXS: {
             fontSize: SIZES.SCREEN_TEXT_XS
         },
+        textItalic: {
+            fontStyle: "italic",
+        },
+        textCentered: {
+            textAlign: "center"
+        },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
             fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
             paddingBottom: 5,
         },
-        tasksContainer: {
+        taskContainer: {
             paddingBottom: SIZES.SPACING_VERTICAL_DEFAULT,
         },
         taskBoxLight: {
@@ -192,14 +291,22 @@ function getStyles(insets) {
             backgroundColor: DARKMODE.BOX_COLOR,
             borderRadius: SIZES.BORDER_RADIUS,
         },
-        taskUpperContainerEditNotActive: {
+        taskBoxEditActive: {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            padding: 10
+        },
+        taskUpperBoxEditNotActive: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
             borderBottomWidth: 1,
             padding: 10
         },
-        taskLowerContainerEditNotActive: {
+        taskLowerBoxEditNotActive: {
             width: '70%',
             alignItems: "flex-start",
             rowGap: 5,
@@ -211,9 +318,14 @@ function getStyles(insets) {
         borderDark: {
             borderColor: DARKMODE.BORDER_COLOR,
         },
-        taskTitleDateColumn: {
+        taskTitleDateColumnEditNotActive: {
             alignItems: "flex-end",
-            rowGap: 5
+            rowGap: 5,
+        },
+        taskTitleDateColumnEditActive: {
+            alignItems: "center",
+            rowGap: 5,
+            maxWidth: '70%',
         },
     })
 }
