@@ -5,12 +5,37 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
 import {useTheme} from "../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
-function CustomBackButton({onPress, heading}) {
+/**
+ * # COMPONENT CUSTOMBACKBUTTONWITHSIDEELEMENT
+ * Component to use on Screens where there is an Element next to the CustomBackButton
+ * f.e. a heading or buttons
+ * ### Usage:
+ * Is used in the ListTasks and the CompletedTasks Screens
+
+ * @param onPress {function} prop for the navigation function which handles the go Back behaviour
+ *                           for the screen where it is used
+ * @param elementNextToBackButton prop for the JSX element, which should be rendered next to
+ *                                              the back button
+ * @returns {JSX.Element}
+ * @constructor
+ *
+ * ### example
+ * <pre>
+ * <CustomBackButtonWithSideElement
+*     onPress={handleGoBack}
+*     elementNextToBackButton={
+*       <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.headerHeading]}>
+*        Erledigt
+*     </Text>
+*     }
+*  />
+ * </pre>
+ */
+function CustomBackButtonWithSideElement({onPress, elementNextToBackButton}) {
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
     const styles = getStyles(insets);
-
 
     return (
         <View style={styles.headerContainer}>
@@ -24,15 +49,13 @@ function CustomBackButton({onPress, heading}) {
                 </View>
             </TouchableOpacity>
             <View>
-                <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.headerHeading]}>
-                    {heading}
-                </Text>
+                {elementNextToBackButton}
             </View>
         </View>
     )
 }
 
-export default CustomBackButton;
+export default CustomBackButtonWithSideElement;
 
 function getStyles(insets) {
     return StyleSheet.create({
@@ -56,10 +79,6 @@ function getStyles(insets) {
         headerTitle: {
             fontSize: SIZES.BACK_HEADER_FONTSIZE,
             marginLeft: 5,
-        },
-        headerHeading: {
-            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
-            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
         }
 
     })

@@ -1,11 +1,12 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomBackButtonWithTitle from "../../components/CustomBackButtonWithTitle";
+import CustomBackButtonWithTitle from "../../components/CustomBackButtonWithSideElement";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import CustomBackButtonWithSideElement from "../../components/CustomBackButtonWithSideElement";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -41,14 +42,26 @@ function CompletedTasks({navigation}){
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
-            <CustomBackButtonWithTitle onPress={handleGoBack} heading={"Erledigt"}/>
+            <CustomBackButtonWithSideElement
+                onPress={handleGoBack}
+                elementNextToBackButton={
+                    <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.headerHeading]}>
+                        Erledigt
+                    </Text>
+                }
+            />
             <View style={styles.contentContainer}>
                 {/*USER INSTRUCTION*/}
-                <View style={[isDarkMode? styles.contentBoxDark : styles.contentBoxLight, styles.instructionBox]}>
+                <View style={
+                    [isDarkMode? styles.contentBoxDark : styles.contentBoxLight,
+                        styles.instructionBox
+                    ]}>
                     <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textXS, styles.textItalic]}>
-                        <Text style={styles.textBold}>Hinweis:</Text> Du kannst noch 30 Tage auf deine Aufgaben
+                        <Text style={styles.textBold}>Hinweis:</Text>
+                        Du kannst noch 30 Tage auf deine Aufgaben
                         zugreifen, bevor sie aus der Liste gelöscht
-                        werden. Um eine Aufgabe wiederherzustellen, tippe auf die Aufgabe.
+                        werden. Um eine Aufgabe wiederherzustellen,
+                        tippe auf die Aufgabe.
                     </Text>
                 </View>
 
@@ -129,6 +142,10 @@ function getStyles(insets) {
         },
         textItalic: {
             fontStyle: "italic",
+        },
+        headerHeading: {
+            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
+            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
         },
         scrollViewContentContainer: {
             paddingHorizontal: 10,
