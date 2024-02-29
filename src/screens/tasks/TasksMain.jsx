@@ -7,10 +7,10 @@ import {useState} from "react";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
-import AddTaskModal from "../../components/AddTaskModal";
+import AddTaskModal from "../../components/modals/AddTaskModal";
 
 
 

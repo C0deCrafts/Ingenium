@@ -1,14 +1,14 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomBackButton from "../../components/CustomBackButton";
-import CustomInputField from "../../components/CustomInputField";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
+import CustomInputField from "../../components/inputFields/CustomInputField";
 import {ICONS} from "../../constants/icons";
 import BoxIcon from "../../components/BoxIcon";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
-import ColorPickerButtons from "../../components/ColorPickerButtons";
+import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../components/buttons/CustomButton";
 function CreateList({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;

@@ -1,10 +1,10 @@
 import {View, StyleSheet, Modal, TouchableOpacity} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomButton from "./CustomButton";
-import Icon from "./Icon";
-import {ICONS} from "../constants/icons";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
-import {useTheme} from "../constants/context/ThemeContext";
+import CustomButton from "../buttons/CustomButton";
+import Icon from "../Icon";
+import {ICONS} from "../../constants/icons";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {useTheme} from "../../constants/context/ThemeContext";
 
 /**
  * ### AddTaskModal Component

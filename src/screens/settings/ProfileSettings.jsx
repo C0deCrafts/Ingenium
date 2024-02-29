@@ -1,5 +1,5 @@
 import {Text, View, StyleSheet} from "react-native";
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 

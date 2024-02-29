@@ -1,5 +1,5 @@
 import {Text, View, StyleSheet} from "react-native";
-import CustomBackButton from "../../components/CustomBackButton";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useNavigation} from "@react-navigation/native";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";

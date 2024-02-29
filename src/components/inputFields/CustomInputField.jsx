@@ -1,7 +1,7 @@
 import {StyleSheet, TextInput, View} from "react-native";
-import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
-import {useTheme} from "../constants/context/ThemeContext";
-import BoxIcon from "./BoxIcon";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {useTheme} from "../../constants/context/ThemeContext";
+import BoxIcon from "../BoxIcon";
 
 function CustomInputField({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, iconColor, iconBoxBackgroundColor}){
     const { theme } = useTheme();

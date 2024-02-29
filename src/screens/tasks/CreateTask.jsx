@@ -1,17 +1,30 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity, TextInput, Keyboard} from "react-native";
+import {Text, View, StyleSheet, TextInput, Keyboard} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomBackButton from "../../components/CustomBackButton";
-import CustomButton from "../../components/CustomButton";
-import {useState} from "react";
-import CustomBoxButton from "../../components/CustomBoxButton";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
+import CustomButton from "../../components/buttons/CustomButton";
+import {useRef, useState} from "react";
+import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
+import SelectListModal from "../../components/modals/SelectListModal";
+
 function CreateList({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const bottomSheetRef = useRef(null);
+
+    const handlePresentModalPress = () => bottomSheetRef.current?.present();
+
     const [title, setTitle] = useState('');
     const [notes, setNotes] = useState('');
+    const [selectedList, setSelectedList] = useState("Ingenium"); // Beispielinitialisierung
+
+    const handleListSelection = (buttonTextLeft) => {
+        setSelectedList(buttonTextLeft);
+        console.log("listname: " + buttonTextLeft)
+        bottomSheetRef.current?.dismiss(); // Schließt das Modal
+    };
 
     const navigateToEditTaskDetails = () => {
         Keyboard.dismiss(); // Schließt die Tastatur
@@ -59,11 +72,13 @@ function CreateList({navigation}){
                 <View>
                     <CustomBoxButton
                         buttonTextLeft={"Liste"}
-                        buttonTextRight={"Ingenium"}
+                        buttonTextRight={selectedList}
                         iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
                         iconName={ICONS.TASKICONS.LIST}
                         iconColor={COLOR.BUTTONLABEL}
-                        onPress={navigateToEditTaskDetails}
+                        onPress={handlePresentModalPress}
+                        showForwardIcon={true}
+                        extraPadding={10}
                     />
                     <View style={styles.spacing}></View>
                     <CustomBoxButton
@@ -73,6 +88,8 @@ function CreateList({navigation}){
                         iconName={ICONS.TASKICONS.CURVED_LINE}
                         iconColor={COLOR.BUTTONLABEL}
                         onPress={navigateToEditTaskDetails}
+                        showForwardIcon={true}
+                        extraPadding={10}
                     />
                 </View>
 
@@ -85,6 +102,10 @@ function CreateList({navigation}){
                     </View>
                 </View>
             </View>
+            <SelectListModal
+                ref={bottomSheetRef}
+                onSelect={handleListSelection} // Prop für die Callback-Funktion
+            />
         </View>
     )
 }
@@ -153,27 +174,23 @@ const styles = StyleSheet.create({
         fontSize: SIZES.TEXTINPUT_SIZE,
         color: LIGHTMODE.TEXTINPUT_COLOR,
         textAlign: "left",
-        //paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputDark: {
         fontSize: SIZES.TEXTINPUT_SIZE,
         color: DARKMODE.TEXTINPUT_COLOR,
         textAlign: "left",
-        //paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputLightNotes: {
         fontSize: SIZES.TEXTINPUT_SIZE,
         color: LIGHTMODE.TEXTINPUT_COLOR,
         textAlign: "left",
         height: 100,
-        //paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     inputDarkNotes: {
         fontSize: SIZES.TEXTINPUT_SIZE,
         color: DARKMODE.TEXTINPUT_COLOR,
         textAlign: "left",
         height: 100,
-        //paddingLeft: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     boxSpacing: {
         marginRight: 15,

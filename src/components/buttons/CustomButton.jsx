@@ -1,5 +1,5 @@
 import {Text, StyleSheet, TouchableOpacity} from "react-native";
-import {COLOR, SIZES} from "../constants/styleSettings";
+import {COLOR, SIZES} from "../../constants/styleSettings";
 
 function CustomButton({title, onPressFunction}){
     return (
