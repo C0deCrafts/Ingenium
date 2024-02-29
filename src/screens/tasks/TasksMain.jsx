@@ -32,7 +32,7 @@ function TasksMain({navigation}) {
      * will toggle the property done of a task
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done
-     * @param taskId
+     * @param taskId the id of the task which was pressed
      */
     function handleTaskCompleted(taskId) {
         //logic which sets the task property done to true --> implemented in the tasksreducer function
@@ -129,7 +129,7 @@ function TasksMain({navigation}) {
                                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
                                                 {task.title}
                                             </Text>
-                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS,styles.dueDate]}>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
                                                 fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
                                             </Text>
                                         </View>
@@ -260,7 +260,7 @@ function getStyles(insets)  {
             color: DARKMODE.TEXT_COLOR,
         },
         textXS: {
-            fontSize: 12,
+            fontSize: SIZES.SCREEN_TEXT_XS,
         },
         textNormal: {
             fontSize: SIZES.SCREEN_TEXT_NORMAL,

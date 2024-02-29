@@ -28,7 +28,7 @@ import {COLOR, SIZES} from "../constants/styleSettings";
 function SquareIcon({name, color}) {
     return (
         <View style={[{backgroundColor: color}, styles.square]}>
-            <Icon name={name} size={18} color={COLOR.BUTTONLABEL}/>
+            <Icon name={name} size={24} color={COLOR.BUTTONLABEL}/>
         </View>
     );
 }
