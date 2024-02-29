@@ -16,6 +16,8 @@ import BoxIcon from "../BoxIcon";
  * @param {string} iconName - The name of the icon to be displayed.
  * @param {string} iconColor - The color of the icon.
  * @param {string} iconBoxBackgroundColor - The background color of the icon's box.
+ * @param {function} onChangeText - A function that will be called when the text input's content changes. It receives the current text value as its argument.
+ * @param {string} value - The value of the input field. This prop is required for controlled input components, where the parent component controls the value of the input field.
  *
  * @example
  * // Inside your component's render method, use the CustomInputField component like this:
