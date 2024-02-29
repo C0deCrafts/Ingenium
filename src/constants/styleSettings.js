@@ -114,8 +114,8 @@ export const SIZES = {
 
     SQUARE_ICON_SIZE: 24,
 
-    //Size of Icon which appears when deleting lists / tasks
-    DELETE_ICON_SIZE: 24,
+    //Size of Icons which appear when deleting editing lists / tasks
+    EDIT_TASKS_ICON_SIZE: 24,
 
     //Size of Icon which appears when entering edit mode for lists / tasks
     MORE_ICON_SIZE: 30,
