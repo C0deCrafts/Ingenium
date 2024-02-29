@@ -141,7 +141,7 @@ function TasksMain({navigation}) {
                                             style={styles.taskCompletedButton}
                                             onPress={() => handleTaskCompleted(task.id)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                  color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
+                                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                   size={20}/>
                                         </TouchableOpacity>
                                         <View style={styles.taskTitleDateColumn}>
@@ -193,7 +193,8 @@ function TasksMain({navigation}) {
                             <TouchableOpacity
                             onPress={handleOpenEditTaskLists}
                             >
-                            <Icon name={ICONS.TASKICONS.MORE_OUTLINE} size={SIZES.SCREEN_HEADER}
+                            <Icon name={ICONS.TASKICONS.MORE_OUTLINE}
+                                  size={SIZES.MORE_ICON_SIZE}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
                             </TouchableOpacity>
                         }
@@ -238,8 +239,11 @@ function TasksMain({navigation}) {
                                     {/*regular taskList item*/}
                                     return (
                                         <TouchableOpacity
-                                            //here the id of the list needs to be passed to the next Screen, so there the right list is shown
-                                            onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                            /*
+                                            here the id of the list is passed as parameter to the next ListTasksScree,
+                                            so that in the ListTasksScreen the chosen list can be shown
+                                             */
+                                            onPress={() => navigation.navigate("ListTasks_Screen", {listId: list.id})}
                                             key={list.id}
                                             style={[
                                                 isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
