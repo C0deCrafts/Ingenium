@@ -7,11 +7,13 @@ import {useState} from "react";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
-import AddTaskModal from "../../components/AddTaskModal";
-import CustomButtonSmall from "../../components/CustomButtonSmall";
+import AddTaskModal from "../../components/modals/AddTaskModal";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
+import RoundButton from "../../components/buttons/RoundButton";
+
 
 function TasksMain({navigation}) {
     //state to control the visibility of the modal
@@ -32,16 +34,13 @@ function TasksMain({navigation}) {
     const {taskListsState, dispatch} = useTasks();
 
     /**
-     * Is called on Press of the round Button next to a task in the taskslist
+     * Is called on Press of the round Button next to a task in the taskslist.
      * will toggle the property done of a task
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done
      * @param taskId the id of the task which was pressed
      */
     function handleTaskCompleted(taskId) {
-        //logic which sets the task property done to true --> implemented in the tasksreducer function
-        //the task should not be visible in the list anymore
-        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed on task with id: ", taskId);
         dispatch({
             type: 'TOGGLED_TASK_DONE',
             taskId: taskId,
@@ -224,7 +223,7 @@ function TasksMain({navigation}) {
                                             key={list.id}
                                         >
                                             <TouchableOpacity>
-                                             <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.DELETE_ICON_SIZE}/>
+                                             <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.EDIT_TASKS_ICON_SIZE}/>
                                             </TouchableOpacity>
                                             <View
                                                 style={styles.editTaskListItem}
@@ -262,12 +261,11 @@ function TasksMain({navigation}) {
                 </View>
 
                 {/*Round button for navigating to the AddTaskOrListScreen*/}
-                <TouchableOpacity
-                    style={styles.roundButton}
+                <RoundButton
                     onPress={handleOpenModal}
-                >
-                    <Icon name={ICONS.TASKICONS.ADD} size={35} color={COLOR.BUTTONLABEL}/>
-                </TouchableOpacity>
+                    buttonStyle={styles.roundButtonPosition}
+                    iconName={ICONS.TASKICONS.ADD}
+                />
 
                 {/*Conditional rendering of the AddTaskModal Component
                 Only when modalIsVisible is set to true*/}
@@ -353,13 +351,7 @@ function getStyles(insets)  {
             rowGap: 5,
             padding: 20
         },
-        roundButton: {
-            height: 60,
-            width: 60,
-            borderRadius: 30,
-            backgroundColor: COLOR.BUTTONCOLOR,
-            justifyContent: "center",
-            alignItems: "center",
+        roundButtonPosition: {
             position: "absolute",
             left: (windowWidth / 2) - 30,
             bottom: insets.bottom,
