@@ -11,9 +11,13 @@ import CustomDrawerHeader from "../../components/CustomDrawerHeader";
 import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
 import AddTaskModal from "../../components/AddTaskModal";
+import CustomButtonSmall from "../../components/CustomButtonSmall";
 
 function TasksMain({navigation}) {
+    //state to control the visibility of the modal
     const [modalIsVisible, setModalIsVisible] = useState(false);
+    //state to control the editing mode for the taskList View
+    const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
 
     //providing a safe area
     const insets = useSafeAreaInsets();
@@ -23,7 +27,7 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    //task context provider hook which provides a the taskListsState
+    //task context provider hook which provides the taskListsState
     //and a dispatchFunction to change the state based on actions
     const {taskListsState, dispatch} = useTasks();
 
@@ -42,6 +46,22 @@ function TasksMain({navigation}) {
             type: 'TOGGLED_TASK_DONE',
             taskId: taskId,
         })
+    }
+
+    /**
+     * is called on Press of the more button above the taskList View
+     * will open the editing mode for the Lists - where lists can be deleted
+     */
+    function handleOpenEditTaskLists() {
+        setEditTaskListsIsActive(true);
+    }
+
+    /**
+     * is called on Press of the 'Fertig' button above the taskList View
+     * will close the editing mode for the Lists
+     */
+    function handleCloseEditTaskLists() {
+        setEditTaskListsIsActive(false);
     }
 
     /**
@@ -168,14 +188,20 @@ function TasksMain({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                             Meine Listen
                         </Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                console.log('more was pressed')
-                            }}
-                        >
+                        {   /*Conditionally render more button, when editTaskListsIsActive === false*/
+                            !editTaskListsIsActive &&
+                            <TouchableOpacity
+                            onPress={handleOpenEditTaskLists}
+                            >
                             <Icon name={ICONS.TASKICONS.MORE_OUTLINE} size={SIZES.SCREEN_HEADER}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        }
+                        { /*Conditionally render done editing button, when editTaskListsIsActive === true*/
+                            editTaskListsIsActive &&
+                            <CustomButtonSmall title={"Fertig"} onPressFunction={handleCloseEditTaskLists}/>
+                        }
+
                     </View>
                     <ScrollView
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
@@ -185,18 +211,46 @@ function TasksMain({navigation}) {
                     >
                         {
                             taskListsState.map(list => {
-                                return (
-                                    <Pressable
-                                        //here the id of the list needs to be passed to the next Screen, so there the right list is shown
-                                        onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
-                                        key={list.id}
-                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer, styles.listItemContainerTaskList]}
-                                    >
-                                        <SquareIcon name={list.icon} color={list.color}/>
-                                        <Text
-                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
-                                    </Pressable>
-                                )
+                                if(editTaskListsIsActive) {
+                                    {/*editable taskList item*/}
+                                    return (
+                                        <View
+                                            style={[
+                                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                styles.listItemContainer,
+                                                styles.listItemContainerTaskList
+                                            ]}
+                                            key={list.id}
+                                        >
+                                            <TouchableOpacity>
+                                             <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.DELETE_ICON_SIZE}/>
+                                            </TouchableOpacity>
+                                            <Pressable
+                                                //here the id of the list needs to be passed to the next Screen, so there the right list is shown
+                                                onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                                style={styles.editTaskListItem}
+                                            >
+                                                <SquareIcon name={list.icon} color={list.color}/>
+                                                <Text
+                                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                            </Pressable>
+                                        </View>
+                                    )
+                                } else {
+                                    {/*regular taskList item*/}
+                                    return (
+                                        <Pressable
+                                            //here the id of the list needs to be passed to the next Screen, so there the right list is shown
+                                            onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
+                                            key={list.id}
+                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer, styles.listItemContainerTaskList]}
+                                        >
+                                            <SquareIcon name={list.icon} color={list.color}/>
+                                            <Text
+                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                        </Pressable>
+                                    )
+                                }
                             })
                         }
                     </ScrollView>
@@ -242,8 +296,8 @@ function getStyles(insets)  {
             //should we set paddings like this?
             paddingTop: insets.top,
             paddingBottom: insets.bottom + 40,
-            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-            rowGap: 20
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+            rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
         contentLight: {
             flex: 1,
@@ -273,6 +327,7 @@ function getStyles(insets)  {
         headerWithIcon: {
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingBottom: 5,
         },
         contentBoxLight: {
             backgroundColor: LIGHTMODE.BOX_COLOR,
@@ -320,7 +375,7 @@ function getStyles(insets)  {
             paddingHorizontal: 5,
             paddingVertical: 12,
             flexDirection: "row",
-            columnGap: 20,
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
             borderBottomWidth: 1,
         },
         listItemContainerTaskList: {
@@ -333,6 +388,11 @@ function getStyles(insets)  {
             flexDirection: "column",
             alignItems: "flex-start",
             rowGap: 5
+        },
+        editTaskListItem: {
+            flexDirection: "row",
+            alignItems: "center",
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
         },
     })
 }
