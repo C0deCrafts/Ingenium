@@ -58,8 +58,9 @@ function CreateList({navigation}) {
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                     Neue Liste erstellen
                 </Text>
-                {/* Input field for list name */}
+                {/* Spacing */}
                 <View style={styles.spacing}>
+                    {/* Input field for list name */}
                     <CustomInputField placeholder={"Listenname"}
                                       keyboardType={"default"}
                                       maxTextInputLength={25}
@@ -194,13 +195,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop: 40
     },
-    // Styles for the first button left
+    // Save button styles
     buttonOne: {
         flex: 1,
         marginRight: 10,
         height: 50,
     },
-    // Styles for the second button right
+    // Cancel button styles
     buttonTwo: {
         flex: 1,
         height: 50,
