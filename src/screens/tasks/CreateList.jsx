@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
     header: {
         fontSize: SIZES.SCREEN_HEADER,
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-        paddingBottom: 5,
     },
     // Text styles for light and dark mode
     textLight: {

@@ -43,10 +43,10 @@ function CreateList({navigation}) {
     };
 
     // Function to navigate to the edit task details screen
-    const navigateToEditTaskDetails = () => {
+    const navigateToAddTaskDetails = () => {
         // Dismiss the keyboard and navigate to the edit task details screen
         Keyboard.dismiss();
-        navigation.navigate("EditTaskDetails_Screen");
+        navigation.navigate("CreateTaskDetails_Screen");
         // Optional: Pass additional props like title and notes to the EditTaskDetails screen for further use
         // navigation.navigate("EditTaskDetails_Screen", {title, notes});
     };
@@ -112,7 +112,7 @@ function CreateList({navigation}) {
                         iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
                         iconName={ICONS.TASKICONS.CURVED_LINE}
                         iconColor={COLOR.BUTTONLABEL}
-                        onPress={navigateToEditTaskDetails}
+                        onPress={navigateToAddTaskDetails}
                         showForwardIcon={true}
                         extraPadding={10}
                     />
@@ -165,7 +165,6 @@ const styles = StyleSheet.create({
     header: {
         fontSize: SIZES.SCREEN_HEADER,
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-        paddingBottom: 5,
     },
     // Text styles for light and dark mode
     textLight: {
