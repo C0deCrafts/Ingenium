@@ -1,4 +1,12 @@
-import {Text, View, StyleSheet, TextInput, Keyboard} from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TextInput,
+    Keyboard,
+    InputAccessoryView,
+    TouchableOpacity,
+} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
@@ -14,6 +22,9 @@ import SelectListModal from "../../components/modals/SelectListModal";
 function CreateList({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
+    const inputAccessoryViewID = 'uniqueID';
 
     // Reference for the select list modal
     const selectListModalRef = useRef(null);
@@ -79,6 +90,8 @@ function CreateList({navigation}) {
                             selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                             onChangeText={(title) => setTitle(title)}
                             value={title}
+                            keyboardAppearance={isDarkMode ? "dark" : "light"}
+                            returnKeyType="done"
                         />
                     </View>
                     <View style={isDarkMode ? styles.textInputBoxNotesDark : styles.textInputBoxNotesLight}>
@@ -91,7 +104,16 @@ function CreateList({navigation}) {
                                    scrollEnabled={true}
                                    onChangeText={(notes) => setNotes(notes)}
                                    value={notes}
+                                   inputAccessoryViewID={inputAccessoryViewID}
+                                   keyboardAppearance={isDarkMode ? "dark" : "light"}
                         />
+                        {/* Custom keyboard button */}
+                        <InputAccessoryView nativeID={inputAccessoryViewID}>
+                            <TouchableOpacity onPress={() => Keyboard.dismiss()}
+                                              style={isDarkMode ? styles.keyboardButtonDark : styles.keyboardButtonLight}>
+                                <Text style={styles.keyboardButtonLabel}>Fertig</Text>
+                            </TouchableOpacity>
+                        </InputAccessoryView>
                     </View>
                 </View>
                 {/* Spacing */}
@@ -123,7 +145,8 @@ function CreateList({navigation}) {
                 {/* Optional buttons for saving and canceling */}
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern gedrückt - Titel: " + title + ", Notizen: " + notes + ", Ausgewählte Liste: " + selectedList)}/>
+                        <CustomButton title={"Speichern"}
+                                      onPressFunction={() => console.log("Speichern gedrückt - Titel: " + title + ", Notizen: " + notes + ", Ausgewählte Liste: " + selectedList)}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
@@ -253,5 +276,24 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 50,
         marginLeft: 10
+    },
+    keyboardButtonLight: {
+        backgroundColor: LIGHTMODE.BUTTONCOLOR,
+        borderBottomWidth: 1,
+        borderColor: LIGHTMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: 20,
+        paddingVertical: 10
+    },
+    keyboardButtonDark: {
+        backgroundColor: DARKMODE.BUTTONCOLOR,
+        borderBottomWidth: 1,
+        borderColor: DARKMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        paddingVertical: 10
+    },
+    keyboardButtonLabel: {
+        fontSize: SIZES.BUTTON_LABEL_SIZE,
+        color: COLOR.BUTTONLABEL,
+        textAlign: "right",
     }
 })

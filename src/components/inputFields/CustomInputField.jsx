@@ -75,6 +75,7 @@ function CustomInputField({
                 onChangeText={onChangeText}
                 value={value}
                 returnKeyType="done"
+                keyboardAppearance={isDarkMode ? "dark" : "light"}
             />
         </View>
     )
