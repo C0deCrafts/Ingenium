@@ -21,30 +21,6 @@ export const useTasks = () => {
 //variable initialized with the imported dummydata for taskLists
 const taskListsData = dummyDataTasks;
 
-//less data to test the reducer functions
-const testData = [
-    {
-        id: 1,
-        title: 'Programmieren',
-        icon: ICONS.TASKICONS.CODE,
-        color: COLOR.ICONCOLOR_CUSTOM_AQUA,
-        tasks: [
-            { id: 1, title: 'Webseitenprojekt', notes: 'Interaktive Webseite mit HTML, CSS und JavaScript entwickeln.', dueDate: '2024-03-15', done: true },
-            { id: 2, title: 'Algorithmus implementieren', notes: 'Bubble-Sort-Algorithmus in Java implementieren.', dueDate: '2024-03-10', done: false },
-        ]
-    },
-    {
-        id: 2,
-        title: 'Netzwerktechnik',
-        icon: ICONS.TASKICONS.HIERARCHY,
-        color: COLOR.ICONCOLOR_CUSTOM_DARKGREEN,
-        tasks: [
-            { id: 3, title: 'Netzwerktopologie entwerfen', notes: 'Netzwerktopologie für ein kleines Bürogebäude entwerfen.', dueDate: '2024-03-22', done: true },
-            { id: 4, title: 'Lernen wie man ACLs implementiert', notes: 'PackettracerÜbungen zu ACLs machen.', dueDate: '2024-03-12', done: false },
-        ]
-    },
-];
-
 /**
  * A TaskProvider Component which needs to be wrapped around the Components which need to access and change the tasksState
  */
@@ -83,18 +59,20 @@ export const TasksProvider = ({children}) => {
  * ## PRINCIPLES:
  * - It assumes that each list and each task in the data structure have a unique id.
  * - As immutability of state is required by React and React Native, we always need to return copies of the state, holding
- * the updated values, instead of making direct changes to the state variable.
+ * the updated values, instead of directly mutating the state variable. For this purpose, shallow copies of the state
+ * are created using the '...' spread syntax.
  *
  * ### A reducer function in general takes the following arguments:
+ * (add)
  *
  * It offers the following actions for updating the taskListsState state:
  *
  * - 'TOGGLED_TASK_DONE': toggles the task.done property
+ * - 'DELETED_TASK':
+ * - 'DELETED_LIST':
  * - 'CREATED_TASK':
  * - 'EDITED_TASK':
- * - 'DELETED_TASK':
  * - 'CREATED_LIST':
- * - 'DELETED_LIST':
  *
  * Care is required regarding the Switch Case statement - as each action needs to
  * return a state, so that the cases do not fall through
@@ -102,7 +80,9 @@ export const TasksProvider = ({children}) => {
  * having the same valid structure after an update.
  *
  * @param taskListsState
- * @param action
+ * @param action {object} holding the action type,which is executed, as well as additional data, needed to execute
+ *                        the action. For each type the required data is specified in the description of the action.type
+ *                        inside the reducer function.
  * @returns {*[]}
  */
 function tasksReducer(taskListsState, action) {
@@ -140,47 +120,63 @@ function tasksReducer(taskListsState, action) {
              *
              */
 
-            //destructure the taskId of the task which was toggled, from the action object passed to dispatch(action)
+            /*
+            Destructures the taskId of the task which was toggled, from the action object passed
+            to the dispatch function.
+            */
             const {taskId} = action;
 
-            //check if task Id was passed to action object
-            //if no task Id was passed return the unchanged state
+            /*
+            ERROR HANDLING:
+            TREATS THE CASE IF NO TASKID WAS PASSED TO THE ACTION OBJECT:
+            Checks if the taskId was passed to the action object. If not returns the unchanged state,
+            as the action can not be executed without the taskId.
+             */
             if(!taskId) {
-                console.error("Invalid action object passed to action: 'toggled_task_done' - taskId is expected");
+                console.error("Invalid action object passed to action: 'TOGGLED_TASK_DONE' - taskId is expected");
                 return [...taskListsState];
             }
 
-            console.log("INSIDE TASKSREDUCER: action toggled_task_done");
-            console.log("Task which will be updated has id: ", taskId);
+            console.log("INSIDE TASKSREDUCER: action 'TOGGLED_TASK_DONE'");
+            console.log("Task which will be updated has the id: ", taskId);
 
             /*****************1) find list and task which need an update in taskListsState*****************************/
             /*
-            Action: Find the list the task belongs to.
-            Uses the find method which will return the first list from the array that
+            Finds the list the task belongs to.
+            Find iterates through the taskListsState and returns the first list from the array that
             satisfies the testing condition.
-            Testing condition: uses the some method, which will check if a task in the lists task array
-            has the id we are looking for - if so it returns true.
-            Means that the first list whose testing condition returns true, will be assigned to listToUpdate
-             */
-            const listToUpdate = taskListsState.find(list => {
-                return list.tasks.some(task => task.id === taskId);
-            });
 
-            //check if a list was found - if not return the unchanged state
+            Testing condition: Find iterates through the tasks of the current list and returns  the first task, where the
+            id matches the taskId.
+
+            OUTCOME:
+            If a task with the taskId is found within a list, the outer find returns that entire list, which is
+            assigned to listToUpdate. If the task is not found in any list, listToUpdate will be undefined.
+             */
+            const listToUpdate = taskListsState.find(list => list.tasks.find(task => task.id === taskId));
+
+            /*
+            ERROR HANDLING:
+            TREATS THE CASE IF NO LIST WAS FOUND - if listToUpdate is undefinded.
+            Undefined is a falsy value in JavaScript.
+            If listToUpdate is undefined (falsy) - !listToUpdate will return true.
+            Since the action can not be performed if listToUpdate is undefined, the if-code-block will be
+            entered and the action will return the unchanged state.
+
+            This step also verifies, that a task with taskId exists, as the list will be undefined if no task
+            could be found. So the task can be saved to a variable taskToUpdate without further verification.
+             */
             if(!listToUpdate) {
-                console.error("The list where the task belongs to could not be found!");
+                console.error("The list or the task could not be found!");
                 return [...taskListsState];
             }
             console.log("List which will be updated: ", listToUpdate);
 
-            //find the task which needs to be updated in the list
+            /*
+            Saves the task with taskId to variable taskToUpdate.
+             */
             const taskToUpdate = listToUpdate.tasks.find(task => task.id === taskId);
 
-            //check if the task was found - if not return the unchanged state
-            if(!taskToUpdate) {
-                console.error("The task with id {taskId} could not be found", taskId);
-                return [...taskListsState];
-            }
 
             /****2) create a copy of the task and toggle the property done*********/
             const newTask = {
@@ -207,11 +203,85 @@ function tasksReducer(taskListsState, action) {
 
             console.log("The updated list - newTasksList: ", newTasksList);
 
-            /****5) create a copy of the taskListsState and replace the list to update with the updated list**************/
+            /****5) create a copy of the taskListsState and replace the corresponding list with the updated list**************/
             //create a copy of the taskListsState with map
             //in which the listToUpdate is replaced with newTasksList
             const newTaskListsState = taskListsState.map(tasksList => tasksList.id === listToUpdate.id ? newTasksList : tasksList);
-            console.log('The final updated state of action toggle_task_done is: ', newTaskListsState);
+            console.log("The final updated state of action 'TOGGLED_TASK_DONE' is: ", newTaskListsState);
+
+            return newTaskListsState;
+        }
+
+        case 'DELETED_TASK': {
+
+            /*
+           Destructures the taskId of the task which was toggled, from the action object passed
+           to the dispatch function.
+            */
+            const {taskId} = action;
+
+            /*
+            ERROR HANDLING:
+            TREATS THE CASE IF NO TASKID WAS PASSED TO THE ACTION OBJECT:
+            Checks if the taskId was passed to the action object. If not returns the unchanged state,
+            as the action can not be executed without the taskId.
+             */
+            if(!taskId) {
+                console.error("Invalid action object passed to action: 'DELETED TASK' - taskId is expected");
+                return [...taskListsState];
+            }
+
+            /*****************1) find list and task which need an update in taskListsState*****************************/
+            /*
+            Finds the list the task belongs to.
+            Find iterates through the taskListsState and returns the first list from the array that
+            satisfies the testing condition.
+
+            Testing condition: Find iterates through the tasks of the current list and returns  the first task, where the
+            id matches the taskId.
+
+            OUTCOME:
+            If a task with the taskId is found within a list, the outer find returns that entire list, which is
+            assigned to listToUpdate. If the task is not found in any list, listToUpdate will be undefined.
+             */
+            const listToUpdate = taskListsState.find(list => list.tasks.find(task => task.id === taskId));
+
+            /*
+            ERROR HANDLING:
+            TREATS THE CASE IF NO LIST WAS FOUND - if listToUpdate is undefinded.
+            Undefined is a falsy value in JavaScript.
+            If listToUpdate is undefined (falsy) - !listToUpdate will return true.
+            Since the action can not be performed if listToUpdate is undefined, the if-code-block will be
+            entered and the action will return the unchanged state.
+             */
+            if(!listToUpdate) {
+                console.error("The list or the task could not be found!");
+                return [...taskListsState];
+            }
+
+            /****2) Create a new Tasks Array by removing the task from listToUpdate with filtering*********/
+            const newTasksArray = listToUpdate.tasks.filter(task => task.id !== taskId);
+
+            console.log("Inside 'DELETED_TASK': After filtering the listToUpdate.tasks to newTasksArray: ", newTasksArray)
+
+            /****3) Create a new TasksList object containing the updated TasksArray**************/
+            const newTasksList = {
+                ...listToUpdate,
+                tasks: newTasksArray
+            }
+
+            /****5) Create a new taskListsState in which the corresponding list is replaced with the updated list**************/
+            /*
+            Creates a new taskListsStateArray with map in which the listToUpdate is replaced with newTasksList.
+
+            Iterates through the original taskListsState array using the map method. Applies a function to each tasksList,
+            which checks if the current tasksList's id matches the id of the listToUpdate.
+            If the condition is true, it replaces the current tasksList with the newTasksList. If the condition is false
+            the current tasksList is kept unchanged.
+             */
+            const newTaskListsState = taskListsState.map(tasksList => tasksList.id === listToUpdate.id ? newTasksList : tasksList);
+            console.log("The final updated state of action 'DELETED_TASK' is: ", newTaskListsState);
+
 
             return newTaskListsState;
         }

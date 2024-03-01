@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
 import CustomButton from "../../components/buttons/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
@@ -84,11 +84,35 @@ function ListTasks({route, navigation}){
 
     /**
      * Deletes the task
+     *
      */
-    function handleDeleteTask() {
-
+    function handleDeleteTask(taskId) {
+        dispatch({
+            type: 'DELETED_TASK',
+            taskId: taskId,
+        });
     }
 
+    /**
+     * //create Alert
+     *         const handleAlert = () => {
+     *             return Alert.alert(
+     *                 'Aufgabe löschen',
+     *                 'Bist du sicher, dass du diese Aufgabe löschen möchtest?',
+     *                 [
+     *                     {
+     *                         text: 'Ja',
+     *                         onPress: () => {
+     *                             console.log(`INSIDE HANDLE DELETES TASK ALERT, 'JA' WAS PRESSED: task with id ${taskId} will be deleted.`);
+     *                         }
+     *                     },
+     *                     {
+     *                         text: 'Nein'
+     *                     }
+     *                 ]
+     *             )
+     *         }
+     */
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -139,7 +163,7 @@ function ListTasks({route, navigation}){
                                                 ]}
                                             >
                                                 <TouchableOpacity
-                                                    onPress={handleDeleteTask}
+                                                    onPress={() => handleDeleteTask(task.id)}
                                                 >
                                                     <Icon name={ICONS.TASKICONS.MINUS}
                                                           color={COLOR.ICONCOLOR_CUSTOM_RED}
