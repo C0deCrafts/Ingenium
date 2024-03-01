@@ -35,33 +35,33 @@ function ListTasks({route, navigation}){
     const {listId} = route.params;
 
     /**
-     * is called on press of the Back Button
-     * navigates back to the TasksMain Screen
+     * Is called on press of the Back Button.
+     * Navigates back to the TasksMain Screen.
      */
     const handleGoBack = () => {
         navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
     };
 
     /**
-     * is called on press of the edit Task Button
-     * navigates to the EditTask Screen
+     * Is called on press of the edit Task Button
+     * navigates to the EditTask Screen.
      */
     function handleNavigateToEditTask() {
         navigation.push("EditTask_Screen");
     }
 
     /**
-     * is called on press of the more Button
-     * opens the edit mode in the screen, which enables the user
-     * to delete tasks or navigate to the EditTask Screen
+     * Is called on press of the more Button.
+     * Opens the edit mode in the screen, which enables the user
+     * to delete tasks or navigate to the EditTask Screen.
      */
     function handleCloseEditingTasks() {
         setEditTasksIsActive(false);
     }
 
     /**
-     * is called on press of the 'Fertig' button
-     * closes the edit mode for the tasks
+     * Is called on press of the 'Fertig' button
+     * closes the edit mode for the tasks.
      */
     function handleOpenEditingTasks() {
         setEditTasksIsActive(true);
