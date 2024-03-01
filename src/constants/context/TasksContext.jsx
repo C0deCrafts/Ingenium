@@ -1,40 +1,42 @@
 import {useState, createContext, useContext, useReducer} from 'react';
 import dummyDataTasks from "../../assets/dummydata/dummyDataTasks";
-import {ICONS} from "../icons";
-import {COLOR} from "../styleSettings";
 
 /**
-Creates a context for all the tasks data, which needs to be shared across the task Screens
-providing a shared taskListsState and a dispatch function for triggering state updates based on an action
+ * Creates a context to manage task data across task screens.
+ * Provides a shared state (`taskListsState`) and a dispatch function
+ * to trigger state updates based on actions.
  */
 const TasksContext = createContext(null);
 
+
 /**
- * **useTasks:** A custom Hook for usage of the context inside the Screens which need to access
- * the taskListsState and the dispatch function to update the state
+ * Custom hook to access the tasks context state and the dispatch functions for state updates
+ * from components that need to manage tasks.
  */
+
 export const useTasks = () => {
     return useContext(TasksContext);
 };
 
-/****TEST DATA***/
-//variable initialized with the imported dummydata for taskLists
+
+// Initialize task data with imported dummy data
 const taskListsData = dummyDataTasks;
 
 /**
  * A TaskProvider Component which needs to be wrapped around the Components which need to access and change the tasksState
  */
 export const TasksProvider = ({children}) => {
+
     /**
      * useReducer Hook
-     * ### it returns the following:
+     * ###  - Returns current state and a dispatch function.
      *- the current state
-     *- a dispatch function which needs to be called with an action object
-     * to trigger the state update defined in the tasksReducer function
+     * - The dispatch function triggers state updates based on the action object
+     * passed to it.
      * it takes two arguments:
      * - **reducer**: the tasksReducer function: defines how the state is updated based on the action type passed to dispatch
      * - **initialArg**: the value from which the initial state is calculated
-     * the third argument is optional as mentioned in React documentation - IntelliJ expects all three for some reason?
+     * the third argument is optional
      */
     const [taskListsState, dispatch] = useReducer(
         tasksReducer,
@@ -54,15 +56,17 @@ export const TasksProvider = ({children}) => {
 
 /**
  * # TASKSREDUCER
- * The tasksReducer is a reducer function and performs taskListsState updates based on the chosen action.
+ * The tasksReducer is a reducer function and performs taskListsState updates based on the action passed to it.
  *
  * ## ASSUMPTIONS:
- * - It assumes that each list and each task in the data structure have a unique id.
- * - As immutability of state is required by React and React Native, the reducer always need to return copies of the state, holding
- * the updated values, instead of directly mutating the state variable. For this purpose, shallow copies of the state
- * are created using the '...' spread syntax.
+ * - Each list and each task in the data structure must have a unique id.
+ * - React requires immutable state updates. This means that state should not be directly mutated, but instead a new state array/object
+ * has to be returned. The spread syntax (`...`) is used for shallow copying.
+ * Therefore, the reducer always returns:
+ *  *   a new state object with updated values instead of mutating the existing state.
  *
- * @param taskListsState  The current state of taskLists.
+ *
+ * @param taskListsState  The current state of task lists.
  * @param action {object} An Object containing the action type, which should be executed, as well as additional data, needed to execute
  *                        that specific action. For each action type the required data is specified in the description of the action types
  *                        offered by the reducer function.
@@ -76,7 +80,7 @@ export const TasksProvider = ({children}) => {
  * dispatch({
  *             type: 'TOGGLED_TASK_DONE',
  *             taskId: taskId,
- *         })
+ *         });
  *
  * - **'DELETED_TASK':** deletes the task from taskListsState
  *
@@ -85,9 +89,17 @@ export const TasksProvider = ({children}) => {
  * dispatch({
  *             type: 'DELETED_TASK',
  *             taskId: taskId,
- *         })
+ *         });
  *
  * - **'DELETED_LIST':** deletes the list from taskListsState
+ *
+ * **It requires the following arguments passed to dispatch:**
+ *
+ * dispatch({
+ *              type: 'DELETED_LIST',
+ *              tasksListId: tasksListId,
+ *          });
+ *
  * - **'CREATED_TASK':** adds a new task to chosen list in taskListsState
  * - **'EDITED_TASK':** updates the task in taskListsState
  * - **'CREATED_LIST':** creates a new list in taskListsState
@@ -279,7 +291,7 @@ function tasksReducer(taskListsState, action) {
                 tasks: newTasksArray
             }
 
-            /****5) Create a new taskListsState in which the corresponding list is replaced with the updated list**************/
+            /****4) Create a new taskListsState in which the corresponding list is replaced with the updated list**************/
             /*
             Creates a new taskListsStateArray with map in which the listToUpdate is replaced with newTasksList.
 
@@ -312,6 +324,7 @@ function tasksReducer(taskListsState, action) {
                 return [...taskListsState];
             }
 
+            /*****************1) return an updated taskListsState by removing the deleted list with filtering*****************************/
             /**
              * Create and return a new state by filtering out the list with the taskListId.
              * Filter iterates through the taskListsState Array and returns a shallow copy, containing
