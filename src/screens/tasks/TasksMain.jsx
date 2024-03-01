@@ -76,10 +76,15 @@ function TasksMain({navigation}) {
 
     /**
      *
-     * @param listId
+     * @param tasksListId
      */
-    function handleDeleteTaskList(listId) {
-        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", listId)
+    function handleDeleteTaskList(tasksListId) {
+        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
+
+        dispatch({
+            type: 'DELETED_LIST',
+            tasksListId: tasksListId,
+        });
     }
 
     /**

@@ -56,34 +56,46 @@ export const TasksProvider = ({children}) => {
  * # TASKSREDUCER
  * The tasksReducer is a reducer function and performs taskListsState updates based on the chosen action.
  *
- * ## PRINCIPLES:
+ * ## ASSUMPTIONS:
  * - It assumes that each list and each task in the data structure have a unique id.
- * - As immutability of state is required by React and React Native, we always need to return copies of the state, holding
+ * - As immutability of state is required by React and React Native, the reducer always need to return copies of the state, holding
  * the updated values, instead of directly mutating the state variable. For this purpose, shallow copies of the state
  * are created using the '...' spread syntax.
  *
- * ### A reducer function in general takes the following arguments:
- * (add)
+ * @param taskListsState  The current state of taskLists.
+ * @param action {object} An Object containing the action type, which should be executed, as well as additional data, needed to execute
+ *                        that specific action. For each action type the required data is specified in the description of the action types
+ *                        offered by the reducer function.
+ * @returns {*[]}         The updated taskListsState array.
  *
- * It offers the following actions for updating the taskListsState state:
+ * The tasksReducer offers the following  action types for updating the taskListsState state:
  *
- * - 'TOGGLED_TASK_DONE': toggles the task.done property
- * - 'DELETED_TASK':
- * - 'DELETED_LIST':
- * - 'CREATED_TASK':
- * - 'EDITED_TASK':
- * - 'CREATED_LIST':
+ * - **'TOGGLED_TASK_DONE':** toggles the task.done property <br>
+ * **It requires the following arguments passed to dispatch:**
+ *
+ * dispatch({
+ *             type: 'TOGGLED_TASK_DONE',
+ *             taskId: taskId,
+ *         })
+ *
+ * - **'DELETED_TASK':** deletes the task from taskListsState
+ *
+ * **It requires the following arguments passed to dispatch:**
+ *
+ * dispatch({
+ *             type: 'DELETED_TASK',
+ *             taskId: taskId,
+ *         })
+ *
+ * - **'DELETED_LIST':** deletes the list from taskListsState
+ * - **'CREATED_TASK':** adds a new task to chosen list in taskListsState
+ * - **'EDITED_TASK':** updates the task in taskListsState
+ * - **'CREATED_LIST':** creates a new list in taskListsState
  *
  * Care is required regarding the Switch Case statement - as each action needs to
  * return a state, so that the cases do not fall through
  * the state needs to be valid - as the Screens using the state depend on the state
  * having the same valid structure after an update.
- *
- * @param taskListsState
- * @param action {object} holding the action type,which is executed, as well as additional data, needed to execute
- *                        the action. For each type the required data is specified in the description of the action.type
- *                        inside the reducer function.
- * @returns {*[]}
  */
 function tasksReducer(taskListsState, action) {
     switch (action.type) {
@@ -100,8 +112,8 @@ function tasksReducer(taskListsState, action) {
              *         })
              *
              * HOW THE UPDATE IS ACHIEVED:
-             * All lists in the taskListsState need to stay the same accept the list holding the task which was toggled.
-             * This list will be replaced, with an updated list.
+             * **All lists in the taskListsState need to stay the same accept the list holding the task which was toggled.
+             * This list will be replaced, with an updated list.**
              *
              * Steps to achieve this, by adhering to the principle of immutability of arrays stored in state:
              *
@@ -115,14 +127,12 @@ function tasksReducer(taskListsState, action) {
              * 4) create a copy of the list, and replace the tasks array with the updated tasks array --> updated tasksList
              *
              * 5) create a copy of the taskListsState, and replace the list to update with the updated list  --> updated taskListsState
-             *
-             * Error handling:
-             *
              */
 
             /*
-            Destructures the taskId of the task which was toggled, from the action object passed
-            to the dispatch function.
+            Destructures the taskId of the task from the action object passed
+            to the dispatch function. This is the id of the task which should be set to either done === false or
+            done === true. (toggle done property)
             */
             const {taskId} = action;
 
@@ -211,12 +221,11 @@ function tasksReducer(taskListsState, action) {
 
             return newTaskListsState;
         }
-
         case 'DELETED_TASK': {
 
             /*
-           Destructures the taskId of the task which was toggled, from the action object passed
-           to the dispatch function.
+           Destructures the taskId from the action object passed
+           to the dispatch function. This is the id of the task which should be deleted.
             */
             const {taskId} = action;
 
@@ -282,11 +291,36 @@ function tasksReducer(taskListsState, action) {
             const newTaskListsState = taskListsState.map(tasksList => tasksList.id === listToUpdate.id ? newTasksList : tasksList);
             console.log("The final updated state of action 'DELETED_TASK' is: ", newTaskListsState);
 
-
             return newTaskListsState;
         }
+        case 'DELETED_LIST': {
+
+            /*
+           Destructures the taskListId of the task which was toggled, from the action object passed
+           to the dispatch function. This is the id of the list which should be deleted.
+            */
+            const {tasksListId} = action;
+
+            /*
+            ERROR HANDLING:
+            TREATS THE CASE IF NO TASKLISTID WAS PASSED TO THE ACTION OBJECT:
+            Checks if the taskListId was passed to the action object. If not returns the unchanged state,
+            as the action can not be executed without the listId.
+             */
+            if(!tasksListId) {
+                console.error("Invalid action object passed to action: 'DELETED TASK' - tasksListId is expected");
+                return [...taskListsState];
+            }
+
+            /**
+             * Create and return a new state by filtering out the list with the taskListId.
+             * Filter iterates through the taskListsState Array and returns a shallow copy, containing
+             * just the taskLists which do not have the given tasksListId.
+             */
+            return taskListsState.filter(tasksList => tasksList.id !== tasksListId);
+        }
         default: {
-            throw Error('Unknown action: ' + action.type);
+            throw Error('Unknown action');
         }
     }
 }
