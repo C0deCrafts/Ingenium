@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert} from "react-native";
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
@@ -55,7 +55,7 @@ function TasksMain({navigation}) {
         dispatch({
             type: 'TOGGLED_TASK_DONE',
             taskId: taskId,
-        })
+        });
     }
 
     /**
@@ -80,11 +80,32 @@ function TasksMain({navigation}) {
      */
     function handleDeleteTaskList(tasksListId) {
         console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
-
-        dispatch({
-            type: 'DELETED_LIST',
-            tasksListId: tasksListId,
-        });
+        
+        //create Alert
+        Alert.alert(
+            'Liste löschen',
+            'Möchtest du diese Liste wirklich löschen?',
+            [
+                {
+                    text: 'Ja',
+                    onPress: () => {
+                        console.log(`DELETE LIST ALERT, 'JA' WAS PRESSED:  with id ${tasksListId} will be deleted.`);
+                        return dispatch({
+                            type: 'DELETED_LIST',
+                            tasksListId: tasksListId,
+                        });
+                    },
+                    //styling the alert button for IOs to be red
+                    style: 'destructive'
+                },
+                {
+                    text: 'Nein',
+                    onPress: () => console.log("DELETE LIST ALERT, 'NEIN' WAS PRESSED"),
+                    //styling the alert button for IOs to be blue
+                    style: 'cancel'
+                },
+            ]
+        );
     }
 
     /**
