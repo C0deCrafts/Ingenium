@@ -29,8 +29,19 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    //task context provider hook which provides the taskListsState
-    //and a dispatchFunction to change the state based on actions
+
+    /**
+     * CUSTOM HOOK USETASKS
+     * Provides the taskListsState and a dispatch function.
+     *
+     * The dispatch function expects an action object as its argument.
+     * This action object communicates with the reducer, about what needs to
+     * be done and what information is needed to perform that action.
+     * The action object always holds an action type, and additional data
+     * which is needed for performing that action. The additional data which needs
+     * to be passed to the action object for each action, is specified in the reducer
+     * function.
+     */
     const {taskListsState, dispatch} = useTasks();
 
     /**
@@ -61,6 +72,14 @@ function TasksMain({navigation}) {
      */
     function handleCloseEditTaskLists() {
         setEditTaskListsIsActive(false);
+    }
+
+    /**
+     *
+     * @param listId
+     */
+    function handleDeleteTaskList(listId) {
+        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", listId)
     }
 
     /**
@@ -222,7 +241,9 @@ function TasksMain({navigation}) {
                                             ]}
                                             key={list.id}
                                         >
-                                            <TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => handleDeleteTaskList(list.id)}
+                                            >
                                              <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.EDIT_TASKS_ICON_SIZE}/>
                                             </TouchableOpacity>
                                             <View
@@ -268,7 +289,7 @@ function TasksMain({navigation}) {
                 />
 
                 {/*Conditional rendering of the AddTaskModal Component
-                Only when modalIsVisible is set to true*/}
+                only when modalIsVisible is set to true*/}
                 {modalIsVisible && <AddTaskModal
                     visible={modalIsVisible}
                     onPressCreateList={handleCreateList}
