@@ -83,36 +83,41 @@ function ListTasks({route, navigation}){
 
 
     /**
-     * Deletes the task
-     *
+     * Is called on press of the delete task button.
+     * Shows an alert to the user, if the user is sure about deleting the task.
+     * If the user chooses 'Ja' the dispatch function with action type 'DELETED_TASK'
+     * will be called. If the user chooses 'No', the Alert will be closed and the
+     * task will not be deleted.
      */
     function handleDeleteTask(taskId) {
-        dispatch({
-            type: 'DELETED_TASK',
-            taskId: taskId,
-        });
+        //create Alert
+        Alert.alert(
+            'Aufgabe löschen',
+            'Möchtest du diese Aufgabe wirklich löschen?',
+            [
+                {
+                    text: 'Ja',
+                    onPress: () => {
+                        console.log(`DELETE TASK ALERT, 'JA' WAS PRESSED: task with id ${taskId} will be deleted.`);
+                        return dispatch({
+                            type: 'DELETED_TASK',
+                            taskId: taskId,
+                        });
+                    },
+                    //styling the alert button for IOs to be red
+                    style: 'destructive'
+                },
+                {
+                    text: 'Nein',
+                    onPress: () => console.log("DELETE TASK ALERT, 'NEIN' WAS PRESSED"),
+                    //styling the alert button for IOs to be blue
+                    style: 'cancel'
+                },
+            ]
+        );
+
     }
 
-    /**
-     * //create Alert
-     *         const handleAlert = () => {
-     *             return Alert.alert(
-     *                 'Aufgabe löschen',
-     *                 'Bist du sicher, dass du diese Aufgabe löschen möchtest?',
-     *                 [
-     *                     {
-     *                         text: 'Ja',
-     *                         onPress: () => {
-     *                             console.log(`INSIDE HANDLE DELETES TASK ALERT, 'JA' WAS PRESSED: task with id ${taskId} will be deleted.`);
-     *                         }
-     *                     },
-     *                     {
-     *                         text: 'Nein'
-     *                     }
-     *                 ]
-     *             )
-     *         }
-     */
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
