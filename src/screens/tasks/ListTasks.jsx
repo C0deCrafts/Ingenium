@@ -342,10 +342,10 @@ function getStyles(insets) {
             padding: 10
         },
         borderLight: {
-            borderColor: LIGHTMODE.BORDER_COLOR,
+            borderColor: LIGHTMODE.BACKGROUNDCOLOR,
         },
         borderDark: {
-            borderColor: DARKMODE.BORDER_COLOR,
+            borderColor: DARKMODE.BACKGROUNDCOLOR,
         },
         taskTitleDateColumnEditNotActive: {
             alignItems: "flex-end",
