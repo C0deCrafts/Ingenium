@@ -118,6 +118,9 @@ function ListTasks({route, navigation}){
 
     }
 
+    //access the current list title to show it in the heading of the screen
+    const currentList = taskListsState.find(list => list.id === listId);
+    const currentScreenTitle = currentList.title;
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -141,7 +144,9 @@ function ListTasks({route, navigation}){
             need to show only tasks of this list
             need to show tasks sorted ascending by dueDate*/
             }
-                <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>Alle</Text>
+                <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>
+                    {currentScreenTitle}
+                </Text>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     bounces={false}
