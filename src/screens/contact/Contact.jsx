@@ -1,4 +1,4 @@
-import {ActionSheetIOS, Alert, Platform, Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
+import {ActionSheetIOS, Platform, Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
