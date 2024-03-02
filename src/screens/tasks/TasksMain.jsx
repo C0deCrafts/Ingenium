@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView, Dimensions, Pressable, TouchableOpacity, Modal} from "react-native";
+import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert} from "react-native";
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
@@ -7,42 +7,106 @@ import {useState} from "react";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
-import CustomDrawerHeader from "../../components/CustomDrawerHeader";
+import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import Icon from "../../components/Icon";
 import SquareIcon from "../../components/SquareIcon";
-import AddTaskModal from "../../components/AddTaskModal";
-
-
-
+import AddTaskModal from "../../components/modals/AddTaskModal";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
+import RoundButton from "../../components/buttons/RoundButton";
 
 
 function TasksMain({navigation}) {
+    //state to control the visibility of the modal
     const [modalIsVisible, setModalIsVisible] = useState(false);
+    //state to control the editing mode for the taskList View
+    const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
 
     //providing a safe area
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    //theme context provider
+    //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {taskLists} = useTasks();
 
-    //extract all tasks from the taskslist
-    const allTasks = taskLists.flatMap(list => list.tasks);
+    /**
+     * CUSTOM HOOK USETASKS
+     * Provides the taskListsState and a dispatch function.
+     *
+     * The dispatch function expects an action object as its argument.
+     * This action object communicates with the reducer, about what needs to
+     * be done and what information is needed to perform that action.
+     * The action object always holds an action type, and additional data
+     * which is needed for performing that action. The additional data which needs
+     * to be passed to the action object for each action, is specified in the reducer
+     * function.
+     */
+    const {taskListsState, dispatch} = useTasks();
 
-
-    //TASK PREVIEW
-    //implement a function to sort tasks by dueDate ascending for the task preview
-    //implement that only tasks with done: true are shown
-
-    function handleTaskCompleted() {
-        //logic which sets the task property done to true
-        //removes the task from the list
-        console.log("INSIDE HANDLETASKCOMPLETED: Task completed was pressed");
+    /**
+     * Is called on Press of the round Button next to a task in the taskslist.
+     * will toggle the property done of a task
+     * and the task will disappear from the taskslist in the UI as it only shows tasks
+     * which are not yet done
+     * @param taskId the id of the task which was pressed
+     */
+    function handleTaskCompleted(taskId) {
+        dispatch({
+            type: 'TOGGLED_TASK_DONE',
+            taskId: taskId,
+        });
     }
 
+    /**
+     * is called on Press of the more button above the taskList View
+     * will open the editing mode for the Lists - where lists can be deleted
+     */
+    function handleOpenEditTaskLists() {
+        setEditTaskListsIsActive(true);
+    }
+
+    /**
+     * is called on Press of the 'Fertig' button above the taskList View
+     * will close the editing mode for the Lists
+     */
+    function handleCloseEditTaskLists() {
+        setEditTaskListsIsActive(false);
+    }
+
+    /**
+     *
+     * @param tasksListId
+     */
+    function handleDeleteTaskList(tasksListId) {
+        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
+        
+        //create Alert
+        Alert.alert(
+            'Liste löschen',
+            'Möchtest du diese Liste wirklich löschen?',
+            [
+                {
+                    text: 'Ja',
+                    onPress: () => {
+                        console.log(`DELETE LIST ALERT, 'JA' WAS PRESSED:  with id ${tasksListId} will be deleted.`);
+                        return dispatch({
+                            type: 'DELETED_LIST',
+                            tasksListId: tasksListId,
+                        });
+                    },
+                    //styling the alert button for IOs to be red
+                    style: 'destructive'
+                },
+                {
+                    text: 'Nein',
+                    onPress: () => console.log("DELETE LIST ALERT, 'NEIN' WAS PRESSED"),
+                    //styling the alert button for IOs to be blue
+                    style: 'cancel'
+                },
+            ]
+        );
+    }
 
     /**
      * is called on Press of the Round Button 'Add' in TasksMain Screen
@@ -95,6 +159,11 @@ function TasksMain({navigation}) {
                     <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                         Meine Aufgaben
                     </Text>
+                    {/*Here the taskLists state is taken and a shallow copy is created using the spread syntax.
+                    On the copy by chaining the array methods: flatMap, filter, sort and map
+                    it is achieved that all tasks, of all lists with the property done = false are shown sorted in an ascending
+                    order by dueDate.
+                    This adheres to the principle of immutability of state variables*/}
                     <ScrollView
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                         showsVerticalScrollIndicator={false}
@@ -102,19 +171,32 @@ function TasksMain({navigation}) {
                         contentContainerStyle={styles.scrollViewContentContainer}
                     >
                         {
-                            allTasks.map(task => {
+                            [...taskListsState]
+                            .flatMap(list => list.tasks)
+                            .filter(task => !task.done)
+                            .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
+                            .map(task => {
                                 return (
                                     <View
                                         key={task.id}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
                                     >
-                                        <Pressable onPress={handleTaskCompleted}>
+                                        <TouchableOpacity
+                                            style={styles.taskCompletedButton}
+                                            onPress={() => handleTaskCompleted(task.id)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                  color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
+                                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                   size={20}/>
-                                        </Pressable>
-                                        <Text
-                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{task.title}</Text>
+                                        </TouchableOpacity>
+                                        <View style={styles.taskTitleDateColumn}>
+                                            <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                {task.title}
+                                            </Text>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
+                                                fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
+                                            </Text>
+                                        </View>
                                     </View>
                                 )
                             })
@@ -131,7 +213,7 @@ function TasksMain({navigation}) {
                         <Icon name={ICONS.TASKICONS.COMPLETED}
                               color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                               size={SIZES.SCREEN_TEXT_NORMAL}/>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Erledigt</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Erledigt</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
@@ -140,7 +222,7 @@ function TasksMain({navigation}) {
                         <Icon name={ICONS.TASKICONS.INBOX}
                               color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                               size={SIZES.SCREEN_TEXT_NORMAL}/>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Inbox</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -150,14 +232,21 @@ function TasksMain({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                             Meine Listen
                         </Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                console.log('more was pressed')
-                            }}
-                        >
-                            <Icon name={ICONS.TASKICONS.MORE_OUTLINE} size={SIZES.SCREEN_HEADER}
+                        {   /*Conditionally render more button, when editTaskListsIsActive === false*/
+                            !editTaskListsIsActive &&
+                            <TouchableOpacity
+                            onPress={handleOpenEditTaskLists}
+                            >
+                            <Icon name={ICONS.TASKICONS.MORE_OUTLINE}
+                                  size={SIZES.MORE_ICON_SIZE}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        }
+                        { /*Conditionally render done editing button, when editTaskListsIsActive === true*/
+                            editTaskListsIsActive &&
+                            <CustomButtonSmall title={"Fertig"} onPressFunction={handleCloseEditTaskLists}/>
+                        }
+
                     </View>
                     <ScrollView
                         style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
@@ -166,34 +255,67 @@ function TasksMain({navigation}) {
                         contentContainerStyle={styles.scrollViewContentContainer}
                     >
                         {
-                            taskLists.map(list => {
-                                return (
-                                    <Pressable
-                                        //here the id of the list needs to be passed to the next Screen, so there the right list is shown
-                                        onPress={() => navigation.navigate("ListTasks_Screen", list.id)}
-                                        key={list.id}
-                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                    >
-                                        <SquareIcon name={list.icon} color={list.color}/>
-                                        <Text
-                                            style={[isDarkMode ? styles.textDark : styles.textLight]}>{list.title}</Text>
-                                    </Pressable>
-                                )
+                            taskListsState.map(list => {
+                                if(editTaskListsIsActive) {
+                                    {/*editable taskList item*/}
+                                    return (
+                                        <View
+                                            style={[
+                                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                styles.listItemContainer,
+                                                styles.listItemContainerTaskList
+                                            ]}
+                                            key={list.id}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() => handleDeleteTaskList(list.id)}
+                                            >
+                                             <Icon name={ICONS.TASKICONS.MINUS} color={COLOR.ICONCOLOR_CUSTOM_RED} size={SIZES.EDIT_TASKS_ICON_SIZE}/>
+                                            </TouchableOpacity>
+                                            <View
+                                                style={styles.editTaskListItem}
+                                            >
+                                                <SquareIcon name={list.icon} color={list.color}/>
+                                                <Text
+                                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                            </View>
+                                        </View>
+                                    )
+                                } else {
+                                    {/*regular taskList item*/}
+                                    return (
+                                        <TouchableOpacity
+                                            /*
+                                            here the id of the list is passed as parameter to the next ListTasksScree,
+                                            so that in the ListTasksScreen the chosen list can be shown
+                                             */
+                                            onPress={() => navigation.navigate("ListTasks_Screen", {listId: list.id})}
+                                            key={list.id}
+                                            style={[
+                                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                styles.listItemContainer,
+                                                styles.listItemContainerTaskList]}
+                                        >
+                                            <SquareIcon name={list.icon} color={list.color}/>
+                                            <Text
+                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                }
                             })
                         }
                     </ScrollView>
                 </View>
 
                 {/*Round button for navigating to the AddTaskOrListScreen*/}
-                <TouchableOpacity
-                    style={styles.roundButton}
+                <RoundButton
                     onPress={handleOpenModal}
-                >
-                    <Icon name={ICONS.TASKICONS.ADD} size={35} color={COLOR.BUTTONLABEL}/>
-                </TouchableOpacity>
+                    buttonStyle={styles.roundButtonPosition}
+                    iconName={ICONS.TASKICONS.ADD}
+                />
 
                 {/*Conditional rendering of the AddTaskModal Component
-                Only when modalIsVisible is set to true*/}
+                only when modalIsVisible is set to true*/}
                 {modalIsVisible && <AddTaskModal
                     visible={modalIsVisible}
                     onPressCreateList={handleCreateList}
@@ -224,8 +346,8 @@ function getStyles(insets)  {
             //should we set paddings like this?
             paddingTop: insets.top,
             paddingBottom: insets.bottom + 40,
-            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-            rowGap: 20
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
+            rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
         contentLight: {
             flex: 1,
@@ -237,19 +359,25 @@ function getStyles(insets)  {
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
-            fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
         textDark: {
             color: DARKMODE.TEXT_COLOR,
         },
+        textXS: {
+            fontSize: SIZES.SCREEN_TEXT_XS,
+        },
+        textNormal: {
+            fontSize: SIZES.SCREEN_TEXT_NORMAL,
+        },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
-            fontWeight: "bold",
+            fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
             paddingBottom: 5,
         },
         headerWithIcon: {
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingBottom: 5,
         },
         contentBoxLight: {
             backgroundColor: LIGHTMODE.BOX_COLOR,
@@ -265,24 +393,18 @@ function getStyles(insets)  {
             height: 80,
         },
         cardButton: {
-            width: '45%',
+            width: '48%',
             justifyContent: "center",
             rowGap: 5,
             padding: 20
         },
-        roundButton: {
-            height: 60,
-            width: 60,
-            borderRadius: 30,
-            backgroundColor: COLOR.BUTTONCOLOR,
-            justifyContent: "center",
-            alignItems: "center",
+        roundButtonPosition: {
             position: "absolute",
             left: (windowWidth / 2) - 30,
             bottom: insets.bottom,
         },
         scrollViewContentContainer: {
-            paddingHorizontal: 20,
+            paddingHorizontal: 10,
             paddingVertical: 10,
         },
         listItemContainerLight: {
@@ -294,12 +416,27 @@ function getStyles(insets)  {
             borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
         },
         listItemContainer: {
-            paddingHorizontal: 10,
+            paddingHorizontal: 5,
             paddingVertical: 12,
+            flexDirection: "row",
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
             borderBottomWidth: 1,
+        },
+        listItemContainerTaskList: {
+            alignItems: "center",
+        },
+        taskCompletedButton: {
+            paddingTop: 2
+        },
+        taskTitleDateColumn: {
+            flexDirection: "column",
+            alignItems: "flex-start",
+            rowGap: 5
+        },
+        editTaskListItem: {
             flexDirection: "row",
             alignItems: "center",
-            columnGap: 20
-        }
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        },
     })
 }

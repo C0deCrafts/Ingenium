@@ -1,9 +1,10 @@
 import {View, StyleSheet, Modal, TouchableOpacity} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomButton from "./CustomButton";
-import Icon from "./Icon";
-import {ICONS} from "../constants/icons";
-import {COLOR, SIZES} from "../constants/styleSettings";
+import CustomButton from "../buttons/CustomButton";
+import Icon from "../Icon";
+import {ICONS} from "../../constants/icons";
+import {COLOR, SIZES} from "../../constants/styleSettings";
+import RoundButton from "../buttons/RoundButton";
 
 /**
  * ### AddTaskModal Component
@@ -19,6 +20,7 @@ import {COLOR, SIZES} from "../constants/styleSettings";
  * @returns {JSX.Element}
  * @constructor
  */
+
 function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, visible}) {
     //providing a safe area
     const insets = useSafeAreaInsets();
@@ -33,12 +35,11 @@ function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, 
                     <View style={styles.buttonContainer}>
                         <CustomButton title={"Neue Liste"} onPressFunction={onPressCreateList}/>
                         <CustomButton title={"Neue Aufgabe"} onPressFunction={onPressCreateTask}/>
-                        <TouchableOpacity
+                        <RoundButton
                             onPress={onPressCloseModal}
-                            style={styles.roundButton}
-                        >
-                            <Icon name={ICONS.TASKICONS.CLOSE} size={20} color={COLOR.BUTTONLABEL}/>
-                        </TouchableOpacity>
+                            buttonStyle={styles.roundButtonPosition}
+                            iconName={ICONS.TASKICONS.CLOSE}
+                        />
                     </View>
                 </View>
             </Modal>
@@ -65,13 +66,7 @@ function getStyles(insets) {
             rowGap: 25,
             width: '50%',
         },
-        roundButton: {
-            height: 60,
-            width: 60,
-            borderRadius: 30,
-            backgroundColor: COLOR.BUTTONCOLOR,
-            justifyContent: "center",
-            alignItems: "center",
+        roundButtonPosition: {
             alignSelf: "center"
         }
     });

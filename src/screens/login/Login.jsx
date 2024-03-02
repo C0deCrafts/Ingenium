@@ -1,8 +1,8 @@
 import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import * as Linking from "expo-linking"
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../components/buttons/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import CustomInputField from "../../components/CustumInputField";
+import CustomInputField from "../../components/inputFields/CustomInputField";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 

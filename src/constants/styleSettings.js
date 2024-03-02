@@ -11,7 +11,7 @@ export const LIGHTMODE = {
 
     BOX_COLOR: "#FFFFFF",
 
-    BORDER_COLOR: "#000000",
+    BORDER_COLOR: "#F2F2F2",
 
     DRAWER_HEADER_LABEL_COLOR: "#000000",
 
@@ -75,7 +75,7 @@ export const SIZES = {
     BOTTOM_TAB_BAR_HEIGHT: 80,
 
 
-    BACK_BUTTON_ICON_SIZE: 20,
+    BACK_BUTTON_ICON_SIZE: 28,
     BACK_BUTTON_LABEL_SIZE: 18,
 
     CLOSE_BUTTON_ICON_SIZE: 50,
@@ -89,6 +89,7 @@ export const SIZES = {
     DRAWER_LABEL_SIZE: 18,
 
     BUTTON_LABEL_SIZE: 18,
+    BUTTON_SMALL_LABEL_SIZE: 14,
     BUTTON_LABEL_WEIGHT: "600",
 
     BORDER_RADIUS: 4,
@@ -98,6 +99,7 @@ export const SIZES = {
     TEXT_SIZE: 18,
 
     SPACING_HORIZONTAL_DEFAULT: 20,
+    SPACING_VERTICAL_DEFAULT: 20,
 
     PADDING_TOP_DRAWER_HEADER_FROM_SAFEAREAVIEW: 40,
     PADDING_TOP_BACK_HEADER_FROM_SAFEAREAVIEW: 49,
@@ -110,8 +112,18 @@ export const SIZES = {
     MARGIN_BOTTOM: windowHeight * 0.10,
     MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05,
 
+    SQUARE_ICON_SIZE: 24,
+
+    //Size of Icons which appear when deleting editing lists / tasks
+    EDIT_TASKS_ICON_SIZE: 24,
+
+    //Size of Icon which appears when entering edit mode for lists / tasks
+    MORE_ICON_SIZE: 30,
+
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
+    SCREEN_HEADER_WEIGHT: "700",
     SCREEN_TEXT_NORMAL: 18,
-    SCREEN_TEXT_SMALL: 16,
+    SCREEN_TEXT_SMALL: 15,
+    SCREEN_TEXT_XS: 12,
 }
