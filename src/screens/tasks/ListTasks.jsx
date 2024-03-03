@@ -231,6 +231,7 @@ function ListTasks({route, navigation}){
                                                         <Text style={[
                                                             isDarkMode? styles.textDark : styles.textLight,
                                                             styles.textNormal,
+                                                            styles.textAlignRight,
                                                         ]}>
                                                             {task.title}
                                                         </Text>
@@ -291,19 +292,22 @@ function getStyles(insets) {
             color: DARKMODE.TEXT_COLOR,
         },
         textNormal: {
-            fontSize: SIZES.SCREEN_TEXT_NORMAL
+            fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
         textSmall: {
-            fontSize: SIZES.SCREEN_TEXT_SMALL
+            fontSize: SIZES.SCREEN_TEXT_SMALL,
         },
         textXS: {
-            fontSize: SIZES.SCREEN_TEXT_XS
+            fontSize: SIZES.SCREEN_TEXT_XS,
         },
         textItalic: {
             fontStyle: "italic",
         },
         textCentered: {
-            textAlign: "center"
+            textAlign: "center",
+        },
+        textAlignRight: {
+            textAlign: "right",
         },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
@@ -337,7 +341,7 @@ function getStyles(insets) {
             padding: 10
         },
         taskLowerBoxEditNotActive: {
-            width: '70%',
+            flex: 1,
             alignItems: "flex-start",
             rowGap: 5,
             padding: 10
@@ -351,11 +355,12 @@ function getStyles(insets) {
         taskTitleDateColumnEditNotActive: {
             alignItems: "flex-end",
             rowGap: 5,
+            flex: 1
         },
         taskTitleDateColumnEditActive: {
             alignItems: "center",
             rowGap: 5,
-            maxWidth: '70%',
+            flex: 1
         },
     })
 }
