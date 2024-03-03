@@ -290,7 +290,7 @@ function TasksMain({navigation}) {
                                                 <View
                                                     style={styles.editTaskListItem}
                                                 >
-                                                    <SquareIcon name={list.icon} color={list.color}/>
+                                                    <SquareIcon name={list.icon} backgroundColor={list.color}/>
                                                     <Text
                                                         style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
                                                 </View>

@@ -1,8 +1,8 @@
 import {Text, StyleSheet, TouchableOpacity} from "react-native";
-import BoxIcon from "../BoxIcon";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {ICONS} from "../../constants/icons";
+import SquareIcon from "../SquareIcon";
 
 /**
  * ## CustomBoxButton Component
@@ -58,11 +58,11 @@ function CustomBoxButton({
                               isDarkMode ? styles.containerDark : styles.containerLight,
                               {padding: containerPadding} // Applying the calculated padding
                           ]}>
-            <BoxIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
+            <SquareIcon name={iconName} backgroundColor={iconBoxBackgroundColor}/>
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>
             <Text style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
             {showForwardIcon && (
-                <BoxIcon name={ICONS.FORWARD.ACTIVE} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                <SquareIcon name={ICONS.FORWARD.ACTIVE} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                          backgroundColor={isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR}/>
             )}
         </TouchableOpacity>

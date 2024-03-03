@@ -1,7 +1,7 @@
 import {StyleSheet, TextInput, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
-import BoxIcon from "../BoxIcon";
+import SquareIcon from "../SquareIcon";
 
 /**
  * ## CustomInputField Component
@@ -63,7 +63,7 @@ function CustomInputField({
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <BoxIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
+            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
             <TextInput
                 style={isDarkMode ? styles.inputDark : styles.inputLight}
                 placeholder={placeholder}
