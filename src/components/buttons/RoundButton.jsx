@@ -1,10 +1,5 @@
-
-
-
-
-import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet, TouchableOpacity} from "react-native";
 import Icon from "../Icon";
-import {ICONS} from "../../constants/icons";
 import {COLOR} from "../../constants/styleSettings";
 
 
