@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },
     buttonLabelLight: {
         flexGrow: 1,
-        marginLeft: 10,
+        marginLeft: 15,
         fontSize: SIZES.TEXT_SIZE,
         color: LIGHTMODE.TEXT_COLOR
     },

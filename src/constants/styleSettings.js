@@ -128,7 +128,7 @@ export const SIZES = {
 
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
-    SCREEN_HEADER_WEIGHT: "700",
+    SCREEN_HEADER_WEIGHT: "600",
     SCREEN_TEXT_NORMAL: 18,
     SCREEN_TEXT_SMALL: 15,
     SCREEN_TEXT_XS: 12,
