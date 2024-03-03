@@ -23,9 +23,9 @@ export default RoundButton;
 
 const styles = StyleSheet.create({
     roundButton: {
-        height: 60,
-        width: 60,
-        borderRadius: 30,
+        height: 70,
+        width: 70,
+        borderRadius: 35,
         backgroundColor: COLOR.BUTTONCOLOR,
         justifyContent: "center",
         alignItems: "center",

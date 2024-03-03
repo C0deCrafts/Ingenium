@@ -174,7 +174,7 @@ function TasksMain({navigation}) {
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
-                            bounces={false}
+                            bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
                             {filteredAndSortedTasks.map((task, index) => {
@@ -222,7 +222,7 @@ function TasksMain({navigation}) {
                         >
                             <Icon name={ICONS.TASKICONS.COMPLETED}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                  size={SIZES.SCREEN_TEXT_NORMAL}/>
+                                  size={22}/>
                             <Text
                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Erledigt</Text>
                         </TouchableOpacity>
@@ -232,7 +232,7 @@ function TasksMain({navigation}) {
                         >
                             <Icon name={ICONS.TASKICONS.INBOX}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                  size={SIZES.SCREEN_TEXT_NORMAL}/>
+                                  size={22}/>
                             <Text
                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Inbox</Text>
                         </TouchableOpacity>
@@ -263,7 +263,7 @@ function TasksMain({navigation}) {
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
-                            bounces={false}
+                            bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
                             {
@@ -368,7 +368,7 @@ function getStyles(insets) {
             //should we set paddings like this?
             //paddingTop: insets.top,
             paddingTop: SIZES.MARGIN_TOP_FROM_DRAWER_HEADER,
-            paddingBottom: insets.bottom + 40,
+            paddingBottom: insets.bottom + 25,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
@@ -422,15 +422,15 @@ function getStyles(insets) {
         },
         roundButtonPosition: {
             position: "absolute",
-            left: (windowWidth / 2) - 30,
-            bottom: insets.bottom,
+            left: (windowWidth / 2) - 35,
+            bottom: insets.bottom - 20,
         },
         scrollViewContentContainer: {
             paddingHorizontal: 10,
             paddingVertical: 10,
         },
         listItemContainerLight: {
-            //backgroundColor: LIGHTMODE.BOX_COLOR,
+            //backgroundColor: "yellow",
             //borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR,
         },
         listItemContainerDark: {
@@ -458,7 +458,7 @@ function getStyles(insets) {
         editTaskListItem: {
             flexDirection: "row",
             alignItems: "center",
-            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            columnGap: 15,
         },
         separatorLight: {
             height: 1,

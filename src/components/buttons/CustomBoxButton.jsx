@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TextInput, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, TouchableOpacity} from "react-native";
 import BoxIcon from "../BoxIcon";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
