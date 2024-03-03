@@ -54,7 +54,7 @@ function CompletedTasks({navigation}){
                         styles.instructionBox
                     ]}>
                     <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textXS, styles.textItalic]}>
-                        <Text style={styles.textBold}>Hinweis:</Text>
+                        <Text style={styles.textBold}>Hinweis: </Text>
                         Du kannst noch 30 Tage auf deine Aufgaben
                         zugreifen, bevor sie aus der Liste gelöscht
                         werden. Um eine Aufgabe wiederherzustellen,
@@ -89,7 +89,11 @@ function CompletedTasks({navigation}){
                                                  size={20}/></View>
                                         <View style={styles.taskTitleDateColumn}>
                                             <Text
-                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                style={[
+                                                    isDarkMode ? styles.textDark : styles.textLight,
+                                                    styles.textNormal,
+                                                    styles.textAlignRight
+                                                ]}>
                                                 {task.title}
                                             </Text>
                                             <Text style={[
@@ -147,7 +151,10 @@ function getStyles(insets) {
             fontWeight: "bold"
         },
         textItalic: {
-            fontStyle: "italic",
+            fontStyle: "italic"
+        },
+        textAlignRight: {
+            textAlign: "right"
         },
         headerHeading: {
             fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
@@ -188,7 +195,8 @@ function getStyles(insets) {
         },
         taskTitleDateColumn: {
             alignItems: "flex-end",
-            rowGap: 5
+            rowGap: 5,
+            flex: 1
         },
     })
 }
