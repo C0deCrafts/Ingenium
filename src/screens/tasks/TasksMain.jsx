@@ -433,8 +433,8 @@ function getStyles(insets) {
         cardButton: {
             width: '48%',
             justifyContent: "center",
-            rowGap: 5,
-            padding: 20
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            padding: SIZES.SPACING_HORIZONTAL_DEFAULT,
         },
         roundButtonPosition: {
             position: "absolute",
@@ -469,7 +469,7 @@ function getStyles(insets) {
         taskTitleDateColumn: {
             flexDirection: "column",
             alignItems: "flex-start",
-            rowGap: 5,
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1,
         },
         editTaskListItem: {

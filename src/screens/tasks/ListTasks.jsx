@@ -312,7 +312,7 @@ function getStyles(insets) {
         header: {
             fontSize: SIZES.SCREEN_HEADER,
             fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-            paddingBottom: 5,
+            paddingBottom: SIZES.SPACING_VERTICAL_SMALL,
         },
         taskContainer: {
             paddingBottom: SIZES.SPACING_VERTICAL_DEFAULT,
@@ -343,7 +343,6 @@ function getStyles(insets) {
         taskLowerBoxEditNotActive: {
             flex: 1,
             alignItems: "flex-start",
-            rowGap: 5,
             padding: 10
         },
         borderLight: {
@@ -354,13 +353,13 @@ function getStyles(insets) {
         },
         taskTitleDateColumnEditNotActive: {
             alignItems: "flex-end",
-            rowGap: 5,
-            flex: 1
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            flex: 1,
         },
         taskTitleDateColumnEditActive: {
             alignItems: "center",
-            rowGap: 5,
-            flex: 1
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            flex: 1,
         },
     })
 }

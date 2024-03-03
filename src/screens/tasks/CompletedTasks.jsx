@@ -185,7 +185,7 @@ function getStyles(insets) {
             borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
         },
         listItemContainer: {
-            paddingHorizontal: 5,
+            paddingHorizontal: SIZES.SPACING_HORIZONTAL_SMALL,
             paddingVertical: 12,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -195,7 +195,7 @@ function getStyles(insets) {
         },
         taskTitleDateColumn: {
             alignItems: "flex-end",
-            rowGap: 5,
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1
         },
     })
