@@ -45,6 +45,12 @@ function TasksMain({navigation}) {
      */
     const {taskListsState, dispatch} = useTasks();
 
+    // Berechnung von filteredAndSortedTasks
+    const filteredAndSortedTasks = [...taskListsState]
+        .flatMap(list => list.tasks)
+        .filter(task => !task.done)
+        .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate));
+
     /**
      * Is called on Press of the round Button next to a task in the taskslist.
      * will toggle the property done of a task
@@ -171,37 +177,39 @@ function TasksMain({navigation}) {
                             bounces={false}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
-                            {
-                                [...taskListsState]
-                                    .flatMap(list => list.tasks)
-                                    .filter(task => !task.done)
-                                    .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
-                                    .map((task, index) => {
-                                        return (
-                                            <View
-                                                key={task.id}
-                                                style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                            >
-                                                <TouchableOpacity
-                                                    style={styles.taskCompletedButton}
-                                                    onPress={() => handleTaskCompleted(task.id)}>
-                                                    <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                          color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                                          size={20}/>
-                                                </TouchableOpacity>
-                                                <View style={styles.taskTitleDateColumn}>
-                                                    <Text
-                                                        style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
-                                                        {task.title}
-                                                    </Text>
-                                                    <Text
-                                                        style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
-                                                        fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        )
-                                    })
+                            {filteredAndSortedTasks.map((task, index) => {
+                                return (
+                                    <View
+                                        key={task.id}
+                                    >
+                                        <View
+                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
+                                        <TouchableOpacity
+                                            style={styles.taskCompletedButton}
+                                            onPress={() => handleTaskCompleted(task.id)}>
+                                            <Icon name={ICONS.TASKICONS.CIRCLE}
+                                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                                                  size={20}/>
+                                        </TouchableOpacity>
+                                        <View style={styles.taskTitleDateColumn}>
+                                            <Text
+                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                {task.title}
+                                            </Text>
+                                            <Text
+                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
+                                                fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                        {/* Adds a border, except after the last element */}
+                                        {index !== filteredAndSortedTasks.length - 1 && (
+                                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                        )}
+                                    </View>
+                                )
+                            })
                             }
                         </ScrollView>
                     </View>
@@ -310,7 +318,8 @@ function TasksMain({navigation}) {
                                                 />
                                                 {/* Adds a border, except after the last element */}
                                                 {index !== taskListsState.length - 1 && (
-                                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                    <View
+                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                 )}
                                             </TouchableOpacity>
                                         )
@@ -429,7 +438,7 @@ function getStyles(insets) {
             //borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
         },
         listItemContainer: {
-            paddingHorizontal: 5,
+            marginHorizontal: 10,
             paddingVertical: 12,
             flexDirection: "row",
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
