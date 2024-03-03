@@ -1,14 +1,11 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-
-//ACHTUNG - Sabrinas BackButtonWithTitle
-import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -35,22 +32,20 @@ function CompletedTasks({navigation}){
         })
     }
 
-
-    //TODO: make margins and insets vertical and horizontal, create content boxes, add text for the doneDates
-
+    /**
+     * Is called on press of the Back Button.
+     * Navigates back to the TasksMain Screen.
+     */
     const handleGoBack = () => {
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+        navigation.goBack();
     };
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
-            <CustomBackButtonWithSideElement
+            <CustomBackButton
                 onPress={handleGoBack}
-                elementNextToBackButton={
-                    <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.headerHeading]}>
-                        Erledigt
-                    </Text>
-                }
+                showTitle={true}
+                title={"Erledigt"}
             />
             <View style={styles.contentContainer}>
                 {/*USER INSTRUCTION*/}
@@ -122,16 +117,17 @@ function getStyles(insets) {
     return StyleSheet.create({
         containerLight: {
             flex: 1,
-            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         containerDark: {
             flex: 1,
-            backgroundColor: DARKMODE.BACKGROUNDCOLOR
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         contentContainer: {
             paddingBottom: insets.bottom + 10,
             paddingTop: insets.top + 10,
-            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             flex: 1,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },

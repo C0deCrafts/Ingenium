@@ -11,24 +11,69 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
  * This component represents a custom back button used in stack navigation headers.
  * It allows users to navigate back to the previous screen when pressed.
  * The appearance of the button is determined by the current theme (dark/light).
+ * It can optionally be extended to hold either:
+ * - a title to the right side of the back button
+ * - a custom element to the right side of the back button
+ * Only one of these options should be chosen.
+ *
+ *
+ * **Use without optional title / element**
+ * @example
+ * ```jsx
+ * // Inside your stack navigation header component, use the CustomBackButton component like this:
+ *
+ * <CustomBackButton onPress={() => navigation.goBack()} />
+ * ```
+ *
+ * **Use with optional title**
+ * @example
+ * ```jsx
+ * //If a title should be displayed on the right of the header, use the CustomBackButton component like this:
+ *
+ * <CustomBackButton
+ *                 onPress={handleGoBack}
+ *                 showTitle={true}
+ *                 title={"Inbox"}
+ *             />
+ * ```
+ *
+ * **Use with optional customElement**
+ * @example
+ * ```jsx
+ * // The optional customElement is used in Screens, where a button is displayed to the right of the back button and
+ * // the state in the component controls which button is rendered.
+ * // If a custom element should be displayed on the right of the header, use the CustomBackButton component like this:
+ *
+ * <CustomBackButton
+ *                 onPress={handleGoBack}
+ *                 showCustomElement={true}
+ *                 customElement={<CustomButtonSmall onPressFunction={handleCloseEditingTasks} title={'Fertig'}/>}
+ *             />
+ *  ```
  *
  * @param {Function} onPress - Function to be called when the button is pressed.
- * @param {string} title - An optional additional title to be displayed on the far right side of the header.
- *                         If provided, it will be displayed to the right of the back button.
- *
- * @example
- * // Inside your stack navigation header component, use the CustomBackButton component like this:
- * <CustomBackButton onPress={() => navigation.goBack()} />
+ * @param {boolean} showTitle - Optional flag to determine whether to display a title next to the back button.
+ *                             Default is false.
+ * @param {string} title - Optional additional title to be displayed on the right edge of the header.
+ * @param {boolean} showCustomElement - Optional flag to determine whether to display a clickable icon next to the back button.
+ *                             Default is false.
+ * @param customElement - Optional additional JSX Element to be displayed on the right edge of the header.
  */
-function CustomBackButton({onPress, title}) {
+function CustomBackButton({
+                              onPress,
+                              showTitle = false,
+                              title,
+                              showCustomElement = false,
+                              customElement
+                          }) {
     const insets = useSafeAreaInsets();
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
     const styles = getStyles(insets);
 
 
     return (
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer, styles.titleContainer]}>
             <TouchableOpacity style={styles.titleContainer} onPress={onPress}>
                 <Icon name={ICON.BACK.ACTIVE}
                       size={SIZES.BACK_BUTTON_ICON_SIZE}
@@ -37,10 +82,19 @@ function CustomBackButton({onPress, title}) {
                 <View>
                     <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>Zurück</Text>
                 </View>
+            </TouchableOpacity>
+            {/*optional title will be shown only if showTitle is true and a title was provided*/}
+            {showTitle && title &&
                 <View style={styles.titleContainerRight}>
                     <Text style={isDarkMode ? styles.headerTitleRightDark : styles.headerTitleRightLight}>{title}</Text>
                 </View>
-            </TouchableOpacity>
+            }
+            {/*optional custom Element will be shown only if showCustomElement is true and a customElement was provided*/}
+            {showCustomElement && customElement &&
+                <View style={styles.titleContainerRight}>
+                    {customElement}
+                </View>
+            }
         </View>
     )
 }

@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet} from "react-native";
 import CustomButton from "../../components/buttons/CustomButton";
 import {useTheme} from "../../constants/context/ThemeContext";
-import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 
@@ -30,11 +30,13 @@ export default EditTask;
 const styles = StyleSheet.create({
     containerLight: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     contentLight: {
         flex: 1,

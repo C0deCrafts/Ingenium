@@ -14,7 +14,10 @@ function CreateTaskDetails({navigation}){
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button with title*/}
-            <CustomBackButton onPress={handleGoBack} title={"Details"}/>
+            <CustomBackButton
+                onPress={handleGoBack}
+                showTitle={true}
+                title={"Details"}/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                     Datum

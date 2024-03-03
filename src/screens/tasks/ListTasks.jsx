@@ -1,19 +1,13 @@
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
-import CustomButton from "../../components/buttons/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import {useState} from "react";
-import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
-
-
-/*<CustomButton title={"Punkte im falschen Screen, ist dann im Overlay"} onPressFunction={()=>{navigation.push("EditTask_Screen")}}/>*/
-
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
@@ -39,7 +33,7 @@ function ListTasks({route, navigation}){
      * Navigates back to the TasksMain Screen.
      */
     const handleGoBack = () => {
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+        navigation.goBack();
     };
 
     /**
@@ -124,9 +118,10 @@ function ListTasks({route, navigation}){
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <CustomBackButtonWithSideElement
+            <CustomBackButton
                 onPress={handleGoBack}
-                elementNextToBackButton={
+                showCustomElement={true}
+                customElement={
                 editTasksIsActive?
                     <CustomButtonSmall onPressFunction={handleCloseEditingTasks} title={'Fertig'}/> :
                     <TouchableOpacity
@@ -276,17 +271,18 @@ function getStyles(insets) {
     return  StyleSheet.create({
         containerLight: {
             flex: 1,
-            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         containerDark: {
             flex: 1,
-            backgroundColor: DARKMODE.BACKGROUNDCOLOR
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         contentContainer: {
             flex: 1,
             paddingTop: insets.top,
             paddingBottom: insets.bottom + 40,
-            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
