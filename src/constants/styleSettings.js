@@ -113,12 +113,12 @@ export const SIZES = {
     BACK_HEADER_FONTSIZE: 18,
 
     MARGIN_BOTTOM: windowHeight * 0.10,
-    MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.05,
+    MARGIN_TOP_FROM_DRAWER_HEADER: windowHeight * 0.03,
     MARGIN_TOP_FROM_BACKBUTTON_HEADER: windowHeight * 0.03,
 
     SPACES_VERTICAL_BETWEEN_BOXES: 10,
 
-    SQUARE_ICON_SIZE: 24,
+    SQUARE_ICON_SIZE: 25,
 
     //Size of Icons which appear when deleting editing lists / tasks
     EDIT_TASKS_ICON_SIZE: 24,
@@ -128,7 +128,7 @@ export const SIZES = {
 
     //used for styling the main content of screens
     SCREEN_HEADER: 25,
-    SCREEN_HEADER_WEIGHT: "700",
+    SCREEN_HEADER_WEIGHT: "600",
     SCREEN_TEXT_NORMAL: 18,
     SCREEN_TEXT_SMALL: 15,
     SCREEN_TEXT_XS: 12,

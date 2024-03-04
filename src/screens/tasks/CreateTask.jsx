@@ -195,11 +195,11 @@ const styles = StyleSheet.create({
     // Text styles for light and dark mode
     textLight: {
         color: LIGHTMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL,
+        //fontSize: SIZES.SCREEN_TEXT_NORMAL,
     },
     textDark: {
         color: DARKMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL,
+        //fontSize: SIZES.SCREEN_TEXT_NORMAL,
     },
     // Spacing between elements
     spacing: {

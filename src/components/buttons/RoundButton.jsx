@@ -1,10 +1,5 @@
-
-
-
-
-import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet, TouchableOpacity} from "react-native";
 import Icon from "../Icon";
-import {ICONS} from "../../constants/icons";
 import {COLOR} from "../../constants/styleSettings";
 
 
@@ -23,9 +18,9 @@ export default RoundButton;
 
 const styles = StyleSheet.create({
     roundButton: {
-        height: 60,
-        width: 60,
-        borderRadius: 30,
+        height: 70,
+        width: 70,
+        borderRadius: 35,
         backgroundColor: COLOR.BUTTONCOLOR,
         justifyContent: "center",
         alignItems: "center",

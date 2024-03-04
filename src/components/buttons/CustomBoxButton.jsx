@@ -1,8 +1,8 @@
-import {Text, View, StyleSheet, TextInput, TouchableOpacity} from "react-native";
-import BoxIcon from "../BoxIcon";
+import {Text, StyleSheet, TouchableOpacity} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {ICONS} from "../../constants/icons";
+import SquareIcon from "../SquareIcon";
 
 /**
  * ## CustomBoxButton Component
@@ -13,9 +13,9 @@ import {ICONS} from "../../constants/icons";
  *
  * @param {string} buttonTextLeft - The text label displayed on the left side of the button.
  * @param {string} buttonTextRight - The text label displayed on the right side of the button.
- * @param {string} iconName - The name of the icon to be displayed inside the box.
- * @param {string} iconColor - The color of the icon.
- * @param {string} iconBoxBackgroundColor - The background color of the icon's box.
+ * @param iconName - The name of the icon to be displayed inside the box.
+ * @param iconColor - The color of the icon.
+ * @param iconBoxBackgroundColor - The background color of the icon's box.
  * @param {Function} onPress - Function to be called when the button is pressed.
  * @param {boolean} [showForwardIcon=true] - Optional. Determines whether to display the forward icon (default is true).
  * @param {number} [extraPadding=0] - Optional. Extra padding to be applied to the button (default is 0).
@@ -58,11 +58,11 @@ function CustomBoxButton({
                               isDarkMode ? styles.containerDark : styles.containerLight,
                               {padding: containerPadding} // Applying the calculated padding
                           ]}>
-            <BoxIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
+            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>
             <Text style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
             {showForwardIcon && (
-                <BoxIcon name={ICONS.FORWARD.ACTIVE} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                <SquareIcon name={ICONS.FORWARD.ACTIVE} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                          backgroundColor={isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR}/>
             )}
         </TouchableOpacity>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },
     buttonLabelLight: {
         flexGrow: 1,
-        marginLeft: 10,
+        marginLeft: 15,
         fontSize: SIZES.TEXT_SIZE,
         color: LIGHTMODE.TEXT_COLOR
     },

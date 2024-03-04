@@ -4,11 +4,11 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
 import {ICONS} from "../../constants/icons";
-import BoxIcon from "../../components/BoxIcon";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
+import SquareIcon from "../../components/SquareIcon";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -84,7 +84,7 @@ function CreateList({navigation}) {
                         {iconNames.map((iconName) => (
                             <TouchableOpacity key={iconName} onPress={() => handleChangeIcon(USER_ICONS[iconName])}>
                                 <View key={iconName} style={styles.boxSpacing}>
-                                    <BoxIcon
+                                    <SquareIcon
                                         name={ICONS.TASKICONS[iconName]}
                                         color={"white"}
                                         backgroundColor={iconBoxColor}
