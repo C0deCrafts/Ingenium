@@ -1,16 +1,29 @@
 import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
-import Icon from "./Icon";
-import {ICONS} from "../constants/icons";
-import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
-import {useTheme} from "../constants/context/ThemeContext";
+import Icon from "../Icon";
+import {ICONS} from "../../constants/icons";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
+/**
+ * ## CustomDrawerHeader Component
+ *
+ * This component represents a custom header for drawer navigation.
+ * It displays a burger menu icon on the left side and a title on the right side.
+ * Users can interact with the menu icon to open the drawer.
+ * The appearance of the header is determined by the current theme (dark/light).
+ *
+ * @param {string} title - The title to be displayed in the header.
+ * @param {Function} onPress - Function to be called when the menu icon is pressed.
+ *
+ * @example
+ * // Inside your drawer navigation component, use the CustomDrawerHeader component like this:
+ *  <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
+ */
 function CustomDrawerHeader({title, onPress}){
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
-
-    // Rufe die getStyles-Funktion mit den aktuellen Insets auf
     const styles = getStyles(insets);
 
     return (
