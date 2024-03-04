@@ -273,28 +273,36 @@ function TasksMain({navigation}) {
                                         }
                                         return (
                                             <View
-                                                style={[
-                                                    isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
-                                                    styles.listItemContainer,
-                                                    styles.listItemContainerTaskList
-                                                ]}
-                                                key={list.id}
-                                            >
-                                                <TouchableOpacity
-                                                    onPress={() => handleDeleteTaskList(list.id)}
-                                                >
-                                                    <Icon name={ICONS.TASKICONS.MINUS}
-                                                          color={COLOR.ICONCOLOR_CUSTOM_RED}
-                                                          size={SIZES.EDIT_TASKS_ICON_SIZE}/>
-                                                </TouchableOpacity>
+                                                key={list.id}>
                                                 <View
-                                                    style={styles.editTaskListItem}
+                                                    style={[
+                                                        isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                        styles.listItemContainer,
+                                                        styles.listItemContainerTaskList
+                                                    ]}
                                                 >
-                                                    <SquareIcon name={list.icon} backgroundColor={list.color}/>
-                                                    <Text
-                                                        style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                                    <TouchableOpacity
+                                                        onPress={() => handleDeleteTaskList(list.id)}
+                                                    >
+                                                        <Icon name={ICONS.TASKICONS.MINUS}
+                                                              color={COLOR.ICONCOLOR_CUSTOM_RED}
+                                                              size={SIZES.EDIT_TASKS_ICON_SIZE}/>
+                                                    </TouchableOpacity>
+                                                    <View
+                                                        style={styles.editTaskListItem}
+                                                    >
+                                                        <SquareIcon name={list.icon} backgroundColor={list.color}/>
+                                                        <Text
+                                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                                    </View>
                                                 </View>
+                                                {/* Adds a border, except after the last element */}
+                                                {index !== taskListsState.length - 1 && (
+                                                    <View
+                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                )}
                                             </View>
+
                                         )
                                     } else {
                                         {/*regular taskList item*/
