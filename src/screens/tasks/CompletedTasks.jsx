@@ -1,14 +1,11 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-
-//ACHTUNG - Sabrinas BackButtonWithTitle
-import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -35,22 +32,20 @@ function CompletedTasks({navigation}){
         })
     }
 
-
-    //TODO: make margins and insets vertical and horizontal, create content boxes, add text for the doneDates
-
+    /**
+     * Is called on press of the Back Button.
+     * Navigates back to the TasksMain Screen.
+     */
     const handleGoBack = () => {
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+        navigation.goBack();
     };
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
-            <CustomBackButtonWithSideElement
+            <CustomBackButton
                 onPress={handleGoBack}
-                elementNextToBackButton={
-                    <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.headerHeading]}>
-                        Erledigt
-                    </Text>
-                }
+                showTitle={true}
+                title={"Erledigt"}
             />
             <View style={styles.contentContainer}>
                 {/*USER INSTRUCTION*/}
@@ -59,7 +54,7 @@ function CompletedTasks({navigation}){
                         styles.instructionBox
                     ]}>
                     <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textXS, styles.textItalic]}>
-                        <Text style={styles.textBold}>Hinweis:</Text>
+                        <Text style={styles.textBold}>Hinweis: </Text>
                         Du kannst noch 30 Tage auf deine Aufgaben
                         zugreifen, bevor sie aus der Liste gelöscht
                         werden. Um eine Aufgabe wiederherzustellen,
@@ -94,7 +89,11 @@ function CompletedTasks({navigation}){
                                                  size={20}/></View>
                                         <View style={styles.taskTitleDateColumn}>
                                             <Text
-                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                                                style={[
+                                                    isDarkMode ? styles.textDark : styles.textLight,
+                                                    styles.textNormal,
+                                                    styles.textAlignRight
+                                                ]}>
                                                 {task.title}
                                             </Text>
                                             <Text style={[
@@ -122,16 +121,17 @@ function getStyles(insets) {
     return StyleSheet.create({
         containerLight: {
             flex: 1,
-            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         containerDark: {
             flex: 1,
-            backgroundColor: DARKMODE.BACKGROUNDCOLOR
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         contentContainer: {
             paddingBottom: insets.bottom + 10,
             paddingTop: insets.top + 10,
-            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             flex: 1,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
@@ -151,7 +151,10 @@ function getStyles(insets) {
             fontWeight: "bold"
         },
         textItalic: {
-            fontStyle: "italic",
+            fontStyle: "italic"
+        },
+        textAlignRight: {
+            textAlign: "right"
         },
         headerHeading: {
             fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
@@ -182,7 +185,7 @@ function getStyles(insets) {
             borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
         },
         listItemContainer: {
-            paddingHorizontal: 5,
+            paddingHorizontal: SIZES.SPACING_HORIZONTAL_SMALL,
             paddingVertical: 12,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -192,7 +195,8 @@ function getStyles(insets) {
         },
         taskTitleDateColumn: {
             alignItems: "flex-end",
-            rowGap: 5
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            flex: 1
         },
     })
 }

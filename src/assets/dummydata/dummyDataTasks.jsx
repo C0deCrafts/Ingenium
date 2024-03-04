@@ -10,7 +10,7 @@ const taskLists = [
         tasks: [
             { id: 1, title: 'POS Tasksheet Abgabe', notes: 'Frontend und Backend verbinden.', dueDate: '2024-03-02', done: false },
             { id: 2, title: 'SYP Aufgabe', notes: 'Beispiel "Login" die gesamte Analyse erstellen (UseCaseFlow - GUI-Prototyp - OOA-KD - OOD-KD -> Implementierung', dueDate: '2024-03-05', done: false },
-            { id: 3, title: 'WIRE Präsentation vorbereiten', notes: 'Zehn minütige Präsentation zu Patentrecht.', dueDate: '2024-03-10', done: false },
+            { id: 3, title: 'WIRE Präsentation inklusive Handout und Powerpoint vorbereiten', notes: 'Zehn minütige Präsentation zu einem von Ihnen ausgewählten Thema.', dueDate: '2024-03-10', done: false },
         ]
     },
     {

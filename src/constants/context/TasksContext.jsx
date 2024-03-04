@@ -1,5 +1,11 @@
-import {useState, createContext, useContext, useReducer} from 'react';
+import {createContext, useContext, useReducer} from 'react';
 import dummyDataTasks from "../../assets/dummydata/dummyDataTasks";
+
+/* Improvements:
+further improvement of comment structure
+adapt the code to reflect the structure of data in the database
+error handling in the useTasks hook (if not used in provider? if context null?)
+ */
 
 /**
  * Creates a context to manage task data across task screens.

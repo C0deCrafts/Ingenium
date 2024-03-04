@@ -1,19 +1,13 @@
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
-import CustomButton from "../../components/buttons/CustomButton";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CustomBackButtonWithTitle from "../../components/buttons/CustomBackButtonWithSideElement";
 import {useState} from "react";
-import CustomBackButtonWithSideElement from "../../components/buttons/CustomBackButtonWithSideElement";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../constants/context/TasksContext";
-
-
-/*<CustomButton title={"Punkte im falschen Screen, ist dann im Overlay"} onPressFunction={()=>{navigation.push("EditTask_Screen")}}/>*/
-
+import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
@@ -39,7 +33,7 @@ function ListTasks({route, navigation}){
      * Navigates back to the TasksMain Screen.
      */
     const handleGoBack = () => {
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+        navigation.goBack();
     };
 
     /**
@@ -118,12 +112,16 @@ function ListTasks({route, navigation}){
 
     }
 
+    //access the current list title to show it in the heading of the screen
+    const currentList = taskListsState.find(list => list.id === listId);
+    const currentScreenTitle = currentList.title;
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <CustomBackButtonWithSideElement
+            <CustomBackButton
                 onPress={handleGoBack}
-                elementNextToBackButton={
+                showCustomElement={true}
+                customElement={
                 editTasksIsActive?
                     <CustomButtonSmall onPressFunction={handleCloseEditingTasks} title={'Fertig'}/> :
                     <TouchableOpacity
@@ -141,7 +139,9 @@ function ListTasks({route, navigation}){
             need to show only tasks of this list
             need to show tasks sorted ascending by dueDate*/
             }
-                <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>Alle</Text>
+                <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>
+                    {currentScreenTitle}
+                </Text>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     bounces={false}
@@ -231,6 +231,7 @@ function ListTasks({route, navigation}){
                                                         <Text style={[
                                                             isDarkMode? styles.textDark : styles.textLight,
                                                             styles.textNormal,
+                                                            styles.textAlignRight,
                                                         ]}>
                                                             {task.title}
                                                         </Text>
@@ -271,17 +272,18 @@ function getStyles(insets) {
     return  StyleSheet.create({
         containerLight: {
             flex: 1,
-            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         containerDark: {
             flex: 1,
-            backgroundColor: DARKMODE.BACKGROUNDCOLOR
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         contentContainer: {
             flex: 1,
             paddingTop: insets.top,
             paddingBottom: insets.bottom + 40,
-            paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
@@ -290,24 +292,27 @@ function getStyles(insets) {
             color: DARKMODE.TEXT_COLOR,
         },
         textNormal: {
-            fontSize: SIZES.SCREEN_TEXT_NORMAL
+            fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
         textSmall: {
-            fontSize: SIZES.SCREEN_TEXT_SMALL
+            fontSize: SIZES.SCREEN_TEXT_SMALL,
         },
         textXS: {
-            fontSize: SIZES.SCREEN_TEXT_XS
+            fontSize: SIZES.SCREEN_TEXT_XS,
         },
         textItalic: {
             fontStyle: "italic",
         },
         textCentered: {
-            textAlign: "center"
+            textAlign: "center",
+        },
+        textAlignRight: {
+            textAlign: "right",
         },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
             fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-            paddingBottom: 5,
+            paddingBottom: SIZES.SPACING_VERTICAL_SMALL,
         },
         taskContainer: {
             paddingBottom: SIZES.SPACING_VERTICAL_DEFAULT,
@@ -336,25 +341,25 @@ function getStyles(insets) {
             padding: 10
         },
         taskLowerBoxEditNotActive: {
-            width: '70%',
+            flex: 1,
             alignItems: "flex-start",
-            rowGap: 5,
             padding: 10
         },
         borderLight: {
-            borderColor: LIGHTMODE.BORDER_COLOR,
+            borderColor: LIGHTMODE.BACKGROUNDCOLOR,
         },
         borderDark: {
-            borderColor: DARKMODE.BORDER_COLOR,
+            borderColor: DARKMODE.BACKGROUNDCOLOR,
         },
         taskTitleDateColumnEditNotActive: {
             alignItems: "flex-end",
-            rowGap: 5,
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            flex: 1,
         },
         taskTitleDateColumnEditActive: {
             alignItems: "center",
-            rowGap: 5,
-            maxWidth: '70%',
+            rowGap: SIZES.SPACING_VERTICAL_SMALL,
+            flex: 1,
         },
     })
 }

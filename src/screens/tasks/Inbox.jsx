@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet} from "react-native";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useNavigation} from "@react-navigation/native";
-import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../constants/context/ThemeContext";
 function Inbox(){
     const { theme } = useTheme();
@@ -15,7 +15,11 @@ function Inbox(){
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <CustomBackButton onPress={handleGoBack}/>
+            <CustomBackButton
+                onPress={handleGoBack}
+                showTitle={true}
+                title={"Inbox"}
+            />
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>
             </View>
@@ -28,11 +32,13 @@ export default Inbox;
 const styles = StyleSheet.create({
     containerLight: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     contentLight: {
         flex: 1,
