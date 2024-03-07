@@ -3,7 +3,6 @@ import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
-import {ICONS} from "../../constants/icons";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
@@ -50,7 +49,6 @@ function CreateList({navigation}) {
     * which we can then iterate over using map(). This allows us to access
     * each element of the object and use it as we want.
     */
-    const iconNames = Object.keys(USER_ICONS);
     const userColors = Object.keys(USER_COLORS);
 
     const userIconNames = USER_ICONS.map(icon => {
