@@ -2,27 +2,22 @@ import {Text, View, StyleSheet, ScrollView} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {localDatabase} from "../../databases/localDatabase";
-import {useCallback, useEffect, useState} from "react";
-import {useFocusEffect} from "@react-navigation/native";
+import {useEffect} from "react";
+import CustomInputField from "../../components/inputFields/CustomInputField";
+import CustomButton from "../../components/buttons/CustomButton";
+import {useDatabase} from "../../context/DatabaseContext";
 
 function Dashboard({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {getLists} = localDatabase();
-    const [lists, setLists] = useState([]);
+    const { lists, loadLists, deleteAllLists} = useDatabase();
 
-    useFocusEffect(
-        useCallback(() => {
-            loadLists();
-        }, [])
-    );
-
-        const loadLists = async () => {
-            const result = await getLists();
-            setLists(result[0].rows)
-        };
+    // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
+    // oder wenn sich loadLists ändert
+    useEffect(() => {
+        loadLists();
+    }, []);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -34,9 +29,16 @@ function Dashboard({navigation}){
                 {lists.map((lists) => (
                     <View key={lists.listId}>
                         <Text>{lists.listId}:{lists.listName}:{lists.iconName}:{lists.iconBackgroundColor}</Text>
+                        <CustomInputField
+                            isUserIcon={true}
+                            iconName={lists.iconName}
+                            iconBoxBackgroundColor={lists.iconBackgroundColor}
+                            placeholder={lists.listName}
+                        />
                     </View>
                 ))}
             </ScrollView>
+            <CustomButton title={"Lösche alle Listen"} onPressFunction={deleteAllLists}/>
         </View>
     )
 }

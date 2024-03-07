@@ -4,7 +4,7 @@ import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBoxButton from "../buttons/CustomBoxButton";
 import {useTheme} from "../../context/ThemeContext";
-import {testDataSelectList} from "../../constants/userData";
+import {useDatabase} from "../../context/DatabaseContext";
 
 /**
  * ### SelectListModal Component
@@ -31,7 +31,7 @@ import {testDataSelectList} from "../../constants/userData";
 const SelectListModal = forwardRef(({onSelect}, ref) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const testData = testDataSelectList;
+    const {lists} = useDatabase();
 
     // Determine screen height
     const {height: screenHeight} = Dimensions.get('window');
@@ -65,18 +65,19 @@ const SelectListModal = forwardRef(({onSelect}, ref) => {
                 <Text style={isDarkMode ? styles.containerHeadlineDark : styles.containerHeadlineLight}>Liste auswählen</Text>
                 <View style={[isDarkMode ? styles.listBoxDark : styles.listBoxLight, { maxHeight: listBoxMaxHeight }]}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        {testData.map((item, index) => (
-                            <Fragment key={item.id}>
+                        {lists.map((item, index) => (
+                            <Fragment key={item.listId}>
                                 <CustomBoxButton
-                                    buttonTextLeft={item.buttonTextLeft}
+                                    buttonTextLeft={item.listName}
                                     iconName={item.iconName}
-                                    iconBoxBackgroundColor={item.iconBoxBackgroundColor}
-                                    iconColor={item.iconColor}
+                                    iconBoxBackgroundColor={item.iconBackgroundColor}
+                                    iconColor={"white"}
                                     showForwardIcon={false}
-                                    onPress={() => onSelect(item.buttonTextLeft)}
+                                    onPress={() => onSelect(item.listName)}
+                                    isUserIcon={true}
                                 />
                                 {/* Adds a border, except after the last element */}
-                                {index !== testData.length - 1 && (
+                                {index !== lists.length - 1 && (
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 )}
                             </Fragment>

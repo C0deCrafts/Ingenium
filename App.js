@@ -4,17 +4,18 @@ import {ThemeProvider} from "./src/context/ThemeContext";
 import {TasksProvider} from "./src/context/TasksContext";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
-import {localDatabase} from "./src/databases/localDatabase";
+import {DatabaseProvider} from "./src/context/DatabaseContext";
 
 export default function App() {
-    const {getLists} = localDatabase();
     return (
         <ThemeProvider>
             <GestureHandlerRootView style={{flex: 1}}>
                 <BottomSheetModalProvider>
-                    <TasksProvider>
-                        <AppNavigation/>
-                    </TasksProvider>
+                    <DatabaseProvider>
+                        <TasksProvider>
+                            <AppNavigation/>
+                        </TasksProvider>
+                    </DatabaseProvider>
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
         </ThemeProvider>

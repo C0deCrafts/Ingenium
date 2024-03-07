@@ -6,12 +6,8 @@ import * as Sharing from "expo-sharing";
 export const localDatabase = () => {
     const db = SQLite.openDatabase("ingeniumLocalDB.db");
 
-    useEffect(() => {
-        initDB();
-        //debugDB();
-    }, []);
-
     const initDB = () => {
+        // zweiten Table --> tasks
         const sql = `CREATE TABLE IF NOT EXISTS taskLists(
                     listId INTEGER PRIMARY KEY AUTOINCREMENT,
                     listName TEXT NOT NULL,
@@ -42,14 +38,29 @@ export const localDatabase = () => {
         return db.execAsync([{sql, args}], false);
     };
 
+    const deleteList = (listId) => {
+        const sql = `DELETE FROM taskLists WHERE id = ?;`
+        const args = [listId];
+        return db.execAsync([{sql, args}], false);
+    }
+
+    const deleteAllLists = () => {
+        const sql = `DELETE FROM taskLists`;
+        db.execAsync([{sql, args: []}], false);
+    }
+
     const debugDB = async () => {
         console.log(FileSystem.documentDirectory);
         await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/ingeniumLocalDB.db")
     }
 
     return {
+        initDB,
+        debugDB,
         getLists,
         insertList,
+        deleteList,
+        deleteAllLists
     }
 
 }

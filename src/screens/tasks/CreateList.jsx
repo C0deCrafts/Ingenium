@@ -1,3 +1,4 @@
+import {useState} from "react";
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from "react-native";
 import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -5,10 +6,9 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
-import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
 import SquareIcon from "../../components/SquareIcon";
-import {localDatabase} from "../../databases/localDatabase";
+import {useDatabase} from "../../context/DatabaseContext";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -23,23 +23,21 @@ function CreateList({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    // State variables for icon box color and icon name
+    // State variables for the form
     const [listName, setListName] = useState("");
     const [iconName, setIconName] = useState("LIST");
     const [iconBackgroundColor, setIconBackgroundColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
 
-    const {insertList} = localDatabase();
+    const {addList} = useDatabase();
 
-    const addProduct = async () => {
+    const handleAddList = async () => {
         if(listName.trim()===""){
             Alert.alert("Fehler", "Bitte einen Listennamen eingeben", [{text: "OK"}])
             return;
         }
-        const result = await insertList({listName,iconName,iconBackgroundColor});
-        console.log(result);
+        await addList({listName, iconName, iconBackgroundColor});
         navigation.goBack();
     }
-
     /*
     * Extract icon names and user colors from constants:
     * In JavaScript, we can iterate directly over arrays using map(),
@@ -50,10 +48,7 @@ function CreateList({navigation}) {
     * each element of the object and use it as we want.
     */
     const userColors = Object.keys(USER_COLORS);
-
-    const userIconNames = USER_ICONS.map(icon => {
-        return icon.name;
-    })
+    const userIconNames = USER_ICONS.map((icon) => icon.name);
 
     const handleChangeIcon = (name) => {
         setIconName(name);
@@ -77,15 +72,15 @@ function CreateList({navigation}) {
                 {/* Spacing */}
                 <View style={styles.spacing}>
                     {/* Input field for list name */}
-                    <CustomInputField placeholder={"Listenname"}
-                                      keyboardType={"default"}
-                                      maxTextInputLength={25}
+                    <CustomInputField placeholder="Listenname"
+                                      keyboardType="default"
+                                      onChangeText={setListName}
+                                      value={listName}
                                       iconName={iconName}
                                       iconBoxBackgroundColor={iconBackgroundColor}
-                                      iconColor={"white"}
-                                      onChangeText={(listName) => setListName(listName)}
-                                      value={listName}
+                                      iconColor="white"
                                       isUserIcon={true}
+                                      maxTextInputLength={25}
                     />
                 </View>
                 {/* Icon selection */}
@@ -139,7 +134,7 @@ function CreateList({navigation}) {
                 {/* Optional buttons for saving and canceling */}
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={addProduct}/>
+                        <CustomButton title={"Speichern"} onPressFunction={handleAddList}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>

@@ -50,8 +50,9 @@ function CreateList({navigation}) {
     * It updates the selectedList state with the chosen list name,
     * and then dismisses the modal.
     */
-    const handleListSelection = (buttonTextLeft) => {
-        setSelectedList(buttonTextLeft);
+    const handleListSelection = (buttonTextRight) => {
+        //setSelectedList(buttonTextLeft);
+        setSelectedList(buttonTextRight)
         //console.log("list name: " + buttonTextLeft)
         selectListModalRef.current?.dismiss(); // Closes the modal
     };
