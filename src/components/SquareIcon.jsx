@@ -16,6 +16,7 @@ import {SIZES} from "../constants/styleSettings";
  * @param name - The name of the icon to be displayed inside the square.
  * @param color - The color of the icon - default "white"
  * @param backgroundColor - The background color of the square behind the icon.
+ * @param isUserIcon
  * @returns {JSX.Element} - A JSX element which renders the icon.
  *
  * @example
@@ -27,7 +28,7 @@ import {SIZES} from "../constants/styleSettings";
  * />
  */
 
-function SquareIcon({name, color="white", backgroundColor}) {
+function SquareIcon({name, color="white", backgroundColor, isUserIcon}) {
     const containerStyle = {
         ...styles.square,
         backgroundColor: backgroundColor, // Verwendung der Prop für die Hintergrundfarbe
@@ -35,7 +36,7 @@ function SquareIcon({name, color="white", backgroundColor}) {
 
     return (
         <View style={containerStyle}>
-            <Icon name={name} size={SIZES.SQUARE_ICON_SIZE} color={color}/>
+            <Icon name={name} size={SIZES.SQUARE_ICON_SIZE} color={color} isUserIcon={isUserIcon}/>
         </View>
     );
 }

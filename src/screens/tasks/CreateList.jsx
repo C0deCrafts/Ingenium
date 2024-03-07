@@ -5,6 +5,7 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
 import {ICONS} from "../../constants/icons";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
+import {USER_ICONSTEST} from "../../constants/customizationSettingsTEST";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
@@ -26,7 +27,7 @@ function CreateList({navigation}) {
 
     // State variables for icon box color and icon name
     const [listName, setListName] = useState("");
-    const [iconName, setIconName] = useState(USER_ICONS.LIST);
+    const [iconName, setIconName] = useState("HAT");
     const [iconBackgroundColor, setIconBackgroundColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
 
     const {insertList} = localDatabase();
@@ -52,6 +53,10 @@ function CreateList({navigation}) {
     */
     const iconNames = Object.keys(USER_ICONS);
     const userColors = Object.keys(USER_COLORS);
+
+    const userIconNames = USER_ICONSTEST.map(icon => {
+        return icon.name;
+    })
 
     const handleChangeIcon = (name) => {
         setIconName(name);
@@ -83,6 +88,7 @@ function CreateList({navigation}) {
                                       iconColor={"white"}
                                       onChangeText={(listName) => setListName(listName)}
                                       value={listName}
+                                      isUserIcon={true}
                     />
                 </View>
                 {/* Icon selection */}
@@ -94,13 +100,14 @@ function CreateList({navigation}) {
                     <ScrollView horizontal={true}
                                 style={isDarkMode ? styles.scrollContainerDark : styles.scrollContainerLight}
                                 showsHorizontalScrollIndicator={false} bounces={true}>
-                        {iconNames.map((iconName) => (
-                            <TouchableOpacity key={iconName} onPress={() => handleChangeIcon(USER_ICONS[iconName])}>
+                        {userIconNames.map((iconName) => (
+                            <TouchableOpacity key={iconName} onPress={()=> handleChangeIcon(iconName)}>
                                 <View key={iconName} style={styles.boxSpacing}>
                                     <SquareIcon
-                                        name={ICONS.TASKICONS[iconName]}
+                                        name={iconName}
                                         color={"white"}
                                         backgroundColor={iconBackgroundColor}
+                                        isUserIcon={true}
                                     />
                                 </View>
                             </TouchableOpacity>

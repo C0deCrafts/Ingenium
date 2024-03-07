@@ -1,4 +1,5 @@
 import {Image} from "react-native";
+import {USER_ICONSTEST} from "../constants/customizationSettingsTEST";
 
 /**
  * ### Icon Component
@@ -16,6 +17,7 @@ import {Image} from "react-native";
  * It's recommended to use the values from the constants provided in that file
  * @param size - The size of the icon.
  * @param color - The color of the icon
+ * @param isUserIcon
  * @returns {JSX.Element} - The rendered icon as a React element.
  *
  * @example
@@ -27,8 +29,16 @@ import {Image} from "react-native";
  * // Similarly, you can use 'INACTIVE' to render the inactive state of the icon.
  *
  */
-function Icon({name, size, color}) {
+function Icon({name, size, color, isUserIcon = false}) {
+    const findImage = () => {
+        const image = USER_ICONSTEST.find(e => e.name === name);
+        return image ? image.image : require("../assets/icons/surprised-outline.png");
+    }
+
     return (
+        isUserIcon ?
+        <Image source={findImage()} style={{ width: size, height: size, tintColor: color }}/>
+        :
         <Image source={name} style={{ width: size, height: size, tintColor: color }}/>
     )
 }

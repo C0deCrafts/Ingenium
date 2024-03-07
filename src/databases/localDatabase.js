@@ -7,8 +7,8 @@ export const localDatabase = () => {
     const db = SQLite.openDatabase("ingeniumLocalDB.db");
 
     useEffect(() => {
-        //initDB();
-        debugDB();
+        initDB();
+        //debugDB();
     }, []);
 
     const initDB = () => {
