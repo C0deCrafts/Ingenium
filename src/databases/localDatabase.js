@@ -1,11 +1,14 @@
 import * as SQLite from "expo-sqlite";
+import * as FileSystem from 'expo-file-system';
 import {useEffect} from "react";
+import * as Sharing from "expo-sharing";
 
 export const localDatabase = () => {
     const db = SQLite.openDatabase("ingeniumLocalDB.db");
 
     useEffect(() => {
-        initDB();
+        //initDB();
+        debugDB();
     }, []);
 
     const initDB = () => {
@@ -38,6 +41,11 @@ export const localDatabase = () => {
         const args = [];
         return db.execAsync([{sql, args}], false);
     };
+
+    const debugDB = async () => {
+        console.log(FileSystem.documentDirectory);
+        await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/ingeniumLocalDB.db")
+    }
 
     return {
         getLists,
