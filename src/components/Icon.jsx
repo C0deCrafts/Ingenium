@@ -1,5 +1,5 @@
 import {Image} from "react-native";
-import {USER_ICONSTEST} from "../constants/customizationSettingsTEST";
+import {USER_ICONS} from "../constants/customizationSettings";
 
 /**
  * ### Icon Component
@@ -31,7 +31,7 @@ import {USER_ICONSTEST} from "../constants/customizationSettingsTEST";
  */
 function Icon({name, size, color, isUserIcon = false}) {
     const findImage = () => {
-        const image = USER_ICONSTEST.find(e => e.name === name);
+        const image = USER_ICONS.find(e => e.name === name);
         return image ? image.image : require("../assets/icons/surprised-outline.png");
     }
 

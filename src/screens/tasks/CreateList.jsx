@@ -5,7 +5,6 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
 import {ICONS} from "../../constants/icons";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
-import {USER_ICONSTEST} from "../../constants/customizationSettingsTEST";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
@@ -27,7 +26,7 @@ function CreateList({navigation}) {
 
     // State variables for icon box color and icon name
     const [listName, setListName] = useState("");
-    const [iconName, setIconName] = useState("HAT");
+    const [iconName, setIconName] = useState("LIST");
     const [iconBackgroundColor, setIconBackgroundColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
 
     const {insertList} = localDatabase();
@@ -54,7 +53,7 @@ function CreateList({navigation}) {
     const iconNames = Object.keys(USER_ICONS);
     const userColors = Object.keys(USER_COLORS);
 
-    const userIconNames = USER_ICONSTEST.map(icon => {
+    const userIconNames = USER_ICONS.map(icon => {
         return icon.name;
     })
 
