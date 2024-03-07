@@ -54,6 +54,19 @@ export const DatabaseProvider = ({children}) => {
         }
     }
 
+    const deleteList = async (listId) => {
+        try {
+            setIsLoading(true);
+            await db.deleteList(listId);
+            await loadLists();
+            console.log("Liste erfolgreich gelöscht")
+        } catch (error) {
+            setError(error)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const deleteAllLists = async () => {
         try {
             setIsLoading(true);
@@ -68,7 +81,7 @@ export const DatabaseProvider = ({children}) => {
     }
 
     return (
-        <DatabaseContext.Provider value={{lists,addList,loadLists,deleteAllLists}}>
+        <DatabaseContext.Provider value={{lists,addList,loadLists,deleteList,deleteAllLists}}>
             {children}
         </DatabaseContext.Provider>
     );

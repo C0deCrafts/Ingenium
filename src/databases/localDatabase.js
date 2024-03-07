@@ -39,7 +39,7 @@ export const localDatabase = () => {
     };
 
     const deleteList = (listId) => {
-        const sql = `DELETE FROM taskLists WHERE id = ?;`
+        const sql = `DELETE FROM taskLists WHERE listId = ?;`
         const args = [listId];
         return db.execAsync([{sql, args}], false);
     }
