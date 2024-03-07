@@ -1,11 +1,28 @@
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, ScrollView} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
+import {localDatabase} from "../../databases/localDatabase";
+import {useCallback, useEffect, useState} from "react";
+import {useFocusEffect} from "@react-navigation/native";
 
 function Dashboard({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    const {getLists} = localDatabase();
+    const [lists, setLists] = useState([]);
+
+    useFocusEffect(
+        useCallback(() => {
+            loadLists();
+        }, [])
+    );
+
+        const loadLists = async () => {
+            const result = await getLists();
+            setLists(result[0].rows)
+        };
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -13,6 +30,13 @@ function Dashboard({navigation}){
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
             </View>
+            <ScrollView>
+                {lists.map((lists) => (
+                    <View key={lists.listId}>
+                        <Text>{lists.listId}:{lists.listName}:{lists.iconName}:{lists.iconBackgroundColor}</Text>
+                    </View>
+                ))}
+            </ScrollView>
         </View>
     )
 }

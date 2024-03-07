@@ -1,9 +1,9 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../constants/context/TasksContext";
+import {useTasks} from "../../context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 

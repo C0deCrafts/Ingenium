@@ -3,7 +3,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomButton from "../buttons/CustomButton";
 import {ICONS} from "../../constants/icons";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import RoundButton from "../buttons/RoundButton";
 
 /**

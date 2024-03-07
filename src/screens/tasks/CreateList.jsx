@@ -1,5 +1,5 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from "react-native";
+import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
@@ -9,6 +9,7 @@ import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
 import SquareIcon from "../../components/SquareIcon";
+import {localDatabase} from "../../databases/localDatabase";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -24,9 +25,21 @@ function CreateList({navigation}) {
     const isDarkMode = theme === DARKMODE;
 
     // State variables for icon box color and icon name
-    const [iconBoxColor, setIconBoxColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
+    const [listName, setListName] = useState("");
     const [iconName, setIconName] = useState(USER_ICONS.LIST);
-    const [listName, setListName] = useState('');
+    const [iconBackgroundColor, setIconBackgroundColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
+
+    const {insertList} = localDatabase();
+
+    const addProduct = async () => {
+        if(listName.trim()===""){
+            Alert.alert("Fehler", "Bitte einen Listennamen eingeben", [{text: "OK"}])
+            return;
+        }
+        const result = await insertList({listName,iconName,iconBackgroundColor});
+        console.log(result);
+        navigation.goBack();
+    }
 
     /*
     * Extract icon names and user colors from constants:
@@ -44,7 +57,7 @@ function CreateList({navigation}) {
         setIconName(name);
     }
     const handleChangeIconBoxColor = (color) => {
-        setIconBoxColor(color);
+        setIconBackgroundColor(color);
     }
     const handleGoBack = () => {
         navigation.goBack();
@@ -66,7 +79,7 @@ function CreateList({navigation}) {
                                       keyboardType={"default"}
                                       maxTextInputLength={25}
                                       iconName={iconName}
-                                      iconBoxBackgroundColor={iconBoxColor}
+                                      iconBoxBackgroundColor={iconBackgroundColor}
                                       iconColor={"white"}
                                       onChangeText={(listName) => setListName(listName)}
                                       value={listName}
@@ -87,7 +100,7 @@ function CreateList({navigation}) {
                                     <SquareIcon
                                         name={ICONS.TASKICONS[iconName]}
                                         color={"white"}
-                                        backgroundColor={iconBoxColor}
+                                        backgroundColor={iconBackgroundColor}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -122,7 +135,7 @@ function CreateList({navigation}) {
                 {/* Optional buttons for saving and canceling */}
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern der Liste: " + listName + ", IconName: " + iconName + ", IconBoxColor: " + iconBoxColor)}/>
+                        <CustomButton title={"Speichern"} onPressFunction={addProduct}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>

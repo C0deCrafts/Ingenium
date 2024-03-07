@@ -1,5 +1,5 @@
 import {createContext, useContext, useReducer} from 'react';
-import dummyDataTasks from "../../assets/dummydata/dummyDataTasks";
+import dummyDataTasks from "../assets/dummydata/dummyDataTasks";
 
 /* Improvements:
 further improvement of comment structure

@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 
 function Timetable({navigation}){
     const { theme } = useTheme();

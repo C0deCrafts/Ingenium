@@ -3,7 +3,7 @@ import {forwardRef, Fragment, useCallback} from 'react';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBoxButton from "../buttons/CustomBoxButton";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {testDataSelectList} from "../../constants/userData";
 
 /**

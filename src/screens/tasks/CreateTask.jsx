@@ -7,7 +7,7 @@ import {
     InputAccessoryView,
     TouchableOpacity,
 } from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomButton from "../../components/buttons/CustomButton";

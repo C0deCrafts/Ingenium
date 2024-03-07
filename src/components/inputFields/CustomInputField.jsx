@@ -1,6 +1,6 @@
 import {StyleSheet, TextInput, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import SquareIcon from "../SquareIcon";
 
 /**

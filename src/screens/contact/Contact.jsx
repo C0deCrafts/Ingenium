@@ -1,7 +1,7 @@
 import {ActionSheetIOS, Platform, Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import MapView, {Marker} from 'react-native-maps';

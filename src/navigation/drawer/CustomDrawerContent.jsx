@@ -6,7 +6,7 @@ import { useTabContext } from "../context/TabContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 
 const CustomDrawerContent = ({navigation}) => {
     const insets = useSafeAreaInsets();

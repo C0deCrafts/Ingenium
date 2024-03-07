@@ -2,7 +2,7 @@ import {Text, View, StyleSheet} from "react-native";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useNavigation} from "@react-navigation/native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 function Inbox(){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;

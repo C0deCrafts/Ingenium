@@ -2,9 +2,9 @@ import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert}
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../constants/context/TasksContext";
+import {useTasks} from "../../context/TasksContext";
 import {useState} from "react";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";

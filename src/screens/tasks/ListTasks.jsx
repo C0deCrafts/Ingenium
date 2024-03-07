@@ -1,12 +1,12 @@
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useState} from "react";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../constants/context/TasksContext";
+import {useTasks} from "../../context/TasksContext";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 
 function ListTasks({route, navigation}){
