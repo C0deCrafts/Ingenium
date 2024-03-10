@@ -115,6 +115,7 @@ export const localDatabase = () => {
         }
 
     return {
+        getDatabase,
         createTable,
         insertTaskList,
         getTaskLists,

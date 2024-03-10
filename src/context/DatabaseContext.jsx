@@ -18,15 +18,30 @@ export const DatabaseProvider = ({children}) => {
             await localDatabase().createTable(); // Warten, bis die Datenbank erstellt ist
             //console.log("Datenbank wurde erstellt");
             //console.log("Versuche, Listen zu laden...");
+            await initializePermanentList();
             await loadLists(); // Laden der Listen nach erfolgreicher Erstellung der Datenbank
             //console.log("Liste wurde erstellt");
         } catch (err) {
             setError(err.message);
             console.log("Fehler:", err);
         } finally {
-            setIsLoading(true);
+            setIsLoading(false);
         }
     }
+
+    //Füge Ingenium hinzu
+    const initializePermanentList = async () => {
+        const lists = await localDatabase().getTaskLists();
+        const listNames = lists.map(list => list.listName); // Extrahiere alle Listennamen
+
+        if (!listNames.includes("Ingenium")) {
+            // Wenn "Ingenium" nicht in den Listennamen enthalten ist, erstellen Sie die Liste
+            await localDatabase().insertTaskList({listName: "Ingenium", iconName: "HAT", iconBackgroundColor: "#009FE3"});
+            console.log("Liste 'Ingenium' wurde erstellt.");
+        } else {
+            console.log("Die Liste 'Ingenium' existiert bereits.");
+        }
+    };
     // Methode zum Laden der Listen
     //FUNKTIONIERT
     const loadLists = async () => {

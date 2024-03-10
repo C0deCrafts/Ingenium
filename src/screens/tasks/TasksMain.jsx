@@ -297,37 +297,41 @@ function TasksMain({navigation}) {
                             {
                                 lists.flat().map((list, index) => {
                                     if (editTaskListsIsActive) {
-                                        // Bearbeitungsmodus
-                                        return (
-                                            <View
-                                                key={list.listId}
-                                                style={[
-                                                    isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
-                                                    styles.listItemContainer,
-                                                    styles.listItemContainerTaskList
-                                                ]}
-                                            >
-                                                <TouchableOpacity
-                                                    onPress={() => handleDeleteTaskList(list.listId)}
+                                        // Im Bearbeitungsmodus
+                                        if (list.listName !== "Ingenium") {
+                                            return (
+                                                <View
+                                                    key={list.listId}
+                                                    style={[
+                                                        isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                                        styles.listItemContainer,
+                                                        styles.listItemContainerTaskList
+                                                    ]}
                                                 >
-                                                    <Icon name={ICONS.TASKICONS.MINUS}
-                                                          color={COLOR.ICONCOLOR_CUSTOM_RED}
-                                                          size={SIZES.EDIT_TASKS_ICON_SIZE}/>
-                                                </TouchableOpacity>
-                                                <View style={styles.editTaskListItem}>
-                                                    <SquareIcon name={list.iconName}
-                                                                backgroundColor={list.iconBackgroundColor}
-                                                                isUserIcon={true}/>
-                                                    <Text
-                                                        style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
+                                                    <TouchableOpacity
+                                                        onPress={() => handleDeleteTaskList(list.listId)}
+                                                    >
+                                                        <Icon name={ICONS.TASKICONS.MINUS}
+                                                              color={COLOR.ICONCOLOR_CUSTOM_RED}
+                                                              size={SIZES.EDIT_TASKS_ICON_SIZE}/>
+                                                    </TouchableOpacity>
+                                                    <View style={styles.editTaskListItem}>
+                                                        <SquareIcon name={list.iconName}
+                                                                    backgroundColor={list.iconBackgroundColor}
+                                                                    isUserIcon={true}/>
+                                                        <Text
+                                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
+                                                    </View>
+                                                    {/* Adds a border, except after the last element */}
+                                                    {index !== lists.flat().length - 1 && (
+                                                        <View
+                                                            style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                    )}
                                                 </View>
-                                                {/* Adds a border, except after the last element */}
-                                                {index !== lists.flat().length - 1 && (
-                                                    <View
-                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                                                )}
-                                            </View>
-                                        );
+                                            );
+                                        } else {
+                                            return null; // Überspringen Sie die Renderung der Liste "Ingenium"
+                                        }
                                     } else {
                                         // Ansichtsmodus
                                         return (
