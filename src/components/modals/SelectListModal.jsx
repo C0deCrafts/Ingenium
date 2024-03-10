@@ -73,7 +73,7 @@ const SelectListModal = forwardRef(({onSelect}, ref) => {
                                     iconBoxBackgroundColor={list.iconBackgroundColor}
                                     iconColor={"white"}
                                     showForwardIcon={false}
-                                    onPress={() => onSelect(list.listName)}
+                                    onPress={() => onSelect(list)}
                                     isUserIcon={true}
                                 />
                                 {/* Füge einen Trenner hinzu, außer nach dem letzten Element */}

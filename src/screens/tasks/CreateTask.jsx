@@ -5,7 +5,7 @@ import {
     TextInput,
     Keyboard,
     InputAccessoryView,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from "react-native";
 import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -37,6 +37,26 @@ function CreateList({navigation}) {
 
     const { addTask } = useDatabase();
 
+    //Funktion zum Hinzufügen eines Tasks
+    const handleSaveTask = async () => {
+        if (title.trim() === "") {
+            // Ensure title is not empty
+            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
+            return;
+        }
+        await addTask({
+            listId: selectedListId, // Hier sollte die entsprechende listId verwendet werden
+            taskTitle: title,
+            taskNotes: notes,
+            dueDate: "", // Hier müsste das Fälligkeitsdatum der Aufgabe eingefügt werden, wenn verfügbar
+            creationDate: new Date().toISOString(), // Datum und Uhrzeit der Erstellung der Aufgabe
+            imageURL: "", // Hier könnte die URL für Bilder eingefügt werden, falls zutreffend
+            url: "", // Hier könnte eine URL eingefügt werden, falls zutreffend
+            shared: false, // Startwert für die Aufgabe, die nicht geteilt wird
+            reminder: false // Startwert für die Erinnerung an die Aufgabe, die nicht eingestellt ist
+        });
+        navigation.goBack();
+    };
 
     /*
     * Function to handle pressing the select list modal button
@@ -54,11 +74,11 @@ function CreateList({navigation}) {
     * It updates the selectedList state with the chosen list name,
     * and then dismisses the modal.
     */
-    const handleListSelection = (buttonTextRight) => {
-        //setSelectedList(buttonTextLeft);
-        setSelectedList(buttonTextRight)
-        //console.log("list name: " + buttonTextLeft)
-        selectListModalRef.current?.dismiss(); // Closes the modal
+    const handleListSelection = (selectedList) => {
+        setSelectedList(selectedList.listName); // Setze das ausgewählte Listenelement
+        console.log(selectedList); // Gib das gesamte Listenelement aus
+        console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name"); // Gib spezifische Eigenschaften des Listenelements aus
+        selectListModalRef.current?.dismiss(); // Schließt das Modal
     };
 
     // Function to navigate to the edit task details screen
