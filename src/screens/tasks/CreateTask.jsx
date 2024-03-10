@@ -30,31 +30,46 @@ function CreateList({navigation}) {
     // Reference for the select list modal
     const selectListModalRef = useRef(null);
 
-    // State variables for the title, notes, and selected list
-    const [title, setTitle] = useState('');
-    const [notes, setNotes] = useState('');
-    const [selectedList, setSelectedList] = useState("Ingenium");
+    const { addTask, lists } = useDatabase();
 
-    const { addTask } = useDatabase();
+    // State variables for the title, notes, and selected list
+    //const [title, setTitle] = useState('');
+   //const [notes, setNotes] = useState('');
+    //const [selectedList, setSelectedList] = useState("Ingenium");
+
+    // State für Task-Details
+    const [tasks, setTasks] = useState({
+        taskTitle: '',
+        taskNotes: '',
+        selectedListId: lists.find(list => list.listName === "Ingenium")?.listId || null,
+        selectedListName: "Ingenium", // Standardmäßig "Ingenium"
+        dueDate: '',
+        creationDate: new Date().toISOString(),
+        imageURL: '',
+        url: '',
+        shared: false,
+        reminder: false,
+    });
+
+    // Funktion zum Aktualisieren der Task-Details
+    const handleInputChange = (name, value) => {
+        setTasks(prevDetails => ({
+            ...prevDetails,
+            [name]: value,
+        }));
+    };
+
 
     //Funktion zum Hinzufügen eines Tasks
     const handleSaveTask = async () => {
-        if (title.trim() === "") {
+        if (tasks.taskTitle.trim() === "") {
             // Ensure title is not empty
             Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
             return;
         }
-        await addTask({
-            listId: selectedListId, // Hier sollte die entsprechende listId verwendet werden
-            taskTitle: title,
-            taskNotes: notes,
-            dueDate: "", // Hier müsste das Fälligkeitsdatum der Aufgabe eingefügt werden, wenn verfügbar
-            creationDate: new Date().toISOString(), // Datum und Uhrzeit der Erstellung der Aufgabe
-            imageURL: "", // Hier könnte die URL für Bilder eingefügt werden, falls zutreffend
-            url: "", // Hier könnte eine URL eingefügt werden, falls zutreffend
-            shared: false, // Startwert für die Aufgabe, die nicht geteilt wird
-            reminder: false // Startwert für die Erinnerung an die Aufgabe, die nicht eingestellt ist
-        });
+        console.log("addTasks aufrufen")
+        await addTask(tasks); //hier wirft er den fehler
+        console.log("erfolgreich hinzugefügt")
         navigation.goBack();
     };
 
@@ -74,12 +89,26 @@ function CreateList({navigation}) {
     * It updates the selectedList state with the chosen list name,
     * and then dismisses the modal.
     */
+
+    // Funktion zur Handhabung der Listenauswahl
+    const handleListSelection = (selectedList) => {
+        setTasks(prevDetails => ({
+            ...prevDetails,
+            selectedListName: selectedList.listName, // Aktualisiert den ausgewählten ListId im Task-Details State
+        }));
+        console.log(selectedList); // Gib das gesamte Listenelement aus
+        console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name"); // Gib spezifische Eigenschaften des Listenelements aus
+        selectListModalRef.current?.dismiss();
+    };
+
+    /*
     const handleListSelection = (selectedList) => {
         setSelectedList(selectedList.listName); // Setze das ausgewählte Listenelement
         console.log(selectedList); // Gib das gesamte Listenelement aus
         console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name"); // Gib spezifische Eigenschaften des Listenelements aus
         selectListModalRef.current?.dismiss(); // Schließt das Modal
     };
+    * */
 
     // Function to navigate to the edit task details screen
     const navigateToAddTaskDetails = () => {
@@ -112,9 +141,10 @@ function CreateList({navigation}) {
                             placeholder={"Titel"}
                             placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                             style={isDarkMode ? styles.inputDark : styles.inputLight}
+                            onChangeText={(value) => handleInputChange('taskTitle', value)}
+                            value={tasks.taskTitle}
+
                             selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
-                            onChangeText={(title) => setTitle(title)}
-                            value={title}
                             keyboardAppearance={isDarkMode ? "dark" : "light"}
                             returnKeyType="done"
                         />
@@ -123,12 +153,15 @@ function CreateList({navigation}) {
                         <TextInput placeholder={"Notizen"}
                                    placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                    style={isDarkMode ? styles.inputDarkNotes : styles.inputLightNotes}
+
+                                   onChangeText={(value) => handleInputChange('taskNotes', value)}
+                                   value={tasks.taskNotes}
+
                                    selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                    maxLength={1000}
                                    multiline={true}
                                    scrollEnabled={true}
-                                   onChangeText={(notes) => setNotes(notes)}
-                                   value={notes}
+
                                    inputAccessoryViewID={inputAccessoryViewID}
                                    keyboardAppearance={isDarkMode ? "dark" : "light"}
                         />
@@ -147,7 +180,8 @@ function CreateList({navigation}) {
                 <View>
                     <CustomBoxButton
                         buttonTextLeft={"Liste"}
-                        buttonTextRight={selectedList}
+                        //buttonTextRight={lists.find(list => list.listId === tasks.selectedListId)?.listName || 'Ingenium'} // Zeigt den Namen der ausgewählten Liste an oder 'Ingenium' als Standard
+                        buttonTextRight={tasks.selectedListName}
                         iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
                         iconName={ICONS.TASKICONS.LIST}
                         iconColor={COLOR.BUTTONLABEL}
@@ -171,7 +205,7 @@ function CreateList({navigation}) {
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
                         <CustomButton title={"Speichern"}
-                                      onPressFunction={() => console.log("Speichern gedrückt - Titel: " + title + ", Notizen: " + notes + ", Ausgewählte Liste: " + selectedList)}/>
+                                      onPressFunction={handleSaveTask}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
@@ -182,6 +216,7 @@ function CreateList({navigation}) {
             <SelectListModal
                 ref={selectListModalRef}
                 onSelect={handleListSelection} // Prop for the callback function
+                lists={lists} // Liste der verfügbaren Listen zur Auswahl
             />
         </View>
     )

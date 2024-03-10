@@ -35,7 +35,11 @@ function CreateList({navigation}) {
             Alert.alert("Fehler", "Bitte einen Listennamen eingeben", [{text: "OK"}])
             return;
         }
-        await addList({listName, iconName, iconBackgroundColor});
+        await addList({
+            listName: listName,
+            iconName: iconName,
+            iconBackgroundColor: iconBackgroundColor
+        });
         navigation.goBack();
     }
     /*

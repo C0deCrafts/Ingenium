@@ -7,6 +7,7 @@ export const useDatabase = () => useContext(DatabaseContext);
 
 export const DatabaseProvider = ({children}) => {
     const [lists, setLists] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(false); //evtl. einen Loadingscreen anzeigen lassen für bessere Usability
     const [error, setError] = useState(null); // error speichern
 
@@ -15,13 +16,15 @@ export const DatabaseProvider = ({children}) => {
         try {
             //await localDatabase().debugDB();
 
-            //console.log("Versuche, die Datenbanktabelle zu erstellen...");
+            console.log("Versuche, die Datenbanktabelle zu erstellen...");
             await localDatabase().createTable(); // Warten, bis die Datenbank erstellt ist
-            //console.log("Datenbank wurde erstellt");
-            //console.log("Versuche, Listen zu laden...");
+            console.log("Datenbank wurde erstellt");
+            console.log("Versuche, Listen zu laden...");
             await initializePermanentList();
             await loadLists(); // Laden der Listen nach erfolgreicher Erstellung der Datenbank
-            //console.log("Liste wurde erstellt");
+            console.log("Liste wurde erstellt");
+
+
         } catch (err) {
             setError(err.message);
             console.log("Fehler:", err);
@@ -49,12 +52,17 @@ export const DatabaseProvider = ({children}) => {
         setIsLoading(true);
         try {
             const loadedLists = await localDatabase().getTaskLists();
+            //const loadedTasks = await localDatabase().getTasks();
             //loadedLists.forEach(items => console.log("ITEM: ", items))
             const listsArray = [loadedLists];
-            setLists(listsArray)
+            //const tasksArray = [loadedTasks];
+            setLists(listsArray);
+            //setTasks(tasksArray);
 
             const dataString = JSON.stringify(loadedLists, null,2);
-            console.log("DATA STRING: ", dataString)
+            console.log("DATA STRING: ", dataString);
+            //const dataStringTasks = JSON.stringify(loadedTasks, null,2);
+            //console.log("DATA STRING Tasks: ", dataStringTasks)
         } catch (err) {
             setError(err.message);
             console.log("ERROR Lists: ", err);
@@ -66,19 +74,23 @@ export const DatabaseProvider = ({children}) => {
     //FUNKTIONIERT
     const addList = async (list) => {
         try {
+            console.log("Liste hinzugefügt:")
             await localDatabase().insertTaskList(list);
             await loadLists();
         } catch (err) {
+            console.error("Fehler beim Hinzufügen der Liste:", err.message);
             setError(err.message);
         }
     };
 
     const addTask = async (task) => {
+        console.log("ADD LIST IM CONTEXT")
         try {
             await localDatabase().insertTaskInList(task);
             await loadLists();
+            console.log("Task erfolgreich hinzugefügt");
         } catch (err) {
-            console.log("ERROR IN ADD TASK")
+            console.error("Fehler beim Hinzufügen des Tasks:", err);
             setError(err.message);
         }
     }
@@ -108,14 +120,14 @@ export const DatabaseProvider = ({children}) => {
     }
 
     useEffect(() => {
-        initializeDatabase().then(r => {
-            console.log("UseEffect")
-        });
+                initializeDatabase().then(r => {
+                    console.log("UseEffect")
+                })
     }, []);
 
 
     return (
-        <DatabaseContext.Provider value={{lists, loadLists, addList, deleteList, isLoading, deleteAllLists, error/*lists,addList,loadLists,deleteList,deleteAllLists*/}}>
+        <DatabaseContext.Provider value={{lists, tasks, addTask, loadLists, addList, deleteList, isLoading, deleteAllLists, error/*lists,addList,loadLists,deleteList,deleteAllLists*/}}>
             {children}
         </DatabaseContext.Provider>
     );

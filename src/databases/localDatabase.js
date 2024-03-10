@@ -7,8 +7,6 @@ import * as Sharing from "expo-sharing";
 let dbInstance = null;
 
 export const localDatabase = () => {
-
-    //const db = SQLite.openDatabase("ingeniumLocalDB.db");
     const readOnly = false;
 
     /**
@@ -90,7 +88,7 @@ export const localDatabase = () => {
                     iconName, 
                     iconBackgroundColor
         ) VALUES (?, ?, ?);`
-        let resultData;
+        //let resultData;
 
         const args = [listName, iconName, iconBackgroundColor];
         await db.transactionAsync(async tx => {
@@ -145,6 +143,22 @@ export const localDatabase = () => {
     }
 
     //FUNKTIONIERT
+    const getTasks = async () => {
+        const db = getDatabase();
+        const sql = `SELECT * FROM tasks`;
+        const args = [];
+        let resultData;
+
+        await db.transactionAsync(async tx => {
+            const result = await tx.executeSqlAsync(sql,args);
+            //console.log("Ergebnis RESULT: ", result)
+            //console.log("Ergebnis: ", result.rows[0]);
+            resultData = result.rows;
+        },readOnly);
+        return resultData;
+    }
+
+    //FUNKTIONIERT
     const deleteTaskList = async (listId) => {
         const db = getDatabase();
         const sql = `DELETE FROM taskLists WHERE listId = ?;`
@@ -177,6 +191,7 @@ export const localDatabase = () => {
         insertTaskList,
         insertTaskInList,
         getTaskLists,
+        getTasks,
         deleteTaskList,
         deleteAllTaskLists,
         debugDB

@@ -42,16 +42,18 @@ function Dashboard({navigation}){
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
             </View>
             <ScrollView>
-                {lists.flat().map(list => (
-                    <View key={list.listId}>
-                        <Text>{list.listId}:{list.listName}:{list.iconName}:{list.iconBackgroundColor}</Text>
-                        <CustomInputField
-                            isUserIcon={true}
-                            iconName={list.iconName}
-                            iconBoxBackgroundColor={list.iconBackgroundColor}
-                            placeholder={list.listName}
-                        />
-                    </View>
+                {lists.map(innerList => (
+                    innerList.map(list => (
+                        <View key={list.listId}>
+                            <Text>{list.listId}:{list.listName}:{list.iconName}:{list.iconBackgroundColor}</Text>
+                            <CustomInputField
+                                isUserIcon={true}
+                                iconName={list.iconName}
+                                iconBoxBackgroundColor={list.iconBackgroundColor}
+                                placeholder={list.listName}
+                            />
+                        </View>
+                    ))
                 ))}
             </ScrollView>
             <CustomButton title={"Lösche alle Listen"} onPressFunction={deleteAllLists}/>
