@@ -10,78 +10,86 @@ export const DatabaseProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false); //evtl. einen Loadingscreen anzeigen lassen für bessere Usability
     const [error, setError] = useState(null); // error speichern
 
-    const db = localDatabase();
-
-    useEffect(() => {
-        const initializeDatabase = async () => {
-            try {
-                setIsLoading(true);
-                //await db.debugDB();
-                await db.initDB();
-                console.log("Database initialized");
-                await loadLists();
-                console.log("Liste erfolgreich aus DB geladen");
-            } catch (error) {
-                setError(error);
-            } finally {
-                setIsLoading(false)
-            }
-        };
-        initializeDatabase();
-    }, []);
-
-    const loadLists = async () => {
+    //FUNKTIONIERT
+    const initializeDatabase = async () => {
         try {
-            const result = await db.getLists();
-            console.log("Result: ", result)
-            //setLists(result);
-            setLists(result[0].rows)
-        } catch (error) {
-            setError(error);
+            //await localDatabase().debugDB();
+            //console.log("Versuche, die Datenbanktabelle zu erstellen...");
+            await localDatabase().createTable(); // Warten, bis die Datenbank erstellt ist
+            //console.log("Datenbank wurde erstellt");
+            //console.log("Versuche, Listen zu laden...");
+            await loadLists(); // Laden der Listen nach erfolgreicher Erstellung der Datenbank
+            //console.log("Liste wurde erstellt");
+        } catch (err) {
+            setError(err.message);
+            console.log("Fehler:", err);
+        } finally {
+            setIsLoading(true);
+        }
+    }
+    // Methode zum Laden der Listen
+    //FUNKTIONIERT
+    const loadLists = async () => {
+        setIsLoading(true);
+        try {
+            const loadedLists = await localDatabase().getTaskLists();
+            //loadedLists.forEach(items => console.log("ITEM: ", items))
+            const listsArray = [loadedLists];
+            setLists(listsArray)
+
+            const dataString = JSON.stringify(loadedLists, null,2);
+            console.log("DATA STRING: ", dataString)
+        } catch (err) {
+            setError(err.message);
+            console.log("ERROR Lists: ", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    // Methode zum Hinzufügen einer Liste
+    //FUNKTIONIERT
+    const addList = async (list) => {
+        try {
+            await localDatabase().insertTaskList(list);
+            await loadLists();
+        } catch (err) {
+            setError(err.message);
         }
     };
 
-    const addList = async (list) => {
-        try {
-            setIsLoading(true);
-            await db.insertList(list);
-            await loadLists();
-            console.log("Liste erfolgreich hinzugefügt")
-        } catch (error) {
-            setError(error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
+    // Methode zum Löschen einer Liste
+    //FUNKTIONIERT
     const deleteList = async (listId) => {
         try {
-            setIsLoading(true);
-            await db.deleteList(listId);
+            await localDatabase().deleteTaskList(listId);
+            console.log("list deleted")
             await loadLists();
-            console.log("Liste erfolgreich gelöscht")
-        } catch (error) {
-            setError(error)
-        } finally {
-            setIsLoading(false);
+        } catch (err) {
+            setError(err.message);
         }
-    }
+    };
 
+
+    //FUNKTIONIERT
     const deleteAllLists = async () => {
         try {
-            setIsLoading(true);
-            await db.deleteAllLists();
+            await localDatabase().deleteAllTaskLists();
             console.log("All lists deleted")
             await loadLists(); // Läd die Listen neu, um die UI zu aktualisieren
         } catch (error) {
             setError(error);
-        } finally {
-            setIsLoading(false);
         }
     }
 
+    useEffect(() => {
+        initializeDatabase().then(r => {
+            console.log("UseEffect")
+        });
+    }, []);
+
+
     return (
-        <DatabaseContext.Provider value={{lists,addList,loadLists,deleteList,deleteAllLists}}>
+        <DatabaseContext.Provider value={{lists, loadLists, addList, deleteList, isLoading, deleteAllLists, error/*lists,addList,loadLists,deleteList,deleteAllLists*/}}>
             {children}
         </DatabaseContext.Provider>
     );

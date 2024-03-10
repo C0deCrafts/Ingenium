@@ -19,6 +19,22 @@ function Dashboard({navigation}){
         loadLists();
     }, []);
 
+    const showAllListsHelperFunction = () => {
+        console.log("Alle Listen:");
+
+        console.log("LIST ID:",lists[0].listId);
+
+        console.log("Alle Listen:");
+        lists.forEach(innerList => {
+            innerList.forEach(list => {
+                console.log("LIST ID:", list.listId);
+                console.log("LIST Name:", list.listName);
+                console.log("Icon Name:", list.iconName);
+                console.log("Icon Background Color:", list.iconBackgroundColor);
+            });
+        });
+    }
+
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomDrawerHeader onPress={()=> navigation.openDrawer()}/>
@@ -26,19 +42,20 @@ function Dashboard({navigation}){
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
             </View>
             <ScrollView>
-                {lists.map((lists) => (
-                    <View key={lists.listId}>
-                        <Text>{lists.listId}:{lists.listName}:{lists.iconName}:{lists.iconBackgroundColor}</Text>
+                {lists.flat().map(list => (
+                    <View key={list.listId}>
+                        <Text>{list.listId}:{list.listName}:{list.iconName}:{list.iconBackgroundColor}</Text>
                         <CustomInputField
                             isUserIcon={true}
-                            iconName={lists.iconName}
-                            iconBoxBackgroundColor={lists.iconBackgroundColor}
-                            placeholder={lists.listName}
+                            iconName={list.iconName}
+                            iconBoxBackgroundColor={list.iconBackgroundColor}
+                            placeholder={list.listName}
                         />
                     </View>
                 ))}
             </ScrollView>
             <CustomButton title={"Lösche alle Listen"} onPressFunction={deleteAllLists}/>
+            <CustomButton title={"Zeige alle Listen"} onPressFunction={showAllListsHelperFunction}/>
         </View>
     )
 }
