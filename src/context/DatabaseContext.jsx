@@ -14,6 +14,7 @@ export const DatabaseProvider = ({children}) => {
     const initializeDatabase = async () => {
         try {
             //await localDatabase().debugDB();
+
             //console.log("Versuche, die Datenbanktabelle zu erstellen...");
             await localDatabase().createTable(); // Warten, bis die Datenbank erstellt ist
             //console.log("Datenbank wurde erstellt");
@@ -71,6 +72,16 @@ export const DatabaseProvider = ({children}) => {
             setError(err.message);
         }
     };
+
+    const addTask = async (task) => {
+        try {
+            await localDatabase().insertTaskInList(task);
+            await loadLists();
+        } catch (err) {
+            console.log("ERROR IN ADD TASK")
+            setError(err.message);
+        }
+    }
 
     // Methode zum Löschen einer Liste
     //FUNKTIONIERT

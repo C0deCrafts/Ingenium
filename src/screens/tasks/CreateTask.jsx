@@ -15,6 +15,7 @@ import {useRef, useState} from "react";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
+import {useDatabase} from "../../context/DatabaseContext";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -33,6 +34,9 @@ function CreateList({navigation}) {
     const [title, setTitle] = useState('');
     const [notes, setNotes] = useState('');
     const [selectedList, setSelectedList] = useState("Ingenium");
+
+    const { addTask } = useDatabase();
+
 
     /*
     * Function to handle pressing the select list modal button

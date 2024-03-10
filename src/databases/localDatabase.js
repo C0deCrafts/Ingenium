@@ -37,17 +37,48 @@ export const localDatabase = () => {
     //FUNKTIONIERT
     const createTable = async () => {
         const db = getDatabase();
-        const sql = `CREATE TABLE IF NOT EXISTS taskLists(
+        const sqlTaskLists = `CREATE TABLE IF NOT EXISTS taskLists(
                     listId INTEGER PRIMARY KEY AUTOINCREMENT,
                     listName TEXT NOT NULL,
                     iconName TEXT NOT NULL, 
                     iconBackgroundColor TEXT NOT NULL
         )`;
+
+
+        /*
+    * Aufgabendaten. Hier ist ein Beispiel für die Struktur:
+    * taskID (Primärschlüssel)
+    * listID (Fremdschlüssel, um die Aufgabe mit der entsprechenden Taskliste zu verknüpfen)
+    * title (Titel der Aufgabe)
+    * notes (Notizen zur Aufgabe)
+    * dueDate (Fälligkeitsdatum der Aufgabe)
+    * creationDate (Erstellungsdatum der Aufgabe)
+    * imageURL (URL für Bilder, die der Benutzer hinzufügen kann)
+    * url (URL, die der Benutzer extra hinzufügen kann)
+    * shared (Boolean-Wert, ob die Aufgabe geteilt wurde)
+    * reminder (Boolean-Wert, ob an diese Aufgabe erinnert werden soll)
+    */
+        const sqlTasks = `CREATE TABLE IF NOT EXISTS tasks (
+                      taskId INTEGER PRIMARY KEY AUTOINCREMENT,
+                      listId INTEGER NOT NULL,
+                      taskTitle TEXT NOT NULL,
+                      taskNotes TEXT,
+                      dueDate TEXT,
+                      creationDate TEXT,
+                      imageURL TEXT,
+                      url TEXT,
+                      shared INTEGER,
+                      reminder INTEGER,
+                      FOREIGN KEY (listId) REFERENCES taskLists(listId)
+        )`;
+
         const args = [];
 
         await db.transactionAsync(async tx => {
-            await tx.executeSqlAsync(sql,args);
-            //console.log("Table erstellt")
+            await tx.executeSqlAsync(sqlTaskLists,args);
+            console.log("Table Task LISTS erstellt")
+            await tx.executeSqlAsync(sqlTasks, args);
+            console.log("Table Tasks erstellt")
         },readOnly);
     };
 
@@ -69,6 +100,32 @@ export const localDatabase = () => {
             //insertedId = result.insertId;
         },readOnly)
         //return resultData;
+    }
+
+    const insertTaskInList = async (task) => {
+        const db = getDatabase();
+        const {listId, taskTitle, taskNotes, dueDate, creationDate, imageURL, url, shared, reminder} = task;
+        const sql = `INSERT INTO tasks (
+                    listId,
+                    taskTitle,
+                    taskNotes,
+                    dueDate,
+                    creationDate,
+                    imageURL,
+                    url,
+                    shared,
+                    reminder
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        const args = [listId, taskTitle, taskNotes, dueDate, creationDate, imageURL, url,
+            shared ? 1 : 0, // Convert boolean to integer for SQLite
+            reminder ? 1 : 0 // Convert boolean to integer for SQLite
+        ];
+
+        await db.transactionAsync(async tx => {
+            console.log("Öffne INSERT TASK IN LIST")
+            const result = await tx.executeSqlAsync(sql,args)
+            console.log("Ergebnis RESULT: ", result)
+        },readOnly)
     }
 
     //FUNKTIONIERT
@@ -118,6 +175,7 @@ export const localDatabase = () => {
         getDatabase,
         createTable,
         insertTaskList,
+        insertTaskInList,
         getTaskLists,
         deleteTaskList,
         deleteAllTaskLists,
