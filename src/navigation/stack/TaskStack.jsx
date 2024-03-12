@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 function TaskStack() {
     const {drawerEnabled, setDrawerEnabled} = useTabContext();
 
-    console.log("??" +drawerEnabled);
+    //console.log("??" +drawerEnabled);
 
     return (
         <Stack.Navigator initialRouteName="Task_Stack"

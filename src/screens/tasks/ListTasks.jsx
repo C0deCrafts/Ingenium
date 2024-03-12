@@ -8,11 +8,13 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTasks} from "../../context/TasksContext";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
+import {useDatabase} from "../../context/DatabaseContext";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
     const [editTasksIsActive, setEditTasksIsActive] = useState(false);
 
+    //TODO DELETE
     //task context provider hook which provides the taskListsState
     //and a dispatchFunction to change the state based on actions
     const {taskListsState, dispatch} = useTasks();
@@ -27,6 +29,9 @@ function ListTasks({route, navigation}){
 
     //access the parameter listId passed from the TasksMain Screen
     const {listId} = route.params;
+
+    //access the tasks state from Database Context
+    const {tasks, lists} = useDatabase();
 
     /**
      * Is called on press of the Back Button.
@@ -113,8 +118,11 @@ function ListTasks({route, navigation}){
     }
 
     //access the current list title to show it in the heading of the screen
-    const currentList = taskListsState.find(list => list.id === listId);
-    const currentScreenTitle = currentList.title;
+    const currentList = lists.find(list => list.listId === listId);
+    const currentScreenTitle = currentList.listName;
+
+    //filter tasks to show tasks belonging to currentList && isDone is false
+    const listTasksNotDone = tasks.filter(task => !task.isDone && task.listId === listId);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -147,19 +155,14 @@ function ListTasks({route, navigation}){
                     bounces={false}
                 >
                     {
-                        [...taskListsState]
-                            .filter(list => list.id === listId)
-                            .flatMap(list => list.tasks)
-                            .filter(task => !task.done)
-                            .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
-                            .map(task => {
+                            listTasksNotDone.map(task => {
 
                                 if(editTasksIsActive) {
                                    return (
                                        /*TaskBox editTasksIsActive === true*/
                                        <View
                                            style={styles.taskContainer}
-                                           key={task.id}
+                                           key={task.taskId}
                                        >
                                             <View
                                                 style={[
@@ -168,7 +171,7 @@ function ListTasks({route, navigation}){
                                                 ]}
                                             >
                                                 <TouchableOpacity
-                                                    onPress={() => handleDeleteTask(task.id)}
+                                                    onPress={() => handleDeleteTask(task.taskId)}
                                                 >
                                                     <Icon name={ICONS.TASKICONS.MINUS}
                                                           color={COLOR.ICONCOLOR_CUSTOM_RED}
@@ -184,15 +187,18 @@ function ListTasks({route, navigation}){
                                                             styles.textNormal,
                                                             styles.textCentered
                                                         ]}>
-                                                        {task.title}
+                                                        {task.taskTitle}
                                                     </Text>
-                                                    <Text style={[
+                                                    {/*only show date if the DateString is not empty*/}
+                                                    {task.dueDate &&
+
+                                                        <Text style={[
                                                         isDarkMode ? styles.textDark : styles.textLight,
                                                         styles.textXS,
                                                         styles.textItalic
-                                                    ]}>
-                                                        fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                                    </Text>
+                                                        ]}>
+                                                        fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                    </Text>}
                                                 </View>
                                                 <TouchableOpacity
                                                     onPress={handleNavigateToEditTask}
@@ -211,7 +217,7 @@ function ListTasks({route, navigation}){
                                         /*TaskBox editTasksIsActive === false*/
                                         <View
                                             style={styles.taskContainer}
-                                            key={task.id}
+                                            key={task.taskId}
                                         >
                                             <View style={[isDarkMode? styles.taskBoxDark : styles.taskBoxLight]}>
                                                 <View style={[
@@ -219,7 +225,7 @@ function ListTasks({route, navigation}){
                                                     isDarkMode ? styles.borderDark : styles.borderLight,
                                                 ]}>
                                                     <TouchableOpacity
-                                                        onPress={() => handleTaskCompleted(task.id)}>
+                                                        onPress={() => handleTaskCompleted(task.taskId)}>
                                                         <Icon
                                                             name={ICONS.TASKICONS.CIRCLE}
                                                             color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
@@ -233,15 +239,19 @@ function ListTasks({route, navigation}){
                                                             styles.textNormal,
                                                             styles.textAlignRight,
                                                         ]}>
-                                                            {task.title}
+                                                            {task.taskTitle}
                                                         </Text>
-                                                        <Text style={[
-                                                            isDarkMode? styles.textDark : styles.textLight,
-                                                            styles.textXS,
-                                                            styles.textItalic
-                                                        ]}>
-                                                            fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                                        </Text>
+                                                        {/*only show date if the DateString is not empty*/}
+                                                        {task.dueDate &&
+                                                            <Text style={[
+                                                                isDarkMode ? styles.textDark : styles.textLight,
+                                                                styles.textXS,
+                                                                styles.textItalic
+                                                            ]}>
+                                                                fällig
+                                                                am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                            </Text>
+                                                        }
                                                     </View>
                                                 </View>
                                                 <View
@@ -251,7 +261,7 @@ function ListTasks({route, navigation}){
                                                             styles.textSmall,
                                                             isDarkMode? styles.textDark : styles.textLight
                                                             ]}>
-                                                            {task.notes}
+                                                            {task.taskNotes}
                                                         </Text>
                                                 </View>
                                             </View>

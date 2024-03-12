@@ -155,6 +155,10 @@ function TasksMain({navigation}) {
         navigation.navigate("CreateTask_Screen");
     }
 
+    function handleNavigateToListTasks(listId) {
+        navigation.navigate("ListTasks_Screen", {listId: listId});
+    }
+
     return (
         <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -317,9 +321,8 @@ function TasksMain({navigation}) {
                                     } else {
                                         // Ansichtsmodus
                                         return (
-                                            <TouchableOpacity
+                                            <View
                                                 key={list.listId}
-                                                onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
                                             >
                                                 <CustomBoxButton
                                                     buttonTextLeft={list.listName}
@@ -327,15 +330,15 @@ function TasksMain({navigation}) {
                                                     iconBoxBackgroundColor={list.iconBackgroundColor}
                                                     iconColor={"white"}
                                                     showForwardIcon={false}
-                                                    onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
+                                                    onPress={() => handleNavigateToListTasks(list.listId)}
                                                     isUserIcon={true}
                                                 />
                                                 {/* Adds a border, except after the last element */}
-                                                {index !== lists.flat().length - 1 && (
+                                                {index !== lists.length - 1 && (
                                                     <View
                                                         style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                 )}
-                                            </TouchableOpacity>
+                                            </View>
                                         );
                                     }
                                 })
