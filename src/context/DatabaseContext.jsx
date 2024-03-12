@@ -118,6 +118,18 @@ export const DatabaseProvider = ({children}) => {
         }
     };
 
+    // Function to delete a task from the database
+    const deleteTask = async (taskId) => {
+        try {
+            await localDatabase().deleteTask(taskId);
+            await loadLists();
+            console.log("Task erfolgreich gelöscht");
+        } catch (err) {
+            setError(err.message);
+            console.error("Fehler beim Löschen des Tasks:", err);
+        }
+    };
+
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
                 initializeDatabase();
@@ -132,7 +144,7 @@ export const DatabaseProvider = ({children}) => {
 
     // Provide the database context and its operations to the child components
     return (
-        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, isLoading, error}}>
+        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, isLoading, error}}>
             {children}
         </DatabaseContext.Provider>
     );

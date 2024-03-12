@@ -31,7 +31,7 @@ function ListTasks({route, navigation}){
     const {listId} = route.params;
 
     //access the tasks state from Database Context
-    const {tasks, lists} = useDatabase();
+    const {tasks, lists, deleteTask} = useDatabase();
 
     /**
      * Is called on press of the Back Button.
@@ -88,6 +88,7 @@ function ListTasks({route, navigation}){
      * will be called. If the user chooses 'No', the Alert will be closed and the
      * task will not be deleted.
      */
+    //TODO DELETE implement with db
     function handleDeleteTask(taskId) {
         //create Alert
         Alert.alert(
@@ -98,10 +99,7 @@ function ListTasks({route, navigation}){
                     text: 'Ja',
                     onPress: () => {
                         console.log(`DELETE TASK ALERT, 'JA' WAS PRESSED: task with id ${taskId} will be deleted.`);
-                        return dispatch({
-                            type: 'DELETED_TASK',
-                            taskId: taskId,
-                        });
+                        return deleteTask(taskId);
                     },
                     //styling the alert button for IOs to be red
                     style: 'destructive'

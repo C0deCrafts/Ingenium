@@ -179,6 +179,27 @@ export const localDatabase = () => {
     }
 
     /**
+     * Function to delete a task from the database
+     */
+    const deleteTask = async (taskId) => {
+        const db = await getDatabase();
+        const deleteTasksSql = `DELETE FROM tasks WHERE taskId = ?;`
+        const args = [taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(deleteTasksSql, args); // Lösche den Task
+        },readOnly)
+    }
+
+    /**
+     * Function to toggle isDone of a task from the database
+     */
+
+    /**
+     * Function to edit a task from the database
+     */
+
+    /**
      * Function to debug the database by sharing the database file.
      * @returns {Promise<void>}
      */
@@ -195,6 +216,7 @@ export const localDatabase = () => {
         getTaskLists,
         getTasks,
         deleteTaskList,
+        deleteTask,
         debugDB
     }
 
