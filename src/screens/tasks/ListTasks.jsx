@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert, Dimensions} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -8,6 +8,7 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
+import RoundButton from "../../components/buttons/RoundButton";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
@@ -76,11 +77,10 @@ function ListTasks({route, navigation}){
     /**
      * Is called on press of the delete task button.
      * Shows an alert to the user, if the user is sure about deleting the task.
-     * If the user chooses 'Ja' the dispatch function with action type 'DELETED_TASK'
-     * will be called. If the user chooses 'No', the Alert will be closed and the
+     * If the user chooses 'Ja' the task is deleted from the database.
+     * If the user chooses 'Nein', the Alert will be closed and the
      * task will not be deleted.
      */
-    //TODO DELETE implement with db
     function handleDeleteTask(taskId) {
         //create Alert
         Alert.alert(
@@ -104,7 +104,10 @@ function ListTasks({route, navigation}){
                 },
             ]
         );
+    }
 
+    function handleNavigateToAddTaskToList(listId) {
+        //still to implement
     }
 
     //access the current list title to show it in the heading of the screen
@@ -262,11 +265,18 @@ function ListTasks({route, navigation}){
                     }
                 </ScrollView>
             </View>
+            <RoundButton
+                onPress={() => handleNavigateToAddTaskToList()}
+                buttonStyle={styles.roundButtonPosition}
+                iconName={ICONS.TASKICONS.ADD}
+            />
         </View>
     )
 }
 
 export default ListTasks;
+
+const windowWidth = Dimensions.get("window").width;
 
 function getStyles(insets) {
     return  StyleSheet.create({
@@ -282,8 +292,8 @@ function getStyles(insets) {
         },
         contentContainer: {
             flex: 1,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom + 40,
+            paddingTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
+            paddingBottom: insets.bottom + 25,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
@@ -360,6 +370,11 @@ function getStyles(insets) {
             alignItems: "center",
             rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1,
+        },
+        roundButtonPosition: {
+            position: "absolute",
+            left: (windowWidth / 2) - 35,
+            bottom: insets.bottom - 20,
         },
     })
 }

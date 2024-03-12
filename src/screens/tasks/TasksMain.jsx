@@ -49,7 +49,7 @@ function TasksMain({navigation}) {
     }
 
     /**
-     * is called on Press of the more button above the taskList View
+     * is called on press of the more button above the taskList View
      * will open the editing mode for the Lists - where lists can be deleted
      */
     function handleOpenEditTaskLists() {
@@ -57,7 +57,7 @@ function TasksMain({navigation}) {
     }
 
     /**
-     * is called on Press of the 'Fertig' button above the taskList View
+     * is called on press of the 'Fertig' button above the taskList View
      * will close the editing mode for the Lists
      */
     function handleCloseEditTaskLists() {
@@ -65,38 +65,10 @@ function TasksMain({navigation}) {
     }
 
     /**
-     *
-     * @param tasksListId
+     * is called on press of the red 'delete' button, visible in editing mode
+     * deletes the takslist and tasks belonging to that list from the database.
+     * @param listId the id of the list which is deleted
      */
-    /*function handleDeleteTaskList(tasksListId) {
-        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
-
-        //create Alert
-        Alert.alert(
-            'Liste löschen',
-            'Möchtest du diese Liste wirklich löschen?',
-            [
-                {
-                    text: 'Ja',
-                    onPress: () => {
-                        console.log(`DELETE LIST ALERT, 'JA' WAS PRESSED:  with id ${tasksListId} will be deleted.`);
-                        return dispatch({
-                            type: 'DELETED_LIST',
-                            tasksListId: tasksListId,
-                        });
-                    },
-                    //styling the alert button for IOs to be red
-                    style: 'destructive'
-                },
-                {
-                    text: 'Nein',
-                    onPress: () => console.log("DELETE LIST ALERT, 'NEIN' WAS PRESSED"),
-                    //styling the alert button for IOs to be blue
-                    style: 'cancel'
-                },
-            ]
-        );
-    }*/
     function handleDeleteTaskList(listId) {
         Alert.alert(
             'Liste löschen',
@@ -104,7 +76,7 @@ function TasksMain({navigation}) {
             [
                 {
                     text: 'Ja',
-                    onPress: () => deleteList(listId), // Verwende hier die deleteList Funktion aus deinem Kontext
+                    onPress: () => deleteList(listId),
                     style: 'destructive',
                 },
                 {
@@ -116,7 +88,7 @@ function TasksMain({navigation}) {
     }
 
     /**
-     * is called on Press of the Round Button 'Add' in TasksMain Screen
+     * is called on press of the Round Button 'Add' in TasksMain Screen
      * shows the Modal, by setting the state of its visibility to true
      */
     function handleOpenModal() {
@@ -379,8 +351,6 @@ function getStyles(insets) {
             backgroundColor: DARKMODE.BACKGROUNDCOLOR
         },
         contentContainer: {
-            //should we set paddings like this?
-            //paddingTop: insets.top,
             paddingTop: SIZES.MARGIN_TOP_FROM_DRAWER_HEADER,
             paddingBottom: insets.bottom + 25,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
