@@ -59,8 +59,8 @@ export const DatabaseProvider = ({children}) => {
 
             setTasks(tasksArray);
 
-            console.log("Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
-            console.log("Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
+            console.log("LOAD LISTS IN DBCONTEXT: Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
+            console.log("LOAD LISTS IN DBCONTEXT: Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
 
             const end = performance.now();
             console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
@@ -130,6 +130,18 @@ export const DatabaseProvider = ({children}) => {
         }
     };
 
+    // Function to update isDone property of a task from the database
+    const updateTaskIsDone = async (taskId, isDone) => {
+        try {
+            await localDatabase().updateTaskIsDone(taskId, isDone);
+            await loadLists();
+            console.log("Task isDone erfolgreich getogglet");
+        } catch (err) {
+            setError(err.message);
+            console.error("Fehler beim togglen von isDone:", err);
+        }
+    };
+
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
                 initializeDatabase();
@@ -144,7 +156,7 @@ export const DatabaseProvider = ({children}) => {
 
     // Provide the database context and its operations to the child components
     return (
-        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, isLoading, error}}>
+        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, updateTaskIsDone, isLoading, error}}>
             {children}
         </DatabaseContext.Provider>
     );

@@ -6,18 +6,12 @@ import {useState} from "react";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../context/TasksContext";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
     const [editTasksIsActive, setEditTasksIsActive] = useState(false);
-
-    //TODO DELETE
-    //task context provider hook which provides the taskListsState
-    //and a dispatchFunction to change the state based on actions
-    const {taskListsState, dispatch} = useTasks();
 
     //providing a safe area
     const insets = useSafeAreaInsets();
@@ -31,7 +25,7 @@ function ListTasks({route, navigation}){
     const {listId} = route.params;
 
     //access the tasks state from Database Context
-    const {tasks, lists, deleteTask} = useDatabase();
+    const {tasks, lists, deleteTask, updateTaskIsDone} = useDatabase();
 
     /**
      * Is called on press of the Back Button.
@@ -72,12 +66,10 @@ function ListTasks({route, navigation}){
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done.
      * @param taskId the id of the task which was pressed
+     * @param isDone the isDone property of the task
      */
-    function handleTaskCompleted(taskId) {
-        dispatch({
-            type: 'TOGGLED_TASK_DONE',
-            taskId: taskId,
-        })
+    function handleTaskCompleted(taskId, isDone) {
+        updateTaskIsDone(taskId, isDone);
     }
 
 
@@ -223,7 +215,7 @@ function ListTasks({route, navigation}){
                                                     isDarkMode ? styles.borderDark : styles.borderLight,
                                                 ]}>
                                                     <TouchableOpacity
-                                                        onPress={() => handleTaskCompleted(task.taskId)}>
+                                                        onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
                                                         <Icon
                                                             name={ICONS.TASKICONS.CIRCLE}
                                                             color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}

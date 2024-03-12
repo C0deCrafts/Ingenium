@@ -2,7 +2,6 @@ import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert}
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../context/TasksContext";
 import {useState} from "react";
 import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -31,24 +30,22 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {tasks, lists, deleteList} = useDatabase();
+    const {tasks, lists, deleteList, updateTaskIsDone} = useDatabase();
 
     //filtering Tasks for tasksview
     const tasksNotDone = tasks.filter(task => !task.isDone);
 
 
-    /**TODO - wird mit altem TasksContext gemeacht - ÄNDERN!
+    /**
      * Is called on Press of the round Button next to a task in the taskslist.
      * will toggle the property done of a task
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done
      * @param taskId the id of the task which was pressed
+     * @param isDone
      */
-    function handleTaskCompleted(taskId) {
-        dispatch({
-            type: 'TOGGLED_TASK_DONE',
-            taskId: taskId,
-        });
+    function handleTaskCompleted(taskId, isDone) {
+        updateTaskIsDone(taskId, isDone);
     }
 
     /**
@@ -188,7 +185,7 @@ function TasksMain({navigation}) {
                                             style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
                                         <TouchableOpacity
                                             style={styles.taskCompletedButton}
-                                            onPress={() => console.log("Neue Funktion machen")}>
+                                            onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                   size={20}/>

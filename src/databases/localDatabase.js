@@ -194,6 +194,15 @@ export const localDatabase = () => {
     /**
      * Function to toggle isDone of a task from the database
      */
+    const updateTaskIsDone = async (taskId, isDone) => {
+        const db = await getDatabase();
+        const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ? WHERE taskId = ?;`
+        const args = [isDone === 0 ? 1 : 0, taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(updateTaskIsDoneSql, args); // Update isDone property
+        },readOnly)
+    }
 
     /**
      * Function to edit a task from the database
@@ -217,6 +226,7 @@ export const localDatabase = () => {
         getTasks,
         deleteTaskList,
         deleteTask,
+        updateTaskIsDone,
         debugDB
     }
 
