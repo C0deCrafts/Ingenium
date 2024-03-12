@@ -168,11 +168,13 @@ export const localDatabase = () => {
      */
     const deleteTaskList = async (listId) => {
         const db = await getDatabase();
-        const sql = `DELETE FROM taskLists WHERE listId = ?;`
+        const deleteTasksSql = `DELETE FROM tasks WHERE listId = ?;`
+        const deleteListSql = `DELETE FROM taskLists WHERE listId = ?;`
         const args = [listId];
 
         await db.transactionAsync(async tx => {
-            await tx.executeSqlAsync(sql,args);
+            await tx.executeSqlAsync(deleteTasksSql, args); // Lösche zuerst alle zugehörigen Tasks
+            await tx.executeSqlAsync(deleteListSql, args); // Lösche dann die Liste
         },readOnly)
     }
 
