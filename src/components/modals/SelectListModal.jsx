@@ -65,7 +65,7 @@ const SelectListModal = forwardRef(({onSelect}, ref) => {
                 <Text style={isDarkMode ? styles.containerHeadlineDark : styles.containerHeadlineLight}>Liste auswählen</Text>
                 <View style={[isDarkMode ? styles.listBoxDark : styles.listBoxLight, { maxHeight: listBoxMaxHeight }]}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        {lists.flat().map((list, index, array) => (
+                        {lists.map((list, index) => (
                             <Fragment key={list.listId}>
                                 <CustomBoxButton
                                     buttonTextLeft={list.listName}
@@ -77,7 +77,7 @@ const SelectListModal = forwardRef(({onSelect}, ref) => {
                                     isUserIcon={true}
                                 />
                                 {/* Füge einen Trenner hinzu, außer nach dem letzten Element */}
-                                {index !== array.length - 1 && (
+                                {index !== lists.length - 1 && (
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 )}
                             </Fragment>

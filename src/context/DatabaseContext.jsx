@@ -49,7 +49,7 @@ export const DatabaseProvider = ({children}) => {
             const start = performance.now();
 
             const loadedLists = await localDatabase().getTaskLists();
-            const listsArray = [loadedLists];
+            const listsArray = [...loadedLists];
             setLists(listsArray);
 
             const loadedTasks = await localDatabase().getTasks();

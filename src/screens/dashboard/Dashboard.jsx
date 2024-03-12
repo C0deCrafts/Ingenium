@@ -36,14 +36,12 @@ function Dashboard({navigation}){
         console.log("LIST ID:",lists[0].listId);
 
         console.log("Alle Listen:");
-        lists.forEach(innerList => {
-            innerList.forEach(list => {
+        lists.forEach(list => {
                 console.log("LIST ID:", list.listId);
                 console.log("LIST Name:", list.listName);
                 console.log("Icon Name:", list.iconName);
                 console.log("Icon Background Color:", list.iconBackgroundColor);
             });
-        });
     }
 
     return (
@@ -53,8 +51,7 @@ function Dashboard({navigation}){
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Dashboard</Text>
             </View>
             <ScrollView>
-                {lists.map(innerList => (
-                    innerList.map(list => (
+                {lists.map(list => (
                         <View key={list.listId}>
                             <Text>{list.listId}:{list.listName}:{list.iconName}:{list.iconBackgroundColor}</Text>
                             <CustomInputField
@@ -64,8 +61,7 @@ function Dashboard({navigation}){
                                 placeholder={list.listName}
                             />
                         </View>
-                    ))
-                ))}
+                    ))}
             </ScrollView>
             <CustomButton title={"Zeige alle Listen"} onPressFunction={showAllListsHelperFunction}/>
         </View>

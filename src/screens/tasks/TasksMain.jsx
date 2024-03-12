@@ -169,11 +169,6 @@ function TasksMain({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                             Nächste ToDo's
                         </Text>
-                        {/*Here the taskLists state is taken and a shallow copy is created using the spread syntax.
-                    On the copy by chaining the array methods: flatMap, filter, sort and map
-                    it is achieved that all tasks, of all lists with the property done = false are shown sorted in an ascending
-                    order by dueDate.
-                    This adheres to the principle of immutability of state variables*/}
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
@@ -207,10 +202,14 @@ function TasksMain({navigation}) {
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
                                                 {task.taskTitle}
                                             </Text>
-                                            <Text
+                                            {/*Show date only when dueDate is not an empty string*/}
+                                            {task.dueDate && <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
-                                                fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
-                                            </Text>
+                                                fällig am {/*
+                                                Anpassen, wenn Datumsauswahl implementiert wird
+                                                new Date(task.dueDate).toLocaleDateString('de-DE')
+                                                */}
+                                            </Text>}
                                         </View>
                                     </View>
 
@@ -278,7 +277,7 @@ function TasksMain({navigation}) {
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
                             {
-                                lists.flat().map((list, index) => {
+                                lists.map((list, index) => {
                                     if (editTaskListsIsActive) {
                                         // Im Bearbeitungsmodus
                                         if (list.listName !== "Ingenium") {
