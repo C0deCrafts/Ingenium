@@ -31,30 +31,13 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {lists, deleteList} = useDatabase();
+    const {tasks, lists, deleteList} = useDatabase();
+
+    //filtering Tasks for tasksview
+    const tasksNotDone = tasks.filter(task => !task.isDone);
 
 
-    /**
-     * CUSTOM HOOK USETASKS
-     * Provides the taskListsState and a dispatch function.
-     *
-     * The dispatch function expects an action object as its argument.
-     * This action object communicates with the reducer, about what needs to
-     * be done and what information is needed to perform that action.
-     * The action object always holds an action type, and additional data
-     * which is needed for performing that action. The additional data which needs
-     * to be passed to the action object for each action, is specified in the reducer
-     * function.
-     */
-    const {taskListsState, dispatch} = useTasks();
-
-    // Berechnung von filteredAndSortedTasks
-    const filteredAndSortedTasks = [...taskListsState]
-        .flatMap(list => list.tasks)
-        .filter(task => !task.done)
-        .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate));
-
-    /**
+    /**TODO - wird mit altem TasksContext gemeacht - ÄNDERN!
      * Is called on Press of the round Button next to a task in the taskslist.
      * will toggle the property done of a task
      * and the task will disappear from the taskslist in the UI as it only shows tasks
@@ -197,16 +180,16 @@ function TasksMain({navigation}) {
                             bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
-                            {filteredAndSortedTasks.map((task, index) => {
+                            {tasksNotDone.map((task, index) => {
                                 return (
                                     <View
-                                        key={task.id}
+                                        key={task.taskId}
                                     >
                                         <View
                                             style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
                                         <TouchableOpacity
                                             style={styles.taskCompletedButton}
-                                            onPress={() => handleTaskCompleted(task.id)}>
+                                            onPress={() => console.log("Neue Funktion machen")}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                   size={20}/>
@@ -222,17 +205,17 @@ function TasksMain({navigation}) {
                                                 numberOfLines={1}
                                                 ellipsizeMode={"tail"}
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
-                                                {task.title}
+                                                {task.taskTitle}
                                             </Text>
                                             <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
-                                                fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
+                                                fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
                                             </Text>
                                         </View>
                                     </View>
 
                                         {/* Adds a border, except after the last element */}
-                                        {index !== filteredAndSortedTasks.length - 1 && (
+                                        {index !== tasks.length - 1 && (
                                             <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                         )}
                                     </View>

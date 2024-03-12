@@ -11,13 +11,14 @@ function Dashboard({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const { isDbReady, lists, loadLists} = useDatabase();
+    const { tasks, isDbReady, lists, loadLists} = useDatabase();
 
     // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
     // oder wenn sich isDbReady ändert
     useEffect(() => {
         if(isDbReady){
             loadLists();
+            console.log("The Tasks State - Dashboard" ,JSON.stringify(tasks, null, 2));
         }
     }, [isDbReady]);
 

@@ -53,7 +53,10 @@ export const DatabaseProvider = ({children}) => {
             setLists(listsArray);
 
             const loadedTasks = await localDatabase().getTasks();
-            const tasksArray = [loadedTasks];
+            const tasksArray = [...loadedTasks];
+
+            console.log("INSIDE LOADLISTS:", tasksArray);
+
             setTasks(tasksArray);
 
             console.log("Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
