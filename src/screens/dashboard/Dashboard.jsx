@@ -11,7 +11,7 @@ function Dashboard({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const { isDbReady, lists, loadLists, deleteAllLists} = useDatabase();
+    const { isDbReady, lists, loadLists} = useDatabase();
 
     // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
     // oder wenn sich isDbReady ändert
@@ -66,7 +66,6 @@ function Dashboard({navigation}){
                     ))
                 ))}
             </ScrollView>
-            <CustomButton title={"Lösche alle Listen"} onPressFunction={deleteAllLists}/>
             <CustomButton title={"Zeige alle Listen"} onPressFunction={showAllListsHelperFunction}/>
         </View>
     )

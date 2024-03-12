@@ -27,10 +27,10 @@ function CreateTask({navigation}) {
     // State variables for the form
     const [taskTitle, setTaskTitle] = useState("");
     const [taskNotes, setTaskNotes] = useState("");
-    const [dueDate, setDueDate] = useState(""); // You can set initial due date here
+    //const [dueDate, setDueDate] = useState(""); ??? brauchen wir das ??
     const [creationDate, setCreationDate] = useState(new Date().toISOString());
-    const [imageURL, setImageURL] = useState(""); // You can set initial image URL here
-    const [url, setUrl] = useState("");
+    //const [imageURL, setImageURL] = useState(""); ??? brauchen wir das ??
+    //const [url, setUrl] = useState(""); ??? brauchen wir das ??
     //const [isDone, setIsDone] = useState(false); ??? brauchen wir das ??
     //const [shared, setShared] = useState(false); ??? brauchen wir das ??
     //const [reminder, setReminder] = useState(false); ??? brauchen wir das ??
@@ -59,10 +59,10 @@ function CreateTask({navigation}) {
             listId: listId,
             taskTitle: taskTitle,
             taskNotes: taskNotes,
-            dueDate: dueDate, // Passing the empty string
+            dueDate: "", // Passing the empty string
             creationDate: creationDate,
-            imageURL: imageURL, // Passing the empty string
-            url: url,
+            imageURL: "", // Passing the empty string
+            url: "",
             isDone: false,
             shared: false,
             reminder: false,

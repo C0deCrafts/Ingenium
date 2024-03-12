@@ -115,18 +115,6 @@ export const DatabaseProvider = ({children}) => {
         }
     };
 
-    // Function to delete all lists from the database (Only for debugging!)
-    const deleteAllLists = async () => {
-        try {
-            await localDatabase().deleteAllTaskLists();
-            await loadLists();
-            console.log("Alle Listen erfolgreich gelöscht");
-        } catch (err) {
-            setError(err);
-            console.error("Fehler beim Löschen aller Listen:", err);
-        }
-    }
-
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
                 initializeDatabase();
@@ -141,7 +129,7 @@ export const DatabaseProvider = ({children}) => {
 
     // Provide the database context and its operations to the child components
     return (
-        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, isLoading, deleteAllLists, error}}>
+        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, isLoading, error}}>
             {children}
         </DatabaseContext.Provider>
     );

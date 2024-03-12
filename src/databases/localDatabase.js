@@ -179,20 +179,6 @@ export const localDatabase = () => {
     }
 
     /**
-     * Function to delete all task lists from the database.
-     * @returns {Promise<void>}
-     */
-    const deleteAllTaskLists = async () => {
-        const db = await getDatabase();
-        const sql = `DELETE FROM taskLists`;
-        const args = [];
-
-        await db.transactionAsync(async tx => {
-            await tx.executeSqlAsync(sql,args)
-        },readOnly)
-    }
-
-    /**
      * Function to debug the database by sharing the database file.
      * @returns {Promise<void>}
      */
@@ -209,7 +195,6 @@ export const localDatabase = () => {
         getTaskLists,
         getTasks,
         deleteTaskList,
-        deleteAllTaskLists,
         debugDB
     }
 
