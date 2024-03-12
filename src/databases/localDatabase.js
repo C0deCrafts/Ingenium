@@ -22,7 +22,7 @@ export const localDatabase = () => {
      */
     const getDatabase = async () => {
         //console.log("getDatabase wird aufgerufen");
-        const dbName = "asdf2024.db"
+        const dbName = "ingeniumLocalDb.db"
         if (!dbInstance){
             dbInstance = SQLite.openDatabase(dbName)
             console.log("Datenbankinstanz erstellt:", dbInstance);
@@ -108,7 +108,7 @@ export const localDatabase = () => {
                     isDone,
                     shared,
                     reminder
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
         const args = [task.listId, task.taskTitle, task.taskNotes, task.dueDate, task.creationDate, task.imageURL, task.url,
             task.isDone ? 1: 0, // Convert boolean to integer for SQLite
@@ -196,7 +196,7 @@ export const localDatabase = () => {
      */
     const debugDB = async () => {
         console.log(FileSystem.documentDirectory);
-        await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/asdf2024.db")
+        await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/ingeniumLocalDb.db")
     }
 
     return {

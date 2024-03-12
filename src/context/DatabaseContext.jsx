@@ -1,5 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {localDatabase} from "../databases/localDatabase";
+import {COLOR} from "../constants/styleSettings";
 
 // Create a context for the database operations
 const DatabaseContext = createContext();
@@ -26,7 +27,7 @@ export const DatabaseProvider = ({children}) => {
             console.log("Datenbank und Tabellen wurden erfolgreich initialisiert.");
 
             console.log("Sicherstellung, dass die 'Ingenium'-Liste existiert.");
-            await ensureListExists("Ingenium", "HAT", "#009FE3"); // Ensure a default list exists
+            await ensureListExists("Ingenium", "HAT", COLOR.ICONCOLOR_CUSTOM_BLUE); // Ensure a default list exists
 
             await loadLists();
             console.log("Alle Listen wurden erfolgreich geladen.");
@@ -51,7 +52,12 @@ export const DatabaseProvider = ({children}) => {
             const listsArray = [loadedLists];
             setLists(listsArray);
 
-            console.log("Loaded lists:", loadedLists); // Nur für Debugging-Zwecke, im Produktivcode ggf. entfernen
+            const loadedTasks = await localDatabase().getTasks();
+            const tasksArray = [loadedTasks];
+            setTasks(tasksArray);
+
+            console.log("Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
+            console.log("Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
 
             const end = performance.now();
             console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
