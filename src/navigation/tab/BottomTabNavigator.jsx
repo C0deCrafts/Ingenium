@@ -6,7 +6,7 @@ import {useTabContext} from "../context/TabContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +57,8 @@ function ButtonTabNavigator() {
                 backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,
                 borderTopWidth: 0, //border IOS
                 elevation: 0, //border Android
-                height: SIZES.BOTTOM_TAB_BAR_HEIGHT
+                //height: SIZES.BOTTOM_TAB_BAR_HEIGHT
+                marginBottom: SIZES.BOTTOM_TAB_BAR_HEIGHT,
             },
             tabBarLabelStyle: {
               fontSize: SIZES.BOTTOM_TAB_LABEL_SIZE,

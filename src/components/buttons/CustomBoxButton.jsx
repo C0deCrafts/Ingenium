@@ -1,6 +1,6 @@
 import {Text, StyleSheet, TouchableOpacity} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {ICONS} from "../../constants/icons";
 import SquareIcon from "../SquareIcon";
 
@@ -20,6 +20,7 @@ import SquareIcon from "../SquareIcon";
  * @param {boolean} [showForwardIcon=true] - Optional. Determines whether to display the forward icon (default is true).
  * @param {number} [extraPadding=0] - Optional. Extra padding to be applied to the button (default is 0).
  *
+ * @param isUserIcon
  * @example
  * // Inside your component's render method, use the CustomBoxButton component like this:
  * <CustomBoxButton
@@ -44,7 +45,8 @@ function CustomBoxButton({
                              iconBoxBackgroundColor,
                              onPress,
                              showForwardIcon = true,
-                             extraPadding = 0
+                             extraPadding = 0,
+                             isUserIcon,
                          }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -58,12 +60,14 @@ function CustomBoxButton({
                               isDarkMode ? styles.containerDark : styles.containerLight,
                               {padding: containerPadding} // Applying the calculated padding
                           ]}>
-            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
+            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor} isUserIcon={isUserIcon}/>
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>
             <Text style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
             {showForwardIcon && (
                 <SquareIcon name={ICONS.FORWARD.ACTIVE} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                         backgroundColor={isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR}/>
+                            backgroundColor={isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR}
+                            isUserIcon={isUserIcon}
+                />
             )}
         </TouchableOpacity>
     )

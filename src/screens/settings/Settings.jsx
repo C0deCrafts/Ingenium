@@ -1,7 +1,7 @@
 import {Text, View, StyleSheet, Switch} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 
 function Settings({navigation}){
     const { theme, toggleTheme } = useTheme(); // Verwende den useTheme Hook

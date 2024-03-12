@@ -2,9 +2,9 @@ import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert}
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../constants/context/TasksContext";
+import {useTasks} from "../../context/TasksContext";
 import {useState} from "react";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
@@ -14,6 +14,7 @@ import AddTaskModal from "../../components/modals/AddTaskModal";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import RoundButton from "../../components/buttons/RoundButton";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
+import {useDatabase} from "../../context/DatabaseContext";
 
 
 function TasksMain({navigation}) {
@@ -29,6 +30,8 @@ function TasksMain({navigation}) {
     //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    const {lists, deleteList} = useDatabase();
 
 
     /**
@@ -85,7 +88,7 @@ function TasksMain({navigation}) {
      *
      * @param tasksListId
      */
-    function handleDeleteTaskList(tasksListId) {
+    /*function handleDeleteTaskList(tasksListId) {
         console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
 
         //create Alert
@@ -110,6 +113,23 @@ function TasksMain({navigation}) {
                     onPress: () => console.log("DELETE LIST ALERT, 'NEIN' WAS PRESSED"),
                     //styling the alert button for IOs to be blue
                     style: 'cancel'
+                },
+            ]
+        );
+    }*/
+    function handleDeleteTaskList(listId) {
+        Alert.alert(
+            'Liste löschen',
+            'Möchtest du diese Liste wirklich löschen?',
+            [
+                {
+                    text: 'Ja',
+                    onPress: () => deleteList(listId), // Verwende hier die deleteList Funktion aus deinem Kontext
+                    style: 'destructive',
+                },
+                {
+                    text: 'Nein',
+                    style: 'cancel',
                 },
             ]
         );
@@ -275,14 +295,13 @@ function TasksMain({navigation}) {
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
                             {
-                                taskListsState.map((list, index) => {
+                                lists.flat().map((list, index) => {
                                     if (editTaskListsIsActive) {
-                                        {/*editable taskList item*/
-                                        }
-                                        return (
-                                            <View
-                                                key={list.id}>
+                                        // Im Bearbeitungsmodus
+                                        if (list.listName !== "Ingenium") {
+                                            return (
                                                 <View
+                                                    key={list.listId}
                                                     style={[
                                                         isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
                                                         styles.listItemContainer,
@@ -290,55 +309,52 @@ function TasksMain({navigation}) {
                                                     ]}
                                                 >
                                                     <TouchableOpacity
-                                                        onPress={() => handleDeleteTaskList(list.id)}
+                                                        onPress={() => handleDeleteTaskList(list.listId)}
                                                     >
                                                         <Icon name={ICONS.TASKICONS.MINUS}
                                                               color={COLOR.ICONCOLOR_CUSTOM_RED}
                                                               size={SIZES.EDIT_TASKS_ICON_SIZE}/>
                                                     </TouchableOpacity>
-                                                    <View
-                                                        style={styles.editTaskListItem}
-                                                    >
-                                                        <SquareIcon name={list.icon} backgroundColor={list.color}/>
+                                                    <View style={styles.editTaskListItem}>
+                                                        <SquareIcon name={list.iconName}
+                                                                    backgroundColor={list.iconBackgroundColor}
+                                                                    isUserIcon={true}/>
                                                         <Text
-                                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.title}</Text>
+                                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
                                                     </View>
+                                                    {/* Adds a border, except after the last element */}
+                                                    {index !== lists.flat().length - 1 && (
+                                                        <View
+                                                            style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                    )}
                                                 </View>
-                                                {/* Adds a border, except after the last element */}
-                                                {index !== taskListsState.length - 1 && (
-                                                    <View
-                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                                                )}
-                                            </View>
-
-                                        )
-                                    } else {
-                                        {/*regular taskList item*/
+                                            );
+                                        } else {
+                                            return null; // Überspringen Sie die Renderung der Liste "Ingenium"
                                         }
+                                    } else {
+                                        // Ansichtsmodus
                                         return (
                                             <TouchableOpacity
-                                                /*
-                                                here the id of the list is passed as parameter to the next ListTasksScree,
-                                                so that in the ListTasksScreen the chosen list can be shown
-                                                 */
-                                                onPress={() => navigation.navigate("ListTasks_Screen", {listId: list.id})}
-                                                key={list.id}
+                                                key={list.listId}
+                                                onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
                                             >
                                                 <CustomBoxButton
-                                                    buttonTextLeft={list.title}
-                                                    iconName={list.icon}
-                                                    iconBoxBackgroundColor={list.color}
-                                                    iconColor={COLOR.BUTTONLABEL}
+                                                    buttonTextLeft={list.listName}
+                                                    iconName={list.iconName}
+                                                    iconBoxBackgroundColor={list.iconBackgroundColor}
+                                                    iconColor={"white"}
                                                     showForwardIcon={false}
-                                                    onPress={() => navigation.navigate("ListTasks_Screen", {listId: list.id})}
+                                                    onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
+                                                    isUserIcon={true}
                                                 />
                                                 {/* Adds a border, except after the last element */}
-                                                {index !== taskListsState.length - 1 && (
+                                                {index !== lists.flat().length - 1 && (
                                                     <View
                                                         style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                 )}
                                             </TouchableOpacity>
-                                        )
+                                        );
                                     }
                                 })
                             }

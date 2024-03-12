@@ -5,9 +5,9 @@ import {
     TextInput,
     Keyboard,
     InputAccessoryView,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomButton from "../../components/buttons/CustomButton";
@@ -15,24 +15,60 @@ import {useRef, useState} from "react";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
+import {useDatabase} from "../../context/DatabaseContext";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
 
-function CreateList({navigation}) {
+function CreateTask({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    // State variables for the form
+    const [taskTitle, setTaskTitle] = useState("");
+    const [taskNotes, setTaskNotes] = useState("");
+    //const [dueDate, setDueDate] = useState(""); ??? brauchen wir das ??
+    const [creationDate, setCreationDate] = useState(new Date().toISOString());
+    //const [imageURL, setImageURL] = useState(""); ??? brauchen wir das ??
+    //const [url, setUrl] = useState(""); ??? brauchen wir das ??
+    //const [isDone, setIsDone] = useState(false); ??? brauchen wir das ??
+    //const [shared, setShared] = useState(false); ??? brauchen wir das ??
+    //const [reminder, setReminder] = useState(false); ??? brauchen wir das ??
+
+    // State for the database attributes
+    const [listId, setListId] = useState(1);
+    const [selectedListName, setSelectedListName] = useState("Ingenium"); // Default list name
+
+    const {addTask, lists} = useDatabase();
+
     //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
-    const inputAccessoryViewID = 'uniqueID';
+    const inputAccessoryViewID = 'uniqueID'; //?
 
     // Reference for the select list modal
-    const selectListModalRef = useRef(null);
+    const selectListModalRef = useRef(null); //?
 
-    // State variables for the title, notes, and selected list
-    const [title, setTitle] = useState('');
-    const [notes, setNotes] = useState('');
-    const [selectedList, setSelectedList] = useState("Ingenium");
+    const handleAddTask = async () => {
+        if (taskTitle.trim() === "") {
+            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
+            return;
+        }
+
+        setCreationDate(new Date().toISOString()); //?
+
+        await addTask({
+            listId: listId,
+            taskTitle: taskTitle,
+            taskNotes: taskNotes,
+            dueDate: "", // Passing the empty string
+            creationDate: creationDate,
+            imageURL: "", // Passing the empty string
+            url: "",
+            isDone: false,
+            shared: false,
+            reminder: false,
+        });
+        navigation.goBack();
+    }
 
     /*
     * Function to handle pressing the select list modal button
@@ -44,17 +80,15 @@ function CreateList({navigation}) {
         selectListModalRef.current?.present();
     }
 
-    /*
-    * Function to handle the selection of a list from the modal
-    * When a list is selected from the modal, this function is called.
-    * It updates the selectedList state with the chosen list name,
-    * and then dismisses the modal.
-    */
-    const handleListSelection = (buttonTextLeft) => {
-        setSelectedList(buttonTextLeft);
-        //console.log("list name: " + buttonTextLeft)
-        selectListModalRef.current?.dismiss(); // Closes the modal
+    // Funktion zum Auswählen einer Liste aus dem Modal
+    const handleListSelection = (selectedList) => {
+        setListId(selectedList.listId);
+        setSelectedListName(selectedList.listName);
+        console.log(selectedList); // Gib das gesamte Listenelement aus
+        console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
+        selectListModalRef.current?.dismiss();
     };
+
 
     // Function to navigate to the edit task details screen
     const navigateToAddTaskDetails = () => {
@@ -87,9 +121,10 @@ function CreateList({navigation}) {
                             placeholder={"Titel"}
                             placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                             style={isDarkMode ? styles.inputDark : styles.inputLight}
+                            onChangeText={(value) => setTaskTitle(value)}
+                            value={taskTitle}
+
                             selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
-                            onChangeText={(title) => setTitle(title)}
-                            value={title}
                             keyboardAppearance={isDarkMode ? "dark" : "light"}
                             returnKeyType="done"
                         />
@@ -98,12 +133,15 @@ function CreateList({navigation}) {
                         <TextInput placeholder={"Notizen"}
                                    placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                    style={isDarkMode ? styles.inputDarkNotes : styles.inputLightNotes}
+
+                                   onChangeText={(value) => setTaskNotes(value)}
+                                   value={taskNotes}
+
                                    selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                    maxLength={1000}
                                    multiline={true}
                                    scrollEnabled={true}
-                                   onChangeText={(notes) => setNotes(notes)}
-                                   value={notes}
+
                                    inputAccessoryViewID={inputAccessoryViewID}
                                    keyboardAppearance={isDarkMode ? "dark" : "light"}
                         />
@@ -122,7 +160,7 @@ function CreateList({navigation}) {
                 <View>
                     <CustomBoxButton
                         buttonTextLeft={"Liste"}
-                        buttonTextRight={selectedList}
+                        buttonTextRight={selectedListName}
                         iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
                         iconName={ICONS.TASKICONS.LIST}
                         iconColor={COLOR.BUTTONLABEL}
@@ -146,7 +184,7 @@ function CreateList({navigation}) {
                 <View style={styles.buttonBox}>
                     <View style={styles.buttonOne}>
                         <CustomButton title={"Speichern"}
-                                      onPressFunction={() => console.log("Speichern gedrückt - Titel: " + title + ", Notizen: " + notes + ", Ausgewählte Liste: " + selectedList)}/>
+                                      onPressFunction={handleAddTask}/>
                     </View>
                     <View style={styles.buttonTwo}>
                         <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
@@ -157,12 +195,13 @@ function CreateList({navigation}) {
             <SelectListModal
                 ref={selectListModalRef}
                 onSelect={handleListSelection} // Prop for the callback function
+                lists={lists} // Liste der verfügbaren Listen zur Auswahl
             />
         </View>
     )
 }
 
-export default CreateList;
+export default CreateTask;
 
 const styles = StyleSheet.create({
     // Container styles for light and dark mode

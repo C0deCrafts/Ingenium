@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import {ICONS as ICON} from "../../constants/icons";
 import Icon from "../Icon";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 /**
