@@ -38,15 +38,25 @@ function CreateTask({navigation, route}) {
     //const [shared, setShared] = useState(false); ??? brauchen wir das ??
     //const [reminder, setReminder] = useState(false); ??? brauchen wir das ??
 
-    /*
-   If User enters the Screen from ListTasks and clicks on add task (round blue button)
-   a parameter with the listId of the List shown in ListTasks is passed to the route
-   so that the list selected by default, or if Screen was entered from
-   TasksMain the listIdForAddTask will be undefined
+
+    /* route.params --> explanation:
+   User enters the Screen from ListTasks and clicks on add task (round blue button):
+     - Case 1: User was looking at tasks of a list -> the listId is passed to route.params
+     - Case 2: User was looking at all tasks -> undefined is passed to route.params
+
+   User enters the Screen from TasksMain Modal - Button 'Create Task':
+      - undefined is passed to route.params,
     */
-    const {listIdForAddTask} = route.params || {};
-    const defaultListId = listIdForAddTask ? listIdForAddTask : 1;
+    const {listIdForAddTask} = route.params;
+
+    //if listIdForAddTask is valid Id assign it to defaultListId
+    //if it is undefined, initialize it with 1 - which is the id of Ingenium List
+    const defaultListId = listIdForAddTask? listIdForAddTask : 1;
     const defaultListName = lists.find(list => list.listId === defaultListId).listName;
+
+    console.log("listIdForAddTask",listIdForAddTask);
+    console.log("defaultListId",defaultListId);
+
 
     // State for the database attributes
     const [listId, setListId] = useState(defaultListId);

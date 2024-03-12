@@ -118,12 +118,19 @@ function TasksMain({navigation}) {
      * is called on Press of the 'Neue Aufgabe' Button in
      * the AddTaskModal Component
      * hides the Modal and navigates to the CreatTask Screen
+     * passes a listId - which is initialized with undefined as user
+     * did not choose a list to add the task to - but the parameter is needed
+     * for conditional rendering later
      */
-    function handleCreateTask() {
+    function handleCreateTask(listId) {
         setModalIsVisible(false);
-        navigation.navigate("CreateTask_Screen");
+        navigation.navigate("CreateTask_Screen", {listId: listId});
     }
 
+    /**
+     * Navigates to the ListTasksScreen and shows tasks of a list or all tasks depending on users choice.
+     * @param listId the id of the list the user clicked on OR undefined if the user clicked on "Alle".
+     */
     function handleNavigateToListTasks(listId) {
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
@@ -249,6 +256,20 @@ function TasksMain({navigation}) {
                             bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
+                            {/*Button for All Tasks -- Rendered only when the editing mode is not active*/}
+                            {!editTaskListsIsActive &&
+                                <>
+                                    <CustomBoxButton
+                                        buttonTextLeft={"Alle"}
+                                        iconName={ICONS.TASKICONS.LIST}
+                                        iconColor={"white"}
+                                        iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                        onPress={() => handleNavigateToListTasks(undefined)}
+                                        showForwardIcon={false}
+                                    />
+                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                </>
+                            }
                             {
                                 lists.map((list, index) => {
                                     if (editTaskListsIsActive) {
@@ -278,7 +299,7 @@ function TasksMain({navigation}) {
                                                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
                                                     </View>
                                                     {/* Adds a border, except after the last element */}
-                                                    {index !== lists.flat().length - 1 && (
+                                                    {index !== lists.length - 1 && (
                                                         <View
                                                             style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                     )}
@@ -304,8 +325,7 @@ function TasksMain({navigation}) {
                                                 />
                                                 {/* Adds a border, except after the last element */}
                                                 {index !== lists.length - 1 && (
-                                                    <View
-                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                 )}
                                             </View>
                                         );
@@ -327,7 +347,7 @@ function TasksMain({navigation}) {
                     {modalIsVisible && <AddTaskModal
                         visible={modalIsVisible}
                         onPressCreateList={handleCreateList}
-                        onPressCreateTask={handleCreateTask}
+                        onPressCreateTask={() => handleCreateTask(undefined)}
                         onPressCloseModal={handleCloseModal}
                     />}
                 </View>

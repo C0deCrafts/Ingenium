@@ -22,8 +22,6 @@ function ListTasks({route, navigation}){
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    //access the parameter listId passed from the TasksMain Screen
-    const {listId} = route.params;
 
     //access the tasks state from Database Context
     const {tasks, lists, deleteTask, updateTaskIsDone} = useDatabase();
@@ -108,16 +106,38 @@ function ListTasks({route, navigation}){
         );
     }
 
+    /*
+    access the parameter listId passed from the TasksMain Screen
+    is a valid listId if a list was chosen
+    is null if the button "Alle" for showing all Tasks was pressed
+     */
+    const {listId} = route.params;
+
     function handleAddTaskToList() {
-       navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
+        navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
     }
 
-    //access the current list title to show it in the heading of the screen
-    const currentList = lists.find(list => list.listId === listId);
-    const currentScreenTitle = currentList.listName;
+    /*
+    the following values are initialized differently depending on if a listId or
+    undefined was passed to the listId parameter of the route
+     */
+    //set current list title to show it in the heading of the screen
+    let currentScreenTitle;
 
-    //filter tasks to show tasks belonging to currentList && isDone is false
-    const listTasksNotDone = tasks.filter(task => !task.isDone && task.listId === listId);
+    if(listId) {
+        const currentList = lists.find(list => list.listId === listId);
+        currentScreenTitle = currentList.listName;
+    } else {
+        currentScreenTitle = "Alle";
+    }
+
+    /**
+     * if the listId passed to the route.params:
+     * filter tasks to show tasks belonging to currentList which are not done
+     * if undefined is passed to route.params:
+     * show all tasks which are not done
+     */
+    const listTasksNotDone = listId ? tasks.filter(task => !task.isDone && task.listId === listId) : tasks.filter(task => !task.isDone);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -138,9 +158,12 @@ function ListTasks({route, navigation}){
              }
             />
             <View style={styles.contentContainer}>
-            {/*show Tasks of List with id which was passed by the route param listId
+            {/*
+            show Tasks of List with id which was passed by the route param listId
             need to show only tasks of this list
-            need to show tasks sorted ascending by dueDate*/
+            (need to show tasks sorted ascending by dueDate)
+            Exception: user clicked on all tasks -- tasks of all lists will be shown
+            */
             }
                 <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>
                     {currentScreenTitle}
@@ -243,8 +266,7 @@ function ListTasks({route, navigation}){
                                                                 styles.textXS,
                                                                 styles.textItalic
                                                             ]}>
-                                                                fällig
-                                                                am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                                fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
                                                             </Text>
                                                         }
                                                     </View>

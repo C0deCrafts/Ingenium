@@ -86,7 +86,7 @@ function EditTask({navigation, route}){
     const navigateToEditTaskDetails = () => {
         // Dismiss the keyboard and navigate to the edit task details screen
         Keyboard.dismiss();
-        //navigation.navigate();
+        console.log("Still need to implement this... with passing a parameter to the route as well!!!");
     };
 
     return (
