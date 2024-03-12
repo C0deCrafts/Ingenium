@@ -106,8 +106,8 @@ function ListTasks({route, navigation}){
         );
     }
 
-    function handleNavigateToAddTaskToList(listId) {
-        //still to implement
+    function handleAddTaskToList() {
+       navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
     }
 
     //access the current list title to show it in the heading of the screen
@@ -266,7 +266,7 @@ function ListTasks({route, navigation}){
                 </ScrollView>
             </View>
             <RoundButton
-                onPress={() => handleNavigateToAddTaskToList()}
+                onPress={() => handleAddTaskToList()}
                 buttonStyle={styles.roundButtonPosition}
                 iconName={ICONS.TASKICONS.ADD}
             />
