@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView} from "react-native";
+import {Text, View, StyleSheet, ScrollView, ActivityIndicator} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -11,13 +11,23 @@ function Dashboard({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const { lists, loadLists, deleteAllLists} = useDatabase();
+    const { isDbReady, lists, loadLists, deleteAllLists} = useDatabase();
 
     // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
-    // oder wenn sich loadLists ändert
+    // oder wenn sich isDbReady ändert
     useEffect(() => {
-        loadLists();
-    }, []);
+        if(isDbReady){
+            loadLists();
+        }
+    }, [isDbReady]);
+
+    if (!isDbReady) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
 
     const showAllListsHelperFunction = () => {
         console.log("Alle Listen:");

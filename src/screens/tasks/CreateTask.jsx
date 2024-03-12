@@ -47,6 +47,7 @@ function CreateList({navigation}) {
         creationDate: new Date().toISOString(),
         imageURL: '',
         url: '',
+        isDone: false,
         shared: false,
         reminder: false,
     });

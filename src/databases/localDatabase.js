@@ -1,28 +1,28 @@
 import * as SQLite from "expo-sqlite";
 import * as FileSystem from 'expo-file-system';
-import {useEffect} from "react";
 import * as Sharing from "expo-sharing";
 
-
-let dbInstance = null;
+let dbInstance = null; // Initialize database instance variable
 
 export const localDatabase = () => {
-    const readOnly = false;
+    const readOnly = false; // Set database to read-write mode
 
     /**
-     * getDatabase function:
-     * This function helps us stick to the "Singleton pattern" for our database connection.
-     * The Singleton pattern means we only create and use one single instance of something across our app.
+     * Function to get the database instance.
+     * It ensures we have only one connection to the database throughout the app.
+     *
+     * This function follows the <u>Singleton</u> pattern for our database connection.
+     * The Singleton pattern means we create and use only one instance of something across our app.
      * Here's how it works:
      * - If we've already set up our database connection before (if `dbInstance` is not empty), we don't make a new one. We use the one we already have.
      * - If it's our first time asking for the database connection (so, `dbInstance` is empty), we create it and then keep it for later.
      * Doing this makes sure we don't waste resources by making new connections all the time.
      * Instead, we have just one connection that we use over and over, making our app work better and faster.
+     * @returns {Promise<*>}
      */
-    //FUNKTIONIERT
-    const getDatabase = () => {
+    const getDatabase = async () => {
         //console.log("getDatabase wird aufgerufen");
-        const dbName = "ingeniumLocalDB.db"
+        const dbName = "asdf2024.db"
         if (!dbInstance){
             dbInstance = SQLite.openDatabase(dbName)
             console.log("Datenbankinstanz erstellt:", dbInstance);
@@ -32,30 +32,20 @@ export const localDatabase = () => {
         return dbInstance;
     }
 
-    //FUNKTIONIERT
+    /**
+     * Function to create tables in the database if they don't exist.
+     * It creates tables for task lists and tasks.
+     * @returns {Promise<void>}
+     */
     const createTable = async () => {
-        const db = getDatabase();
+        const db = await getDatabase(); // Get database instance
         const sqlTaskLists = `CREATE TABLE IF NOT EXISTS taskLists(
                     listId INTEGER PRIMARY KEY AUTOINCREMENT,
                     listName TEXT NOT NULL,
                     iconName TEXT NOT NULL, 
                     iconBackgroundColor TEXT NOT NULL
-        )`;
+        )`; // SQL query to create taskLists table
 
-
-        /*
-    * Aufgabendaten. Hier ist ein Beispiel für die Struktur:
-    * taskID (Primärschlüssel)
-    * listID (Fremdschlüssel, um die Aufgabe mit der entsprechenden Taskliste zu verknüpfen)
-    * title (Titel der Aufgabe)
-    * notes (Notizen zur Aufgabe)
-    * dueDate (Fälligkeitsdatum der Aufgabe)
-    * creationDate (Erstellungsdatum der Aufgabe)
-    * imageURL (URL für Bilder, die der Benutzer hinzufügen kann)
-    * url (URL, die der Benutzer extra hinzufügen kann)
-    * shared (Boolean-Wert, ob die Aufgabe geteilt wurde)
-    * reminder (Boolean-Wert, ob an diese Aufgabe erinnert werden soll)
-    */
         const sqlTasks = `CREATE TABLE IF NOT EXISTS tasks (
                       taskId INTEGER PRIMARY KEY AUTOINCREMENT,
                       listId INTEGER NOT NULL,
@@ -65,44 +55,48 @@ export const localDatabase = () => {
                       creationDate TEXT,
                       imageURL TEXT,
                       url TEXT,
+                      isDone INTEGER,
                       shared INTEGER,
                       reminder INTEGER,
                       FOREIGN KEY (listId) REFERENCES taskLists(listId)
-        )`;
+        )`; // SQL query to create tasks table
 
-        const args = [];
+        const args = []; // No arguments for table creation
 
         await db.transactionAsync(async tx => {
-            await tx.executeSqlAsync(sqlTaskLists,args);
-            console.log("Table Task LISTS erstellt")
-            await tx.executeSqlAsync(sqlTasks, args);
-            console.log("Table Tasks erstellt")
-        },readOnly);
+            await tx.executeSqlAsync(sqlTaskLists,args); // Execute query to create taskLists table
+            await tx.executeSqlAsync(sqlTasks, args); // Execute query to create tasks table
+        },readOnly); // Read-write transaction
     };
 
+    /**
+     * Function to insert a new task list into the database.
+     * @param list
+     * @returns {Promise<void>}
+     */
     const insertTaskList = async (list) => {
-        const db = getDatabase();
-        const {listName, iconName, iconBackgroundColor} = list;
+        const db = await getDatabase();
         const sql = `INSERT INTO taskLists(
                     listName, 
                     iconName, 
                     iconBackgroundColor
         ) VALUES (?, ?, ?);`
-        //let resultData;
 
-        const args = [listName, iconName, iconBackgroundColor];
+        const args = [list.listName, list.iconName, list.iconBackgroundColor];
+
         await db.transactionAsync(async tx => {
-            console.log("Öffne INSERT TASK LIST")
             const result = await tx.executeSqlAsync(sql,args)
-            console.log("Ergebnis RESULT: ", result)
-            //insertedId = result.insertId;
         },readOnly)
-        //return resultData;
     }
 
+    /**
+     * Function to insert a new task into a task list.
+     * @param task
+     * @returns {Promise<void>}
+     */
     const insertTaskInList = async (task) => {
-        const db = getDatabase();
-        const {listId, taskTitle, taskNotes, dueDate, creationDate, imageURL, url, shared, reminder} = task;
+        const db = await getDatabase();
+
         const sql = `INSERT INTO tasks (
                     listId,
                     taskTitle,
@@ -111,66 +105,83 @@ export const localDatabase = () => {
                     creationDate,
                     imageURL,
                     url,
+                    isDone,
                     shared,
                     reminder
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-        const args = [listId, taskTitle, taskNotes, dueDate, creationDate, imageURL, url,
-            shared ? 1 : 0, // Convert boolean to integer for SQLite
-            reminder ? 1 : 0 // Convert boolean to integer for SQLite
+
+        const args = [task.listId, task.taskTitle, task.taskNotes, task.dueDate, task.creationDate, task.imageURL, task.url,
+            task.isDone ? 1: 0, // Convert boolean to integer for SQLite
+            task.shared ? 1 : 0, // Convert boolean to integer for SQLite
+            task.reminder ? 1 : 0 // Convert boolean to integer for SQLite
         ];
 
         await db.transactionAsync(async tx => {
-            console.log("Öffne INSERT TASK IN LIST")
             const result = await tx.executeSqlAsync(sql,args)
-            console.log("Ergebnis RESULT: ", result)
         },readOnly)
     }
 
-    //FUNKTIONIERT
+    /**
+     * Function to get all task lists from the database.
+     * @returns {Promise<*>}
+     */
     const getTaskLists = async () => {
-        const db = getDatabase();
+        const db = await getDatabase();
         const sql = `SELECT * FROM taskLists`;
+
         const args = [];
+
         let resultData;
 
         await db.transactionAsync(async tx => {
             const result = await tx.executeSqlAsync(sql,args);
-            //console.log("Ergebnis RESULT: ", result)
-            //console.log("Ergebnis: ", result.rows[0]);
             resultData = result.rows;
         },readOnly);
+
         return resultData;
     }
 
-    //FUNKTIONIERT
+    /**
+     * Function to get all tasks from the database.
+     * @returns {Promise<*>}
+     */
     const getTasks = async () => {
-        const db = getDatabase();
+        const db = await getDatabase();
         const sql = `SELECT * FROM tasks`;
+
         const args = [];
+
         let resultData;
 
         await db.transactionAsync(async tx => {
             const result = await tx.executeSqlAsync(sql,args);
-            //console.log("Ergebnis RESULT: ", result)
-            //console.log("Ergebnis: ", result.rows[0]);
             resultData = result.rows;
         },readOnly);
+
         return resultData;
     }
 
-    //FUNKTIONIERT
+    /**
+     * Function to delete a task list from the database.
+     * @param listId
+     * @returns {Promise<void>}
+     */
     const deleteTaskList = async (listId) => {
-        const db = getDatabase();
+        const db = await getDatabase();
         const sql = `DELETE FROM taskLists WHERE listId = ?;`
         const args = [listId];
 
         await db.transactionAsync(async tx => {
-            const result = await tx.executeSqlAsync(sql,args);
+            await tx.executeSqlAsync(sql,args);
         },readOnly)
     }
 
+    /**
+     * Function to delete all task lists from the database.
+     * @returns {Promise<void>}
+     */
     const deleteAllTaskLists = async () => {
-        const db = getDatabase();
+        const db = await getDatabase();
         const sql = `DELETE FROM taskLists`;
         const args = [];
 
@@ -179,11 +190,14 @@ export const localDatabase = () => {
         },readOnly)
     }
 
-
-        const debugDB = async () => {
-            console.log(FileSystem.documentDirectory);
-            await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/ingeniumLocalDB.db")
-        }
+    /**
+     * Function to debug the database by sharing the database file.
+     * @returns {Promise<void>}
+     */
+    const debugDB = async () => {
+        console.log(FileSystem.documentDirectory);
+        await Sharing.shareAsync(FileSystem.documentDirectory + "SQLite/asdf2024.db")
+    }
 
     return {
         getDatabase,
