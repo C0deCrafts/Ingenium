@@ -38,10 +38,12 @@ function ListTasks({route, navigation}){
 
     /**
      * Is called on press of the edit Task Button
-     * navigates to the EditTask Screen.
+     * navigates to the EditTask Screen. Passes the
+     * task which user wants to edit as a parameter to
+     * the route.
      */
-    function handleNavigateToEditTask() {
-        navigation.push("EditTask_Screen");
+    function handleNavigateToEditTask(task) {
+        navigation.push("EditTask_Screen", {taskToEdit: task});
     }
 
     /**
@@ -194,7 +196,7 @@ function ListTasks({route, navigation}){
                                                     </Text>}
                                                 </View>
                                                 <TouchableOpacity
-                                                    onPress={handleNavigateToEditTask}
+                                                    onPress={() => handleNavigateToEditTask(task)}
                                                 >
                                                     <Icon name={ICONS.TASKICONS.MORE}
                                                           color={COLOR.ICONCOLOR_CUSTOM_BLUE}

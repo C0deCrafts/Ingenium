@@ -142,6 +142,18 @@ export const DatabaseProvider = ({children}) => {
         }
     };
 
+    // Function to update editable properties of a task from the database
+    const updateTask = async (task) => {
+        try {
+            await localDatabase().updateTask(task);
+            await loadLists();
+            console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
+        } catch (err) {
+            setError(err.message);
+            console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
+        }
+    };
+
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
                 initializeDatabase();
@@ -156,7 +168,7 @@ export const DatabaseProvider = ({children}) => {
 
     // Provide the database context and its operations to the child components
     return (
-        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, updateTaskIsDone, isLoading, error}}>
+        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, updateTaskIsDone, updateTask, isLoading, error}}>
             {children}
         </DatabaseContext.Provider>
     );

@@ -207,6 +207,24 @@ export const localDatabase = () => {
     /**
      * Function to edit a task from the database
      */
+    const updateTask = async (task) => {
+        const db = await getDatabase();
+        const updateTaskSql = `UPDATE tasks SET
+            listId = ?,
+            taskTitle = ?,
+            taskNotes = ?,
+            dueDate = ?,
+            imageURL = ?,
+            url = ?,
+            shared = ?,
+            reminder = ?
+            WHERE taskId = ?;`
+        const args = [task.listId, task.taskTitle, task.taskNotes, task.dueDate, task.imageURL, task.url, task.shared, task.reminder, task.taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(updateTaskSql, args);
+        },readOnly)
+    }
 
     /**
      * Function to debug the database by sharing the database file.
@@ -227,6 +245,7 @@ export const localDatabase = () => {
         deleteTaskList,
         deleteTask,
         updateTaskIsDone,
+        updateTask,
         debugDB
     }
 
