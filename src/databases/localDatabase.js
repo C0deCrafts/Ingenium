@@ -85,7 +85,7 @@ export const localDatabase = () => {
         const args = [list.listName, list.iconName, list.iconBackgroundColor];
 
         await db.transactionAsync(async tx => {
-            const result = await tx.executeSqlAsync(sql,args)
+            await tx.executeSqlAsync(sql,args)
         },readOnly)
     }
 
@@ -117,7 +117,7 @@ export const localDatabase = () => {
         ];
 
         await db.transactionAsync(async tx => {
-            const result = await tx.executeSqlAsync(sql,args)
+            await tx.executeSqlAsync(sql,args)
         },readOnly)
     }
 
