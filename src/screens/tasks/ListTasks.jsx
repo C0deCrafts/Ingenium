@@ -41,6 +41,7 @@ function ListTasks({route, navigation}){
      * the route.
      */
     function handleNavigateToEditTask(task) {
+        setEditTasksIsActive(false);
         navigation.push("EditTask_Screen", {taskToEdit: task});
     }
 
@@ -114,6 +115,7 @@ function ListTasks({route, navigation}){
     const {listId} = route.params;
 
     function handleAddTaskToList() {
+        setEditTasksIsActive(false);
         navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
     }
 

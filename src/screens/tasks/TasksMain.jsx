@@ -93,7 +93,7 @@ function TasksMain({navigation}) {
      */
     function handleOpenModal() {
         setModalIsVisible(true);
-        console.log('the insets size:' + insets.bottom);
+        setEditTaskListsIsActive(false);
     }
 
     /**
@@ -111,6 +111,7 @@ function TasksMain({navigation}) {
      */
     function handleCreateList() {
         setModalIsVisible(false);
+        setEditTaskListsIsActive(false);
         navigation.navigate("CreateList_Stack");
     }
 
@@ -124,6 +125,7 @@ function TasksMain({navigation}) {
      */
     function handleCreateTask(listId) {
         setModalIsVisible(false);
+        setEditTaskListsIsActive(false);
         navigation.navigate("CreateTask_Screen", {listId: listId});
     }
 
@@ -132,6 +134,7 @@ function TasksMain({navigation}) {
      * @param listId the id of the list the user clicked on OR undefined if the user clicked on "Alle".
      */
     function handleNavigateToListTasks(listId) {
+        setEditTaskListsIsActive(false);
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
@@ -139,7 +142,7 @@ function TasksMain({navigation}) {
         <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
                 {/*DrawerHeader for Tasks*/}
-                <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
+                <CustomDrawerHeader title="Aufgaben" onPress={() => [navigation.openDrawer(),setEditTaskListsIsActive(false)]}/>
 
                 {/*Outer View Container*/}
                 <View style={[isDarkMode ? styles.contentDark : styles.contentLight, styles.contentContainer]}>
@@ -208,7 +211,7 @@ function TasksMain({navigation}) {
                     <View style={styles.cardButtonContainer}>
                         <TouchableOpacity
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("CompletedTasks_Stack")}
+                            onPress={() => [navigation.navigate("CompletedTasks_Stack"), setEditTaskListsIsActive(false)]}
                         >
                             <Icon name={ICONS.TASKICONS.COMPLETED}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
@@ -218,7 +221,7 @@ function TasksMain({navigation}) {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("Inbox_Stack")}
+                            onPress={() => [navigation.navigate("Inbox_Stack"), setEditTaskListsIsActive(false)]}
                         >
                             <Icon name={ICONS.TASKICONS.INBOX}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
