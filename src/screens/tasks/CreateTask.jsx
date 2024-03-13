@@ -20,9 +20,12 @@ import {useDatabase} from "../../context/DatabaseContext";
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
 
-function CreateTask({navigation}) {
+function CreateTask({navigation, route}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    //load methods and state from the DatabaseContext
+    const {addTask, lists} = useDatabase();
 
     // State variables for the form
     const [taskTitle, setTaskTitle] = useState("");
@@ -35,11 +38,30 @@ function CreateTask({navigation}) {
     //const [shared, setShared] = useState(false); ??? brauchen wir das ??
     //const [reminder, setReminder] = useState(false); ??? brauchen wir das ??
 
-    // State for the database attributes
-    const [listId, setListId] = useState(1);
-    const [selectedListName, setSelectedListName] = useState("Ingenium"); // Default list name
 
-    const {addTask, lists} = useDatabase();
+    /* route.params --> explanation:
+   User enters the Screen from ListTasks and clicks on add task (round blue button):
+     - Case 1: User was looking at tasks of a list -> the listId is passed to route.params
+     - Case 2: User was looking at all tasks -> undefined is passed to route.params
+
+   User enters the Screen from TasksMain Modal - Button 'Create Task':
+      - undefined is passed to route.params,
+    */
+    const {listIdForAddTask} = route.params;
+
+    //if listIdForAddTask is valid Id assign it to defaultListId
+    //if it is undefined, initialize it with 1 - which is the id of Ingenium List
+    const defaultListId = listIdForAddTask? listIdForAddTask : 1;
+    const defaultListName = lists.find(list => list.listId === defaultListId).listName;
+
+    console.log("listIdForAddTask",listIdForAddTask);
+    console.log("defaultListId",defaultListId);
+
+
+    // State for the database attributes
+    const [listId, setListId] = useState(defaultListId);
+    const [selectedListName, setSelectedListName] = useState(defaultListName); // Default list name
+
 
     //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
     const inputAccessoryViewID = 'uniqueID'; //?

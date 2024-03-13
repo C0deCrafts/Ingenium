@@ -3,9 +3,9 @@ import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../context/TasksContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
+import {useDatabase} from "../../context/DatabaseContext";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -15,7 +15,7 @@ function CompletedTasks({navigation}){
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    const {taskListsState, dispatch} = useTasks();
+    const {tasks, updateTaskIsDone} = useDatabase();
 
     /**
      * Is called on Press of the round Button next to a task in the taskslist
@@ -24,12 +24,8 @@ function CompletedTasks({navigation}){
      * which are done
      * @param taskId the id of the task which was pressed
      */
-    function handleTaskNotCompleted(taskId) {
-        console.log("INSIDE HANDLETASKNOTCOMPLETED: Task not completed was pressed on task with id: ", taskId);
-        dispatch({
-            type: 'TOGGLED_TASK_DONE',
-            taskId: taskId,
-        })
+    function handleTaskNotCompleted(taskId, isDone) {
+        updateTaskIsDone(taskId, isDone);
     }
 
     /**
@@ -39,6 +35,9 @@ function CompletedTasks({navigation}){
     const handleGoBack = () => {
         navigation.goBack();
     };
+
+    //filter tasks to show tasks belonging to currentList && isDone is false
+    const tasksDone = tasks.filter(task => task.isDone);
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -73,16 +72,13 @@ function CompletedTasks({navigation}){
                         shows tasks of all taskLists which have the property done === true
                         ordered by date ascending
                         */
-                        [...taskListsState]
-                            .flatMap(list => list.tasks)
-                            .filter(task => task.done)
-                            .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
-                            .map(task => {
+
+                            tasksDone.map(task => {
                                 return (
                                     <TouchableOpacity
-                                        key={task.id}
+                                        key={task.taskId}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        onPress={() => handleTaskNotCompleted(task.id)}
+                                        onPress={() => handleTaskNotCompleted(task.taskId)}
                                     >
                                         <View><Icon name={ICONS.TASKICONS.CIRCLE_DONE}
                                                  color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
@@ -94,7 +90,7 @@ function CompletedTasks({navigation}){
                                                     styles.textNormal,
                                                     styles.textAlignRight
                                                 ]}>
-                                                {task.title}
+                                                {task.taskTitle}
                                             </Text>
                                             <Text style={[
                                                 isDarkMode ? styles.textDark : styles.textLight,

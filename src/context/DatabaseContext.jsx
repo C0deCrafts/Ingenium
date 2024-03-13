@@ -49,15 +49,18 @@ export const DatabaseProvider = ({children}) => {
             const start = performance.now();
 
             const loadedLists = await localDatabase().getTaskLists();
-            const listsArray = [loadedLists];
+            const listsArray = [...loadedLists];
             setLists(listsArray);
 
             const loadedTasks = await localDatabase().getTasks();
-            const tasksArray = [loadedTasks];
+            const tasksArray = [...loadedTasks];
+
+            console.log("INSIDE LOADLISTS:", tasksArray);
+
             setTasks(tasksArray);
 
-            console.log("Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
-            console.log("Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
+            console.log("LOAD LISTS IN DBCONTEXT: Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
+            console.log("LOAD LISTS IN DBCONTEXT: Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
 
             const end = performance.now();
             console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
@@ -115,6 +118,42 @@ export const DatabaseProvider = ({children}) => {
         }
     };
 
+    // Function to delete a task from the database
+    const deleteTask = async (taskId) => {
+        try {
+            await localDatabase().deleteTask(taskId);
+            await loadLists();
+            console.log("Task erfolgreich gelöscht");
+        } catch (err) {
+            setError(err.message);
+            console.error("Fehler beim Löschen des Tasks:", err);
+        }
+    };
+
+    // Function to update isDone property of a task from the database
+    const updateTaskIsDone = async (taskId, isDone) => {
+        try {
+            await localDatabase().updateTaskIsDone(taskId, isDone);
+            await loadLists();
+            console.log("Task isDone erfolgreich getogglet");
+        } catch (err) {
+            setError(err.message);
+            console.error("Fehler beim togglen von isDone:", err);
+        }
+    };
+
+    // Function to update editable properties of a task from the database
+    const updateTask = async (task) => {
+        try {
+            await localDatabase().updateTask(task);
+            await loadLists();
+            console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
+        } catch (err) {
+            setError(err.message);
+            console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
+        }
+    };
+
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
                 initializeDatabase();
@@ -129,7 +168,7 @@ export const DatabaseProvider = ({children}) => {
 
     // Provide the database context and its operations to the child components
     return (
-        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, isLoading, error}}>
+        <DatabaseContext.Provider value={{isDbReady, lists, tasks, addTask, loadLists, addList, deleteList, deleteTask, updateTaskIsDone, updateTask, isLoading, error}}>
             {children}
         </DatabaseContext.Provider>
     );

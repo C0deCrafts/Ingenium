@@ -2,7 +2,6 @@ import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert}
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../context/TasksContext";
 import {useState} from "react";
 import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
@@ -31,28 +30,11 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {lists, deleteList} = useDatabase();
+    const {tasks, lists, deleteList, updateTaskIsDone} = useDatabase();
 
+    //filtering Tasks for tasksview
+    const tasksNotDone = tasks.filter(task => !task.isDone);
 
-    /**
-     * CUSTOM HOOK USETASKS
-     * Provides the taskListsState and a dispatch function.
-     *
-     * The dispatch function expects an action object as its argument.
-     * This action object communicates with the reducer, about what needs to
-     * be done and what information is needed to perform that action.
-     * The action object always holds an action type, and additional data
-     * which is needed for performing that action. The additional data which needs
-     * to be passed to the action object for each action, is specified in the reducer
-     * function.
-     */
-    const {taskListsState, dispatch} = useTasks();
-
-    // Berechnung von filteredAndSortedTasks
-    const filteredAndSortedTasks = [...taskListsState]
-        .flatMap(list => list.tasks)
-        .filter(task => !task.done)
-        .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate));
 
     /**
      * Is called on Press of the round Button next to a task in the taskslist.
@@ -60,16 +42,14 @@ function TasksMain({navigation}) {
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done
      * @param taskId the id of the task which was pressed
+     * @param isDone
      */
-    function handleTaskCompleted(taskId) {
-        dispatch({
-            type: 'TOGGLED_TASK_DONE',
-            taskId: taskId,
-        });
+    function handleTaskCompleted(taskId, isDone) {
+        updateTaskIsDone(taskId, isDone);
     }
 
     /**
-     * is called on Press of the more button above the taskList View
+     * is called on press of the more button above the taskList View
      * will open the editing mode for the Lists - where lists can be deleted
      */
     function handleOpenEditTaskLists() {
@@ -77,7 +57,7 @@ function TasksMain({navigation}) {
     }
 
     /**
-     * is called on Press of the 'Fertig' button above the taskList View
+     * is called on press of the 'Fertig' button above the taskList View
      * will close the editing mode for the Lists
      */
     function handleCloseEditTaskLists() {
@@ -85,38 +65,10 @@ function TasksMain({navigation}) {
     }
 
     /**
-     *
-     * @param tasksListId
+     * is called on press of the red 'delete' button, visible in editing mode
+     * deletes the takslist and tasks belonging to that list from the database.
+     * @param listId the id of the list which is deleted
      */
-    /*function handleDeleteTaskList(tasksListId) {
-        console.log("DELETE TASK LIST WAS PRESSED: implement logic to delete list with id: ", tasksListId);
-
-        //create Alert
-        Alert.alert(
-            'Liste löschen',
-            'Möchtest du diese Liste wirklich löschen?',
-            [
-                {
-                    text: 'Ja',
-                    onPress: () => {
-                        console.log(`DELETE LIST ALERT, 'JA' WAS PRESSED:  with id ${tasksListId} will be deleted.`);
-                        return dispatch({
-                            type: 'DELETED_LIST',
-                            tasksListId: tasksListId,
-                        });
-                    },
-                    //styling the alert button for IOs to be red
-                    style: 'destructive'
-                },
-                {
-                    text: 'Nein',
-                    onPress: () => console.log("DELETE LIST ALERT, 'NEIN' WAS PRESSED"),
-                    //styling the alert button for IOs to be blue
-                    style: 'cancel'
-                },
-            ]
-        );
-    }*/
     function handleDeleteTaskList(listId) {
         Alert.alert(
             'Liste löschen',
@@ -124,7 +76,7 @@ function TasksMain({navigation}) {
             [
                 {
                     text: 'Ja',
-                    onPress: () => deleteList(listId), // Verwende hier die deleteList Funktion aus deinem Kontext
+                    onPress: () => deleteList(listId),
                     style: 'destructive',
                 },
                 {
@@ -136,7 +88,7 @@ function TasksMain({navigation}) {
     }
 
     /**
-     * is called on Press of the Round Button 'Add' in TasksMain Screen
+     * is called on press of the Round Button 'Add' in TasksMain Screen
      * shows the Modal, by setting the state of its visibility to true
      */
     function handleOpenModal() {
@@ -166,10 +118,21 @@ function TasksMain({navigation}) {
      * is called on Press of the 'Neue Aufgabe' Button in
      * the AddTaskModal Component
      * hides the Modal and navigates to the CreatTask Screen
+     * passes a listId - which is initialized with undefined as user
+     * did not choose a list to add the task to - but the parameter is needed
+     * for conditional rendering later
      */
-    function handleCreateTask() {
+    function handleCreateTask(listId) {
         setModalIsVisible(false);
-        navigation.navigate("CreateTask_Screen");
+        navigation.navigate("CreateTask_Screen", {listId: listId});
+    }
+
+    /**
+     * Navigates to the ListTasksScreen and shows tasks of a list or all tasks depending on users choice.
+     * @param listId the id of the list the user clicked on OR undefined if the user clicked on "Alle".
+     */
+    function handleNavigateToListTasks(listId) {
+        navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
     return (
@@ -186,27 +149,22 @@ function TasksMain({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
                             Nächste ToDo's
                         </Text>
-                        {/*Here the taskLists state is taken and a shallow copy is created using the spread syntax.
-                    On the copy by chaining the array methods: flatMap, filter, sort and map
-                    it is achieved that all tasks, of all lists with the property done = false are shown sorted in an ascending
-                    order by dueDate.
-                    This adheres to the principle of immutability of state variables*/}
                         <ScrollView
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                             showsVerticalScrollIndicator={false}
                             bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
-                            {filteredAndSortedTasks.map((task, index) => {
+                            {tasksNotDone.map((task, index) => {
                                 return (
                                     <View
-                                        key={task.id}
+                                        key={task.taskId}
                                     >
                                         <View
                                             style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
                                         <TouchableOpacity
                                             style={styles.taskCompletedButton}
-                                            onPress={() => handleTaskCompleted(task.id)}>
+                                            onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
                                             <Icon name={ICONS.TASKICONS.CIRCLE}
                                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
                                                   size={20}/>
@@ -222,17 +180,21 @@ function TasksMain({navigation}) {
                                                 numberOfLines={1}
                                                 ellipsizeMode={"tail"}
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
-                                                {task.title}
+                                                {task.taskTitle}
                                             </Text>
-                                            <Text
+                                            {/*Show date only when dueDate is not an empty string*/}
+                                            {task.dueDate && <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
-                                                fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                            </Text>
+                                                fällig am {/*
+                                                Anpassen, wenn Datumsauswahl implementiert wird
+                                                new Date(task.dueDate).toLocaleDateString('de-DE')
+                                                */}
+                                            </Text>}
                                         </View>
                                     </View>
 
                                         {/* Adds a border, except after the last element */}
-                                        {index !== filteredAndSortedTasks.length - 1 && (
+                                        {index !== tasks.length - 1 && (
                                             <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                         )}
                                     </View>
@@ -294,8 +256,22 @@ function TasksMain({navigation}) {
                             bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
+                            {/*Button for All Tasks -- Rendered only when the editing mode is not active*/}
+                            {!editTaskListsIsActive &&
+                                <>
+                                    <CustomBoxButton
+                                        buttonTextLeft={"Alle"}
+                                        iconName={ICONS.TASKICONS.LIST}
+                                        iconColor={"white"}
+                                        iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                        onPress={() => handleNavigateToListTasks(undefined)}
+                                        showForwardIcon={false}
+                                    />
+                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                </>
+                            }
                             {
-                                lists.flat().map((list, index) => {
+                                lists.map((list, index) => {
                                     if (editTaskListsIsActive) {
                                         // Im Bearbeitungsmodus
                                         if (list.listName !== "Ingenium") {
@@ -323,7 +299,7 @@ function TasksMain({navigation}) {
                                                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
                                                     </View>
                                                     {/* Adds a border, except after the last element */}
-                                                    {index !== lists.flat().length - 1 && (
+                                                    {index !== lists.length - 1 && (
                                                         <View
                                                             style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                     )}
@@ -335,9 +311,8 @@ function TasksMain({navigation}) {
                                     } else {
                                         // Ansichtsmodus
                                         return (
-                                            <TouchableOpacity
+                                            <View
                                                 key={list.listId}
-                                                onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
                                             >
                                                 <CustomBoxButton
                                                     buttonTextLeft={list.listName}
@@ -345,15 +320,14 @@ function TasksMain({navigation}) {
                                                     iconBoxBackgroundColor={list.iconBackgroundColor}
                                                     iconColor={"white"}
                                                     showForwardIcon={false}
-                                                    onPress={() => console.log("Navigieren muss wieder implementiert werden, dazu brauchen wir aber dann die Tasks")}
+                                                    onPress={() => handleNavigateToListTasks(list.listId)}
                                                     isUserIcon={true}
                                                 />
                                                 {/* Adds a border, except after the last element */}
-                                                {index !== lists.flat().length - 1 && (
-                                                    <View
-                                                        style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                {index !== lists.length - 1 && (
+                                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                 )}
-                                            </TouchableOpacity>
+                                            </View>
                                         );
                                     }
                                 })
@@ -373,7 +347,7 @@ function TasksMain({navigation}) {
                     {modalIsVisible && <AddTaskModal
                         visible={modalIsVisible}
                         onPressCreateList={handleCreateList}
-                        onPressCreateTask={handleCreateTask}
+                        onPressCreateTask={() => handleCreateTask(undefined)}
                         onPressCloseModal={handleCloseModal}
                     />}
                 </View>
@@ -397,8 +371,6 @@ function getStyles(insets) {
             backgroundColor: DARKMODE.BACKGROUNDCOLOR
         },
         contentContainer: {
-            //should we set paddings like this?
-            //paddingTop: insets.top,
             paddingTop: SIZES.MARGIN_TOP_FROM_DRAWER_HEADER,
             paddingBottom: insets.bottom + 25,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,

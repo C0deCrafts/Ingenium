@@ -179,6 +179,54 @@ export const localDatabase = () => {
     }
 
     /**
+     * Function to delete a task from the database
+     */
+    const deleteTask = async (taskId) => {
+        const db = await getDatabase();
+        const deleteTasksSql = `DELETE FROM tasks WHERE taskId = ?;`
+        const args = [taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(deleteTasksSql, args); // Lösche den Task
+        },readOnly)
+    }
+
+    /**
+     * Function to toggle isDone of a task from the database
+     */
+    const updateTaskIsDone = async (taskId, isDone) => {
+        const db = await getDatabase();
+        const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ? WHERE taskId = ?;`
+        const args = [isDone === 0 ? 1 : 0, taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(updateTaskIsDoneSql, args); // Update isDone property
+        },readOnly)
+    }
+
+    /**
+     * Function to edit a task from the database
+     */
+    const updateTask = async (task) => {
+        const db = await getDatabase();
+        const updateTaskSql = `UPDATE tasks SET
+            listId = ?,
+            taskTitle = ?,
+            taskNotes = ?,
+            dueDate = ?,
+            imageURL = ?,
+            url = ?,
+            shared = ?,
+            reminder = ?
+            WHERE taskId = ?;`
+        const args = [task.listId, task.taskTitle, task.taskNotes, task.dueDate, task.imageURL, task.url, task.shared, task.reminder, task.taskId];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(updateTaskSql, args);
+        },readOnly)
+    }
+
+    /**
      * Function to debug the database by sharing the database file.
      * @returns {Promise<void>}
      */
@@ -195,6 +243,9 @@ export const localDatabase = () => {
         getTaskLists,
         getTasks,
         deleteTaskList,
+        deleteTask,
+        updateTaskIsDone,
+        updateTask,
         debugDB
     }
 
