@@ -263,7 +263,7 @@ function TasksMain({navigation}) {
                                         buttonTextLeft={"Alle"}
                                         iconName={ICONS.TASKICONS.LIST}
                                         iconColor={"white"}
-                                        iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                        iconBoxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_VIOLET}
                                         onPress={() => handleNavigateToListTasks(undefined)}
                                         showForwardIcon={false}
                                     />

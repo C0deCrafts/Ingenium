@@ -7,14 +7,6 @@
 
 BEZÜGLICH DEM USEEFFECT FÜR INITIALIZEDATABASE: noch überlegen wo / wann dies eingesetzt werden sollte
 
-### Bezüglich 'Liste' Alle
-- Eine Liste mit Titel Alle anlegen und wenn man da draufklickt sieht man Alle Aufgaben 
-- -- soll das überhaupt eine Liste sein? Oder ein extra Button der nur aussieht wie eine Liste -- wenn man draufklickt wird man zu 
-ListTasks weitergeleitet & es wird kein listId Parameter an die Route weitergegeben - if listId === false - werden alle Todos angezeigt.
-
-
-
-
 Gemeinsam Machen:
 - Wenn Tasks fertig: Über alle Styles gemeinsam drüberschauen (vor allem die Paddings in den ScreenContainern und
 den ContentBoxen abgleichen) + Responsive Design
