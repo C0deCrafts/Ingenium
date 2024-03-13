@@ -26,6 +26,8 @@ function TasksMain({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
+    console.log("insets: ", insets)
+
     //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -364,6 +366,10 @@ export default TasksMain;
 const windowWidth = Dimensions.get("window").width;
 
 function getStyles(insets) {
+    // Bestimme einen Schwellenwert für den unteren Inset. Wenn der Inset größer als dieser Wert ist,
+    // bedeutet das, dass das Gerät eine Home-Indikatorleiste oder ähnliche Features hat.
+    const bottomInsetAdjustment = insets.bottom > 0 ? insets.bottom - 20 : 10;
+
     return StyleSheet.create({
         containerLight: {
             flex: 1,
@@ -375,7 +381,7 @@ function getStyles(insets) {
         },
         contentContainer: {
             paddingTop: SIZES.MARGIN_TOP_FROM_DRAWER_HEADER,
-            paddingBottom: insets.bottom + 25,
+            paddingBottom: bottomInsetAdjustment + 45,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
@@ -430,7 +436,7 @@ function getStyles(insets) {
         roundButtonPosition: {
             position: "absolute",
             left: (windowWidth / 2) - 35,
-            bottom: insets.bottom - 20,
+            bottom: bottomInsetAdjustment,
         },
         scrollViewContentContainer: {
             paddingHorizontal: 10,
