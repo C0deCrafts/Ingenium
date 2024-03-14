@@ -10,6 +10,7 @@ import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
 import NextCourseBox from "../../components/buttons/NextCourseBox";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Dashboard({navigation}) {
     const {theme} = useTheme();
@@ -56,23 +57,56 @@ function Dashboard({navigation}) {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            //aspect: [4,3],
             quality: 1,
         });
 
         if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
-            console.log(result);
+            setSelectedImage(result.assets[0].uri); // Aktualisiere den Zustand mit der neuen Bild-URI
+            await saveProfilImage(result.assets[0].uri); // Speichere die neue Bild-URI
         } else {
-            alert('You did not select any image.');
+            alert('Du hast kein Bild ausgewählt.');
         }
     };
+
+
+    const loadProfilImage = () => {
+        AsyncStorage.getItem("storedProfilImage").then(data => {
+            if(data !== null){
+                setSelectedImage(data);
+            }
+        }).catch((err) => {
+            console.log("Fehler beim Laden des Images: ", err)
+        })
+    }
+
+    const saveProfilImage = async (imageUri) => {
+        try {
+            await AsyncStorage.setItem("storedProfilImage", imageUri);
+            console.log("Bild erfolgreich gespeichert");
+        } catch (err) {
+            console.error("Fehler beim Speichern des Bildes: ", err);
+        }
+    }
+
+    //helper function
+    const logAllStoredData = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys(); // Alle Schlüssel abrufen
+            const items = await AsyncStorage.multiGet(keys); // Alle Werte für die Schlüssel abrufen
+            console.log('Gespeicherte Daten im AsyncStorage:', items);
+        } catch (error) {
+            console.error('Fehler beim Abrufen der AsyncStorage Daten:', error);
+        }
+    }
+
 
     // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
     // oder wenn sich isDbReady ändert
     useEffect(() => {
         if (isDbReady) {
             loadLists();
+            loadProfilImage();
+            logAllStoredData();
             console.log("The Tasks State - Dashboard", JSON.stringify(tasks, null, 2));
         }
     }, [isDbReady]);
