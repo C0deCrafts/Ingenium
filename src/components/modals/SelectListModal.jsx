@@ -3,8 +3,8 @@ import {forwardRef, Fragment, useCallback} from 'react';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBoxButton from "../buttons/CustomBoxButton";
-import {useTheme} from "../../constants/context/ThemeContext";
-import {testDataSelectList} from "../../constants/userData";
+import {useTheme} from "../../context/ThemeContext";
+import {useDatabase} from "../../context/DatabaseContext";
 
 /**
  * ### SelectListModal Component
@@ -31,7 +31,7 @@ import {testDataSelectList} from "../../constants/userData";
 const SelectListModal = forwardRef(({onSelect}, ref) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const testData = testDataSelectList;
+    const {lists} = useDatabase();
 
     // Determine screen height
     const {height: screenHeight} = Dimensions.get('window');
@@ -65,18 +65,19 @@ const SelectListModal = forwardRef(({onSelect}, ref) => {
                 <Text style={isDarkMode ? styles.containerHeadlineDark : styles.containerHeadlineLight}>Liste auswählen</Text>
                 <View style={[isDarkMode ? styles.listBoxDark : styles.listBoxLight, { maxHeight: listBoxMaxHeight }]}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        {testData.map((item, index) => (
-                            <Fragment key={item.id}>
+                        {lists.map((list, index) => (
+                            <Fragment key={list.listId}>
                                 <CustomBoxButton
-                                    buttonTextLeft={item.buttonTextLeft}
-                                    iconName={item.iconName}
-                                    iconBoxBackgroundColor={item.iconBoxBackgroundColor}
-                                    iconColor={item.iconColor}
+                                    buttonTextLeft={list.listName}
+                                    iconName={list.iconName}
+                                    iconBoxBackgroundColor={list.iconBackgroundColor}
+                                    iconColor={"white"}
                                     showForwardIcon={false}
-                                    onPress={() => onSelect(item.buttonTextLeft)}
+                                    onPress={() => onSelect(list)}
+                                    isUserIcon={true}
                                 />
-                                {/* Adds a border, except after the last element */}
-                                {index !== testData.length - 1 && (
+                                {/* Füge einen Trenner hinzu, außer nach dem letzten Element */}
+                                {index !== lists.length - 1 && (
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 )}
                             </Fragment>

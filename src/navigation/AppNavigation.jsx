@@ -5,7 +5,7 @@ import DrawerNavigation from "./drawer/DrawerNavigation";
 import {useState} from "react";
 import LoginNavigation from "./LoginNavigation";
 import {LIGHTMODE} from "../constants/styleSettings";
-import { useTheme } from "../constants/context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 
 function AppNavigation() {
     // Hier kann die Logik für die Überprüfung des Benutzer-Login-Status eingefügt werden

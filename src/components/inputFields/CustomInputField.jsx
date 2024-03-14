@@ -1,6 +1,6 @@
 import {StyleSheet, TextInput, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import SquareIcon from "../SquareIcon";
 
 /**
@@ -19,6 +19,7 @@ import SquareIcon from "../SquareIcon";
  * @param {function} onChangeText - A function that will be called when the text input's content changes. It receives the current text value as its argument.
  * @param {string} value - The value of the input field. This prop is required for controlled input components, where the parent component controls the value of the input field.
  *
+ * @param isUserIcon
  * @example
  * // Inside your component's render method, use the CustomInputField component like this:
  * <CustomInputField
@@ -41,6 +42,7 @@ function CustomInputField({
                               iconBoxBackgroundColor,
                               onChangeText,
                               value,
+                              isUserIcon,
 }){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -63,7 +65,7 @@ function CustomInputField({
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor}/>
+            <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor} isUserIcon={isUserIcon}/>
             <TextInput
                 style={isDarkMode ? styles.inputDark : styles.inputLight}
                 placeholder={placeholder}

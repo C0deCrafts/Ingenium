@@ -1,11 +1,14 @@
 import {Text, View, StyleSheet} from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 function CreateTaskDetails({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+    const insets = useSafeAreaInsets();
+    const styles = getStyles(insets);
 
     const handleGoBack = () => {
         navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
@@ -44,7 +47,8 @@ function CreateTaskDetails({navigation}){
 
 export default CreateTaskDetails;
 
-const styles = StyleSheet.create({
+function getStyles(insets){
+return StyleSheet.create({
     // Container styles for light and dark mode
     containerLight: {
         flex: 1,
@@ -60,12 +64,14 @@ const styles = StyleSheet.create({
     contentLight: {
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER
+        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
+        paddingBottom: insets.bottom + 10
     },
     contentDark: {
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER
+        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
+        paddingBottom: insets.bottom + 10
     },
     // Header text styles
     header: {
@@ -112,15 +118,17 @@ const styles = StyleSheet.create({
         justifyContent: "center" //platzhalter
     },
     boxLight: {
+        flex: 1,
         backgroundColor: LIGHTMODE.BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS,
         alignItems: "center", //platzhalter
         justifyContent: "center" //platzhalter
     },
     boxDark: {
+        flex: 1,
         backgroundColor: DARKMODE.BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS,
         alignItems: "center", //platzhalter
         justifyContent: "center" //platzhalter
     }
-})
+})}

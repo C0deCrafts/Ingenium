@@ -6,7 +6,7 @@ import { useTabContext } from "../context/TabContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 
 const CustomDrawerContent = ({navigation}) => {
     const insets = useSafeAreaInsets();
@@ -137,8 +137,8 @@ const CustomDrawerContent = ({navigation}) => {
             </DrawerContentScrollView>
             <View style={styles.footer}>
                 <Image source={require("../../assets/images/Ingenium_Schriftzug.png")}
-                       style={{ width: '100%', height: 40 }}
-                       resizeMode={"center"}
+                       style={{ width: '100%', height: 40}}
+                       resizeMode={"contain"}
                 />
             </View>
 
@@ -233,7 +233,8 @@ function getStyles(insets) {
         },
         footer: {
             alignItems: 'center',
-            paddingBottom: 35
+            paddingBottom: 35,
+            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
         }
     })
 }

@@ -1,21 +1,18 @@
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert, Dimensions} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useState} from "react";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
-import {useTasks} from "../../constants/context/TasksContext";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
+import {useDatabase} from "../../context/DatabaseContext";
+import RoundButton from "../../components/buttons/RoundButton";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
     const [editTasksIsActive, setEditTasksIsActive] = useState(false);
-
-    //task context provider hook which provides the taskListsState
-    //and a dispatchFunction to change the state based on actions
-    const {taskListsState, dispatch} = useTasks();
 
     //providing a safe area
     const insets = useSafeAreaInsets();
@@ -25,8 +22,9 @@ function ListTasks({route, navigation}){
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    //access the parameter listId passed from the TasksMain Screen
-    const {listId} = route.params;
+
+    //access the tasks state from Database Context
+    const {tasks, lists, deleteTask, updateTaskIsDone} = useDatabase();
 
     /**
      * Is called on press of the Back Button.
@@ -38,10 +36,13 @@ function ListTasks({route, navigation}){
 
     /**
      * Is called on press of the edit Task Button
-     * navigates to the EditTask Screen.
+     * navigates to the EditTask Screen. Passes the
+     * task which user wants to edit as a parameter to
+     * the route.
      */
-    function handleNavigateToEditTask() {
-        navigation.push("EditTask_Screen");
+    function handleNavigateToEditTask(task) {
+        setEditTasksIsActive(false);
+        navigation.push("EditTask_Screen", {taskToEdit: task});
     }
 
     /**
@@ -67,20 +68,18 @@ function ListTasks({route, navigation}){
      * and the task will disappear from the taskslist in the UI as it only shows tasks
      * which are not yet done.
      * @param taskId the id of the task which was pressed
+     * @param isDone the isDone property of the task
      */
-    function handleTaskCompleted(taskId) {
-        dispatch({
-            type: 'TOGGLED_TASK_DONE',
-            taskId: taskId,
-        })
+    function handleTaskCompleted(taskId, isDone) {
+        updateTaskIsDone(taskId, isDone);
     }
 
 
     /**
      * Is called on press of the delete task button.
      * Shows an alert to the user, if the user is sure about deleting the task.
-     * If the user chooses 'Ja' the dispatch function with action type 'DELETED_TASK'
-     * will be called. If the user chooses 'No', the Alert will be closed and the
+     * If the user chooses 'Ja' the task is deleted from the database.
+     * If the user chooses 'Nein', the Alert will be closed and the
      * task will not be deleted.
      */
     function handleDeleteTask(taskId) {
@@ -93,10 +92,7 @@ function ListTasks({route, navigation}){
                     text: 'Ja',
                     onPress: () => {
                         console.log(`DELETE TASK ALERT, 'JA' WAS PRESSED: task with id ${taskId} will be deleted.`);
-                        return dispatch({
-                            type: 'DELETED_TASK',
-                            taskId: taskId,
-                        });
+                        return deleteTask(taskId);
                     },
                     //styling the alert button for IOs to be red
                     style: 'destructive'
@@ -109,12 +105,41 @@ function ListTasks({route, navigation}){
                 },
             ]
         );
-
     }
 
-    //access the current list title to show it in the heading of the screen
-    const currentList = taskListsState.find(list => list.id === listId);
-    const currentScreenTitle = currentList.title;
+    /*
+    access the parameter listId passed from the TasksMain Screen
+    is a valid listId if a list was chosen
+    is null if the button "Alle" for showing all Tasks was pressed
+     */
+    const {listId} = route.params;
+
+    function handleAddTaskToList() {
+        setEditTasksIsActive(false);
+        navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
+    }
+
+    /*
+    the following values are initialized differently depending on if a listId or
+    undefined was passed to the listId parameter of the route
+     */
+    //set current list title to show it in the heading of the screen
+    let currentScreenTitle;
+
+    if(listId) {
+        const currentList = lists.find(list => list.listId === listId);
+        currentScreenTitle = currentList.listName;
+    } else {
+        currentScreenTitle = "Alle";
+    }
+
+    /**
+     * if the listId passed to the route.params:
+     * filter tasks to show tasks belonging to currentList which are not done
+     * if undefined is passed to route.params:
+     * show all tasks which are not done
+     */
+    const listTasksNotDone = listId ? tasks.filter(task => !task.isDone && task.listId === listId) : tasks.filter(task => !task.isDone);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -135,9 +160,12 @@ function ListTasks({route, navigation}){
              }
             />
             <View style={styles.contentContainer}>
-            {/*show Tasks of List with id which was passed by the route param listId
+            {/*
+            show Tasks of List with id which was passed by the route param listId
             need to show only tasks of this list
-            need to show tasks sorted ascending by dueDate*/
+            (need to show tasks sorted ascending by dueDate)
+            Exception: user clicked on all tasks -- tasks of all lists will be shown
+            */
             }
                 <Text style={[isDarkMode? styles.textDark : styles.textLight , styles.header]}>
                     {currentScreenTitle}
@@ -147,19 +175,14 @@ function ListTasks({route, navigation}){
                     bounces={false}
                 >
                     {
-                        [...taskListsState]
-                            .filter(list => list.id === listId)
-                            .flatMap(list => list.tasks)
-                            .filter(task => !task.done)
-                            .sort((t1, t2) => new Date(t1.dueDate) - new Date(t2.dueDate))
-                            .map(task => {
+                            listTasksNotDone.map(task => {
 
                                 if(editTasksIsActive) {
                                    return (
                                        /*TaskBox editTasksIsActive === true*/
                                        <View
                                            style={styles.taskContainer}
-                                           key={task.id}
+                                           key={task.taskId}
                                        >
                                             <View
                                                 style={[
@@ -168,7 +191,7 @@ function ListTasks({route, navigation}){
                                                 ]}
                                             >
                                                 <TouchableOpacity
-                                                    onPress={() => handleDeleteTask(task.id)}
+                                                    onPress={() => handleDeleteTask(task.taskId)}
                                                 >
                                                     <Icon name={ICONS.TASKICONS.MINUS}
                                                           color={COLOR.ICONCOLOR_CUSTOM_RED}
@@ -184,18 +207,21 @@ function ListTasks({route, navigation}){
                                                             styles.textNormal,
                                                             styles.textCentered
                                                         ]}>
-                                                        {task.title}
+                                                        {task.taskTitle}
                                                     </Text>
-                                                    <Text style={[
+                                                    {/*only show date if the DateString is not empty*/}
+                                                    {task.dueDate &&
+
+                                                        <Text style={[
                                                         isDarkMode ? styles.textDark : styles.textLight,
                                                         styles.textXS,
                                                         styles.textItalic
-                                                    ]}>
-                                                        fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                                    </Text>
+                                                        ]}>
+                                                        fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                    </Text>}
                                                 </View>
                                                 <TouchableOpacity
-                                                    onPress={handleNavigateToEditTask}
+                                                    onPress={() => handleNavigateToEditTask(task)}
                                                 >
                                                     <Icon name={ICONS.TASKICONS.MORE}
                                                           color={COLOR.ICONCOLOR_CUSTOM_BLUE}
@@ -211,7 +237,7 @@ function ListTasks({route, navigation}){
                                         /*TaskBox editTasksIsActive === false*/
                                         <View
                                             style={styles.taskContainer}
-                                            key={task.id}
+                                            key={task.taskId}
                                         >
                                             <View style={[isDarkMode? styles.taskBoxDark : styles.taskBoxLight]}>
                                                 <View style={[
@@ -219,7 +245,7 @@ function ListTasks({route, navigation}){
                                                     isDarkMode ? styles.borderDark : styles.borderLight,
                                                 ]}>
                                                     <TouchableOpacity
-                                                        onPress={() => handleTaskCompleted(task.id)}>
+                                                        onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
                                                         <Icon
                                                             name={ICONS.TASKICONS.CIRCLE}
                                                             color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
@@ -233,15 +259,18 @@ function ListTasks({route, navigation}){
                                                             styles.textNormal,
                                                             styles.textAlignRight,
                                                         ]}>
-                                                            {task.title}
+                                                            {task.taskTitle}
                                                         </Text>
-                                                        <Text style={[
-                                                            isDarkMode? styles.textDark : styles.textLight,
-                                                            styles.textXS,
-                                                            styles.textItalic
-                                                        ]}>
-                                                            fällig am {new Date(task.dueDate).toLocaleDateString('de-DE')}
-                                                        </Text>
+                                                        {/*only show date if the DateString is not empty*/}
+                                                        {task.dueDate &&
+                                                            <Text style={[
+                                                                isDarkMode ? styles.textDark : styles.textLight,
+                                                                styles.textXS,
+                                                                styles.textItalic
+                                                            ]}>
+                                                                fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                            </Text>
+                                                        }
                                                     </View>
                                                 </View>
                                                 <View
@@ -251,7 +280,7 @@ function ListTasks({route, navigation}){
                                                             styles.textSmall,
                                                             isDarkMode? styles.textDark : styles.textLight
                                                             ]}>
-                                                            {task.notes}
+                                                            {task.taskNotes}
                                                         </Text>
                                                 </View>
                                             </View>
@@ -262,13 +291,22 @@ function ListTasks({route, navigation}){
                     }
                 </ScrollView>
             </View>
+            <RoundButton
+                onPress={() => handleAddTaskToList()}
+                buttonStyle={styles.roundButtonPosition}
+                iconName={ICONS.TASKICONS.ADD}
+            />
         </View>
     )
 }
 
 export default ListTasks;
 
+const windowWidth = Dimensions.get("window").width;
+
 function getStyles(insets) {
+    const bottomInsetAdjustment = insets.bottom > 0 ? insets.bottom - 20 : 10;
+
     return  StyleSheet.create({
         containerLight: {
             flex: 1,
@@ -282,8 +320,8 @@ function getStyles(insets) {
         },
         contentContainer: {
             flex: 1,
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom + 40,
+            paddingTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
+            paddingBottom: bottomInsetAdjustment+ 45,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
@@ -360,6 +398,11 @@ function getStyles(insets) {
             alignItems: "center",
             rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1,
+        },
+        roundButtonPosition: {
+            position: "absolute",
+            left: (windowWidth / 2) - 35,
+            bottom: bottomInsetAdjustment,
         },
     })
 }

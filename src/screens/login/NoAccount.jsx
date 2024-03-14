@@ -1,6 +1,6 @@
 import {Text, View, StyleSheet} from "react-native";
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 
 function NoAccount(){

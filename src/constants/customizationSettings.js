@@ -1,49 +1,37 @@
-export const USER_ICONS = {
-    //Bildung und Arbeit
-    BOOK: require('../assets/icons/book-outline.png'),
-    PEN: require('../assets/icons/pen.png'),
-    CODE: require('../assets/icons/code-outline.png'),
-    COMPUTER: require('../assets/icons/computer-outline.png'),
-    CONTRACT: require('../assets/icons/contract-outline.png'),
-    FOLDER: require('../assets/icons/folder-outline.png'),
-    WORK: require('../assets/icons/work-outline.png'),
+export const USER_ICONS = [
+    { name: 'BOOK', image: require('../assets/icons/book-outline.png') },
+    { name: 'PEN', image: require('../assets/icons/pen.png') },
+    { name: 'CODE', image: require('../assets/icons/code-outline.png') },
+    { name: 'COMPUTER', image: require('../assets/icons/computer-outline.png') },
+    { name: 'CONTRACT', image: require('../assets/icons/contract-outline.png') },
+    { name: 'FOLDER', image: require('../assets/icons/folder-outline.png') },
+    { name: 'WORK', image: require('../assets/icons/work-outline.png') },
+    { name: 'CHAT', image: require('../assets/icons/chat-outline.png') },
+    { name: 'HELP', image: require('../assets/icons/help-outline.png') },
+    { name: 'QUESTIONING', image: require('../assets/icons/questioning-outline.png') },
+    { name: 'HEART', image: require('../assets/icons/heart-outline.png') },
+    { name: 'HEARTBEAT', image: require('../assets/icons/heartbeat-outline.png') },
+    { name: 'SMILE', image: require('../assets/icons/smile-outline.png') },
+    { name: 'HAPPY', image: require('../assets/icons/happy-outline.png') },
+    { name: 'SAD', image: require('../assets/icons/sad-outline.png') },
+    { name: 'SURPRISED', image: require('../assets/icons/surprised-outline.png') },
+    { name: 'ANNOYED', image: require('../assets/icons/annoyed-outline.png') },
+    { name: 'GAME', image: require('../assets/icons/gamepad-outline.png') },
+    { name: 'GIFT', image: require('../assets/icons/gift-outline.png') },
+    { name: 'HAT', image: require('../assets/icons/hat-icon.png') },
+    { name: 'LIST', image: require('../assets/icons/list.png') },
+    { name: 'TIME', image: require('../assets/icons/time-outline.png') },
+    { name: 'COMPLETED', image: require('../assets/icons/done-checkmark-outline.png') },
+    { name: 'HIERARCHY', image: require('../assets/icons/hierarchical-structure-outline.png') },
+    { name: 'COLOR_PALETTE', image: require('../assets/icons/color-palette-outline.png') },
+    { name: 'LEAF', image: require('../assets/icons/leaf-outline.png') },
+    { name: 'BUG', image: require('../assets/icons/bug-outline.png') },
+    { name: 'CHAIR', image: require('../assets/icons/armchair.png') },
+    { name: 'CURVED_LINE', image: require('../assets/icons/curved_line.png') },
+    { name: 'SOUND', image: require('../assets/icons/sound-outline.png') },
+    { name: 'TEXT', image: require('../assets/icons/text.png') },
+];
 
-    //Kommunikation und Soziales
-    CHAT: require('../assets/icons/chat-outline.png'),
-    HELP: require('../assets/icons/help-outline.png'),
-    QUESTIONING: require('../assets/icons/questioning-outline.png'),
-
-    //Gesundheit und Wohlbefinden
-    HEART: require('../assets/icons/heart-outline.png'),
-    HEARTBEAT: require('../assets/icons/heartbeat-outline.png'),
-    SMILE: require('../assets/icons/smile-outline.png'),
-    HAPPY: require('../assets/icons/happy-outline.png'),
-    SAD: require('../assets/icons/sad-outline.png'),
-    SURPRISED: require('../assets/icons/surprised-outline.png'),
-    ANNOYED: require('../assets/icons/annoyed-outline.png'),
-
-    //Freizeit und Hobbys
-    GAME: require('../assets/icons/gamepad-outline.png'),
-    GIFT: require('../assets/icons/gift-outline.png'),
-    HAT: require('../assets/icons/hat-icon.png'),
-
-    //Organisation und Planung
-    LIST: require('../assets/icons/list.png'),
-    TIME: require('../assets/icons/time-outline.png'),
-    COMPLETED: require('../assets/icons/done-checkmark-outline.png'),
-    HIERARCHY: require('../assets/icons/hierarchical-structure-outline.png'),
-
-    //Kreativität und Natur
-    COLOR_PALETTE: require('../assets/icons/color-palette-outline.png'),
-    LEAF: require('../assets/icons/leaf-outline.png'),
-
-    //Sonstige
-    BUG: require('../assets/icons/bug-outline.png'),
-    CHAIR: require('../assets/icons/armchair.png'),
-    CURVED_LINE: require('../assets/icons/curved_line.png'),
-    SOUND: require('../assets/icons/sound-outline.png'),
-    TEXT: require('../assets/icons/text.png'),
-}
 export const USER_COLORS = {
     // Blautöne
     ICONCOLOR_CUSTOM_BLUE: "#009FE3",

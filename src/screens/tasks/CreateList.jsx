@@ -1,14 +1,15 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
-import {useTheme} from "../../constants/context/ThemeContext";
+import {useState} from "react";
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from "react-native";
+import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
-import {ICONS} from "../../constants/icons";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
-import {useState} from "react";
 import CustomButton from "../../components/buttons/CustomButton";
 import SquareIcon from "../../components/SquareIcon";
+import {useDatabase} from "../../context/DatabaseContext";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -23,11 +24,25 @@ function CreateList({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    // State variables for icon box color and icon name
-    const [iconBoxColor, setIconBoxColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
-    const [iconName, setIconName] = useState(USER_ICONS.LIST);
-    const [listName, setListName] = useState('');
+    // State variables for the form
+    const [listName, setListName] = useState("");
+    const [iconName, setIconName] = useState("LIST");
+    const [iconBackgroundColor, setIconBackgroundColor] = useState(USER_COLORS.ICONCOLOR_CUSTOM_BLUE);
 
+    const {addList} = useDatabase();
+
+    const handleAddList = async () => {
+        if(listName.trim()===""){
+            Alert.alert("Fehler", "Bitte einen Listennamen eingeben", [{text: "OK"}])
+            return;
+        }
+        await addList({
+            listName: listName,
+            iconName: iconName,
+            iconBackgroundColor: iconBackgroundColor
+        });
+        navigation.goBack();
+    }
     /*
     * Extract icon names and user colors from constants:
     * In JavaScript, we can iterate directly over arrays using map(),
@@ -37,14 +52,14 @@ function CreateList({navigation}) {
     * which we can then iterate over using map(). This allows us to access
     * each element of the object and use it as we want.
     */
-    const iconNames = Object.keys(USER_ICONS);
     const userColors = Object.keys(USER_COLORS);
+    const userIconNames = USER_ICONS.map((icon) => icon.name);
 
     const handleChangeIcon = (name) => {
         setIconName(name);
     }
     const handleChangeIconBoxColor = (color) => {
-        setIconBoxColor(color);
+        setIconBackgroundColor(color);
     }
     const handleGoBack = () => {
         navigation.goBack();
@@ -53,7 +68,11 @@ function CreateList({navigation}) {
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
-            <CustomBackButton onPress={handleGoBack}/>
+            <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
+                <CustomButtonSmall title={"Fertig"} onPressFunction={
+                    handleAddList
+                }/>
+            }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 {/* Header */}
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
@@ -62,14 +81,15 @@ function CreateList({navigation}) {
                 {/* Spacing */}
                 <View style={styles.spacing}>
                     {/* Input field for list name */}
-                    <CustomInputField placeholder={"Listenname"}
-                                      keyboardType={"default"}
-                                      maxTextInputLength={25}
-                                      iconName={iconName}
-                                      iconBoxBackgroundColor={iconBoxColor}
-                                      iconColor={"white"}
-                                      onChangeText={(listName) => setListName(listName)}
+                    <CustomInputField placeholder="Listenname"
+                                      keyboardType="default"
+                                      onChangeText={setListName}
                                       value={listName}
+                                      iconName={iconName}
+                                      iconBoxBackgroundColor={iconBackgroundColor}
+                                      iconColor="white"
+                                      isUserIcon={true}
+                                      maxTextInputLength={25}
                     />
                 </View>
                 {/* Icon selection */}
@@ -81,13 +101,14 @@ function CreateList({navigation}) {
                     <ScrollView horizontal={true}
                                 style={isDarkMode ? styles.scrollContainerDark : styles.scrollContainerLight}
                                 showsHorizontalScrollIndicator={false} bounces={true}>
-                        {iconNames.map((iconName) => (
-                            <TouchableOpacity key={iconName} onPress={() => handleChangeIcon(USER_ICONS[iconName])}>
+                        {userIconNames.map((iconName) => (
+                            <TouchableOpacity key={iconName} onPress={()=> handleChangeIcon(iconName)}>
                                 <View key={iconName} style={styles.boxSpacing}>
                                     <SquareIcon
-                                        name={ICONS.TASKICONS[iconName]}
+                                        name={iconName}
                                         color={"white"}
-                                        backgroundColor={iconBoxColor}
+                                        backgroundColor={iconBackgroundColor}
+                                        isUserIcon={true}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -118,15 +139,6 @@ function CreateList({navigation}) {
                         {/* Spacer for the last color picker button */}
                         <View style={{width: 15, height: '100%'}}></View>
                     </ScrollView>
-                </View>
-                {/* Optional buttons for saving and canceling */}
-                <View style={styles.buttonBox}>
-                    <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={() => console.log("Speichern der Liste: " + listName + ", IconName: " + iconName + ", IconBoxColor: " + iconBoxColor)}/>
-                    </View>
-                    <View style={styles.buttonTwo}>
-                        <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
-                    </View>
                 </View>
             </View>
         </View>
