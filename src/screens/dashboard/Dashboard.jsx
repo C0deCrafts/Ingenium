@@ -18,6 +18,40 @@ function Dashboard({navigation}) {
     const {tasks, isDbReady, lists, loadLists} = useDatabase();
     const [selectedImage, setSelectedImage] = useState(null);
 
+    const date = new Date().getDate();
+    const day = new Date().getDay();
+
+    const getDay = (day) => {
+        let actualDay;
+        switch (day) {
+            case 0:
+                actualDay = "Sonntag";
+                break;
+            case 1:
+                actualDay = "Montag";
+                break;
+            case 2:
+                actualDay = "Dienstag";
+                break;
+            case 3:
+                actualDay = "Mittwoch";
+                break;
+            case 4:
+                actualDay = "Donnerstag";
+                break;
+            case 5:
+                actualDay = "Freitag";
+                break;
+            case 6:
+                actualDay = "Samstag";
+                break;
+            default:
+                actualDay = "";
+        }
+        return actualDay;
+    };
+
+
     const handlePressImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -85,8 +119,8 @@ function Dashboard({navigation}) {
                 <View style={styles.informationContainer}>
                     <View style={isDarkMode ? styles.dateTimeWeatherBoxDark : styles.dateTimeWeatherBoxLight}>
                         <Text
-                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>Sonntag</Text>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDate]}>31</Text>
+                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>{getDay(day)}</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDate]}>{date}</Text>
                         <Icon name={ICONS.WEATHER_ICONS.SUNNY} size={100}
                               color={isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}/>
                     </View>
