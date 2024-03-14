@@ -8,6 +8,7 @@ import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
 import {useRef, useState} from "react";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 
 
 function EditTask({navigation, route}){
@@ -92,7 +93,9 @@ function EditTask({navigation, route}){
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
-            <CustomBackButton onPress={handleGoBack}/>
+            <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
+                <CustomButtonSmall title={"Fertig"} onPressFunction={handleUpdateTask}/>
+            }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 {/* Header */}
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
@@ -166,16 +169,6 @@ function EditTask({navigation, route}){
                         showForwardIcon={true}
                         extraPadding={10}
                     />
-                </View>
-                {/* Optional buttons for saving and canceling */}
-                <View style={styles.buttonBox}>
-                    <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"}
-                                      onPressFunction={handleUpdateTask}/>
-                    </View>
-                    <View style={styles.buttonTwo}>
-                        <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
-                    </View>
                 </View>
             </View>
             {/* Select list modal */}

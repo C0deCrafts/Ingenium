@@ -16,6 +16,7 @@ import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
 import {useDatabase} from "../../context/DatabaseContext";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -127,7 +128,10 @@ function CreateTask({navigation, route}) {
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
-            <CustomBackButton onPress={handleGoBack}/>
+            <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
+                <CustomButtonSmall title={"Fertig"} onPressFunction={handleAddTask
+                }/>
+            }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 {/* Header */}
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
@@ -201,16 +205,6 @@ function CreateTask({navigation, route}) {
                         showForwardIcon={true}
                         extraPadding={10}
                     />
-                </View>
-                {/* Optional buttons for saving and canceling */}
-                <View style={styles.buttonBox}>
-                    <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"}
-                                      onPressFunction={handleAddTask}/>
-                    </View>
-                    <View style={styles.buttonTwo}>
-                        <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
-                    </View>
                 </View>
             </View>
             {/* Select list modal */}

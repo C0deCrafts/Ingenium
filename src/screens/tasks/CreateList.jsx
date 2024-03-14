@@ -9,6 +9,7 @@ import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
 import CustomButton from "../../components/buttons/CustomButton";
 import SquareIcon from "../../components/SquareIcon";
 import {useDatabase} from "../../context/DatabaseContext";
+import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -67,7 +68,11 @@ function CreateList({navigation}) {
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
-            <CustomBackButton onPress={handleGoBack}/>
+            <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
+                <CustomButtonSmall title={"Fertig"} onPressFunction={
+                    handleAddList
+                }/>
+            }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 {/* Header */}
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
@@ -134,15 +139,6 @@ function CreateList({navigation}) {
                         {/* Spacer for the last color picker button */}
                         <View style={{width: 15, height: '100%'}}></View>
                     </ScrollView>
-                </View>
-                {/* Optional buttons for saving and canceling */}
-                <View style={styles.buttonBox}>
-                    <View style={styles.buttonOne}>
-                        <CustomButton title={"Speichern"} onPressFunction={handleAddList}/>
-                    </View>
-                    <View style={styles.buttonTwo}>
-                        <CustomButton title={"Abbrechen"} onPressFunction={() => handleGoBack()}/>
-                    </View>
                 </View>
             </View>
         </View>

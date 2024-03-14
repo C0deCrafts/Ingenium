@@ -26,6 +26,8 @@ function TasksMain({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
+    console.log("insets: ", insets)
+
     //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -93,7 +95,7 @@ function TasksMain({navigation}) {
      */
     function handleOpenModal() {
         setModalIsVisible(true);
-        console.log('the insets size:' + insets.bottom);
+        setEditTaskListsIsActive(false);
     }
 
     /**
@@ -111,6 +113,7 @@ function TasksMain({navigation}) {
      */
     function handleCreateList() {
         setModalIsVisible(false);
+        setEditTaskListsIsActive(false);
         navigation.navigate("CreateList_Stack");
     }
 
@@ -124,6 +127,7 @@ function TasksMain({navigation}) {
      */
     function handleCreateTask(listId) {
         setModalIsVisible(false);
+        setEditTaskListsIsActive(false);
         navigation.navigate("CreateTask_Screen", {listId: listId});
     }
 
@@ -132,6 +136,7 @@ function TasksMain({navigation}) {
      * @param listId the id of the list the user clicked on OR undefined if the user clicked on "Alle".
      */
     function handleNavigateToListTasks(listId) {
+        setEditTaskListsIsActive(false);
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
@@ -139,7 +144,7 @@ function TasksMain({navigation}) {
         <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
                 {/*DrawerHeader for Tasks*/}
-                <CustomDrawerHeader title="Aufgaben" onPress={() => navigation.openDrawer()}/>
+                <CustomDrawerHeader title="Aufgaben" onPress={() => [navigation.openDrawer(),setEditTaskListsIsActive(false)]}/>
 
                 {/*Outer View Container*/}
                 <View style={[isDarkMode ? styles.contentDark : styles.contentLight, styles.contentContainer]}>
@@ -208,7 +213,7 @@ function TasksMain({navigation}) {
                     <View style={styles.cardButtonContainer}>
                         <TouchableOpacity
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("CompletedTasks_Stack")}
+                            onPress={() => [navigation.navigate("CompletedTasks_Stack"), setEditTaskListsIsActive(false)]}
                         >
                             <Icon name={ICONS.TASKICONS.COMPLETED}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
@@ -218,7 +223,7 @@ function TasksMain({navigation}) {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => navigation.navigate("Inbox_Stack")}
+                            onPress={() => [navigation.navigate("Inbox_Stack"), setEditTaskListsIsActive(false)]}
                         >
                             <Icon name={ICONS.TASKICONS.INBOX}
                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
@@ -361,6 +366,10 @@ export default TasksMain;
 const windowWidth = Dimensions.get("window").width;
 
 function getStyles(insets) {
+    // Bestimme einen Schwellenwert für den unteren Inset. Wenn der Inset größer als dieser Wert ist,
+    // bedeutet das, dass das Gerät eine Home-Indikatorleiste oder ähnliche Features hat.
+    const bottomInsetAdjustment = insets.bottom > 0 ? insets.bottom - 20 : 10;
+
     return StyleSheet.create({
         containerLight: {
             flex: 1,
@@ -372,7 +381,7 @@ function getStyles(insets) {
         },
         contentContainer: {
             paddingTop: SIZES.MARGIN_TOP_FROM_DRAWER_HEADER,
-            paddingBottom: insets.bottom + 25,
+            paddingBottom: bottomInsetAdjustment + 45,
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
@@ -427,7 +436,7 @@ function getStyles(insets) {
         roundButtonPosition: {
             position: "absolute",
             left: (windowWidth / 2) - 35,
-            bottom: insets.bottom - 20,
+            bottom: bottomInsetAdjustment,
         },
         scrollViewContentContainer: {
             paddingHorizontal: 10,

@@ -41,6 +41,7 @@ function ListTasks({route, navigation}){
      * the route.
      */
     function handleNavigateToEditTask(task) {
+        setEditTasksIsActive(false);
         navigation.push("EditTask_Screen", {taskToEdit: task});
     }
 
@@ -114,6 +115,7 @@ function ListTasks({route, navigation}){
     const {listId} = route.params;
 
     function handleAddTaskToList() {
+        setEditTasksIsActive(false);
         navigation.navigate("CreateTask_Screen", {listIdForAddTask: listId});
     }
 
@@ -303,6 +305,8 @@ export default ListTasks;
 const windowWidth = Dimensions.get("window").width;
 
 function getStyles(insets) {
+    const bottomInsetAdjustment = insets.bottom > 0 ? insets.bottom - 20 : 10;
+
     return  StyleSheet.create({
         containerLight: {
             flex: 1,
@@ -317,7 +321,7 @@ function getStyles(insets) {
         contentContainer: {
             flex: 1,
             paddingTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
-            paddingBottom: insets.bottom + 25,
+            paddingBottom: bottomInsetAdjustment+ 45,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
@@ -398,7 +402,7 @@ function getStyles(insets) {
         roundButtonPosition: {
             position: "absolute",
             left: (windowWidth / 2) - 35,
-            bottom: insets.bottom - 20,
+            bottom: bottomInsetAdjustment,
         },
     })
 }
