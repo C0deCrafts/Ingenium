@@ -23,8 +23,8 @@ function NextCourseBox({
             }}>
                 <Text style={styles.headerTitle}>{headerTitle}</Text>
             </View>
-            <Text style={styles.textDate}>{date}</Text>
-            <Text style={styles.textTime}>{timeStart} - {timeEnd}</Text>
+            <Text style={isDarkMode ? styles.textDateDark : styles.textDateLight}>{date}</Text>
+            <Text style={isDarkMode ? styles.textTimeDark : styles.textTimeLight}>{timeStart} - {timeEnd}</Text>
         </View>
     )
 }
@@ -50,15 +50,29 @@ const styles = StyleSheet.create({
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
         padding: 10
     },
-    textDate: {
+    textDateLight: {
         paddingTop: 20,
         paddingLeft: 10,
         fontSize: SIZES.SCREEN_TEXT_SMALL,
+        color: LIGHTMODE.TEXT_COLOR,
+    }, textDateDark: {
+        paddingTop: 20,
+        paddingLeft: 10,
+        color: DARKMODE.TEXT_COLOR,
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
     },
-    textTime: {
+    textTimeLight: {
         paddingTop: 10,
         paddingLeft: 10,
         paddingBottom: 20,
+        color: LIGHTMODE.TEXT_COLOR,
+        fontSize: SIZES.SCREEN_TEXT_NORMAL,
+    },
+    textTimeDark: {
+        paddingTop: 10,
+        paddingLeft: 10,
+        paddingBottom: 20,
+        color: DARKMODE.TEXT_COLOR,
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
     }
 })

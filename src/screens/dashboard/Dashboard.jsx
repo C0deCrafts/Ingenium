@@ -5,13 +5,9 @@ import {useTheme} from "../../context/ThemeContext";
 import {useEffect, useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import {useDatabase} from "../../context/DatabaseContext";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
-import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
-import CustomInputField from "../../components/inputFields/CustomInputField";
-import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
 import NextCourseBox from "../../components/buttons/NextCourseBox";
 
@@ -252,15 +248,15 @@ const styles = StyleSheet.create({
         fontWeight: "200",
         position: "absolute",
         zIndex: 1,
-        bottom: SIZES.SPACING_VERTICAL_SMALL,
-        left: SIZES.SPACING_HORIZONTAL_SMALL,
+        bottom: 0,
+        left: 10,
     },
     textDateName: {
         fontSize: SIZES.SCREEN_TEXT_SMALL,
         position: "absolute",
         zIndex: 1,
-        top: SIZES.SPACING_VERTICAL_SMALL,
-        left: SIZES.SPACING_HORIZONTAL_SMALL,
+        top: 10,
+        left: 10,
     },
     motivationalQuoteBoxLight: {
         flex: 2, // 2/3

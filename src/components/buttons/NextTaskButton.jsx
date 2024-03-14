@@ -1,7 +1,6 @@
 import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import SquareIcon from "../SquareIcon";
 
 function NextTaskButton({
                              buttonTextLeft,
