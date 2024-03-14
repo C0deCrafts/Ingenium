@@ -66,6 +66,10 @@ export const ICONS = {
         ACTIVE: require('../assets/icons/arrow_back.png'),
         INACTIVE: require('../assets/icons/arrow_back.png'),
     },
+    CAMERA: {
+        ACTIVE: require('../assets/icons/camera_2_line.png'),
+        INACTIVE: require('../assets/icons/camera_2_fill.png'),
+    },
     CLOSE: {
         ACTIVE: require('../assets/icons/close.png'),
         INACTIVE: require('../assets/icons/close.png'),
@@ -125,6 +129,16 @@ export const ICONS = {
     TIMETABLE: {
         ACTIVE: require('../assets/icons/calendar-clock.png'),
         INACTIVE: require('../assets/icons/calendar-clock-outline.png'),
+    },
+    WEATHER_ICONS: {
+        CLOUDY: require('../assets/icons/cloud_line.png'),
+        NIGHT: require('../assets/icons/moon_fog_line.png'),
+        RAIN: require('../assets/icons/heavy_rain_line.png'),
+        SNOWFALL: require('../assets/icons/moderate_snow_line.png'),
+        SUNNY: require('../assets/icons/sun_fog_line.png'),
+        SUN_CLOUDY: require('../assets/icons/sun_cloudy_line.png'),
+        THUNDER: require('../assets/icons/cloud_lightning_line.png'),
+        WINDY: require('../assets/icons/cloud_windy_line.png'),
     },
     TASKICONS: {
         ANNOYED: require('../assets/icons/annoyed-outline.png'),
