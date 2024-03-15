@@ -71,7 +71,7 @@ function TasksMain({navigation}) {
             setTimeout(async () => {
                 await updateTaskIsDone(taskId, isDone);
                 setTaskIsBeingToggled(false);
-            }, 2000);
+            }, 500);
         }
         //only execute on toggling, and not on initial mounting of component
         if(isDone !== null && taskId !== null) {
