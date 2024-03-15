@@ -61,8 +61,6 @@ function TasksMain({navigation}) {
      * before the UI rerenders, only showing tasks which are not done.
      */
     useEffect(() => {
-        console.log("UseEffect for toggling task is active ");
-
         //destructure information needed for updating task and rendering updating
         //text to the UI
         const {isDone, taskId} = toggledTaskData;
@@ -75,7 +73,11 @@ function TasksMain({navigation}) {
                 setTaskIsBeingToggled(false);
             }, 2000);
         }
-        taskToggleTimeout();
+        //only execute on toggling, and not on initial mounting of component
+        if(isDone !== null && taskId !== null) {
+            console.log("UseEffect for toggling task is active ");
+            taskToggleTimeout();
+        }
         //clear the timeout to prevent memory leaks
         return () => clearTimeout(taskToggleTimeout);
     }, [toggledTaskData]);
@@ -172,11 +174,12 @@ function TasksMain({navigation}) {
     }
 
     {/*CONTENT RENDERING FUNCTIONS*/}
+    {/*TASKS*/}
     /**
      * Renders Icon for toggling the task, conditionally, depending on if the task is
      * currently being toggled by the user
      * @param task Task the Icon belongs to.
-     * @param taskIsBeingToggled State indicating whether the task is currently being toggled.
+     * @param taskIsBeingToggled Boolean indicating whether the task is currently being toggled.
      * @param taskData TaskData needed for updating the isDone of a task (taskId, isDone).
      */
     function renderTaskToggleIcon(task, taskIsBeingToggled, taskData) {
@@ -196,7 +199,7 @@ function TasksMain({navigation}) {
      * Renders task text conditionally, depending on if the task is
      * currently being toggled by the user.
      * @param task Task the title belongs to.
-     * @param taskIsBeingToggled State indication whether the task is currently being toggled.
+     * @param taskIsBeingToggled Boolean indicating whether the task is currently being toggled.
      * @param taskData TaskData needed for updating the isDone of a task (taskId, isDone).
      */
     function renderTaskTitle(task, taskIsBeingToggled, taskData) {
@@ -214,9 +217,71 @@ function TasksMain({navigation}) {
         }
     }
 
+    {/*TASKLISTS*/}
+    /**
+     * Renders the tasklists conditionally, depending on if the user currently is in editing mode or not
+     * @param editTaskListsIsActive Boolean indicating, whether the tasklist view is in editing mode.
+     * @param lists The lists which are shown in the tasklist view.
+     */
+    function renderTaskLists(editTaskListsIsActive, lists) {
+        return lists.map((list, index) => {
+            if (editTaskListsIsActive) {
+                //in list editing mode
+                if (list.listName !== "Ingenium") {
+                    return (
+                        <View
+                            key={list.listId}
+                            style={[
+                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
+                                styles.listItemContainer,
+                                styles.listItemContainerTaskList
+                            ]}
+                        >
+                            <TouchableOpacity onPress={() => handleDeleteTaskList(list.listId)}>
+                                <Icon name={ICONS.TASKICONS.MINUS}
+                                      color={COLOR.ICONCOLOR_CUSTOM_RED}
+                                      size={SIZES.EDIT_TASKS_ICON_SIZE}/>
+                            </TouchableOpacity>
+                            <View style={styles.editTaskListItem}>
+                                <SquareIcon name={list.iconName}
+                                            backgroundColor={list.iconBackgroundColor}
+                                            isUserIcon={true}/>
+                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
+                            </View>
+                            {/* Adds a border, except after the last element */}
+                            {index !== lists.length - 1 && (
+                                <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                            )}
+                        </View>
+                    );
+                } else {
+                    return null; //skip rendering the list Ingenium, because it shall not be deleted
+                }
+            } else {
+                // in list preview mode
+                return (
+                    <View key={list.listId}>
+                        <CustomBoxButton
+                            buttonTextLeft={list.listName}
+                            iconName={list.iconName}
+                            iconBoxBackgroundColor={list.iconBackgroundColor}
+                            iconColor={"white"}
+                            showForwardIcon={false}
+                            onPress={() => handleNavigateToListTasks(list.listId)}
+                            isUserIcon={true}
+                        />
+                        {/* Adds a border, except after the last element */}
+                        {index !== lists.length - 1 && (
+                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                        )}
+                    </View>
+                );
+            }
+        })
+    }
+
     //filtering Tasks for tasksview, to only show tasks which are not done
     const tasksNotDone = tasks.filter(task => !task.isDone);
-
 
     return (
         <>
@@ -337,67 +402,8 @@ function TasksMain({navigation}) {
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 </>
                             }
-                            {
-                                lists.map((list, index) => {
-                                    if (editTaskListsIsActive) {
-                                        // Im Bearbeitungsmodus
-                                        if (list.listName !== "Ingenium") {
-                                            return (
-                                                <View
-                                                    key={list.listId}
-                                                    style={[
-                                                        isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
-                                                        styles.listItemContainer,
-                                                        styles.listItemContainerTaskList
-                                                    ]}
-                                                >
-                                                    <TouchableOpacity
-                                                        onPress={() => handleDeleteTaskList(list.listId)}
-                                                    >
-                                                        <Icon name={ICONS.TASKICONS.MINUS}
-                                                              color={COLOR.ICONCOLOR_CUSTOM_RED}
-                                                              size={SIZES.EDIT_TASKS_ICON_SIZE}/>
-                                                    </TouchableOpacity>
-                                                    <View style={styles.editTaskListItem}>
-                                                        <SquareIcon name={list.iconName}
-                                                                    backgroundColor={list.iconBackgroundColor}
-                                                                    isUserIcon={true}/>
-                                                        <Text
-                                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
-                                                    </View>
-                                                    {/* Adds a border, except after the last element */}
-                                                    {index !== lists.length - 1 && (
-                                                        <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                                                    )}
-                                                </View>
-                                            );
-                                        } else {
-                                            return null; // Überspringen Sie die Renderung der Liste "Ingenium"
-                                        }
-                                    } else {
-                                        // Ansichtsmodus
-                                        return (
-                                            <View
-                                                key={list.listId}
-                                            >
-                                                <CustomBoxButton
-                                                    buttonTextLeft={list.listName}
-                                                    iconName={list.iconName}
-                                                    iconBoxBackgroundColor={list.iconBackgroundColor}
-                                                    iconColor={"white"}
-                                                    showForwardIcon={false}
-                                                    onPress={() => handleNavigateToListTasks(list.listId)}
-                                                    isUserIcon={true}
-                                                />
-                                                {/* Adds a border, except after the last element */}
-                                                {index !== lists.length - 1 && (
-                                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                                                )}
-                                            </View>
-                                        );
-                                    }
-                                })
-                            }
+                            {/*call function to render tasklists*/}
+                            {renderTaskLists(editTaskListsIsActive, lists)}
                         </ScrollView>
                     </View>
 
