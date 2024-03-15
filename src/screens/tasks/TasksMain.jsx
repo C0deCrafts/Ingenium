@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert}
 
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {ICONS} from "../../constants/icons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
@@ -17,6 +17,7 @@ import {useDatabase} from "../../context/DatabaseContext";
 
 
 function TasksMain({navigation}) {
+
     //state to control the visibility of the modal
     const [modalIsVisible, setModalIsVisible] = useState(false);
     //state to control the editing mode for the taskList View
@@ -26,29 +27,58 @@ function TasksMain({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    console.log("insets: ", insets)
-
     //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     const {tasks, lists, deleteList, updateTaskIsDone} = useDatabase();
 
-    //filtering Tasks for tasksview
-    const tasksNotDone = tasks.filter(task => !task.isDone);
-
+    {/*CODE FOR TOGGLING THE ISDONE PROPERTY OF A TASK*/}
+    const [taskIsBeingToggled, setTaskIsBeingToggled] = useState(false);
+    const [toggledTaskData, setToggledTaskData] = useState({
+        isDone: null,
+        taskId: null
+    });
 
     /**
-     * Is called on Press of the round Button next to a task in the taskslist.
-     * will toggle the property done of a task
-     * and the task will disappear from the taskslist in the UI as it only shows tasks
-     * which are not yet done
+     * Event handler for the toggle button of a task.
+     * Triggers a UI transition, which indicates that the task will be moved from the view,
+     * By setting taskisBeingToggled to true and updating the toggledTaskData, which
+     * triggers the useEffect.
      * @param taskId the id of the task which was pressed
-     * @param isDone
+     * @param isDone boolean property of task, inidicating whether is done or not.
      */
     function handleTaskCompleted(taskId, isDone) {
-        updateTaskIsDone(taskId, isDone);
+        //set the data for toggled task needed in the use Effect
+        setToggledTaskData({isDone: isDone, taskId: taskId});
+        //start the UI transition by setting taskIsBeingToggled to true
+        setTaskIsBeingToggled(true);
     }
+
+    /**
+     * Sets a timeout to show that the task will be moved
+     * before the UI rerenders, only showing tasks which are not done.
+     */
+    useEffect(() => {
+        console.log("UseEffect for toggling task is active ");
+
+        //destructure information needed for updating task and rendering updating
+        //text to the UI
+        const {isDone, taskId} = toggledTaskData;
+
+        //after timeout set the task is being toggled to false again
+        //& update the task in the database
+        const taskToggleTimeout = () => {
+            setTimeout(async () => {
+                await updateTaskIsDone(taskId, isDone);
+                setTaskIsBeingToggled(false);
+            }, 2000);
+        }
+        taskToggleTimeout();
+        //clear the timeout to prevent memory leaks
+        return () => clearTimeout(taskToggleTimeout);
+    }, [toggledTaskData]);
+
 
     /**
      * is called on press of the more button above the taskList View
@@ -140,6 +170,9 @@ function TasksMain({navigation}) {
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
+    //filtering Tasks for tasksview
+    const tasksNotDone = tasks.filter(task => !task.isDone);
+
     return (
         <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -170,9 +203,14 @@ function TasksMain({navigation}) {
                                         <TouchableOpacity
                                             style={styles.taskCompletedButton}
                                             onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
-                                            <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                                  size={20}/>
+                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
+                                                <Icon name={ICONS.TASKICONS.CIRCLE_DONE}
+                                                      color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
+                                                      size={20}/>
+                                                :
+                                                <Icon name={ICONS.TASKICONS.CIRCLE}
+                                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                                                   size={20}/>}
                                         </TouchableOpacity>
                                         <View style={styles.taskTitleDateColumn}>
                                             {/*
@@ -181,12 +219,19 @@ function TasksMain({navigation}) {
                                             Settings to only show one line of text for the title and display '...'
                                             for the words in the title which exceed the width of the container
                                             */}
+                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
+                                            <Text style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
+                                                ...Aufgabe wird verschoben
+                                            </Text>
+                                                :
                                             <Text
                                                 numberOfLines={1}
                                                 ellipsizeMode={"tail"}
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
                                                 {task.taskTitle}
                                             </Text>
+                                            }
+
                                             {/*Show date only when dueDate is not an empty string*/}
                                             {task.dueDate && <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
@@ -405,6 +450,12 @@ function getStyles(insets) {
         textNormal: {
             fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
+        opaqueLight: {
+            color: LIGHTMODE.TEXT_COLOR_OPAQUE,
+        },
+        opaqueDark: {
+            color: DARKMODE.TEXT_COLOR_OPAQUE,
+        },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
             fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
@@ -442,20 +493,11 @@ function getStyles(insets) {
             paddingHorizontal: 10,
             paddingVertical: 10,
         },
-        listItemContainerLight: {
-            //backgroundColor: "yellow",
-            //borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR,
-        },
-        listItemContainerDark: {
-            //backgroundColor: DARKMODE.BOX_COLOR,
-            //borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
-        },
         listItemContainer: {
             marginHorizontal: 10,
             paddingVertical: 12,
             flexDirection: "row",
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
-            //borderBottomWidth: 1,
         },
         listItemContainerTaskList: {
             alignItems: "center",
