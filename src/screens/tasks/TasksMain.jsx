@@ -17,12 +17,6 @@ import {useDatabase} from "../../context/DatabaseContext";
 
 
 function TasksMain({navigation}) {
-
-    //state to control the visibility of the modal
-    const [modalIsVisible, setModalIsVisible] = useState(false);
-    //state to control the editing mode for the taskList View
-    const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
-
     //providing a safe area
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
@@ -31,7 +25,14 @@ function TasksMain({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    //import of needed state and methods from the database context
     const {tasks, lists, deleteList, updateTaskIsDone} = useDatabase();
+
+    //state to control the visibility of the modal
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+    //state to control the editing mode for the taskList View
+    const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
+
 
     {/*CODE FOR TOGGLING THE ISDONE PROPERTY OF A TASK*/}
     const [taskIsBeingToggled, setTaskIsBeingToggled] = useState(false);
@@ -79,7 +80,7 @@ function TasksMain({navigation}) {
         return () => clearTimeout(taskToggleTimeout);
     }, [toggledTaskData]);
 
-
+    {/*OTHER EVENT HANDLERS*/}
     /**
      * is called on press of the more button above the taskList View
      * will open the editing mode for the Lists - where lists can be deleted
@@ -170,8 +171,52 @@ function TasksMain({navigation}) {
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
-    //filtering Tasks for tasksview
+    {/*CONTENT RENDERING FUNCTIONS*/}
+    /**
+     * Renders Icon for toggling the task, conditionally, depending on if the task is
+     * currently being toggled by the user
+     * @param task Task the Icon belongs to.
+     * @param taskIsBeingToggled State indicating whether the task is currently being toggled.
+     * @param taskData TaskData needed for updating the isDone of a task (taskId, isDone).
+     */
+    function renderTaskToggleIcon(task, taskIsBeingToggled, taskData) {
+
+        if (taskIsBeingToggled && taskData.taskId === task.taskId) {
+
+            return <Icon name={ICONS.TASKICONS.CIRCLE_DONE}
+                         color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
+                         size={20}/>
+        } else {
+            return <Icon name={ICONS.TASKICONS.CIRCLE}
+                         color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                         size={20}/>}
+    }
+
+    /**
+     * Renders task text conditionally, depending on if the task is
+     * currently being toggled by the user.
+     * @param task Task the title belongs to.
+     * @param taskIsBeingToggled State indication whether the task is currently being toggled.
+     * @param taskData TaskData needed for updating the isDone of a task (taskId, isDone).
+     */
+    function renderTaskTitle(task, taskIsBeingToggled, taskData) {
+        if (taskIsBeingToggled && taskData.taskId === task.taskId) {
+            return (
+                <Text style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
+                ...Aufgabe wird verschoben
+                </Text>)
+        } else {
+            return (
+                <Text numberOfLines={1} ellipsizeMode={"tail"}
+                         style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                    {task.taskTitle}
+                </Text>)
+        }
+    }
+
+    //filtering Tasks for tasksview, to only show tasks which are not done
     const tasksNotDone = tasks.filter(task => !task.isDone);
+
 
     return (
         <>
@@ -195,43 +240,15 @@ function TasksMain({navigation}) {
                         >
                             {tasksNotDone.map((task, index) => {
                                 return (
-                                    <View
-                                        key={task.taskId}
-                                    >
-                                        <View
-                                            style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
+                                    <View key={task.taskId}>
+                                        <View style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
                                         <TouchableOpacity
                                             style={styles.taskCompletedButton}
                                             onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
-                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
-                                                <Icon name={ICONS.TASKICONS.CIRCLE_DONE}
-                                                      color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
-                                                      size={20}/>
-                                                :
-                                                <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                   color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                                   size={20}/>}
+                                            {renderTaskToggleIcon(task, taskIsBeingToggled, toggledTaskData)}
                                         </TouchableOpacity>
                                         <View style={styles.taskTitleDateColumn}>
-                                            {/*
-                                            numberOfLines={1}
-                                            ellipsizeMode={"tail"}
-                                            Settings to only show one line of text for the title and display '...'
-                                            for the words in the title which exceed the width of the container
-                                            */}
-                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
-                                            <Text style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
-                                                ...Aufgabe wird verschoben
-                                            </Text>
-                                                :
-                                            <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode={"tail"}
-                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
-                                                {task.taskTitle}
-                                            </Text>
-                                            }
-
+                                            {renderTaskTitle(task, taskIsBeingToggled, toggledTaskData)}
                                             {/*Show date only when dueDate is not an empty string*/}
                                             {task.dueDate && <Text
                                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
@@ -350,8 +367,7 @@ function TasksMain({navigation}) {
                                                     </View>
                                                     {/* Adds a border, except after the last element */}
                                                     {index !== lists.length - 1 && (
-                                                        <View
-                                                            style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                        <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                                     )}
                                                 </View>
                                             );
@@ -393,7 +409,7 @@ function TasksMain({navigation}) {
                     />
 
                     {/*Conditional rendering of the AddTaskModal Component
-                only when modalIsVisible is set to true*/}
+                    only when modalIsVisible is set to true*/}
                     {modalIsVisible && <AddTaskModal
                         visible={modalIsVisible}
                         onPressCreateList={handleCreateList}
