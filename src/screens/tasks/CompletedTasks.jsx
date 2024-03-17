@@ -19,52 +19,51 @@ function CompletedTasks({navigation}){
     const {tasks, updateTaskIsDone} = useDatabase();
 
     {/*CODE FOR TOGGLING THE ISDONE PROPERTY OF A TASK*/}
-    const [taskIsBeingToggled, setTaskIsBeingToggled] = useState(false);
-    const [toggledTaskData, setToggledTaskData] = useState({
-        isDone: null,
-        taskId: null
-    });
+    const [toggledTasks, setToggledTasks] = useState([]);
 
     /**
      * Event handler for the toggle button of a task.
-     * Triggers a UI transition, which indicates that the task will be moved from the view,
-     * By setting taskisBeingToggled to true and updating the toggledTaskData, which
-     * triggers the useEffect.
+     * The task is added to toggledTasks state, which will influence its display mode in
+     * the UI: lighter opacity & text indicating the task will be moved.
+     * Changes to toggledTasks state trigger the useEffect which updates the tasks isDone property in
+     * the database and deletes the task from toggledTasks state, after a timeout.
      * @param taskId the id of the task which was pressed
      * @param isDone boolean property of task, inidicating whether is done or not.
      */
     function handleTaskNotCompleted(taskId, isDone) {
         //set the data for toggled task needed in the use Effect
-        setToggledTaskData({isDone: isDone, taskId: taskId});
-        //start the UI transition by setting taskIsBeingToggled to true
-        setTaskIsBeingToggled(true);
+        setToggledTasks([...toggledTasks, {taskId: taskId, isDone: isDone}]);
     }
 
     /**
-     * Sets a timeout to show that the task will be moved
-     * before the UI rerenders, only showing tasks which are not done.
+     * Sets a timeout, before the execution of updateTaskIsDone and the deletion of the task
+     * from the toggled tasks state.
+     * This enables a UI response to the user, indicating the task will be moved,
+     * before the UI rerenders, only showing tasks which are done.
      */
     useEffect(() => {
         //destructure information needed for updating task and rendering updating
         //text to the UI
-        const {isDone, taskId} = toggledTaskData;
+        const toggledTasksArray = [...toggledTasks];
 
         //after timeout set the task is being toggled to false again
         //& update the task in the database
         const taskToggleTimeout = () => {
             setTimeout(async () => {
-                await updateTaskIsDone(taskId, isDone);
-                setTaskIsBeingToggled(false);
-            }, 500);
+                for(let toggledTask of toggledTasksArray) {
+                    await updateTaskIsDone(toggledTask.taskId, toggledTask.isDone);
+                    setToggledTasks(prevState => prevState.filter(t => t.taskId !== toggledTask.taskId));
+                }
+            }, 2000);
         }
         //only execute on toggling, and not on initial mounting of component
-        if(isDone !== null && taskId !== null) {
+        if(toggledTasks.length !== 0) {
             console.log("UseEffect for toggling task is active ");
             taskToggleTimeout();
         }
         //clear the timeout to prevent memory leaks
         return () => clearTimeout(taskToggleTimeout);
-    }, [toggledTaskData]);
+    }, [toggledTasks]);
 
     /**
      * Is called on press of the Back Button.
@@ -115,10 +114,10 @@ function CompletedTasks({navigation}){
                                     <TouchableOpacity
                                         key={task.taskId}
                                         style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        onPress={() => handleTaskNotCompleted(task.taskId)}
+                                        onPress={() => handleTaskNotCompleted(task.taskId, task.isDone)}
                                     >
                                         <View>
-                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
+                                            {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId) ?
                                                 <Icon name={ICONS.TASKICONS.CIRCLE}
                                                       color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
                                                       size={20}/> :
@@ -128,7 +127,7 @@ function CompletedTasks({navigation}){
                                             }
                                         </View>
                                         <View style={styles.taskTitleDateColumn}>
-                                            {taskIsBeingToggled && toggledTaskData.taskId === task.taskId ?
+                                            {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId)?
                                                 <Text style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
                                                     ...Aufgabe wird verschoben
                                                 </Text>
