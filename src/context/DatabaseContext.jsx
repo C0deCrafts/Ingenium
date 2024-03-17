@@ -55,12 +55,12 @@ export const DatabaseProvider = ({children}) => {
             const loadedTasks = await localDatabase().getTasks();
             const tasksArray = [...loadedTasks];
 
-            console.log("INSIDE LOADLISTS:", tasksArray);
+            //console.log("INSIDE LOADLISTS:", tasksArray);
 
             setTasks(tasksArray);
 
-            console.log("LOAD LISTS IN DBCONTEXT: Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
-            console.log("LOAD LISTS IN DBCONTEXT: Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
+            //console.log("LOAD LISTS IN DBCONTEXT: Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
+            //console.log("LOAD LISTS IN DBCONTEXT: Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
 
             const end = performance.now();
             console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
@@ -163,7 +163,7 @@ export const DatabaseProvider = ({children}) => {
     // useEffect to log updated lists for debugging purposes
     useEffect(() => {
         const dataString = JSON.stringify(lists, null, 2); // Convert lists to a string for logging
-        console.log("Aktualisierte Listen: ", dataString);
+        //console.log("Aktualisierte Listen: ", dataString);
     }, [lists]); // This effect depends on the `lists` state variable and triggers on every change
 
     // Provide the database context and its operations to the child components
