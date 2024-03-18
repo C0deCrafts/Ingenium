@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {localDatabase} from "../databases/localDatabase";
+import {localDatabase} from "../storages/localDatabase";
 import {COLOR} from "../constants/styleSettings";
 
 // Create a context for the database operations

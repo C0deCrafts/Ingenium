@@ -10,7 +10,7 @@ import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
 import NextCourseBox from "../../components/buttons/NextCourseBox";
-import {loadProfileImage, logAllStoredData, saveProfileImage} from "../../databases/asyncStorage";
+import {loadProfileImage, logAllStoredData, saveProfileImage} from "../../storages/asyncStorage";
 
 function Dashboard({navigation}) {
     const {theme} = useTheme();

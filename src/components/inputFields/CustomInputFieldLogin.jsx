@@ -14,6 +14,7 @@ import {useTheme} from "../../context/ThemeContext";
  * @param {number} maxTextInputLength - The maximum length of the text input allowed.
  * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
  *
+ * @param onChangeText
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
@@ -21,7 +22,7 @@ import {useTheme} from "../../context/ThemeContext";
  *   isPassword={true}
  *   maxTextInputLength={25}/>
  */
-function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword}) {
+function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, onChangeText}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -51,6 +52,7 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
+                onChangeText={onChangeText}
             />
         </View>
     )

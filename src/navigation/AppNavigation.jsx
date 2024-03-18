@@ -6,10 +6,12 @@ import {useState} from "react";
 import LoginNavigation from "./LoginNavigation";
 import {LIGHTMODE} from "../constants/styleSettings";
 import { useTheme } from "../context/ThemeContext";
+import {useAuth} from "../context/AuthContext";
 
 function AppNavigation() {
     // Hier kann die Logik für die Überprüfung des Benutzer-Login-Status eingefügt werden
-    const [userLoggedIn, setUserLoggedIn] = useState(true);
+    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const {token, initialized} = useAuth();
 
     //Darkmode - Lightmode
     const { theme, toggleTheme } = useTheme();
@@ -21,7 +23,7 @@ function AppNavigation() {
             <TabProvider>
                 <NavigationContainer ref={navigationRef}>
                     <StatusBar barStyle={statusBarStyle} />
-                    {userLoggedIn ? <DrawerNavigation /> : <LoginNavigation/>}
+                    {initialized ? <DrawerNavigation /> : <LoginNavigation/>}
                 </NavigationContainer>
             </TabProvider>
     )
