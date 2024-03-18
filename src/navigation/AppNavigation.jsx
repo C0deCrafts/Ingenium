@@ -10,7 +10,7 @@ import {useAuth} from "../context/AuthContext";
 
 function AppNavigation() {
     // Hier kann die Logik für die Überprüfung des Benutzer-Login-Status eingefügt werden
-    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    //const [userLoggedIn, setUserLoggedIn] = useState(false); ??
     const {token, initialized} = useAuth();
 
     //Darkmode - Lightmode

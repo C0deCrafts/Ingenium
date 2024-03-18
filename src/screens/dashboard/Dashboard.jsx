@@ -11,6 +11,7 @@ import ImageViewer from "../../components/ImageViewer";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
 import NextCourseBox from "../../components/buttons/NextCourseBox";
 import {loadProfileImage, logAllStoredData, saveProfileImage} from "../../storages/asyncStorage";
+import {motivationalQuotes} from "../../constants/motivationalQuotes";
 
 function Dashboard({navigation}) {
     const {theme} = useTheme();
@@ -21,38 +22,19 @@ function Dashboard({navigation}) {
 
     const date = new Date().getDate();
     const day = new Date().getDay();
+    const [quote, setQuote] = useState("");
 
     const getDay = (day) => {
-        let actualDay;
-        switch (day) {
-            case 0:
-                actualDay = "Sonntag";
-                break;
-            case 1:
-                actualDay = "Montag";
-                break;
-            case 2:
-                actualDay = "Dienstag";
-                break;
-            case 3:
-                actualDay = "Mittwoch";
-                break;
-            case 4:
-                actualDay = "Donnerstag";
-                break;
-            case 5:
-                actualDay = "Freitag";
-                break;
-            case 6:
-                actualDay = "Samstag";
-                break;
-            default:
-                actualDay = "";
-        }
-        return actualDay;
+        const days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+        return days[day] || "";
     };
 
+    const getRandomQuote = () => {
+        const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+        return motivationalQuotes[randomIndex];
+    }
 
+    //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -79,11 +61,13 @@ function Dashboard({navigation}) {
             if (loadedImageUri) {
                 setSelectedImage(loadedImageUri);
             }
+            setQuote(getRandomQuote);
         }
         fetchData();
     }, [isDbReady]);
 
 
+    //wenn die Datenbank noch ladet, zeige den Ladebalken
     if (!isDbReady) {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -132,8 +116,7 @@ function Dashboard({navigation}) {
                               color={isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}/>
                     </View>
                     <View style={isDarkMode ? styles.motivationalQuoteBoxDark : styles.motivationalQuoteBoxLight}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.motivationalQuoteText]}>Zeit,
-                            die Dinge in Angriff zu nehmen!</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.motivationalQuoteText]}>{quote}</Text>
                     </View>
                 </View>
 
@@ -307,7 +290,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-        paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
+        //paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
     },
     motivationalQuoteBoxDark: {
         flex: 2, // 2/3
