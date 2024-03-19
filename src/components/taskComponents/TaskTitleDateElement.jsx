@@ -1,11 +1,8 @@
 import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
-import Icon from "../Icon";
-import {ICONS} from "../../constants/icons";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useEffect, useRef, useState} from "react";
 import {useDatabase} from "../../context/DatabaseContext";
-import touchableNativeFeedback from "react-native-gesture-handler/src/components/touchables/TouchableNativeFeedback";
 import ToggleDoneIcon from "./ToggleDoneIcon";
 
 /**

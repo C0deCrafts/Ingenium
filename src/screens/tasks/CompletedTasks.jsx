@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, ScrollView} from "react-native";
 import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
