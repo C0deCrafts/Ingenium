@@ -228,10 +228,7 @@ function TasksMain({navigation}) {
                     return (
                         <View
                             key={list.listId}
-                            style={[
-                                isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight,
-                                styles.listItemContainer,
-                                styles.listItemContainerTaskList
+                            style={[styles.listItemContainer, styles.listItemContainerTaskList
                             ]}
                         >
                             <TouchableOpacity onPress={() => handleDeleteTaskList(list.listId)}>
@@ -303,27 +300,27 @@ function TasksMain({navigation}) {
                             {tasksNotDone.map((task, index) => {
                                 return (
                                     <View key={task.taskId}>
-                                        <View style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}>
-                                        <TouchableOpacity
-                                            style={styles.taskCompletedButton}
-                                            onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
-                                            {renderTaskToggleIcon(task, toggledTasks)}
-                                        </TouchableOpacity>
-                                        <View style={styles.taskTitleDateColumn}>
-                                            {renderTaskTitle(task, toggledTasks)}
-                                            {/*Show date only when dueDate is not an empty string*/}
-                                            {task.dueDate && <Text
-                                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
-                                                fällig am {/*
-                                                Anpassen, wenn Datumsauswahl implementiert wird
-                                                new Date(task.dueDate).toLocaleDateString('de-DE')
-                                                */}
-                                            </Text>}
+                                        <View style={[styles.listItemContainer]}>
+                                            <TouchableOpacity
+                                                style={styles.taskCompletedButton}
+                                                onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
+                                                {renderTaskToggleIcon(task, toggledTasks)}
+                                            </TouchableOpacity>
+                                            <View style={styles.taskTitleDateColumn}>
+                                                {renderTaskTitle(task, toggledTasks)}
+                                                {/*Show date only when dueDate is not an empty string*/}
+                                                {/*task.dueDate &&*/ <Text
+                                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>
+                                                    fällig am {/*
+                                                    Anpassen, wenn Datumsauswahl implementiert wird
+                                                    new Date(task.dueDate).toLocaleDateString('de-DE')
+                                                    */}
+                                                </Text>}
+                                            </View>
                                         </View>
-                                    </View>
 
                                         {/* Adds a border, except after the last element */}
-                                        {index !== tasks.length - 1 && (
+                                        {index !== tasksNotDone.length - 1 && (
                                             <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                         )}
                                     </View>
@@ -513,9 +510,12 @@ function getStyles(insets) {
             paddingVertical: 10,
         },
         listItemContainer: {
-            marginHorizontal: 10,
             paddingVertical: 12,
             flexDirection: "row",
+
+            //margin which controls left and right spacing
+            marginHorizontal: 10,
+            //gap between the Icon and the TitleDate Column
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
         },
         listItemContainerTaskList: {
@@ -525,7 +525,6 @@ function getStyles(insets) {
             paddingTop: 2
         },
         taskTitleDateColumn: {
-            flexDirection: "column",
             alignItems: "flex-start",
             rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1,
