@@ -107,52 +107,60 @@ function CompletedTasks({navigation}){
                 >
                     {   /*
                         shows tasks of all taskLists which have the property done === true
+
+                        TODO: replace the touchable opacity element with a view with the same listItemContainer classes
+                        When replacing the tasks with a component
                         */
 
-                            tasksDone.map(task => {
+                            tasksDone.map((task, index) => {
                                 return (
-                                    <TouchableOpacity
-                                        key={task.taskId}
-                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        onPress={() => handleTaskNotCompleted(task.taskId, task.isDone)}
-                                    >
-                                        <View>
-                                            {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId) ?
-                                                <Icon name={ICONS.TASKICONS.CIRCLE}
-                                                      color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
-                                                      size={20}/> :
-                                                <Icon name={ICONS.TASKICONS.CIRCLE_DONE}
-                                                      color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
-                                                      size={20}/>
-                                            }
-                                        </View>
-                                        <View style={styles.taskTitleDateColumn}>
-                                            {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId)?
-                                                <Text style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
-                                                    ...Aufgabe wird verschoben
-                                                </Text>
-                                                :
-                                                <>
+                                    <View key={task.taskId}>
+                                        <TouchableOpacity
+                                            style={[styles.listItemContainer]}
+                                            onPress={() => handleTaskNotCompleted(task.taskId, task.isDone)}
+                                        >
+                                            <View>
+                                                {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId) ?
+                                                    <Icon name={ICONS.TASKICONS.CIRCLE}
+                                                          color={isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE}
+                                                          size={20}/> :
+                                                    <Icon name={ICONS.TASKICONS.CIRCLE_DONE}
+                                                          color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
+                                                          size={20}/>
+                                                }
+                                            </View>
+                                            <View style={styles.taskTitleDateColumn}>
+                                                {toggledTasks.find(toggledTask => toggledTask.taskId === task.taskId) ?
                                                     <Text
-                                                    style={[
-                                                        isDarkMode ? styles.textDark : styles.textLight,
-                                                        styles.textNormal,
-                                                        styles.textAlignRight
-                                                    ]}>
-                                                    {task.taskTitle}
-                                                </Text>
-                                                    <Text style={[
-                                                        isDarkMode ? styles.textDark : styles.textLight,
-                                                        styles.textXS,
-                                                        styles.dueDate,
-                                                        styles.textItalic
-                                                    ]}>
-                                                        Erledigt: ... (Logik implementieren)
+                                                        style={[isDarkMode ? styles.opaqueDark : styles.opaqueLight, styles.textNormal]}>
+                                                        ...Aufgabe wird verschoben
                                                     </Text>
-                                                </>
-                                            }
-                                        </View>
-                                    </TouchableOpacity>
+                                                    :
+                                                    <>
+                                                        <Text
+                                                            style={[
+                                                                isDarkMode ? styles.textDark : styles.textLight,
+                                                                styles.textNormal,
+                                                                styles.textAlignRight
+                                                            ]}>
+                                                            {task.taskTitle}
+                                                        </Text>
+                                                        <Text style={[
+                                                            isDarkMode ? styles.textDark : styles.textLight,
+                                                            styles.textXS,
+                                                            styles.textItalic
+                                                        ]}>
+                                                            Erledigt: ... (Logik implementieren)
+                                                        </Text>
+                                                    </>
+                                                }
+                                            </View>
+                                        </TouchableOpacity>
+                                        {/* Adds a border, except after the last element */}
+                                        {index !== tasksDone.length - 1 && (
+                                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                        )}
+                                    </View>
                                 )
                             })
                     }
@@ -229,27 +237,35 @@ function getStyles(insets) {
             paddingHorizontal: 10,
             paddingVertical: 12,
         },
-        listItemContainerLight: {
-            backgroundColor: LIGHTMODE.BOX_COLOR,
-            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR,
-        },
-        listItemContainerDark: {
-            backgroundColor: DARKMODE.BOX_COLOR,
-            borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
-        },
         listItemContainer: {
-            paddingHorizontal: SIZES.SPACING_HORIZONTAL_SMALL,
             paddingVertical: 12,
+
             flexDirection: "row",
+
+            //margin which controls left and right spacing
+            marginHorizontal: 10,
+
+            //gap between the Icon and the TitleDate Column
             justifyContent: "space-between",
             alignItems: "center",
+
+            //needed for gap between title and Icon when title is long
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
-            borderBottomWidth: 1,
         },
         taskTitleDateColumn: {
             alignItems: "flex-end",
             rowGap: SIZES.SPACING_VERTICAL_SMALL,
             flex: 1
+        },
+        separatorLight: {
+            height: 1,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            marginHorizontal: 10,
+        },
+        separatorDark: {
+            height: 1,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            marginHorizontal: 10,
         },
     })
 }
