@@ -239,18 +239,15 @@ function getStyles(insets) {
         },
         listItemContainer: {
             paddingVertical: 12,
-
             flexDirection: "row",
-
             //margin which controls left and right spacing
-            marginHorizontal: 10,
-
-            //gap between the Icon and the TitleDate Column
-            justifyContent: "space-between",
-            alignItems: "center",
-
+            paddingHorizontal: 10,
             //needed for gap between title and Icon when title is long
-            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
+
+            //different on tasksmain
+            //needed to align toggleIcon and titleDate vertically
+            alignItems: "center",
         },
         taskTitleDateColumn: {
             alignItems: "flex-end",

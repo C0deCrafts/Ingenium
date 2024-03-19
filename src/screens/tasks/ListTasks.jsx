@@ -319,7 +319,7 @@ function ListTasks({route, navigation}){
                                                             </Text>
                                                         }
                                                         {/*only show date if the DateString is not empty*/}
-                                                        {task.dueDate &&
+                                                        {/*task.dueDate &&*/
                                                             <Text style={[
                                                                 isDarkMode ? styles.textDark : styles.textLight,
                                                                 styles.textXS,
@@ -436,11 +436,18 @@ function getStyles(insets) {
         },
         taskUpperBoxEditNotActive: {
             flexDirection: "row",
-            justifyContent: "space-between",
+
+            //needed for gap between title and Icon when title is long
+            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
+
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+
+            //different on tasksmain
+            //needed to align toggleIcon and titleDate vertically
             alignItems: "center",
-            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            //do not outsource border - this will be added in the card component
             borderBottomWidth: 1,
-            padding: 10
         },
         taskLowerBoxEditNotActive: {
             flex: 1,

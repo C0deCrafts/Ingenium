@@ -512,9 +512,8 @@ function getStyles(insets) {
         listItemContainer: {
             paddingVertical: 12,
             flexDirection: "row",
-
             //margin which controls left and right spacing
-            marginHorizontal: 10,
+            paddingHorizontal: 10,
             //gap between the Icon and the TitleDate Column
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT - 5,
         },
