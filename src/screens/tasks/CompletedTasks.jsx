@@ -137,19 +137,6 @@ function getStyles(insets) {
         textItalic: {
             fontStyle: "italic"
         },
-        textAlignRight: {
-            textAlign: "right"
-        },
-        opaqueLight: {
-            color: LIGHTMODE.TEXT_COLOR_OPAQUE,
-        },
-        opaqueDark: {
-            color: DARKMODE.TEXT_COLOR_OPAQUE,
-        },
-        headerHeading: {
-            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
-            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
-        },
         scrollViewContentContainer: {
             paddingHorizontal: 10,
             paddingVertical: 10,
