@@ -14,7 +14,7 @@ import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import RoundButton from "../../components/buttons/RoundButton";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {useDatabase} from "../../context/DatabaseContext";
-import TaskTitleDateElement from "../../components/taskComponents/TaskTitleDateElement";
+import TaskPreview from "../../components/taskComponents/TaskPreview";
 
 
 function TasksMain({navigation}) {
@@ -134,57 +134,7 @@ function TasksMain({navigation}) {
      * @param lists The lists which are shown in the tasklist view.
      */
     function renderTaskLists(editTaskListsIsActive, lists) {
-        return lists.map((list, index) => {
-            if (editTaskListsIsActive) {
-                //in list editing mode
-                if (list.listName !== "Ingenium") {
-                    return (
-                        <View
-                            key={list.listId}
-                            style={[styles.listItemContainer, styles.listItemContainerTaskList
-                            ]}
-                        >
-                            <TouchableOpacity onPress={() => handleDeleteTaskList(list.listId)}>
-                                <Icon name={ICONS.TASKICONS.MINUS}
-                                      color={COLOR.ICONCOLOR_CUSTOM_RED}
-                                      size={SIZES.EDIT_TASKS_ICON_SIZE}/>
-                            </TouchableOpacity>
-                            <View style={styles.editTaskListItem}>
-                                <SquareIcon name={list.iconName}
-                                            backgroundColor={list.iconBackgroundColor}
-                                            isUserIcon={true}/>
-                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
-                            </View>
-                            {/* Adds a border, except after the last element */}
-                            {index !== lists.length - 1 && (
-                                <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                            )}
-                        </View>
-                    );
-                } else {
-                    return null; //skip rendering the list Ingenium, because it shall not be deleted
-                }
-            } else {
-                // in list preview mode
-                return (
-                    <View key={list.listId}>
-                        <CustomBoxButton
-                            buttonTextLeft={list.listName}
-                            iconName={list.iconName}
-                            iconBoxBackgroundColor={list.iconBackgroundColor}
-                            iconColor={"white"}
-                            showForwardIcon={false}
-                            onPress={() => handleNavigateToListTasks(list.listId)}
-                            isUserIcon={true}
-                        />
-                        {/* Adds a border, except after the last element */}
-                        {index !== lists.length - 1 && (
-                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                        )}
-                    </View>
-                );
-            }
-        })
+        return
     }
 
     //filtering Tasks for tasksview, to only show tasks which are not done
@@ -213,7 +163,7 @@ function TasksMain({navigation}) {
                             {tasksNotDone.map((task, index) => {
                                 return (
                                     <View key={task.taskId}>
-                                        <TaskTitleDateElement
+                                        <TaskPreview
                                         p_taskId={task.taskId}
                                         p_taskIsDone={task.isDone}
                                         taskTitle={task.taskTitle}
@@ -299,8 +249,58 @@ function TasksMain({navigation}) {
                                     <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
                                 </>
                             }
-                            {/*call function to render tasklists*/}
-                            {renderTaskLists(editTaskListsIsActive, lists)}
+                            {/*Render tasklists*/}
+                            {lists.map((list, index) => {
+                                if (editTaskListsIsActive) {
+                                    //in list editing mode
+                                    if (list.listName !== "Ingenium") {
+                                        return (
+                                            <View
+                                                key={list.listId}
+                                                style={[styles.listItemContainer, styles.listItemContainerTaskList
+                                                ]}
+                                            >
+                                                <TouchableOpacity onPress={() => handleDeleteTaskList(list.listId)}>
+                                                    <Icon name={ICONS.TASKICONS.MINUS}
+                                                          color={COLOR.ICONCOLOR_CUSTOM_RED}
+                                                          size={SIZES.EDIT_TASKS_ICON_SIZE}/>
+                                                </TouchableOpacity>
+                                                <View style={styles.editTaskListItem}>
+                                                    <SquareIcon name={list.iconName}
+                                                                backgroundColor={list.iconBackgroundColor}
+                                                                isUserIcon={true}/>
+                                                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{list.listName}</Text>
+                                                </View>
+                                                {/* Adds a border, except after the last element */}
+                                                {index !== lists.length - 1 && (
+                                                    <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                )}
+                                            </View>
+                                        );
+                                    } else {
+                                        return null; //skip rendering the list Ingenium, because it shall not be deleted
+                                    }
+                                } else {
+                                    // in list preview mode
+                                    return (
+                                        <View key={list.listId}>
+                                            <CustomBoxButton
+                                                buttonTextLeft={list.listName}
+                                                iconName={list.iconName}
+                                                iconBoxBackgroundColor={list.iconBackgroundColor}
+                                                iconColor={"white"}
+                                                showForwardIcon={false}
+                                                onPress={() => handleNavigateToListTasks(list.listId)}
+                                                isUserIcon={true}
+                                            />
+                                            {/* Adds a border, except after the last element */}
+                                            {index !== lists.length - 1 && (
+                                                <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                            )}
+                                        </View>
+                                    );
+                                }
+                            })}
                         </ScrollView>
                     </View>
 

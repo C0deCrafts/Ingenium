@@ -4,7 +4,7 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
-import TaskTitleDateElement from "../../components/taskComponents/TaskTitleDateElement";
+import TaskPreview from "../../components/taskComponents/TaskPreview";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -64,7 +64,7 @@ function CompletedTasks({navigation}){
                                 return (
                                     <View key={task.taskId}>
                                         {/*render a TaskTitleElement for each task*/}
-                                        <TaskTitleDateElement
+                                        <TaskPreview
                                         p_taskId={task.taskId}
                                         p_taskIsDone={task.isDone}
                                         taskTitle={task.taskTitle}

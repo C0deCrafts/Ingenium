@@ -1,5 +1,4 @@
 import {Text, View, StyleSheet, Alert, Keyboard, TextInput, InputAccessoryView, TouchableOpacity} from "react-native";
-import CustomButton from "../../components/buttons/CustomButton";
 import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
