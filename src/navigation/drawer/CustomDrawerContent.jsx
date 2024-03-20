@@ -14,7 +14,7 @@ const CustomDrawerContent = ({navigation}) => {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {logout} = useAuth();
+    const {logout, token} = useAuth();
 
     const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
     const styles = getStyles(insets);

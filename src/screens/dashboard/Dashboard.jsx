@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-        paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
+        //paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
     },
     motivationalQuoteText: {
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
