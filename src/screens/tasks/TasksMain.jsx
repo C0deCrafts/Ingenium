@@ -126,17 +126,6 @@ function TasksMain({navigation}) {
         navigation.navigate("ListTasks_Screen", {listId: listId});
     }
 
-    {/*CONTENT RENDERING FUNCTIONS*/}
-    {/*TASKLISTS*/}
-    /**
-     * Renders the tasklists conditionally, depending on if the user currently is in editing mode or not
-     * @param editTaskListsIsActive Boolean indicating, whether the tasklist view is in editing mode.
-     * @param lists The lists which are shown in the tasklist view.
-     */
-    function renderTaskLists(editTaskListsIsActive, lists) {
-        return
-    }
-
     //filtering Tasks for tasksview, to only show tasks which are not done
     const tasksNotDone = tasks.filter(task => !task.isDone);
 
