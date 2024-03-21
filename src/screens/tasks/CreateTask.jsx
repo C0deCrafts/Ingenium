@@ -10,7 +10,6 @@ import {
 import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
-import CustomButton from "../../components/buttons/CustomButton";
 import {useRef, useState} from "react";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
@@ -107,8 +106,8 @@ function CreateTask({navigation, route}) {
     const handleListSelection = (selectedList) => {
         setListId(selectedList.listId);
         setSelectedListName(selectedList.listName);
-        console.log(selectedList); // Gib das gesamte Listenelement aus
-        console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
+        //console.log(selectedList); // Gib das gesamte Listenelement aus
+        //console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
         selectListModalRef.current?.dismiss();
     };
 

@@ -1,11 +1,10 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, ScrollView} from "react-native";
 import {useTheme} from "../../context/ThemeContext";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import Icon from "../../components/Icon";
-import {ICONS} from "../../constants/icons";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
+import TaskPreview from "../../components/taskComponents/TaskPreview";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -15,18 +14,7 @@ function CompletedTasks({navigation}){
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    const {tasks, updateTaskIsDone} = useDatabase();
-
-    /**
-     * Is called on Press of the round Button next to a task in the taskslist
-     * will toggle the property done of a task
-     * and the task will disappear from the taskslist in the UI as it only shows tasks
-     * which are done
-     * @param taskId the id of the task which was pressed
-     */
-    function handleTaskNotCompleted(taskId, isDone) {
-        updateTaskIsDone(taskId, isDone);
-    }
+    const {tasks} = useDatabase();
 
     /**
      * Is called on press of the Back Button.
@@ -70,38 +58,26 @@ function CompletedTasks({navigation}){
                 >
                     {   /*
                         shows tasks of all taskLists which have the property done === true
-                        ordered by date ascending
                         */
 
-                            tasksDone.map(task => {
+                            tasksDone.map((task, index) => {
                                 return (
-                                    <TouchableOpacity
-                                        key={task.taskId}
-                                        style={[isDarkMode ? styles.listItemContainerDark : styles.listItemContainerLight, styles.listItemContainer]}
-                                        onPress={() => handleTaskNotCompleted(task.taskId)}
-                                    >
-                                        <View><Icon name={ICONS.TASKICONS.CIRCLE_DONE}
-                                                 color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}
-                                                 size={20}/></View>
-                                        <View style={styles.taskTitleDateColumn}>
-                                            <Text
-                                                style={[
-                                                    isDarkMode ? styles.textDark : styles.textLight,
-                                                    styles.textNormal,
-                                                    styles.textAlignRight
-                                                ]}>
-                                                {task.taskTitle}
-                                            </Text>
-                                            <Text style={[
-                                                isDarkMode ? styles.textDark : styles.textLight,
-                                                styles.textXS,
-                                                styles.dueDate,
-                                                styles.textItalic
-                                            ]}>
-                                                Erledigt: ... (Logik implementieren)
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
+                                    <View key={task.taskId}>
+                                        {/*render a TaskTitleElement for each task*/}
+                                        <TaskPreview
+                                        p_taskId={task.taskId}
+                                        p_taskIsDone={task.isDone}
+                                        taskTitle={task.taskTitle}
+                                        isTaskTitlePreview={false}
+                                        showDate={true}
+                                        dateText={"Erledigt am ..."}
+                                        taskIsInCompletedScreen={true}
+                                        />
+                                        {/* Adds a border, except after the last element */}
+                                        {index !== tasksDone.length - 1 && (
+                                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                        )}
+                                    </View>
                                 )
                             })
                     }
@@ -131,6 +107,18 @@ function getStyles(insets) {
             flex: 1,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
+        contentBoxLight: {
+            backgroundColor: LIGHTMODE.BOX_COLOR,
+            borderRadius: SIZES.BORDER_RADIUS,
+        },
+        contentBoxDark: {
+            backgroundColor: DARKMODE.BOX_COLOR,
+            borderRadius: SIZES.BORDER_RADIUS,
+        },
+        instructionBox: {
+        paddingHorizontal: 10,
+            paddingVertical: 12,
+        },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
         },
@@ -149,50 +137,19 @@ function getStyles(insets) {
         textItalic: {
             fontStyle: "italic"
         },
-        textAlignRight: {
-            textAlign: "right"
-        },
-        headerHeading: {
-            fontSize: SIZES.DRAWER_HEADER_FONTSIZE,
-            fontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
-        },
         scrollViewContentContainer: {
             paddingHorizontal: 10,
             paddingVertical: 10,
         },
-        contentBoxLight: {
-            backgroundColor: LIGHTMODE.BOX_COLOR,
-            borderRadius: SIZES.BORDER_RADIUS,
+        separatorLight: {
+            height: 1,
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            marginHorizontal: 10,
         },
-        contentBoxDark: {
-            backgroundColor: DARKMODE.BOX_COLOR,
-            borderRadius: SIZES.BORDER_RADIUS,
-        },
-        instructionBox: {
-            paddingHorizontal: 10,
-            paddingVertical: 12,
-        },
-        listItemContainerLight: {
-            backgroundColor: LIGHTMODE.BOX_COLOR,
-            borderBottomColor: LIGHTMODE.BACKGROUNDCOLOR,
-        },
-        listItemContainerDark: {
-            backgroundColor: DARKMODE.BOX_COLOR,
-            borderBottomColor: DARKMODE.BACKGROUNDCOLOR,
-        },
-        listItemContainer: {
-            paddingHorizontal: SIZES.SPACING_HORIZONTAL_SMALL,
-            paddingVertical: 12,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
-            borderBottomWidth: 1,
-        },
-        taskTitleDateColumn: {
-            alignItems: "flex-end",
-            rowGap: SIZES.SPACING_VERTICAL_SMALL,
-            flex: 1
+        separatorDark: {
+            height: 1,
+            backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            marginHorizontal: 10,
         },
     })
 }

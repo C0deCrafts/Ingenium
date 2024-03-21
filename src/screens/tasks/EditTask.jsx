@@ -1,5 +1,4 @@
 import {Text, View, StyleSheet, Alert, Keyboard, TextInput, InputAccessoryView, TouchableOpacity} from "react-native";
-import CustomButton from "../../components/buttons/CustomButton";
 import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
@@ -22,7 +21,6 @@ function EditTask({navigation, route}){
     const {taskToEdit} = route.params;
     //find the list the taskToEdit was assigned to, to show it as the default list in the UI
     const listOfTaskToEdit = lists.find(list => list.listId === taskToEdit.listId);
-    console.log("The task on which edit button was pressed: ",  taskToEdit);
 
     // State variables for the form - initialized with values from taskToEdit
     const [taskTitle, setTaskTitle] = useState(taskToEdit.taskTitle);
@@ -77,8 +75,8 @@ function EditTask({navigation, route}){
     const handleListSelection = (selectedList) => {
         setListId(selectedList.listId);
         setSelectedListName(selectedList.listName);
-        console.log(selectedList); // Gib das gesamte Listenelement aus
-        console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
+        //console.log(selectedList); // Gib das gesamte Listenelement aus
+        //console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
         selectListModalRef.current?.dismiss();
     };
 

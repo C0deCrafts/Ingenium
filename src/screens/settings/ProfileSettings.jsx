@@ -3,9 +3,12 @@ import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {DARKMODE, LIGHTMODE} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
+
 function ProfileSettings({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    console.log("isDarkMode in ProfileSettings", isDarkMode);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -22,11 +25,11 @@ export default ProfileSettings;
 const styles = StyleSheet.create({
     containerLight: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
     },
     containerDark: {
         flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
     },
     contentLight: {
         flex: 1,
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+
     textLight: {
         color: LIGHTMODE.TEXT_COLOR,
     },

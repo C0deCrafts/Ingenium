@@ -25,6 +25,7 @@ export const LIGHTMODE = {
 
     TEXTINPUT_COLOR: "#000000",
     TEXT_COLOR: "#000000",
+    TEXT_COLOR_OPAQUE: "rgba(0,0,0,0.2)",
     CURSOR_COLOR: "#009FE3",
 
     PLACEHOLDER_TEXTCOLOR: "rgba(99 108 112 / 0.7)",
@@ -51,6 +52,7 @@ export const DARKMODE = {
 
     TEXTINPUT_COLOR: "#FFFFFF",
     TEXT_COLOR: "#FFFFFF",
+    TEXT_COLOR_OPAQUE: "rgba(255,255,255,0.2)",
     CURSOR_COLOR: "#009FE3",
 
     PLACEHOLDER_TEXTCOLOR: "rgba(99 108 112 / 0.7)",

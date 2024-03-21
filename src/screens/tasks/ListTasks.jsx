@@ -9,6 +9,7 @@ import {ICONS} from "../../constants/icons";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import RoundButton from "../../components/buttons/RoundButton";
+import TaskPreview from "../../components/taskComponents/TaskPreview";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
@@ -24,8 +25,9 @@ function ListTasks({route, navigation}){
 
 
     //access the tasks state from Database Context
-    const {tasks, lists, deleteTask, updateTaskIsDone} = useDatabase();
+    const {tasks, lists, deleteTask} = useDatabase();
 
+    {/*EVENT HANDLERS*/}
     /**
      * Is called on press of the Back Button.
      * Navigates back to the TasksMain Screen.
@@ -61,19 +63,6 @@ function ListTasks({route, navigation}){
     function handleOpenEditingTasks() {
         setEditTasksIsActive(true);
     }
-
-    /**
-     * Is called on Press of the round Button next to a task in the taskslist.
-     * Will toggle the property done of a task
-     * and the task will disappear from the taskslist in the UI as it only shows tasks
-     * which are not yet done.
-     * @param taskId the id of the task which was pressed
-     * @param isDone the isDone property of the task
-     */
-    function handleTaskCompleted(taskId, isDone) {
-        updateTaskIsDone(taskId, isDone);
-    }
-
 
     /**
      * Is called on press of the delete task button.
@@ -239,51 +228,16 @@ function ListTasks({route, navigation}){
                                             style={styles.taskContainer}
                                             key={task.taskId}
                                         >
-                                            <View style={[isDarkMode? styles.taskBoxDark : styles.taskBoxLight]}>
-                                                <View style={[
-                                                    styles.taskUpperBoxEditNotActive,
-                                                    isDarkMode ? styles.borderDark : styles.borderLight,
-                                                ]}>
-                                                    <TouchableOpacity
-                                                        onPress={() => handleTaskCompleted(task.taskId, task.isDone)}>
-                                                        <Icon
-                                                            name={ICONS.TASKICONS.CIRCLE}
-                                                            color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                                            size={20}
-                                                        />
-                                                    </TouchableOpacity>
-                                                    <View style={styles.taskTitleDateColumnEditNotActive}
-                                                    >
-                                                        <Text style={[
-                                                            isDarkMode? styles.textDark : styles.textLight,
-                                                            styles.textNormal,
-                                                            styles.textAlignRight,
-                                                        ]}>
-                                                            {task.taskTitle}
-                                                        </Text>
-                                                        {/*only show date if the DateString is not empty*/}
-                                                        {task.dueDate &&
-                                                            <Text style={[
-                                                                isDarkMode ? styles.textDark : styles.textLight,
-                                                                styles.textXS,
-                                                                styles.textItalic
-                                                            ]}>
-                                                                fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
-                                                            </Text>
-                                                        }
-                                                    </View>
-                                                </View>
-                                                <View
-                                                    style={[styles.taskLowerBoxEditNotActive]}
-                                                >
-                                                        <Text style={[
-                                                            styles.textSmall,
-                                                            isDarkMode? styles.textDark : styles.textLight
-                                                            ]}>
-                                                            {task.taskNotes}
-                                                        </Text>
-                                                </View>
-                                            </View>
+                                           <TaskPreview
+                                           p_taskId={task.taskId}
+                                           p_taskIsDone={task.isDone}
+                                           taskTitle={task.taskTitle}
+                                           taskNotes={task.taskNotes}
+                                           isTaskTitlePreview={false}
+                                           showDate={true}
+                                           dateText={"Fällig am..."}
+                                           isTaskCardWithNotes={true}
+                                           />
                                         </View>
                                     );
                                 }
@@ -332,9 +286,6 @@ function getStyles(insets) {
         textNormal: {
             fontSize: SIZES.SCREEN_TEXT_NORMAL,
         },
-        textSmall: {
-            fontSize: SIZES.SCREEN_TEXT_SMALL,
-        },
         textXS: {
             fontSize: SIZES.SCREEN_TEXT_XS,
         },
@@ -343,9 +294,6 @@ function getStyles(insets) {
         },
         textCentered: {
             textAlign: "center",
-        },
-        textAlignRight: {
-            textAlign: "right",
         },
         header: {
             fontSize: SIZES.SCREEN_HEADER,
@@ -369,30 +317,6 @@ function getStyles(insets) {
             alignItems: "center",
             columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
             padding: 10
-        },
-        taskUpperBoxEditNotActive: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
-            borderBottomWidth: 1,
-            padding: 10
-        },
-        taskLowerBoxEditNotActive: {
-            flex: 1,
-            alignItems: "flex-start",
-            padding: 10
-        },
-        borderLight: {
-            borderColor: LIGHTMODE.BACKGROUNDCOLOR,
-        },
-        borderDark: {
-            borderColor: DARKMODE.BACKGROUNDCOLOR,
-        },
-        taskTitleDateColumnEditNotActive: {
-            alignItems: "flex-end",
-            rowGap: SIZES.SPACING_VERTICAL_SMALL,
-            flex: 1,
         },
         taskTitleDateColumnEditActive: {
             alignItems: "center",
