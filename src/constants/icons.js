@@ -138,7 +138,6 @@ export const ICONS = {
         SUNNY: require('../assets/icons/sun_fog_line.png'),
         SUN_CLOUDY: require('../assets/icons/sun_cloudy_line.png'),
         THUNDER: require('../assets/icons/cloud_lightning_line.png'),
-        WINDY: require('../assets/icons/cloud_windy_line.png'),
     },
     TASKICONS: {
         ANNOYED: require('../assets/icons/annoyed-outline.png'),

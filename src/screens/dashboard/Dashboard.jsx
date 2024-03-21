@@ -10,15 +10,18 @@ import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
 import NextCourseBox from "../../components/buttons/NextCourseBox";
-import {loadProfileImage, logAllStoredData, saveProfileImage} from "../../storages/asyncStorage";
+import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
+import {useLocation} from "../../context/LocationContext";
+import fetchCurrentWeather  from '../../api/weather';
 
 function Dashboard({navigation}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
-
-    const {tasks, isDbReady, lists, loadLists} = useDatabase();
+    const {isDbReady, loadLists} = useDatabase();
     const [selectedImage, setSelectedImage] = useState(null);
+    const locationName = useLocation();
+    const [weatherData, setWeatherData] = useState({ condition: '', icon: ICONS.WEATHER_ICONS.DEFAULT });
 
     const date = new Date().getDate();
     const day = new Date().getDay();
@@ -58,14 +61,21 @@ function Dashboard({navigation}) {
                 loadLists(); // Beispiel für Datenbank-bezogene Operation
             }
             const loadedImageUri = await loadProfileImage(); // aus asyncStorage.js
-            if (loadedImageUri) {
-                setSelectedImage(loadedImageUri);
-            }
+            setSelectedImage(loadedImageUri);
             setQuote(getRandomQuote);
         }
         fetchData();
     }, [isDbReady]);
 
+    useEffect(() => {
+        const getWeather = async () => {
+            if (locationName) {
+                const data = await fetchCurrentWeather(locationName);
+                setWeatherData(data);
+            }
+        };
+        getWeather();
+    }, [locationName]);
 
     //wenn die Datenbank noch ladet, zeige den Ladebalken
     if (!isDbReady) {
@@ -112,8 +122,10 @@ function Dashboard({navigation}) {
                         <Text
                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>{getDay(day)}</Text>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDate]}>{date}</Text>
-                        <Icon name={ICONS.WEATHER_ICONS.SUNNY} size={100}
+
+                        <Icon name={weatherData.icon} size={100}
                               color={isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}/>
+
                     </View>
                     <View style={isDarkMode ? styles.motivationalQuoteBoxDark : styles.motivationalQuoteBoxLight}>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.motivationalQuoteText]}>{quote}</Text>

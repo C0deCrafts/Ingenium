@@ -1,23 +1,37 @@
 import axios from "axios";
+import {weatherImages} from "../constants/weatherData";
+import {ICONS} from "../constants/icons";
 
+//API from https://www.weatherapi.com
 const apiKey = "36c91753cb8741d4a61132836241403";
 
-const currentWeather = params => `https://api.weatherapi.com/v1/search.json?key${apiKey}&q=${params.cityName}`;
+const currentWeather = params => `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${params.cityName}`;
 
-const apiCall = async (endpoint) => {
-    const options = {
-        methode: "GET",
-        url: endpoint
-    }
-    try{
-        const response = await axios.request(options);
-        return response.data;
-    }catch (err){
-        console.log("Error apiCall method: ", err);
-        return null;
+/**
+ * ### fetchCurrentWeather
+ * This function retrieves the current weather condition and corresponding icon for a specified city using the WeatherAPI.
+ * Dependencies: Axios, weatherImages, ICONS
+ * @param cityName
+ * @returns {Promise<{condition: string, icon: number}|{condition: *, icon: (*|number)}>}
+ */
+const fetchCurrentWeather = async (cityName) => {
+    try {
+        // Construct URL for accessing WeatherAPI forecast endpoint
+        const response = await axios.get(currentWeather({cityName}));
+        // Extract current weather condition text from the response
+        const conditionText = response.data.current.condition.text;
+        // Find corresponding icon URL based on condition text, or use default icon if not found
+        const icon = weatherImages[conditionText] || ICONS.WEATHER_ICONS.DEFAULT;
+
+        // Log current weather condition to the console for test
+        console.log(`Das aktuelle Wetter in ${cityName}: ${conditionText}`);
+
+        // Return an object containing current weather condition and corresponding icon URL
+        return { condition: conditionText, icon };
+    } catch (err) {
+        console.error("Fehler beim Abrufen der Wetterdaten: ", err);
+        return { condition: 'Unbekannt', icon: ICONS.WEATHER_ICONS.DEFAULT };
     }
 }
 
-export const fetchCurrentWeather = params => {
-    return apiCall(currentWeather(params));
-}
+export default fetchCurrentWeather;
