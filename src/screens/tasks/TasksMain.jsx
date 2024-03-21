@@ -15,6 +15,7 @@ import RoundButton from "../../components/buttons/RoundButton";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
+import CardButton from "../../components/buttons/CardButton";
 
 
 function TasksMain({navigation}) {
@@ -174,28 +175,17 @@ function TasksMain({navigation}) {
 
                     {/*CompletedTasks and Inbox*/}
                     <View style={styles.cardButtonContainer}>
-                        <TouchableOpacity
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => [navigation.navigate("CompletedTasks_Stack"), setEditTaskListsIsActive(false)]}
-                        >
-                            <Icon name={ICONS.TASKICONS.COMPLETED}
-                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                  size={22}/>
-                            <Text
-                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Erledigt</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
-                            onPress={() => [navigation.navigate("Inbox_Stack"), setEditTaskListsIsActive(false)]}
-                        >
-                            <Icon name={ICONS.TASKICONS.INBOX}
-                                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                  size={22}/>
-                            <Text
-                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Inbox</Text>
-                        </TouchableOpacity>
+                        <CardButton buttonTitle={"Erledigt"} buttonIcon={ICONS.TASKICONS.COMPLETED}
+                                    onPressHandler={
+                                        () => [navigation.navigate("CompletedTasks_Stack"),
+                                            setEditTaskListsIsActive(false)]}
+                        />
+                        <CardButton buttonTitle={"Inbox"} buttonIcon={ICONS.TASKICONS.INBOX}
+                                    onPressHandler={
+                                        () => [navigation.navigate("Inbox_Stack"),
+                                            setEditTaskListsIsActive(false)]}
+                        />
                     </View>
-
                     {/*TaskLists*/}
                     <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
                         <View style={styles.headerWithIcon}>
@@ -376,12 +366,6 @@ function getStyles(insets) {
             flexDirection: "row",
             justifyContent: "space-between",
             height: 80,
-        },
-        cardButton: {
-            width: '48%',
-            justifyContent: "center",
-            rowGap: SIZES.SPACING_VERTICAL_SMALL,
-            padding: SIZES.SPACING_HORIZONTAL_DEFAULT,
         },
         roundButtonPosition: {
             position: "absolute",
