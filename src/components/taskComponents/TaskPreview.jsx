@@ -38,6 +38,9 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  * @constructor
  */
 
+//If there is time: make it possible to undo the toggling - when UI effect 'task is being moved' is active user should still
+//be able to click the button to undo it
+
 function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
                                   isTaskTitlePreview, showDate, dateText, isTaskCardWithNotes}) {
     const { theme } = useTheme();
@@ -61,7 +64,7 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
        const timeOut = () => {
            setTimeout(async () => {
                try {
-                   console.log(`The time out in Useffect is over - task with title ${taskTitle} will now be updated `);
+                   console.log(`The time out in UseEffect is over - task with title ${taskTitle} will now be updated `);
                    await updateTaskIsDone(p_taskId, p_taskIsDone);
                    setTogglingIsActive(false);
                } catch (e) {
