@@ -107,7 +107,11 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
                 <Text
                     numberOfLines = {isTaskTitlePreview? 1 : undefined}
                     ellipsizeMode={isTaskTitlePreview? "tail" : undefined}
-                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>
+                    style={[
+                        isDarkMode ? styles.textDark : styles.textLight,
+                        styles.textNormal,
+                        !isTaskTitlePreview && styles.textAlignRight
+                    ]}>
                     {taskTitle}
                 </Text>
             )
