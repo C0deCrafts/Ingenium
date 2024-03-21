@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.BORDER_RADIUS,
         flexDirection: "column",
         justifyContent: "center",
+        //height: 200
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
