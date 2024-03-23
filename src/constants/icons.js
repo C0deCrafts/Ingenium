@@ -254,5 +254,11 @@ export const ICONS = {
         TEXT: require('../assets/icons/text.png'),
         TIME: require('../assets/icons/time-outline.png'),
         WORK: require('../assets/icons/work-outline.png'),
+    },
+
+    LOGIN: {
+        USER: require('../assets/icons/user.png'),
+        LOCK: require('../assets/icons/lock.png')
     }
+
 };
