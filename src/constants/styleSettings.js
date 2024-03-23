@@ -1,7 +1,7 @@
 import {Dimensions} from "react-native";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+export const windowWidth = Dimensions.get('window').width;
+export const windowHeight = Dimensions.get('window').height;
 
 export const LIGHTMODE = {
     BACKGROUNDCOLOR_OLD: "#F9F9F9",

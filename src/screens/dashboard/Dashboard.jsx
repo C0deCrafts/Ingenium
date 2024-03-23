@@ -1,6 +1,6 @@
-import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView} from "react-native";
+import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useEffect, useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
@@ -23,12 +23,24 @@ function Dashboard({navigation}) {
     const locationName = useLocation();
     const [weatherData, setWeatherData] = useState({condition: '', icon: ICONS.WEATHER_ICONS.DEFAULT});
 
-    const date = new Date().getDate();
+    const date = new Date().getDate().toString().padStart(2, '0');
+    const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+
     const day = new Date().getDay();
     const [quote, setQuote] = useState("");
 
+    // Dummy-Aufgaben
+    const dummyTasks = [
+        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
+        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_AQUA },
+        { id: 3, name: 'Aufgabe 3', daysLeft: 20, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
+        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_DARKGREEN },
+
+        // Weitere Aufgaben hier hinzufügen
+    ];
+
     const getDay = (day) => {
-        const days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+        const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
         return days[day] || "";
     };
 
@@ -36,6 +48,23 @@ function Dashboard({navigation}) {
         const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
         return motivationalQuotes[randomIndex];
     }
+
+    const getNextTasksCount = () => {
+        const screenHeight = windowHeight;
+        console.log("Screen Höhe:",screenHeight);
+        //844 iPhone 12 Pro
+        //667 iPhone SE
+        //932 iPhone 12 Pro MAX
+        if(screenHeight < 700){
+            return 1;
+        } else if (screenHeight < 900) {
+            return 2;
+        } else  {
+            return 3;
+        }
+    }
+
+    const nextTasksCount = getNextTasksCount();
 
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
@@ -88,50 +117,56 @@ function Dashboard({navigation}) {
     }
 
     return (
-        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-
+        <>
             {/*Drawer Header*/}
             <View style={{zIndex: 1}}>
                 <CustomDrawerHeader onPress={() => navigation.openDrawer()}/>
             </View>
 
-            {/*Begrüßung und Image*/}
-            <View style={styles.firstContent}>
-                {/* ImageViewer mit TouchableOpacity für den Kamerabutton */}
-                <TouchableOpacity onPress={handlePressImage} style={{zIndex: 2}}>
-                    <View style={styles.imageContainer}>
-                        <ImageViewer
-                            placeholderImageSource={require("../../assets/images/avataaars.png")}
-                            selectedImage={selectedImage}
-                            styles={styles.imageViewer}
-                        />
-                        <View style={styles.cameraStyle}>
-                            <Icon name={ICONS.CAMERA.INACTIVE} size={35}
-                                  color={isDarkMode ? COLOR.BUTTONCOLOR : COLOR.ICONCOLOR_CUSTOM_BLACK}/>
+            <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+                {/*Begrüßung und Image*/}
+                <View>
+                    {/* ImageViewer mit TouchableOpacity für den Kamerabutton */}
+                    <TouchableOpacity onPress={handlePressImage} style={{zIndex: 2}}>
+                        <View style={styles.imageContainer}>
+                            <ImageViewer
+                                placeholderImageSource={require("../../assets/images/avataaars.png")}
+                                selectedImage={selectedImage}
+                                styles={styles.imageViewer}
+                            />
+                            <View style={styles.cameraStyle}>
+                                <Icon name={ICONS.CAMERA.INACTIVE} size={35}
+                                      color={isDarkMode ? COLOR.BUTTONCOLOR : COLOR.ICONCOLOR_CUSTOM_BLACK}/>
+                            </View>
                         </View>
+                    </TouchableOpacity>
+
+                    {/* Guten Tag, Max Mustermann*/}
+                    <View style={styles.greetingContainer}>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>Guten
+                            Tag,</Text>
+                        <Text
+                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>Maximilian</Text>
                     </View>
-                </TouchableOpacity>
-
-                {/* Guten Tag, Max Mustermann - 1. BOX*/}
-                <View style={styles.greetingContainer}>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>Guten Tag,</Text>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>Maximilian</Text>
+                    {/* Spacing */}
+                    <View style={styles.spacing}></View>
                 </View>
-                {/* Spacing */}
-                <View style={styles.spacing}></View>
-            </View>
 
-            <View style={styles.mainContentContainer}>
-                {/*Box 1*/}
-                <View style={styles.informationContainer}>
+                {/*Container Boxen*/}
+                <View style={styles.contentContainer}>
+                    {/*Box 1*/}
+                    <View style={styles.informationContainer}>
                         <View style={isDarkMode ? styles.dateTimeWeatherBoxDark : styles.dateTimeWeatherBoxLight}>
                             <Text
-                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>{getDay(day)}</Text>
-                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDate]}>{date}</Text>
-
+                                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>{getDay(day) + ", " + date + "." + month}</Text>
+                            <View style={styles.temperature}>
+                                <Text
+                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperature]}>{weatherData.temperature}</Text>
+                                <Text
+                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperatureSymbol]}>°</Text>
+                            </View>
                             <Icon name={weatherData.icon} size={100}
                                   color={isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}/>
-
                         </View>
                         <View style={isDarkMode ? styles.motivationalQuoteBoxDark : styles.motivationalQuoteBoxLight}>
                             <Text
@@ -139,49 +174,51 @@ function Dashboard({navigation}) {
                         </View>
                     </View>
 
-                {/*Nächste Kurse*/}
-                <View style={styles.nextCoursesContainer}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste Kurse</Text>
+                    {/*Box 2, Nächste Kurse*/}
+                    <View>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
+                            Kurse</Text>
                         <View style={styles.coursesContainer}>
-                                <NextCourseBox
-                                    headerTitle={"Programmieren"}
-                                    headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
-                                    date={"Montag, 08. Jänner"}
-                                    timeStart={"17:00"}
-                                    timeEnd={"19:25"}
-                                />
-                                <NextCourseBox
-                                    headerTitle={"Web"}
-                                    headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_PINK}
-                                    date={"Montag, 08. Jänner"}
-                                    timeStart={"19:30"}
-                                    timeEnd={"21:00"}
-                                />
+                            <NextCourseBox
+                                headerTitle={"Programmieren"}
+                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                date={"Montag, 08. Jänner"}
+                                timeStart={"17:00"}
+                                timeEnd={"19:25"}
+                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
+                            />
+                            <NextCourseBox
+                                headerTitle={"Web"}
+                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_PINK}
+                                date={"Montag, 08. Jänner"}
+                                timeStart={"19:30"}
+                                timeEnd={"21:00"}
+                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxRight]}
+                            />
                         </View>
+                    </View>
+
+                    {/*Box 3, Nächste Aufgaben*/}
+                    <View>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
+                            Aufgaben</Text>
+
+                            {dummyTasks.slice(0, nextTasksCount).map((task, index)=>(
+                                <View style={styles.taskRow}
+                                      key={task.id}
+                                >
+                                <NextTaskButton
+                                    buttonTextLeft={task.name}
+                                    buttonTextRight={`in ${task.daysLeft} Tagen`}
+                                    boxBackgroundColor={task.backgroundColor}
+                                />
+                                </View>
+                            ))}
+                    </View>
                 </View>
 
-                {/*Nächste Aufgaben*/}
-                <View style={styles.nextTasksContainer}>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
-                        Aufgaben</Text>
-                    <View style={styles.taskRow}>
-                        <NextTaskButton
-                            buttonTextLeft={"WMC TEST"}
-                            buttonTextRight={"in 8 Tagen"}
-                            boxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_PINK}
-                        />
-                    </View>
-                    <View style={styles.taskRow}>
-                        <NextTaskButton
-                            buttonTextLeft={"NSCS TEST"}
-                            buttonTextRight={"in 15 Tagen"}
-                            boxBackgroundColor={COLOR.ICONCOLOR_CUSTOM_AQUA}
-                        />
-                    </View>
-                </View>
             </View>
-
-        </View>
+        </>
     )
 }
 
@@ -192,72 +229,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
         flexDirection: "column",
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     containerDark: {
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
         flexDirection: "column",
     },
-    firstContent: {
-        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
-    },
-    secondContent: {
-        flexGrow: 1,
-        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
-    },
-    greetingContainer: {
-        height: 90,
-        justifyContent: "flex-end",
-    },
-    nextCoursesContainer: {
-        //flex: 1,
-        backgroundColor: "yellow",
-        //height: 200,
-    },
-    nextTasksContainer: {
-        backgroundColor: "red",
-    },
-    greetings: {
-        fontSize: SIZES.SCREEN_TEXT_NORMAL,
-        fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-        marginBottom: 0,
-    },
-    imageContainer: {
-        position: "relative",
+    contentContainer: {
         flex: 1,
-        alignItems: "flex-end",
-        top: -40,
-    },
-    imageViewer: {
-        width: 140,
-        height: 140,
-        borderRadius: 70,
-    },
-    cameraStyle: {
-        position: "relative",
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        top: 5,
-    },
-    header: {
-        fontSize: SIZES.SCREEN_HEADER,
-        fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-        //paddingBottom: SIZES.SPACING_HORIZONTAL_SMALL
-    },
-    headerName: {
-        fontSize: SIZES.SCREEN_HEADER + 10,
-        fontWeight: "300",
-        paddingLeft: 20
-    },
-    textLight: {
-        color: LIGHTMODE.TEXT_COLOR,
-    },
-    textDark: {
-        color: DARKMODE.TEXT_COLOR,
-    },
-    section: {
-        flexDirection: "row",
         justifyContent: "space-between"
     },
     informationContainer: {
@@ -280,21 +260,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-    },
-    textDate: {
-        fontSize: SIZES.SCREEN_TEXT_LARGE,
-        fontWeight: "200",
-        position: "absolute",
-        zIndex: 1,
-        bottom: 0,
-        left: 10,
-    },
-    textDateName: {
-        fontSize: SIZES.SCREEN_TEXT_SMALL,
-        position: "absolute",
-        zIndex: 1,
-        top: 10,
-        left: 10,
     },
     motivationalQuoteBoxLight: {
         flex: 2, // 2/3
@@ -319,30 +284,83 @@ const styles = StyleSheet.create({
     motivationalQuoteText: {
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
     },
+    textLight: {
+        color: LIGHTMODE.TEXT_COLOR,
+    },
+    textDark: {
+        color: DARKMODE.TEXT_COLOR,
+    },
+    temperature: {
+        position: "absolute",
+        zIndex: 1,
+        bottom: 0,
+        left: 10,
+        flexDirection: "row"
+    },
+    textTemperature: {
+        fontSize: SIZES.SCREEN_TEXT_LARGE,
+        fontWeight: "200",
+    },
+    textTemperatureSymbol: {
+        fontSize: SIZES.SCREEN_TEXT_SMALL + 22,
+        fontWeight: "200",
+    },
+    textDateName: {
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
+        position: "absolute",
+        zIndex: 1,
+        top: 10,
+        left: 10,
+    },
+    header: {
+        fontSize: SIZES.SCREEN_HEADER,
+        fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+        paddingVertical: SIZES.SPACING_HORIZONTAL_SMALL
+    },
+    headerName: {
+        fontSize: SIZES.SCREEN_HEADER + 10,
+        fontWeight: "300",
+        paddingLeft: 20
+    },
     coursesContainer: {
-        //flex: 1,
         flexDirection: 'row',
-        //marginTop: SIZES.SPACING_VERTICAL_SMALL
-        //height: 200
+        justifyContent: "space-between"
     },
-    courseBoxOneLight: {
-        flex: 1, // 1/3
-        backgroundColor: "yellow"
+    nextCourseBox: {
+        flex: 1
     },
-    courseBoxOneDark: {
-        flex: 1, // 1/3
-        backgroundColor: DARKMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS
+    nextCourseBoxLeft: {
+        marginRight: 10
     },
-    courseBoxTwoLight: {
-        flex: 1, // 1/3
-        marginLeft: 15,
+    nextCourseBoxRight: {
+        marginLeft: 10
     },
-    courseBoxTwoDark: {
-        flex: 1, // 1/3
-        backgroundColor: DARKMODE.BOX_COLOR,
-        marginLeft: 15,
-        borderRadius: SIZES.BORDER_RADIUS
+    greetingContainer: {
+        height: 90,
+        justifyContent: "flex-end",
+    },
+    greetings: {
+        fontSize: SIZES.SCREEN_TEXT_NORMAL,
+        fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+        marginBottom: 0,
+    },
+    imageContainer: {
+        position: "relative",
+        flex: 1,
+        alignItems: "flex-end",
+        top: -40,
+    },
+    imageViewer: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+    },
+    cameraStyle: {
+        position: "relative",
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        top: 5,
     },
     taskRow: {
         marginBottom: 15
@@ -351,10 +369,4 @@ const styles = StyleSheet.create({
     spacing: {
         marginVertical: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
     },
-
-    mainContentContainer: {
-        flex: 1,
-        justifyContent: "space-between"
-    }
-
 })

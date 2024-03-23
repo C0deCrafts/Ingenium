@@ -8,13 +8,14 @@ function NextCourseBox({
                            date,
                            timeStart,
                            timeEnd,
+                           containerStyle,
                        }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     return (
         <View
-            style={isDarkMode ? styles.containerDark : styles.containerLight}>
+            style={[isDarkMode ? styles.containerDark : styles.containerLight, containerStyle]}>
             <View style={{
                 backgroundColor: headerBackgroundColor,
                 borderTopLeftRadius: SIZES.BORDER_RADIUS,
@@ -37,9 +38,9 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.BORDER_RADIUS,
         flexDirection: "column",
         justifyContent: "center",
-        //height: 200
     },
     containerDark: {
+        flex: 1,
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS,
         flexDirection: "column",
@@ -53,10 +54,11 @@ const styles = StyleSheet.create({
     },
     textDateLight: {
         paddingTop: 20,
-        paddingLeft: 10,
+        paddingHorizontal: 10,
         fontSize: SIZES.SCREEN_TEXT_SMALL,
         color: LIGHTMODE.TEXT_COLOR,
-    }, textDateDark: {
+    },
+    textDateDark: {
         paddingTop: 20,
         paddingLeft: 10,
         color: DARKMODE.TEXT_COLOR,
