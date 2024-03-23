@@ -32,6 +32,21 @@ function Login({navigation}){
         login(userName, password);
     }
 
+    /**
+     * Opens the Ingenium Websites contact section, if the URL is valid.
+     * If it is not supported an error message is printed to the console.
+     */
+    const handleOpenIngeniumWebsite = async () => {
+        //canOpenURL checks if the given URL can be opened, the Promise resolves either to true or false
+        const supportedURL = await Linking.canOpenURL("https://www.ingenium.co.at/ueber-uns/kontakt");
+        //if it resolves to true, the website is opened, else an error is printed
+        if(supportedURL) {
+            await Linking.openURL("https://www.ingenium.co.at/ueber-uns/kontakt");
+        } else  {
+            console.error("The contact link on login Screen is not supported");
+        }
+    }
+
     const forgotPassword = () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
         const body = "Sehr geehrtes Support-Team,\n" +
@@ -57,7 +72,9 @@ function Login({navigation}){
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS
                     Zugangsdaten zur Anmeldung.</Text>
             </View>
-            {/*Input and Login Button*/}
+            {/*Input and Login Button
+            wrapped in Keyboardavoiding view, to make sure the login input fields are accessible when the keyboard is open
+            */}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
@@ -74,15 +91,12 @@ function Login({navigation}){
                 <TouchableOpacity onPress={() => {
                     forgotPassword()
                 }}>
-                    <Text style={[styles.textButton, styles.textXS]}>Password vergessen?</Text>
+                    <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textButton, styles.textXS]}>Password vergessen?</Text>
                 </TouchableOpacity>
                 <View style={styles.footer}>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen
-                        Account?</Text>
-                    <TouchableOpacity onPress={() => {
-                        navigation.navigate("NoAccount")
-                    }}>
-                        <Text style={[styles.textButton, styles.textXS]}>Kontaktiere Ingenium</Text>
+                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen Account?</Text>
+                    <TouchableOpacity onPress={() => handleOpenIngeniumWebsite()}>
+                        <Text style={[isDarkMode? styles.textDark : styles.textLight ,styles.textButton, styles.textXS]}>Kontaktiere Ingenium</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -98,14 +112,14 @@ function getStyles(insets) {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
             paddingTop: insets.top,
-            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },
         containerDark: {
             flex: 1,
             backgroundColor: DARKMODE.BACKGROUNDCOLOR,
             paddingTop: insets.top,
-            marginHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },
         container: {
