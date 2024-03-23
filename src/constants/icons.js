@@ -154,6 +154,10 @@ export const ICONS = {
         ACTIVE: require('../assets/icons/menu.png'),
         INACTIVE: require('../assets/icons/menu.png'),
     },
+    EXPORT: {
+        ACTIVE: require('../assets/icons/arrow_right_up_line.png',),
+        INACTIVE: require('../assets/icons/arrow_right_up_line.png'),
+    },
     FORWARD: {
         ACTIVE: require('../assets/icons/arrow_forward.png'),
         INACTIVE: require('../assets/icons/arrow_forward.png'),
@@ -202,6 +206,12 @@ export const ICONS = {
         SUNNY: require('../assets/icons/sun_fog_line.png'),
         SUN_CLOUDY: require('../assets/icons/sun_cloudy_line.png'),
         THUNDER: require('../assets/icons/cloud_lightning_line.png'),
+    },
+    THEME_ICONS: {
+        DARK_ACTIVE: require('../assets/icons/dark_line.png'),
+        DARK_INACTIVE: require('../assets/icons/dark_line.png'),
+        LIGHT_ACTIVE: require('../assets/icons/light_line.png'),
+        LIGHT_INACTIVE: require('../assets/icons/light_line.png'),
     },
     TASKICONS: {
         ANNOYED: require('../assets/icons/annoyed-outline.png'),

@@ -2,7 +2,6 @@ import {NavigationContainer} from "@react-navigation/native";
 import {navigationRef, TabProvider} from "./context/TabContext";
 import {StatusBar} from "react-native";
 import DrawerNavigation from "./drawer/DrawerNavigation";
-import {useState} from "react";
 import LoginNavigation from "./LoginNavigation";
 import {LIGHTMODE} from "../constants/styleSettings";
 import { useTheme } from "../context/ThemeContext";
@@ -14,7 +13,7 @@ function AppNavigation() {
     const {token, initialized} = useAuth();
 
     //Darkmode - Lightmode
-    const { theme, toggleTheme } = useTheme();
+    const { theme } = useTheme();
     // Statusbar-Stil basierend auf dem aktuellen Thema einstellen
     const statusBarStyle = theme === LIGHTMODE ? 'dark-content' : 'light-content';
 

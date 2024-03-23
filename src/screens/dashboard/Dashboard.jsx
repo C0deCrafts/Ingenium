@@ -127,6 +127,8 @@ function Dashboard({navigation}) {
             setQuote(getRandomQuote);
         }
         fetchData();
+        console.log("IS DARKMODE?", isDarkMode)
+        console.log("THEME DASHBOARD: ",theme)
     }, [isDbReady]);
 
     useEffect(() => {
@@ -149,7 +151,7 @@ function Dashboard({navigation}) {
     }
 
     return (
-        <>
+        <View style={{flex: 1, backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}}>
             {/*Drawer Header*/}
             <View style={{zIndex: 1}}>
                 <CustomDrawerHeader onPress={() => navigation.openDrawer()}/>
@@ -168,7 +170,7 @@ function Dashboard({navigation}) {
                             />
                             <View style={styles.cameraStyle}>
                                 <Icon name={ICONS.CAMERA.INACTIVE} size={35}
-                                      color={isDarkMode ? COLOR.BUTTONCOLOR : COLOR.ICONCOLOR_CUSTOM_BLACK}/>
+                                      color={isDarkMode ? COLOR.BUTTONLABEL : COLOR.ICONCOLOR_CUSTOM_BLACK}/>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -249,7 +251,7 @@ function Dashboard({navigation}) {
                 </View>
 
             </View>
-        </>
+        </View>
     )
 }
 
@@ -266,6 +268,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
         flexDirection: "column",
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
     contentContainer: {
         flex: 1,
