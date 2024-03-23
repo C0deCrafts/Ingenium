@@ -44,7 +44,7 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
     const inputKeyboardType = validKeyboardTypes.includes(keyboardType) ? keyboardType : "default";
 
     return (
-        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
             <Icon name={iconName} size={24} color={isDarkMode? styles.textDark: styles.textLight}/>
             <TextInput
                 style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input]}
