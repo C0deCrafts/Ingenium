@@ -1,5 +1,5 @@
 import {StyleSheet, TextInput, View} from "react-native";
-import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import Icon from "../Icon";
 
@@ -45,9 +45,9 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
 
     return (
         <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
-            <Icon name={iconName} size={24} color={isDarkMode? styles.textDark: styles.textLight}/>
+            <Icon name={iconName} size={24} color={isDarkMode? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
             <TextInput
-                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input]}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input, {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword}
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
         columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         height: 50,
-        shadowColor: "#d0d0d0",
         shadowOffset: {
             width: 0,
             height: 1,
