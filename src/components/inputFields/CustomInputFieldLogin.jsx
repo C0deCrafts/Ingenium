@@ -1,6 +1,7 @@
 import {StyleSheet, TextInput, View} from "react-native";
-import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
+import Icon from "../Icon";
 
 /**
  * ## CustomInputFieldLogin Component
@@ -13,7 +14,7 @@ import {useTheme} from "../../context/ThemeContext";
  * @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").
  * @param {number} maxTextInputLength - The maximum length of the text input allowed.
  * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
- *
+ * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
@@ -21,7 +22,7 @@ import {useTheme} from "../../context/ThemeContext";
  *   isPassword={true}
  *   maxTextInputLength={25}/>
  */
-function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword}) {
+function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, iconName}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -42,9 +43,10 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
     const inputKeyboardType = validKeyboardTypes.includes(keyboardType) ? keyboardType : "default";
 
     return (
-        <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
+        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
+            <Icon name={iconName} size={24} color={isDarkMode? styles.textDark: styles.textLight}/>
             <TextInput
-                style={isDarkMode ? styles.inputDark : styles.inputLight}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword}
@@ -59,30 +61,43 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
 export default CustomInputFieldLogin;
 
 const styles = StyleSheet.create({
+    container: {
+        borderRadius: SIZES.BORDER_RADIUS,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        flexDirection: "row",
+        columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
+        height: 50,
+        shadowColor: "#d0d0d0",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5
+    },
     containerLight: {
         backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: LIGHTMODE.BORDER_COLOR,
-        justifyContent: "center",
-        height: 50,
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        borderWidth: SIZES.BORDER_WIDTH,
-        borderColor: DARKMODE.BORDER_COLOR,
-        justifyContent: "center",
-        height: 50,
+    },
+    input: {
+        fontSize: SIZES.TEXTINPUT_SIZE,
+        textAlign: "left",
     },
     inputLight: {
-        fontSize: SIZES.TEXTINPUT_SIZE,
         color: LIGHTMODE.TEXTINPUT_COLOR,
-        textAlign: "center",
     },
     inputDark: {
-        fontSize: SIZES.TEXTINPUT_SIZE,
         color: DARKMODE.TEXTINPUT_COLOR,
-        textAlign: "center",
+    },
+    textLight: {
+        color: LIGHTMODE.TEXT_COLOR
+    },
+    textDark: {
+        color: DARKMODE.TEXT_COLOR
     }
 })
