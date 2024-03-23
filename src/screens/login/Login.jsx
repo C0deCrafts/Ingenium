@@ -77,14 +77,13 @@ function Login({navigation}){
             */}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.inputFieldContainer}
             >
-                <View style={styles.inputFieldContainer}>
-                    <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
-                                           iconName={ICONS.LOGIN.USER} onChangeTextHandler={setUserName}/>
-                    <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
-                                           maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK} onChangeTextHandler={setPassword}/>
-                    <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
-                </View>
+                <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
+                                       iconName={ICONS.LOGIN.USER} onChangeTextHandler={setUserName}/>
+                <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
+                                       maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK} onChangeTextHandler={setPassword}/>
+                <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>
