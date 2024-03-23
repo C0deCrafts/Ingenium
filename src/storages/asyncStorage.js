@@ -21,6 +21,26 @@ export const loadProfileImage = async () => {
     return null; // Falls kein Bild gefunden wurde oder ein Fehler aufgetreten ist
 };
 
+export const saveThemeMode = async (themeMode) => {
+    try {
+        await AsyncStorage.setItem('themeMode', themeMode);
+        console.log("THEME MODE:", themeMode)
+        console.log("Theme-Modus erfolgreich gespeichert");
+    } catch (err) {
+        console.error("Fehler beim Speichern des Theme-Modus: ", err);
+    }
+};
+
+export const loadThemeMode = async () => {
+    try {
+        const themeMode = await AsyncStorage.getItem('themeMode');
+        return themeMode != null ? themeMode : null;
+    } catch (err) {
+        console.error("Fehler beim Laden des Theme-Modus: ", err);
+        return null;
+    }
+};
+
 
 //helper function
 export const logAllStoredData = async () => {
