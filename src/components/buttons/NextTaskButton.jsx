@@ -2,6 +2,30 @@ import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
+/**
+ * ### Next Task Button Component
+ *
+ * Renders a button to represent the next task.
+ * This component accepts props such as buttonTextLeft, buttonTextRight, boxBackgroundColor, and onPress.
+ *
+ * @param buttonTextLeft - The text to be displayed on the left side of the button.
+ * @param buttonTextRight - The text to be displayed on the right side of the button.
+ * @param boxBackgroundColor - The background color of the button.
+ * @param onPress - Function to be called when the button is pressed.
+ * @returns {JSX.Element} - The rendered next task button as a React element.
+ *
+ * @example
+ * // Import the NextTaskButton component
+ * import NextTaskButton from "../../components/NextTaskButton";
+ * // Inside your component's render method, use the NextTaskButton component like this:
+ * <NextTaskButton
+ *    buttonTextLeft={"Task 1"}
+ *    buttonTextRight={"in 2 days"}
+ *    boxBackgroundColor={"#3498db"}
+ *    onPress={() => console.log("Button pressed")}
+ * />
+ * // This will render a next task button with the specified information and styling.
+ */
 function NextTaskButton({
                              buttonTextLeft,
                              buttonTextRight,

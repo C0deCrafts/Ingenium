@@ -2,6 +2,34 @@ import {Text, StyleSheet, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
+/**
+ * ### Next Course Box Component
+ *
+ * Renders a box displaying information about the next course.
+ * This component accepts props such as headerTitle, headerBackgroundColor, date, timeStart, timeEnd, and containerStyle.
+ *
+ * @param headerTitle - The title of the course.
+ * @param headerBackgroundColor - The background color of the header.
+ * @param date - The date of the course.
+ * @param timeStart - The start time of the course.
+ * @param timeEnd - The end time of the course.
+ * @param containerStyle - Custom styles for the container.
+ * @returns {JSX.Element} - The rendered next course box as a React element.
+ *
+ * @example
+ * // Import the NextCourseBox component
+ * import NextCourseBox from "../../components/NextCourseBox";
+ * // Inside your component's render method, use the NextCourseBox component like this:
+ * <NextCourseBox
+ *    headerTitle={"Math Course"}
+ *    headerBackgroundColor={"#3498db"}
+ *    date={"Monday, March 21"}
+ *    timeStart={"10:00 AM"}
+ *    timeEnd={"12:00 PM"}
+ *    containerStyle={{marginTop: 10}}
+ * />
+ * // This will render a next course box with the specified information and styling.
+ */
 function NextCourseBox({
                            headerTitle,
                            headerBackgroundColor,

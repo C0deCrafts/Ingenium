@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions} from "react-native";
+import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -9,17 +9,36 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
 import NextTaskButton from "../../components/buttons/NextTaskButton";
-import NextCourseBox from "../../components/buttons/NextCourseBox";
+import NextCourseBox from "../../components/boxes/NextCourseBox";
 import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
 import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 
+/**
+ * ### Dashboard
+ * Provides the main user interface for displaying the user's profile,
+ * upcoming courses, tasks, weather updates, and motivational quotes.
+ *
+ * Features:
+ * - User can update their profile picture by tapping on it, which opens the image picker.
+ * - Displays a personalized greeting based on the time of day.
+ * - Shows current weather conditions using data fetched from an external API.
+ * - Randomly displays a motivational quote from a predefined list.
+ * - Presents a list of upcoming courses and tasks, with the number of tasks displayed
+ *   dynamically adjusted based on the screen height.
+ */
 function Dashboard({navigation}) {
+    // Theme context to switch between dark and light mode.
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
+
     const {isDbReady, loadLists} = useDatabase();
+
+    // State for managing the selected profile image.
     const [selectedImage, setSelectedImage] = useState(null);
+
+    // Fetches and sets weather data based on the user's location.
     const locationName = useLocation();
     const [weatherData, setWeatherData] = useState({condition: '', icon: ICONS.WEATHER_ICONS.DEFAULT});
 
@@ -29,14 +48,12 @@ function Dashboard({navigation}) {
     const day = new Date().getDay();
     const [quote, setQuote] = useState("");
 
-    // Dummy-Aufgaben
+    // Dummy-Tasks
     const dummyTasks = [
         { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
         { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_AQUA },
         { id: 3, name: 'Aufgabe 3', daysLeft: 20, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
         { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_DARKGREEN },
-
-        // Weitere Aufgaben hier hinzufügen
     ];
 
     const getDay = (day) => {
@@ -49,12 +66,13 @@ function Dashboard({navigation}) {
         return motivationalQuotes[randomIndex];
     }
 
+    //Screen-Höhen
+    //844 iPhone 12 Pro
+    //667 iPhone SE
+    //932 iPhone 12 Pro MAX
     const getNextTasksCount = () => {
         const screenHeight = windowHeight;
-        console.log("Screen Höhe:",screenHeight);
-        //844 iPhone 12 Pro
-        //667 iPhone SE
-        //932 iPhone 12 Pro MAX
+        //console.log("Screen Höhe:",screenHeight);
         if(screenHeight < 700){
             return 1;
         } else if (screenHeight < 900) {
@@ -82,18 +100,16 @@ function Dashboard({navigation}) {
         }
     };
 
-    // Lade die Listen sofort, wenn die Seite zum ersten Mal angezeigt wird
-    // oder wenn sich isDbReady ändert
+    // Load the lists immediately when the page is first displayed or when isDbReady changes
     useEffect(() => {
         async function fetchData() {
             if (isDbReady) {
-                loadLists(); // Beispiel für Datenbank-bezogene Operation
+                loadLists();
             }
-            const loadedImageUri = await loadProfileImage(); // aus asyncStorage.js
+            const loadedImageUri = await loadProfileImage(); // from asyncStorage.js
             setSelectedImage(loadedImageUri);
             setQuote(getRandomQuote);
         }
-
         fetchData();
     }, [isDbReady]);
 
@@ -107,7 +123,7 @@ function Dashboard({navigation}) {
         getWeather();
     }, [locationName]);
 
-    //wenn die Datenbank noch ladet, zeige den Ladebalken
+    // If the database is still loading, show the loading indicator
     if (!isDbReady) {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -124,7 +140,7 @@ function Dashboard({navigation}) {
             </View>
 
             <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
-                {/*Begrüßung und Image*/}
+                {/*Greeting und Image*/}
                 <View>
                     {/* ImageViewer mit TouchableOpacity für den Kamerabutton */}
                     <TouchableOpacity onPress={handlePressImage} style={{zIndex: 2}}>
@@ -203,7 +219,7 @@ function Dashboard({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Aufgaben</Text>
 
-                            {dummyTasks.slice(0, nextTasksCount).map((task, index)=>(
+                            {dummyTasks.slice(0, nextTasksCount).map((task)=>(
                                 <View style={styles.taskRow}
                                       key={task.id}
                                 >
