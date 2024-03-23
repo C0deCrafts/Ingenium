@@ -16,6 +16,9 @@
  * @property {Object} BACK - Back icon
  * @property {string} BACK.ACTIVE - Active back icon
  * @property {string} BACK.INACTIVE - Inactive back icon
+ * @property {Object} CAMERA - Camera icon
+ * @property {string} CAMERA.ACTIVE - Active camera icon
+ * @property {string} CAMERA.INACTIVE - Inactive camera icon
  * @property {Object} CLOSE - Close icon
  * @property {string} CLOSE.ACTIVE - Active close icon
  * @property {string} CLOSE.INACTIVE - Inactive close icon
@@ -25,30 +28,91 @@
  * @property {Object} DASHBOARD - Dashboard icon
  * @property {string} DASHBOARD.ACTIVE - Active dashboard icon
  * @property {string} DASHBOARD.INACTIVE - Inactive dashboard icon
- * @property {Object} DRAWER_MENU - Drawer menu icon
- * @property {string} DRAWER_MENU.ACTIVE - Active drawer menu icon
- * @property {string} DRAWER_MENU.INACTIVE - Inactive drawer menu icon
  * @property {Object} DEFAULT_ICON - Default icon
  * @property {string} DEFAULT_ICON.ACTIVE - Active default icon
  * @property {string} DEFAULT_ICON.INACTIVE - Inactive default icon
+ * @property {Object} DRAWER_MENU - Drawer menu icon
+ * @property {string} DRAWER_MENU.ACTIVE - Active drawer menu icon
+ * @property {string} DRAWER_MENU.INACTIVE - Inactive drawer menu icon
+ * @property {Object} FORWARD - Forward icon
+ * @property {string} FORWARD.ACTIVE - Active forward icon
+ * @property {string} FORWARD.INACTIVE - Inactive forward icon
  * @property {Object} LINK - Link icon
  * @property {string} LINK.ACTIVE - Active link icon
  * @property {string} LINK.INACTIVE - Inactive link icon
  * @property {Object} LOGOUT - Logout icon
  * @property {string} LOGOUT.ACTIVE - Active logout icon
  * @property {string} LOGOUT.INACTIVE - Inactive logout icon
+ * @property {Object} MAIL - Mail icon
+ * @property {string} MAIL.ACTIVE - Active mail icon
+ * @property {string} MAIL.INACTIVE - Inactive mail icon
+ * @property {Object} NAVIGATION - Navigation icon
+ * @property {string} NAVIGATION.ACTIVE - Active navigation icon
+ * @property {string} NAVIGATION.INACTIVE - Inactive navigation icon
  * @property {Object} NOTIFICATION - Notification icon
  * @property {string} NOTIFICATION.ACTIVE - Active notification icon
  * @property {string} NOTIFICATION.INACTIVE - Inactive notification icon
+ * @property {Object} PHONE - Phone icon
+ * @property {string} PHONE.ACTIVE - Active phone icon
+ * @property {string} PHONE.INACTIVE - Inactive phone icon
  * @property {Object} SETTINGS - Settings icon
  * @property {string} SETTINGS.ACTIVE - Active settings icon
  * @property {string} SETTINGS.INACTIVE - Inactive settings icon
- * @property {Object} TASKS - TasksMain icon
+ * @property {Object} TASKS - Tasks icon
  * @property {string} TASKS.ACTIVE - Active tasks icon
  * @property {string} TASKS.INACTIVE - Inactive tasks icon
  * @property {Object} TIMETABLE - Timetable icon
  * @property {string} TIMETABLE.ACTIVE - Active timetable icon
  * @property {string} TIMETABLE.INACTIVE - Inactive timetable icon
+ * @property {Object} WEATHER_ICONS - Weather icons
+ * @property {string} WEATHER_ICONS.CLOUDY - Cloudy weather icon
+ * @property {string} WEATHER_ICONS.NIGHT - Night weather icon
+ * @property {string} WEATHER_ICONS.RAIN - Rainy weather icon
+ * @property {string} WEATHER_ICONS.SNOWFALL - Snowfall weather icon
+ * @property {string} WEATHER_ICONS.SUNNY - Sunny weather icon
+ * @property {string} WEATHER_ICONS.SUN_CLOUDY - Partly cloudy weather icon
+ * @property {string} WEATHER_ICONS.THUNDER - Thunderstorm weather icon
+ * @property {Object} TASKICONS - Task icons
+ * @property {string} TASKICONS.ANNOYED - Annoyed icon
+ * @property {string} TASKICONS.ADD - Add icon
+ * @property {string} TASKICONS.CHAIR - Chair icon
+ * @property {string} TASKICONS.BOOK - Book icon
+ * @property {string} TASKICONS.BUG - Bug icon
+ * @property {string} TASKICONS.CHAT - Chat icon
+ * @property {string} TASKICONS.CIRCLE - Circle icon
+ * @property {string} TASKICONS.CIRCLE_DONE - Circle done icon
+ * @property {string} TASKICONS.CLOSE - Close icon
+ * @property {string} TASKICONS.CODE - Code icon
+ * @property {string} TASKICONS.COLOR_PALETTE - Color palette icon
+ * @property {string} TASKICONS.COMPUTER - Computer icon
+ * @property {string} TASKICONS.CONTRACT - Contract icon
+ * @property {string} TASKICONS.COMPLETED - Completed icon
+ * @property {string} TASKICONS.CURVED_LINE - Curved line icon
+ * @property {string} TASKICONS.FOLDER - Folder icon
+ * @property {string} TASKICONS.GAME - Game icon
+ * @property {string} TASKICONS.GIFT - Gift icon
+ * @property {string} TASKICONS.HAPPY - Happy icon
+ * @property {string} TASKICONS.HAT - Hat icon
+ * @property {string} TASKICONS.HEART - Heart icon
+ * @property {string} TASKICONS.HEARTBEAT - Heartbeat icon
+ * @property {string} TASKICONS.HELP - Help icon
+ * @property {string} TASKICONS.HIERARCHY - Hierarchy icon
+ * @property {string} TASKICONS.INBOX - Inbox icon
+ * @property {string} TASKICONS.LEAF - Leaf icon
+ * @property {string} TASKICONS.LIST - List icon
+ * @property {string} TASKICONS.MINUS - Minus icon
+ * @property {string} TASKICONS.MINUS_OUTLINE - Minus outline icon
+ * @property {string} TASKICONS.MORE - More icon
+ * @property {string} TASKICONS.MORE_OUTLINE - More outline icon
+ * @property {string} TASKICONS.PEN - Pen icon
+ * @property {string} TASKICONS.QUESTIONING - Questioning icon
+ * @property {string} TASKICONS.SAD - Sad icon
+ * @property {string} TASKICONS.SMILE - Smile icon
+ * @property {string} TASKICONS.SOUND - Sound icon
+ * @property {string} TASKICONS.SURPRISED - Surprised icon
+ * @property {string} TASKICONS.TEXT - Text icon
+ * @property {string} TASKICONS.TIME - Time icon
+ * @property {string} TASKICONS.WORK - Work icon
  *
  * @example
  * import { ICONS } from '../../constants';
@@ -65,6 +129,10 @@ export const ICONS = {
     BACK: {
         ACTIVE: require('../assets/icons/arrow_back.png'),
         INACTIVE: require('../assets/icons/arrow_back.png'),
+    },
+    CAMERA: {
+        ACTIVE: require('../assets/icons/camera_2_line.png'),
+        INACTIVE: require('../assets/icons/camera_2_fill.png'),
     },
     CLOSE: {
         ACTIVE: require('../assets/icons/close.png'),
@@ -125,6 +193,15 @@ export const ICONS = {
     TIMETABLE: {
         ACTIVE: require('../assets/icons/calendar-clock.png'),
         INACTIVE: require('../assets/icons/calendar-clock-outline.png'),
+    },
+    WEATHER_ICONS: {
+        CLOUDY: require('../assets/icons/cloud_line.png'),
+        NIGHT: require('../assets/icons/moon_fog_line.png'),
+        RAIN: require('../assets/icons/heavy_rain_line.png'),
+        SNOWFALL: require('../assets/icons/moderate_snow_line.png'),
+        SUNNY: require('../assets/icons/sun_fog_line.png'),
+        SUN_CLOUDY: require('../assets/icons/sun_cloudy_line.png'),
+        THUNDER: require('../assets/icons/cloud_lightning_line.png'),
     },
     TASKICONS: {
         ANNOYED: require('../assets/icons/annoyed-outline.png'),

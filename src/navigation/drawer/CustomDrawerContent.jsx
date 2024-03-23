@@ -7,11 +7,14 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../context/ThemeContext";
+import {useAuth} from "../../context/AuthContext";
 
 const CustomDrawerContent = ({navigation}) => {
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    const {logout, token} = useAuth();
 
     const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
     const styles = getStyles(insets);
@@ -127,7 +130,7 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Kontakt</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
+                    <TouchableOpacity onPress={logout} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LOGOUT.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>

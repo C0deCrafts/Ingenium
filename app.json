@@ -15,7 +15,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Diese App benötigt Zugriff auf Ihren Standort, um Ihnen das aktuelle Wetter an Ihrem Standort anzeigen zu können. Ihr Standort wird nicht im Hintergrund gespeichert oder verfolgt, wenn die App geschlossen ist."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +31,20 @@
     },
     "web": {
       "favicon": "./src/assets/icons/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Erlaube $(PRODUCT_NAME), auf deine Face ID Daten zuzugreifen, um eine sichere und schnelle Authentifizierung zu ermöglichen."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Erlaube Ingenium auf deine Location zuzugreifen."
+        }
+      ]
+    ]
   }
 }

@@ -5,6 +5,8 @@ import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomInputFieldLogin from "../../components/inputFields/CustomInputFieldLogin";
+import {useState} from "react";
+import {useAuth} from "../../context/AuthContext";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -17,7 +19,17 @@ function Login({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const {login} = useAuth();
+
     const styles = getStyles(insets);
+
+    const handleLogin = async () => {
+        login(userName, password);
+    }
 
     const forgotPassword = () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
@@ -41,8 +53,8 @@ function Login({navigation}){
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Nutze deine Ilias Zugangsdaten für den Login</Text>
             </View>
             <View>
-                <CustomInputFieldLogin placeholder="Benutzername" keyboardType={"default"} maxTextInputLength={25}/>
-                <CustomInputFieldLogin placeholder="Password" keyboardType={"default"} isPassword={true} maxTextInputLength={25}/>
+                <CustomInputFieldLogin placeholder="Benutzername" keyboardType={"default"} maxTextInputLength={25} onChangeText={setUserName}/>
+                <CustomInputFieldLogin placeholder="Password" keyboardType={"default"} isPassword={true} maxTextInputLength={25} onChangeText={setPassword}/>
             </View>
 
             <View style={styles.container}>
@@ -51,7 +63,7 @@ function Login({navigation}){
                 </TouchableOpacity>
             </View>
 
-            <CustomButton title={"Login"} onPressFunction={()=> console.log("Pressed")}/>
+            <CustomButton title={"Login"} onPressFunction={()=> handleLogin()}/>
 
             <View style={[styles.container, styles.footer]}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Keinen Account?</Text>
