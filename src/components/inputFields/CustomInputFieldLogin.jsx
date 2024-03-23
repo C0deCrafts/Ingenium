@@ -1,5 +1,5 @@
 import {StyleSheet, TextInput, View} from "react-native";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import Icon from "../Icon";
 
@@ -15,6 +15,7 @@ import Icon from "../Icon";
  * @param {number} maxTextInputLength - The maximum length of the text input allowed.
  * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
  * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
+ * @param {function} onChangeTextHandler - Event handler for on change text event.
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
@@ -22,7 +23,7 @@ import Icon from "../Icon";
  *   isPassword={true}
  *   maxTextInputLength={25}/>
  */
-function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, iconName}) {
+function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, onChangeTextHandler}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -53,6 +54,7 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
+                onChangeText={onChangeTextHandler}
             />
         </View>
     )

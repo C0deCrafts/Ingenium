@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity, Image} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, Platform} from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/buttons/CustomButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -39,23 +39,34 @@ function Login({navigation}){
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/*Image and Greeting*/}
             <View style={[styles.container, styles.paddingBottom]}>
-                <Image source={require("../../assets/images/Ingenium_Logo_with_box.png")} style={styles.logo} resizeMode={"contain"}/>
+                <Image source={require("../../assets/images/Ingenium_Logo_with_box.png")} style={styles.logo}
+                       resizeMode={"contain"}/>
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Willkommen!</Text>
-                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS Zugangsdaten zur Anmeldung.</Text>
+                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS
+                    Zugangsdaten zur Anmeldung.</Text>
             </View>
             {/*Input and Login Button*/}
-            <View style={styles.inputFieldContainer}>
-                <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25} iconName={ICONS.LOGIN.USER}/>
-                <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true} maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK}/>
-                <CustomButton title={"Anmelden"} onPressFunction={()=> console.log("Login was Pressed")}/>
-            </View>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <View style={styles.inputFieldContainer}>
+                    <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
+                                           iconName={ICONS.LOGIN.USER} />
+                    <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
+                                           maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK}/>
+                    <CustomButton title={"Anmelden"} onPressFunction={() => console.log("Login was Pressed")}/>
+                </View>
+            </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>
-                <TouchableOpacity onPress={()=>{forgotPassword()}}>
+                <TouchableOpacity onPress={() => {
+                    forgotPassword()
+                }}>
                     <Text style={[styles.textButton, styles.textXS]}>Password vergessen?</Text>
                 </TouchableOpacity>
                 <View style={styles.footer}>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen Account?</Text>
+                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen
+                        Account?</Text>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate("NoAccount")
                     }}>
@@ -64,7 +75,6 @@ function Login({navigation}){
                 </View>
             </View>
         </View>
-
     )
 }
 
@@ -91,7 +101,7 @@ function getStyles(insets) {
             alignItems: "center",
         },
         logo: {
-            width: '80%',
+            width: '90%',
             marginBottom: SIZES.SPACING_VERTICAL_DEFAULT
         },
         paddingBottom: {
