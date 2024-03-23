@@ -1,5 +1,5 @@
 import {Text, StyleSheet, TouchableOpacity} from "react-native";
-import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {ICONS} from "../../constants/icons";
 import SquareIcon from "../SquareIcon";
@@ -21,6 +21,7 @@ import SquareIcon from "../SquareIcon";
  * @param {number} [extraPadding=0] - Optional. Extra padding to be applied to the button (default is 0).
  *
  * @param isUserIcon
+ * @param isSelected
  * @example
  * // Inside your component's render method, use the CustomBoxButton component like this:
  * <CustomBoxButton
@@ -47,6 +48,7 @@ function CustomBoxButton({
                              showForwardIcon = true,
                              extraPadding = 0,
                              isUserIcon,
+                             isSelected = false, // Standardwert ist false
                          }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -58,7 +60,8 @@ function CustomBoxButton({
         <TouchableOpacity onPress={onPress}
                           style={[
                               isDarkMode ? styles.containerDark : styles.containerLight,
-                              {padding: containerPadding} // Applying the calculated padding
+                              {padding: containerPadding}, // Applying the calculated padding,
+                              isSelected ? styles.selected : null, // Anwenden des ausgewählten Styles, falls isSelected true ist
                           ]}>
             <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor} isUserIcon={isUserIcon}/>
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>
@@ -108,5 +111,9 @@ const styles = StyleSheet.create({
     secondButtonLabelDark: {
         fontSize: SIZES.TEXT_SIZE - 3,
         color: DARKMODE.TEXT_COLOR
-    }
+    },
+    selected: {
+        borderColor: COLOR.ICONCOLOR_CUSTOM_BLUE,
+        borderLeftWidth: 5,
+    },
 })

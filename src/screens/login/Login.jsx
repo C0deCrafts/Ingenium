@@ -6,6 +6,8 @@ import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomInputFieldLogin from "../../components/inputFields/CustomInputFieldLogin";
 import {ICONS} from "../../constants/icons";
+import {useState} from "react";
+import {useAuth} from "../../context/AuthContext";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -18,7 +20,17 @@ function Login({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const {login} = useAuth();
+
     const styles = getStyles(insets);
+
+    const handleLogin = async () => {
+        login(userName, password);
+    }
 
     const forgotPassword = () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
@@ -51,10 +63,10 @@ function Login({navigation}){
             >
                 <View style={styles.inputFieldContainer}>
                     <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
-                                           iconName={ICONS.LOGIN.USER} />
+                                           iconName={ICONS.LOGIN.USER} onChangeTextHandler={setUserName}/>
                     <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
-                                           maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK}/>
-                    <CustomButton title={"Anmelden"} onPressFunction={() => console.log("Login was Pressed")}/>
+                                           maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK} onChangeTextHandler={setPassword}/>
+                    <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
                 </View>
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
