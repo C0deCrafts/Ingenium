@@ -84,6 +84,22 @@ function Dashboard({navigation}) {
 
     const nextTasksCount = getNextTasksCount();
 
+    // Calculate the current hour
+    const currentHour = new Date().getHours();
+    let greeting;
+
+    if (currentHour < 5) {
+        greeting = "Im Nachtmodus?";
+    } else if (currentHour < 12) {
+        greeting = "Kaffee schon bereit?";
+    } else if (currentHour < 17) {
+        greeting = "Guten Tag!";
+    } else if (currentHour < 21) {
+        greeting = "Guten Abend,";
+    } else {
+        greeting = "Noch wach?";
+    }
+
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -159,8 +175,7 @@ function Dashboard({navigation}) {
 
                     {/* Guten Tag, Max Mustermann*/}
                     <View style={styles.greetingContainer}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>Guten
-                            Tag,</Text>
+                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>{greeting}</Text>
                         <Text
                             style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>Maximilian</Text>
                     </View>
@@ -285,7 +300,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-        //paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
     },
     motivationalQuoteBoxDark: {
         flex: 2, // 2/3
@@ -295,7 +309,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
-        //paddingVertical: SIZES.SPACING_VERTICAL_DEFAULT,
     },
     motivationalQuoteText: {
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
