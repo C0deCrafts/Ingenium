@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity} from "react
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import {useDatabase} from "../../context/DatabaseContext";
 import Icon from "../../components/Icon";
@@ -14,7 +14,7 @@ import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
 import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
-import {AuthProvider, useAuth} from "../../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 
 /**
  * ### Dashboard

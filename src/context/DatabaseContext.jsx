@@ -46,7 +46,7 @@ export const DatabaseProvider = ({children}) => {
         // Entferne setIsLoading Aufrufe hier, falls das Laden der Listen schnell erfolgt
         // und die UI nicht direkt beeinflusst wird, um unnötige Rerenders zu vermeiden. (laut Chat GPT - muss noch geprüft werden ob das Sinn macht?)
         try {
-            const start = performance.now();
+            //const start = performance.now();
 
             const loadedLists = await localDatabase().getTaskLists();
             const listsArray = [...loadedLists];
