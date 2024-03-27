@@ -17,7 +17,6 @@ import CustomInputFieldLogin from "../../components/inputFields/CustomInputField
 import {ICONS} from "../../constants/icons";
 import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
-import {loginService} from "../../api/backendServices";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -25,7 +24,7 @@ Zum Beispiel kannst du damit einen anderen Bildschirm aufrufen oder zurück zu e
 Bildschirm navigieren. Es stellt praktisch eine Schnittstelle bereit, um zwischen den Bildschirmen
 zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
 */
-function Login({navigation}){
+function Login(){
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;

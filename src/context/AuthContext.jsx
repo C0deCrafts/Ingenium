@@ -2,9 +2,6 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {decodeJWT, loginService} from "../api/backendServices";
 import {getItem, removeItem, saveItem} from "../storages/secureStorage";
 
-
-const userToken = "user-token";
-
 const AuthContext = createContext({});
 
 export const useAuth = () => useContext(AuthContext);

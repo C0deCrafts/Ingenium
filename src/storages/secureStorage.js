@@ -11,8 +11,7 @@ export const saveItem = async (key, value) => {
 
 export const getItem = async (key) => {
     try {
-        const value = await SecureStore.getItemAsync(key);
-        return value;
+        return await SecureStore.getItemAsync(key);
     } catch (error) {
         console.error(`Error getting ${key}: `, error);
         return null;
