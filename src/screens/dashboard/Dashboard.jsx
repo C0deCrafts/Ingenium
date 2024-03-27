@@ -127,8 +127,8 @@ function Dashboard({navigation}) {
             setQuote(getRandomQuote);
         }
         fetchData();
-        console.log("IS DARKMODE?", isDarkMode)
-        console.log("THEME DASHBOARD: ",theme)
+        //console.log("IS DARKMODE?", isDarkMode)
+        //console.log("THEME DASHBOARD: ",theme)
     }, [isDbReady]);
 
     useEffect(() => {

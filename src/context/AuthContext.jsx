@@ -14,6 +14,13 @@ export const AuthProvider = ({children}) => {
 
     const [user, setUser] = useState(null);
 
+    // Berechnet, wie lange der Token noch gültig ist (in Minuten)
+    const calculateTokenValidity = (decodedToken) => {
+        const currentTime = Date.now() / 1000; // Aktuelle Zeit in Sekunden
+        const expTime = decodedToken.exp; // Ablaufzeit des Tokens in Sekunden
+        const timeLeft = expTime - currentTime; // Verbleibende Zeit in Sekunden
+        return timeLeft / 60; // Umrechnen in Minuten
+    };
 
     useEffect(() => {
         const initializeAuth = async () => {
@@ -21,22 +28,20 @@ export const AuthProvider = ({children}) => {
             if(storedToken){
                 console.log("Token aus Secure Storage: ", storedToken);
                 const decoded = decodeJWT(storedToken);
-                if(decoded && decoded.exp * 1000 > Date.now()){
+                const validityDuration = calculateTokenValidity(decoded);
+
+                if(validityDuration > 0){
+                    console.log(`Token ist noch ${validityDuration.toFixed(2)} Minuten gültig.`);
                     setToken(storedToken);
                     setUserDetails({uid: decoded.uid });
                     setInitialized(true);
                 } else {
-                    console.log("Token abgelaufen oder ungültig");
+                    console.log("Token abgelaufen oder ungültig. Nutzer wird ausgelogget");
                     await logout();
                 }
             } else {
-                console.log("Secure Storage Fehler - kein Token")
+                console.log("Secure Storage Fehler - kein Token gefunden")
             }
-            // try to get stored token
-            // if stored token == true
-            // setToken
-            // ?? axios.defaults.header.common["Authorization"]="Bearer &{stored token}"; ??
-            // after if --> setInitialized = true
         };
         initializeAuth();
     }, []);
@@ -45,15 +50,14 @@ export const AuthProvider = ({children}) => {
         try {
             const newToken = await loginService(username, password);
             if(newToken){
-                setToken(newToken);
                 const decodes = decodeJWT(newToken);
                 setUserDetails({uid: decodes.uid});
+                setToken(newToken);
 
                 //secure storage
                 await saveItem("userToken", newToken);
-                await saveItem("userId", decodes.uid.toString())
-                console.log("User Details: ", userDetails)
-
+                //await saveItem("userId", decodes.uid.toString())
+                //console.log("User Details: ", userDetails)
                 setInitialized(true);
                 console.log("Login Methode, TOKEN: ", newToken);
             } else {
@@ -63,7 +67,7 @@ export const AuthProvider = ({children}) => {
             }
 
         } catch (err) {
-            console.error("Login fehlgeschlagen: ", err.response ? err.response.data : err);
+            console.error("Login fehlgeschlagen: ", err);
             setInitialized(false);
         }
     }

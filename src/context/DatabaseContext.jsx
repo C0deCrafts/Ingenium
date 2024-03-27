@@ -24,18 +24,18 @@ export const DatabaseProvider = ({children}) => {
         try {
             //await localDatabase().debugDB();
             await localDatabase().createTable();
-            console.log("Datenbank und Tabellen wurden erfolgreich initialisiert.");
+            //console.log("Datenbank und Tabellen wurden erfolgreich initialisiert.");
 
-            console.log("Sicherstellung, dass die 'Ingenium'-Liste existiert.");
+            //console.log("Sicherstellung, dass die 'Ingenium'-Liste existiert.");
             await ensureListExists("Ingenium", "HAT", COLOR.ICONCOLOR_CUSTOM_BLUE); // Ensure a default list exists
 
             await loadLists();
-            console.log("Alle Listen wurden erfolgreich geladen.");
+            //console.log("Alle Listen wurden erfolgreich geladen.");
 
             setIsDbReady(true);
         } catch (err) {
             setError(err.message);
-            console.log("Fehler im DatabaseContext - initializeDatabase():", err);
+            //console.log("Fehler im DatabaseContext - initializeDatabase():", err);
         } finally {
             setIsLoading(false);
         }
@@ -62,11 +62,11 @@ export const DatabaseProvider = ({children}) => {
             //console.log("LOAD LISTS IN DBCONTEXT: Loaded lists:", loadedLists); // Nur für Debugging-Zwecke
             //console.log("LOAD LISTS IN DBCONTEXT: Loaded tasks:", loadedTasks); // Nur für Debugging-Zwecke
 
-            const end = performance.now();
-            console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
+            //const end = performance.now();
+            //console.log(`Das Laden der Listen dauerte ${end - start} Millisekunden.`);
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim Laden der Listen:", err);
+            //console.error("Fehler beim Laden der Listen:", err);
         }
     };
 
@@ -76,9 +76,9 @@ export const DatabaseProvider = ({children}) => {
         const listExists = lists.some(list => list.listName === listName);
         if (!listExists) {
             await localDatabase().insertTaskList({listName, iconName, iconBackgroundColor});
-            console.log(`Liste '${listName}' wurde erstellt.`);
+            //console.log(`Liste '${listName}' wurde erstellt.`);
         } else {
-            console.log(`Die Liste '${listName}' existiert bereits.`);
+            //console.log(`Die Liste '${listName}' existiert bereits.`);
         }
     };
 
@@ -87,10 +87,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().insertTaskList(list);
             await loadLists();
-            console.log("Liste erfolgreich hinzugefügt");
+            //console.log("Liste erfolgreich hinzugefügt");
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim Hinzufügen der Liste:", err.message);
+            //console.error("Fehler beim Hinzufügen der Liste:", err.message);
         }
     };
 
@@ -99,10 +99,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().insertTaskInList(task);
             await loadLists();
-            console.log("Task erfolgreich hinzugefügt");
+            //console.log("Task erfolgreich hinzugefügt");
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim Hinzufügen des Tasks:", err);
+            //console.error("Fehler beim Hinzufügen des Tasks:", err);
         }
     }
 
@@ -111,10 +111,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().deleteTaskList(listId);
             await loadLists();
-            console.log("Liste erfolgreich gelöscht");
+            //console.log("Liste erfolgreich gelöscht");
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim Löschen der Liste:", err);
+            //console.error("Fehler beim Löschen der Liste:", err);
         }
     };
 
@@ -123,10 +123,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().deleteTask(taskId);
             await loadLists();
-            console.log("Task erfolgreich gelöscht");
+            //console.log("Task erfolgreich gelöscht");
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim Löschen des Tasks:", err);
+            //console.error("Fehler beim Löschen des Tasks:", err);
         }
     };
 
@@ -135,10 +135,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().updateTaskIsDone(taskId, isDone);
             await loadLists();
-            console.log("Task isDone erfolgreich getogglet");
+            //console.log("Task isDone erfolgreich getogglet");
         } catch (err) {
             setError(err.message);
-            console.error("Fehler beim togglen von isDone:", err);
+            //console.error("Fehler beim togglen von isDone:", err);
         }
     };
 
@@ -147,10 +147,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().updateTask(task);
             await loadLists();
-            console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
+            //console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
         } catch (err) {
             setError(err.message);
-            console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
+            //console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
         }
     };
 

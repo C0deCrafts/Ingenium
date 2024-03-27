@@ -29,9 +29,9 @@ export const ThemeProvider = ({ children }) => {
         loadTheme();
     }, []);
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("Aktuelle THEME nach dem Laden: ", theme);
-    }, [theme]);
+    }, [theme]);*/
 
 
     if (isLoading) {

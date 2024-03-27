@@ -29,8 +29,8 @@ function Login(){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const [userName, setUserName] = useState("becker.emma");
-    const [password, setPassword] = useState("becker2");
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
     const {login} = useAuth();

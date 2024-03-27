@@ -25,9 +25,9 @@ export const localDatabase = () => {
         const dbName = "ingeniumLocalDb.db"
         if (!dbInstance){
             dbInstance = SQLite.openDatabase(dbName)
-            console.log("Datenbankinstanz erstellt:", dbInstance);
+            //console.log("Datenbankinstanz erstellt:", dbInstance);
         } else {
-            console.log("Verwende vorhandene Datenbankinstanz");
+            //console.log("Verwende vorhandene Datenbankinstanz");
         }
         return dbInstance;
     }
