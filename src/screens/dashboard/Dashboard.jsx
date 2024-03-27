@@ -2,7 +2,7 @@ import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity} from "react
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import {useDatabase} from "../../context/DatabaseContext";
 import Icon from "../../components/Icon";
@@ -14,6 +14,7 @@ import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
 import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
+import {AuthProvider, useAuth} from "../../context/AuthContext";
 
 /**
  * ### Dashboard
@@ -48,6 +49,7 @@ function Dashboard({navigation}) {
     const day = new Date().getDay();
     const [quote, setQuote] = useState("");
 
+    const { userData } = useAuth();
     // Dummy-Tasks
     const dummyTasks = [
         { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
@@ -179,7 +181,7 @@ function Dashboard({navigation}) {
                     <View style={styles.greetingContainer}>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>{greeting}</Text>
                         <Text
-                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>Maximilian</Text>
+                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>{userData?.firstname}</Text>
                     </View>
                     {/* Spacing */}
                     <View style={styles.spacing}></View>
@@ -352,7 +354,7 @@ const styles = StyleSheet.create({
     headerName: {
         fontSize: SIZES.SCREEN_HEADER + 10,
         fontWeight: "300",
-        paddingLeft: 20
+        //paddingLeft: 20
     },
     coursesContainer: {
         flexDirection: 'row',

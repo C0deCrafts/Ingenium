@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {decodeJWT, loginService} from "../api/backendServices";
+import {decodeJWT, getUserData, loginService} from "../api/backendServices";
 import {getItem, removeItem, saveItem} from "../storages/secureStorage";
 
 const AuthContext = createContext({});
@@ -10,6 +10,8 @@ export const AuthProvider = ({children}) => {
     const [token, setToken] = useState(null);
     const [initialized, setInitialized] = useState(false);
     const [userDetails, setUserDetails] = useState({});
+    const [userData, setUserData] = useState(null);
+    const [loginError, setLoginError] = useState(null); // Neuer Zustand für Fehlermeldungen
 
 
     const [user, setUser] = useState(null);
@@ -59,14 +61,11 @@ export const AuthProvider = ({children}) => {
                 //await saveItem("userId", decodes.uid.toString())
                 //console.log("User Details: ", userDetails)
                 setInitialized(true);
+                setLoginError(null);
                 console.log("Login Methode, TOKEN: ", newToken);
-            } else {
-                // zu Fehlerscreen wechseln
-                console.error("Login fehlgeschlagen: Kein Token erhalten.");
-                setInitialized(false);
             }
-
         } catch (err) {
+            setLoginError(err.message);
             console.error("Login fehlgeschlagen: ", err);
             setInitialized(false);
         }
@@ -81,5 +80,22 @@ export const AuthProvider = ({children}) => {
         console.log("Ausgeloggt und Daten bereinigt");
     }
 
-    return <AuthContext.Provider value={{initialized, user, login, logout}}>{children}</AuthContext.Provider>
+    const getUserDetails = async () => {
+        if (token && userDetails.uid) {
+            try {
+                const data = await getUserData(userDetails.uid, token);
+                setUserData(data); // Speichern der Benutzerdaten im Zustand
+                console.log("GET USER DETAILS: ", data)
+            } catch (error) {
+                console.error("Fehler beim Laden der Benutzerdetails: ", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        getUserDetails(); // Benutzerdaten laden, wenn Token und UID verfügbar sind
+    }, [token, userDetails.uid]);
+
+
+    return <AuthContext.Provider value={{initialized, user, userData, login, logout, loginError}}>{children}</AuthContext.Provider>
 }

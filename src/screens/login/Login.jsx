@@ -6,7 +6,7 @@ import {
     Image,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator
+    ActivityIndicator, Alert
 } from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/buttons/CustomButton";
@@ -33,11 +33,21 @@ function Login(){
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const {login} = useAuth();
+    const {login, loginError} = useAuth();
 
     const styles = getStyles(insets);
 
     const handleLogin = async () => {
+
+        // Überprüfung der minimalen Zeichenanzahl
+        if (userName.length < 3 || password.length < 3) {
+            Alert.alert(
+                "Eingabefehler",
+                "Benutzername und Passwort müssen mindestens 3 Zeichen lang sein."
+            );
+            return; // Beenden der Funktion, um keine API-Anfrage zu senden
+        }
+
         setLoading(true);
         try {
             await login(userName, password);
@@ -103,11 +113,24 @@ function Login(){
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}
             >
-                <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
-                                       iconName={ICONS.LOGIN.USER} onChangeTextHandler={setUserName}/>
-                <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
-                                       maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK} onChangeTextHandler={setPassword}/>
+                <CustomInputFieldLogin
+                    placeholder="Nutzername"
+                    keyboardType={"default"}
+                    maxTextInputLength={40}
+                    iconName={ICONS.LOGIN.USER}
+                    onChangeTextHandler={setUserName}
+                />
+                <CustomInputFieldLogin
+                    placeholder="Passwort"
+                    keyboardType={"default"}
+                    isPassword={true}
+                    maxTextInputLength={40}
+                    iconName={ICONS.LOGIN.LOCK}
+                    onChangeTextHandler={setPassword}
+                />
                 <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
+                {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
+                {loginError && <Text style={{ color: 'red', textAlign: "center" }}>{loginError}</Text>}
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>

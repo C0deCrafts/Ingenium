@@ -33,6 +33,31 @@ export const loginService = async (username, password) => {
         //console.log("LoginService:", response.data.token);
         return response.data.token;
     } catch (err){
-        console.error("Fehler im LoginService: ", err);
+        if (axios.isAxiosError(err)) {
+            const status = err.response?.status;
+            if (status === 401) {
+                throw new Error("Benutzername oder Passwort falsch."); //aktuell nicht verwendet da kein 401 fehler vorhanden
+            } else if (status === 403) {
+                throw new Error("Benutzername oder Passwort falsch!");
+            } else {
+                throw new Error("Ein unerwarteter Fehler ist aufgetreten.");
+            }
+        } else {
+            throw new Error("Ein Netzwerkfehler ist aufgetreten.");
+        }
     }
 };
+
+export const getUserData = async (uid, token) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/user/getUserData/${uid}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log("UserData: ", response.data)
+        return response.data;
+    } catch (err) {
+        console.error("Fehler beim Abrufen der Benutzerdaten: ", err);
+    }
+}
