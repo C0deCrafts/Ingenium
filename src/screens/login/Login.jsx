@@ -6,7 +6,8 @@ import {
     Image,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator, Alert
+    ActivityIndicator,
+    Alert
 } from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/buttons/CustomButton";
@@ -31,11 +32,16 @@ function Login(){
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const {login, loginError} = useAuth();
 
     const styles = getStyles(insets);
+
+    const togglePasswordVisibility = () => { // Funktion zum Umschalten der Sichtbarkeit
+        setPasswordVisible(!passwordVisible);
+    };
 
     const handleLogin = async () => {
 
@@ -122,13 +128,15 @@ function Login(){
                 />
                 <CustomInputFieldLogin
                     placeholder="Passwort"
-                    keyboardType={"default"}
-                    isPassword={true}
+                    keyboardType="default"
                     maxTextInputLength={40}
-                    iconName={ICONS.LOGIN.LOCK}
+                    iconName={passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK}
+                    isPassword={true}
+                    passwordVisible={passwordVisible}
+                    togglePasswordVisibility={togglePasswordVisibility}
                     onChangeTextHandler={setPassword}
                 />
-                <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
+                <CustomButton title={"Anmelden"}rt onPressFunction={() => handleLogin()}/>
                 {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
                 {loginError && <Text style={{ color: 'red', textAlign: "center" }}>{loginError}</Text>}
             </KeyboardAvoidingView>

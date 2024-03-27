@@ -258,7 +258,8 @@ export const ICONS = {
 
     LOGIN: {
         USER: require('../assets/icons/user.png'),
-        LOCK: require('../assets/icons/lock.png')
+        LOCK: require('../assets/icons/lock.png'),
+        UNLOCK: require('../assets/icons/unlock_line.png'),
     }
 
 };

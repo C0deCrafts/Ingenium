@@ -1,7 +1,9 @@
-import {StyleSheet, TextInput, View} from "react-native";
+import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import Icon from "../Icon";
+import {useState} from "react";
+import {ICONS} from "../../constants/icons";
 
 /**
  * ## CustomInputFieldLogin Component
@@ -23,7 +25,16 @@ import Icon from "../Icon";
  *   isPassword={true}
  *   maxTextInputLength={25}/>
  */
-function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, onChangeTextHandler}) {
+function CustomInputFieldLogin({
+              placeholder,
+              keyboardType,
+              maxTextInputLength,
+              isPassword,
+              iconName,
+              onChangeTextHandler,
+              passwordVisible, // Neu hinzugefügt
+              togglePasswordVisibility // Neu hinzugefügt
+}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -43,14 +54,24 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
     ];
     const inputKeyboardType = validKeyboardTypes.includes(keyboardType) ? keyboardType : "default";
 
+    const iconToShow = isPassword ? (passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK) : iconName;
+
     return (
         <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
-            <Icon name={iconName} size={24} color={isDarkMode? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
+            {/* Wenn isPassword true ist, rendern wir das Icon in einem TouchableOpacity für Interaktionen */}
+            {isPassword ? (
+                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                    <Icon name={iconToShow} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
+                </TouchableOpacity>
+            ) : (
+                // Wenn isPassword false ist, wird das Icon ohne TouchableOpacity gerendert
+                <Icon name={iconName} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
+            )}
             <TextInput
                 style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input, {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
-                secureTextEntry={isPassword}
+                secureTextEntry={isPassword && !passwordVisible}
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
