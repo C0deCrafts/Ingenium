@@ -118,6 +118,7 @@ function Login(){
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}
+                keyboardVerticalOffset={25}
             >
                 <CustomInputFieldLogin
                     placeholder="Nutzername"
@@ -165,14 +166,14 @@ function getStyles(insets) {
         containerLight: {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-            paddingTop: insets.top,
+            //paddingTop: insets.top,
             paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },
         containerDark: {
             flex: 1,
             backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-            paddingTop: insets.top,
+            //paddingTop: insets.top,
             paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },
