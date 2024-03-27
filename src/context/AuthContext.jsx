@@ -1,8 +1,11 @@
 import {createContext, useContext, useEffect, useState} from "react";
+import {loginService} from "../api/backendServices";
+import axios from "axios";
+
 
 const userToken = "user-token";
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -22,12 +25,13 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     const login = async (userName, password) => {
-        //API request to get token
-        //setToken
-        //SecureStore.setItemAsync(key, token as value);
-        //?? axios.defaults.header.common["Authorization"]="Bearer &{token}"; ??
-        console.log("login function from: AuthContext")
-        setInitialized(true);
+        try {
+            const data = await loginService(userName, password);
+            //console.log("Login Methode, TOKEN: ", data);
+        } catch (err) {
+            console.error("Login fehlgeschlagen: ", err.response ? err.response.data : err);
+            setInitialized(false);
+        }
     }
 
     const logout = async () => {

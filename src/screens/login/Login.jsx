@@ -1,4 +1,13 @@
-import {Text, View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, Platform} from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ActivityIndicator
+} from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/buttons/CustomButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -8,6 +17,7 @@ import CustomInputFieldLogin from "../../components/inputFields/CustomInputField
 import {ICONS} from "../../constants/icons";
 import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
+import {loginService} from "../../api/backendServices";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -20,8 +30,8 @@ function Login({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
+    const [userName, setUserName] = useState("becker.emma");
+    const [password, setPassword] = useState("becker2");
     const [loading, setLoading] = useState(false);
 
     const {login} = useAuth();
@@ -29,7 +39,8 @@ function Login({navigation}){
     const styles = getStyles(insets);
 
     const handleLogin = async () => {
-        login(userName, password);
+        //setLoading(true);
+        await login(userName, password);
     }
 
     /**
@@ -62,6 +73,13 @@ function Login({navigation}){
         Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
     }
 
+    if (loading) {
+        return (
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <ActivityIndicator size="large"/>
+            </View>
+        );
+    }
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/*Image and Greeting*/}
