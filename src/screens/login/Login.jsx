@@ -39,8 +39,15 @@ function Login({navigation}){
     const styles = getStyles(insets);
 
     const handleLogin = async () => {
-        //setLoading(true);
-        await login(userName, password);
+        setLoading(true);
+        try {
+            await login(userName, password);
+        } catch (err) {
+            console.error("Login Fehler, ", err)
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     /**
