@@ -19,8 +19,6 @@ export const decodeJWT = (token) => {
         return null;
     }
 };
-
-
 // Authentifizierungsmethode
 export const loginService = async (username, password) => {
     //console.log("Login Service gestartet...")
@@ -61,3 +59,66 @@ export const getUserData = async (uid, token) => {
         console.error("Fehler beim Abrufen der Benutzerdaten: ", err);
     }
 }
+
+export const getIcalUrl = async (uid, token) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/user/getIcalUrl/${uid}/0`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log("iCalUrl: ", response.data)
+        return response.data;
+    } catch (err) {
+        if (axios.isAxiosError(err) && err.response) {
+            // Zugriff auf den HTTP-Statuscode
+            const statusCode = err.response.status;
+            //console.log(`Fehler beim Abrufen der iCal URL: ${statusCode}`);
+            switch (statusCode) {
+                case 404:
+                    console.log("Die iCal URL wurde nicht gefunden.");
+                    break;
+                case 403:
+                    console.log("Zugriff auf die iCal URL verweigert.");
+                    break;
+                default:
+                    console.log("Ein unerwarteter Fehler ist aufgetreten beim Abrufen der iCal URL.");
+            }
+        } else {
+            console.log("Ein Netzwerkfehler ist aufgetreten.");
+        }
+        throw err;
+    }
+};
+
+// Methode zum Abrufen der iCal Daten
+export const getIcalData = async (uid, token) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/user/getIcalData/${uid}/0`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log("iCalData: ", response.data)
+        return response.data;
+    } catch (err) {
+        if (axios.isAxiosError(err) && err.response) {
+            // Zugriff auf den HTTP-Statuscode
+            const statusCode = err.response.status;
+            //console.error(`Fehler beim Abrufen der iCal Daten: ${statusCode}`);
+            switch (statusCode) {
+                case 404:
+                    console.error("Die iCal Daten wurden nicht gefunden.");
+                    break;
+                case 403:
+                    console.error("Zugriff auf die iCal Daten verweigert.");
+                    break;
+                default:
+                    console.error("Ein unerwarteter Fehler ist aufgetreten beim Abrufen der iCal Daten.");
+            }
+        } else {
+            console.error("Ein Netzwerkfehler ist aufgetreten.");
+        }
+        throw err;
+    }
+};
