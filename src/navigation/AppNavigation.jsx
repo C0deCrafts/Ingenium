@@ -28,7 +28,7 @@ function AppNavigation() {
     if (loading || !initialized) {
         // Ladebildschirm anzeigen, während die Authentifizierungsprüfung läuft
         return (
-            <LoadingComponent/>
+            <LoadingComponent message={"Laden..."}/>
         );
     }
 

@@ -18,6 +18,7 @@ import CustomInputFieldLogin from "../../components/inputFields/CustomInputField
 import {ICONS} from "../../constants/icons";
 import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
+import LoadingComponent from "../../components/LoadingComponent";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -98,9 +99,7 @@ function Login(){
 
     if (loading) {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large"/>
-            </View>
+            <LoadingComponent message={"Du wirst gerade eingelogged..."}/>
         );
     }
     return (

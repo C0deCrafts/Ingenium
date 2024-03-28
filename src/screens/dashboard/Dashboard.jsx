@@ -147,7 +147,7 @@ function Dashboard({navigation}) {
     // If the database is still loading, show the loading indicator
     if (!isDbReady) {
         return (
-            <LoadingComponent/>
+            <LoadingComponent message={"Laden..."}/>
         );
     }
 
