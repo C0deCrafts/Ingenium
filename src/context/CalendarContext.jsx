@@ -9,16 +9,16 @@ export const useCalendar = () => useContext(CalendarContext);
 export const CalendarProvider = ({children}) => {
     const [icalUrl, setIcalUrl] = useState(null);
     const [icalData, setIcalData] = useState(null);
-    const {token, userData} = useAuth();
+    const {token, userId} = useAuth();
 
     useEffect(() => {
         const loadCalendarData = async () => {
-            if(token && userData?.userID){
+            if(token && userId){
                 try {
-                    const url = await getIcalUrl(userData?.userID, token);
+                    const url = await getIcalUrl(userId, token);
                     setIcalUrl(url);
                     console.log("URL: ", url)
-                    const data = await getIcalData(userData?.userID, token);
+                    const data = await getIcalData(userId, token);
                     setIcalData(data);
                     console.log("DATA: ", data)
                 } catch (err) {
@@ -27,7 +27,7 @@ export const CalendarProvider = ({children}) => {
             }
         }
         loadCalendarData();
-    }, [token, userData?.userID]);
+    }, [token, userId]);
 
     return (
         <CalendarContext.Provider value={{icalUrl, icalData}}>

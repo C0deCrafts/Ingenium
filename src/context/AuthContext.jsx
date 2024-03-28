@@ -12,59 +12,60 @@ export const AuthProvider = ({children}) => {
         initialized: false,
         isAuthenticated: false,
     });
-
-    const [userDetails, setUserDetails] = useState({});
+    const [loginError, setLoginError] = useState(null);
+    const [userId, setUserId] = useState(null);
     const [userData, setUserData] = useState(null);
-    const [loginError, setLoginError] = useState(null); // Neuer Zustand für Fehlermeldungen
 
-
-    const [user, setUser] = useState(null);
-
-    // Berechnet, wie lange der Token noch gültig ist (in Minuten)
+    // Function to calculate remaining token validity
     const calculateTokenValidity = (decodedToken) => {
-        const currentTime = Date.now() / 1000; // Aktuelle Zeit in Sekunden
-        const expTime = decodedToken.exp; // Ablaufzeit des Tokens in Sekunden
-        const timeLeft = expTime - currentTime; // Verbleibende Zeit in Sekunden
-        return timeLeft / 60; // Umrechnen in Minuten
+        const currentTime = Date.now() / 1000; // Current time in seconds
+        const expTime = decodedToken.exp; // Token expiry time in seconds
+        const timeLeft = expTime - currentTime; // Remaining time in seconds
+        return timeLeft / 60; // Convert to minutes
+    };
+
+    const initializeAuth = async () => {
+        const storedToken = await getItem("userToken"); // Retrieve token from storage
+        if(storedToken){
+            console.log("Token aus Secure Storage: ", storedToken);
+            const decoded = decodeJWT(storedToken); // Decode token
+            const validityDuration = calculateTokenValidity(decoded); // Calculate token validity
+
+            if(validityDuration > 0){
+                console.log(`Token ist noch ${validityDuration.toFixed(2)} Minuten gültig.`);
+                // If token is valid
+                setToken(storedToken);
+                setAuthStatus({initialized: true, isAuthenticated: true});
+                setUserId(decoded.uid);
+            } else {
+                // If token is expired or invalid
+                console.log("Token abgelaufen oder ungültig. Nutzer wird ausgeloggt");
+                await logout();
+            }
+        } else {
+            // If no token is found in storage
+            console.log("Secure Storage - kein Token gespeichert")
+            setAuthStatus({initialized: true, isAuthenticated: false});
+        }
     };
 
     useEffect(() => {
-        const initializeAuth = async () => {
-            const storedToken = await getItem("userToken");
-            if(storedToken){
-                console.log("Token aus Secure Storage: ", storedToken);
-                const decoded = decodeJWT(storedToken);
-                const validityDuration = calculateTokenValidity(decoded);
-
-                if(validityDuration > 0){
-                    console.log(`Token ist noch ${validityDuration.toFixed(2)} Minuten gültig.`);
-                    setToken(storedToken);
-                    setUserDetails({uid: decoded.uid });
-                    setAuthStatus({initialized: true, isAuthenticated: true});
-                } else {
-                    console.log("Token abgelaufen oder ungültig. Nutzer wird ausgelogget");
-                    await logout();
-                }
-            } else {
-                console.log("Secure Storage - kein Token gespeichert")
-                setAuthStatus({initialized: true, isAuthenticated: false});
-            }
-        };
         initializeAuth();
     }, []);
 
+    // Function to handle user login
     const login = async (username, password) => {
         try {
             const newToken = await loginService(username, password);
-            // Erfolgreicher Login, setze Token und auth Status
-            const decodes = decodeJWT(newToken);
-            setUserDetails({ uid: decodes.uid });
+            // Successful login, set token and auth status
+            const decoded = decodeJWT(newToken);
+            setUserId(decoded.uid);
             setToken(newToken);
-            // Speichere Token sicher
+            // Save token securely
             await saveItem("userToken", newToken);
-            // Aktualisiere AuthStatus
+            // Update auth status
             setAuthStatus({ initialized: true, isAuthenticated: true });
-            setLoginError(null); // Zurücksetzen von etwaigen Fehlermeldungen
+            setLoginError(null); // Reset any error messages
         } catch (err) {
             console.log("Fehler beim Login:", err);
             setLoginError(err.message);
@@ -73,22 +74,25 @@ export const AuthProvider = ({children}) => {
         }
     };
 
-
+    // Function to handle user logout
     const logout = async () => {
         await removeItem("userToken");
-        await removeItem("userId");
         setToken(null);
-        setUserDetails({});
+        setUserId(null);
+        setUserData(null);
         setAuthStatus({ initialized: true, isAuthenticated: false });
         console.log("Ausgeloggt und Daten bereinigt");
     }
 
+    // Function to get on object with user details ->
+    // {"accountIsNotLocked": value, "firstname": value, "lastname": value, "title": value, "userID": value}
     const getUserDetails = async () => {
-        if (token && userDetails.uid) {
+        //console.log("USER ID: ", userId)
+        if (token && userId) {
             try {
-                const data = await getUserData(userDetails.uid, token);
+                const data = await getUserData(userId, token);
                 setUserData(data); // Speichern der Benutzerdaten im Zustand
-                console.log("GET USER DETAILS: ", data)
+                //console.log("GET USER DETAILS: ", data)
             } catch (error) {
                 console.log("Fehler beim Laden der Benutzerdetails: ", error);
             }
@@ -96,9 +100,8 @@ export const AuthProvider = ({children}) => {
     };
 
     useEffect(() => {
-        getUserDetails(); // Benutzerdaten laden, wenn Token und UID verfügbar sind
-    }, [token, userDetails.uid]);
+        getUserDetails(); // Load userData, if token and uid are available
+    }, [token, userId]);
 
-
-    return <AuthContext.Provider value={{...authStatus, token, user, userData, userDetails, login, logout, loginError}}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{...authStatus, token, userId, userData, login, logout, loginError}}>{children}</AuthContext.Provider>
 }

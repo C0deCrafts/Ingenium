@@ -1,10 +1,10 @@
 import axios from "axios";
 import { decode as atob } from 'base-64';
 
-// Basis-URL des Backends
+// Base URL of the backend
 const BASE_URL = "http://192.168.178.33:8080/ingeapp/api/v1";
 
-// JWT dekodieren, um Benutzerinformationen zu extrahieren
+// Function to decode JWT to extract user information
 export const decodeJWT = (token) => {
     try {
         const base64Url = token.split('.')[1];
@@ -19,7 +19,7 @@ export const decodeJWT = (token) => {
         return null;
     }
 };
-// Authentifizierungsmethode
+// Authentication method
 export const loginService = async (username, password) => {
     //console.log("Login Service gestartet...")
     try {
@@ -46,6 +46,7 @@ export const loginService = async (username, password) => {
     }
 };
 
+// Method to get user data
 export const getUserData = async (uid, token) => {
     try {
         const response = await axios.get(`${BASE_URL}/user/getUserData/${uid}`, {
@@ -53,13 +54,14 @@ export const getUserData = async (uid, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log("UserData: ", response.data)
+        //console.log("UserData: ", response.data)
         return response.data;
     } catch (err) {
         console.error("Fehler beim Abrufen der Benutzerdaten: ", err);
     }
 }
 
+// Method to get iCal URL
 export const getIcalUrl = async (uid, token) => {
     try {
         const response = await axios.get(`${BASE_URL}/user/getIcalUrl/${uid}/0`, {
@@ -91,7 +93,7 @@ export const getIcalUrl = async (uid, token) => {
     }
 };
 
-// Methode zum Abrufen der iCal Daten
+// Method to get iCal data
 export const getIcalData = async (uid, token) => {
     try {
         const response = await axios.get(`${BASE_URL}/user/getIcalData/${uid}/0`, {
