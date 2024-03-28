@@ -17,7 +17,7 @@ import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
-import {filterAndSortCourses, parseIcalData} from "../../utils/icalParser";
+import {filterAndSortCourses, parseIcalData} from "../../utils/utils";
 
 /**
  * ### Dashboard
@@ -154,7 +154,7 @@ function Dashboard({navigation}) {
         if (icalData) {
             // Annahme: icalData ist bereits ein Array von geparsten Events
             const filteredAndSorted = filterAndSortCourses(icalData);
-            console.log("Nächste Kurse:", filteredAndSorted);
+            //console.log("Nächste Kurse:", filteredAndSorted);
             setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
         }
     }, [icalData]);

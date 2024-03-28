@@ -8,7 +8,7 @@ export const parseIcalData = (input) => {
 
     try {
         const parsed = ical.parseString(icalFormat);
-        console.log("Parsed ical: ", parsed.events)
+        //console.log("Parsed ical: ", parsed.events)
         return parsed.events;
     } catch (err) {
         console.error("Fehler beim Parsen der iCal-Daten: ", err)
@@ -17,11 +17,11 @@ export const parseIcalData = (input) => {
 }
 
 export const filterAndSortCourses = (courses) => {
-    console.log("icalData vor Filterung: ", courses);
+    //console.log("icalData vor Filterung: ", courses);
     const now = new Date();
     const filteredAndSortedCourses = courses
         .filter(course => new Date(course.dtstart.value) > now)
         .sort((a, b) => new Date(a.dtstart.value) - new Date(b.dtstart.value));
-    console.log("Curses filtered and sorted:", courses)
+    //console.log("Curses filtered and sorted:", courses)
     return filteredAndSortedCourses;
 };
