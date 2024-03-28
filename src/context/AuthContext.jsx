@@ -8,7 +8,11 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({children}) => {
     const [token, setToken] = useState(null);
-    const [initialized, setInitialized] = useState(false);
+    const [authStatus, setAuthStatus] = useState({
+        initialized: false,
+        isAuthenticated: false,
+    });
+
     const [userDetails, setUserDetails] = useState({});
     const [userData, setUserData] = useState(null);
     const [loginError, setLoginError] = useState(null); // Neuer Zustand für Fehlermeldungen
@@ -36,13 +40,14 @@ export const AuthProvider = ({children}) => {
                     console.log(`Token ist noch ${validityDuration.toFixed(2)} Minuten gültig.`);
                     setToken(storedToken);
                     setUserDetails({uid: decoded.uid });
-                    setInitialized(true);
+                    setAuthStatus({initialized: true, isAuthenticated: true});
                 } else {
                     console.log("Token abgelaufen oder ungültig. Nutzer wird ausgelogget");
                     await logout();
                 }
             } else {
-                console.log("Secure Storage Fehler - kein Token gefunden")
+                console.log("Secure Storage - kein Token gespeichert")
+                setAuthStatus({initialized: true, isAuthenticated: false});
             }
         };
         initializeAuth();
@@ -51,32 +56,30 @@ export const AuthProvider = ({children}) => {
     const login = async (username, password) => {
         try {
             const newToken = await loginService(username, password);
-            if(newToken){
-                const decodes = decodeJWT(newToken);
-                setUserDetails({uid: decodes.uid});
-                setToken(newToken);
-
-                //secure storage
-                await saveItem("userToken", newToken);
-                //await saveItem("userId", decodes.uid.toString())
-                //console.log("User Details: ", userDetails)
-                setInitialized(true);
-                setLoginError(null);
-                console.log("Login Methode, TOKEN: ", newToken);
-            }
+            // Erfolgreicher Login, setze Token und auth Status
+            const decodes = decodeJWT(newToken);
+            setUserDetails({ uid: decodes.uid });
+            setToken(newToken);
+            // Speichere Token sicher
+            await saveItem("userToken", newToken);
+            // Aktualisiere AuthStatus
+            setAuthStatus({ initialized: true, isAuthenticated: true });
+            setLoginError(null); // Zurücksetzen von etwaigen Fehlermeldungen
         } catch (err) {
+            console.log("Fehler beim Login:", err);
             setLoginError(err.message);
-            console.error("Login fehlgeschlagen: ", err);
-            setInitialized(false);
+            setAuthStatus({ initialized: true, isAuthenticated: false });
+            throw new err;
         }
-    }
+    };
+
 
     const logout = async () => {
         await removeItem("userToken");
         await removeItem("userId");
         setToken(null);
         setUserDetails({});
-        setInitialized(false);
+        setAuthStatus({ initialized: true, isAuthenticated: false });
         console.log("Ausgeloggt und Daten bereinigt");
     }
 
@@ -87,7 +90,7 @@ export const AuthProvider = ({children}) => {
                 setUserData(data); // Speichern der Benutzerdaten im Zustand
                 console.log("GET USER DETAILS: ", data)
             } catch (error) {
-                console.error("Fehler beim Laden der Benutzerdetails: ", error);
+                console.log("Fehler beim Laden der Benutzerdetails: ", error);
             }
         }
     };
@@ -97,5 +100,5 @@ export const AuthProvider = ({children}) => {
     }, [token, userDetails.uid]);
 
 
-    return <AuthContext.Provider value={{initialized, user, userData, login, logout, loginError}}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{...authStatus, token, user, userData, login, logout, loginError}}>{children}</AuthContext.Provider>
 }

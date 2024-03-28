@@ -33,7 +33,8 @@ function CustomInputFieldLogin({
               iconName,
               onChangeTextHandler,
               passwordVisible, // Neu hinzugefügt
-              togglePasswordVisibility // Neu hinzugefügt
+              togglePasswordVisibility, // Neu hinzugefügt
+              error
 }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -57,7 +58,7 @@ function CustomInputFieldLogin({
     const iconToShow = isPassword ? (passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK) : iconName;
 
     return (
-        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
+        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container, error ? styles.inputError : null]}>
             {/* Wenn isPassword true ist, rendern wir das Icon in einem TouchableOpacity für Interaktionen */}
             {isPassword ? (
                 <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
@@ -68,7 +69,8 @@ function CustomInputFieldLogin({
                 <Icon name={iconName} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
             )}
             <TextInput
-                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input, {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input,
+                    {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword && !passwordVisible}
@@ -119,6 +121,10 @@ const styles = StyleSheet.create({
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
+    },
+    inputError: {
+        borderColor: 'red',
+        borderWidth: 1,
     },
     input: {
         fontSize: SIZES.TEXTINPUT_SIZE,

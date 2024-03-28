@@ -15,6 +15,7 @@ import {motivationalQuotes} from "../../constants/motivationalQuotes";
 import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
+import LoadingComponent from "../../components/LoadingComponent";
 
 /**
  * ### Dashboard
@@ -146,9 +147,7 @@ function Dashboard({navigation}) {
     // If the database is still loading, show the loading indicator
     if (!isDbReady) {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large"/>
-            </View>
+            <LoadingComponent/>
         );
     }
 

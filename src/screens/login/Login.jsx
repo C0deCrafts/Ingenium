@@ -27,13 +27,15 @@ zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
 */
 function Login(){
     const insets = useSafeAreaInsets();
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [loginFailed, setLoginFailed] = useState(false);
 
     const {login, loginError} = useAuth();
 
@@ -44,25 +46,24 @@ function Login(){
     };
 
     const handleLogin = async () => {
+        setLoginFailed(false);
 
-        // Überprüfung der minimalen Zeichenanzahl
-        if (userName.length < 3 || password.length < 3) {
+        if (userName.trim() === "" || password.trim() === "") {
             Alert.alert(
                 "Eingabefehler",
-                "Benutzername und Passwort müssen mindestens 3 Zeichen lang sein."
+                "Benutzername oder Passwortfeld darf nicht leer sein.",
+                [{text: "OK"}]
             );
             return; // Beenden der Funktion, um keine API-Anfrage zu senden
         }
-
         setLoading(true);
         try {
             await login(userName, password);
         } catch (err) {
-            console.error("Login Fehler, ", err)
+            setLoginFailed(true);
         } finally {
             setLoading(false);
         }
-
     }
 
     /**
@@ -126,6 +127,7 @@ function Login(){
                     maxTextInputLength={40}
                     iconName={ICONS.LOGIN.USER}
                     onChangeTextHandler={setUserName}
+                    error={loginFailed}
                 />
                 <CustomInputFieldLogin
                     placeholder="Passwort"
@@ -136,6 +138,7 @@ function Login(){
                     passwordVisible={passwordVisible}
                     togglePasswordVisibility={togglePasswordVisibility}
                     onChangeTextHandler={setPassword}
+                    error={loginFailed}
                 />
                 <CustomButton title={"Anmelden"}rt onPressFunction={() => handleLogin()}/>
                 {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
