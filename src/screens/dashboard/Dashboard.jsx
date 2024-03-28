@@ -16,6 +16,8 @@ import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
+import {useCalendar} from "../../context/CalendarContext";
+import {filterAndSortCourses, parseIcalData} from "../../utils/icalParser";
 
 /**
  * ### Dashboard
@@ -51,6 +53,10 @@ function Dashboard({navigation}) {
     const [quote, setQuote] = useState("");
 
     const { userData } = useAuth();
+
+    const { icalData } = useCalendar();
+    const [nextCourses, setNextCourses] = useState([]);
+
     // Dummy-Tasks
     const dummyTasks = [
         { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
@@ -144,6 +150,15 @@ function Dashboard({navigation}) {
         getWeather();
     }, [locationName]);
 
+    useEffect(() => {
+        if (icalData) {
+            // Annahme: icalData ist bereits ein Array von geparsten Events
+            const filteredAndSorted = filterAndSortCourses(icalData);
+            console.log("Nächste Kurse:", filteredAndSorted);
+            setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
+        }
+    }, [icalData]);
+
     // If the database is still loading, show the loading indicator
     if (!isDbReady) {
         return (
@@ -213,7 +228,18 @@ function Dashboard({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Kurse</Text>
                         <View style={styles.coursesContainer}>
-                            <NextCourseBox
+                            {nextCourses.map((course) => (
+                                <NextCourseBox
+                                    key={course.uid.value}
+                                    headerTitle={course.summary.value}
+                                    headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE} // Dies könnte basierend auf dem Kursinhalt angepasst werden
+                                    date={new Date(course.dtstart.value).toLocaleDateString("de-DE", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
+                                    timeStart={new Date(course.dtstart.value).toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'})}
+                                    timeEnd={new Date(course.dtend.value).toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'})}
+                                    containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]} // Vielleicht möchtest du abwechselnde Stile für linke/rechte Boxen, falls sie nebeneinander dargestellt werden
+                                />
+                            ))}
+                            {/* <NextCourseBox
                                 headerTitle={"Programmieren"}
                                 headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
                                 date={"Montag, 08. Jänner"}
@@ -228,7 +254,7 @@ function Dashboard({navigation}) {
                                 timeStart={"19:30"}
                                 timeEnd={"21:00"}
                                 containerStyle={[styles.nextCourseBox, styles.nextCourseBoxRight]}
-                            />
+                            />*/}
                         </View>
                     </View>
 
