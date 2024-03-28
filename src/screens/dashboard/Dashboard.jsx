@@ -17,7 +17,7 @@ import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
-import {filterAndSortCourses, parseIcalData} from "../../utils/utils";
+import {filterAndSortCourses, parseIcalData, extractCourses, updateCourseNames} from "../../utils/utils";
 
 /**
  * ### Dashboard
@@ -54,8 +54,9 @@ function Dashboard({navigation}) {
 
     const { userData } = useAuth();
 
-    const { icalData } = useCalendar();
+    const { icalData, getCourseNameByNumber } = useCalendar();
     const [nextCourses, setNextCourses] = useState([]);
+    const [preparedCourses, setPreparedCourses] = useState([]);
 
     // Dummy-Tasks
     const dummyTasks = [
@@ -108,6 +109,19 @@ function Dashboard({navigation}) {
     } else {
         greeting = "Noch wach?";
     }
+
+    // Funktion zur Formatierung der Uhrzeit im 24-Stunden-Format mit Berücksichtigung der Zeitzone
+    const formatTimeWithTimezone = (dateString) => {
+        const date = new Date(dateString);
+        const formatter = new Intl.DateTimeFormat('de-AT', {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Europe/Vienna', // Zeitzone auf MEZ/MEZS setzen
+            hour12: false // 24-Stunden-Format
+        });
+        return formatter.format(date);
+    };
+
 
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
@@ -228,17 +242,35 @@ function Dashboard({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Kurse</Text>
                         <View style={styles.coursesContainer}>
-                            {nextCourses.map((course) => (
-                                <NextCourseBox
-                                    key={course.uid.value}
-                                    headerTitle={course.summary.value}
-                                    headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE} // Dies könnte basierend auf dem Kursinhalt angepasst werden
-                                    date={new Date(course.dtstart.value).toLocaleDateString("de-DE", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}
-                                    timeStart={new Date(course.dtstart.value).toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'})}
-                                    timeEnd={new Date(course.dtend.value).toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'})}
-                                    containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]} // Vielleicht möchtest du abwechselnde Stile für linke/rechte Boxen, falls sie nebeneinander dargestellt werden
-                                />
-                            ))}
+                            {nextCourses.map((course) => {
+                                // Extrahiere die Kursnummer aus der URL
+                                const crsMatch = course.url?.value.match(/crs_(\d+)/);
+                                const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
+
+                                // Hole den anzuzeigenden Kursnamen basierend auf der crsNummer
+                                const displayName = getCourseNameByNumber(crsNummer);
+
+                                console.log(`Original-Zeitstempel: ${course.dtstart.value}`);
+                                console.log(`Umgerechnete Zeit (MEZ/MEZS): ${formatTimeWithTimezone(course.dtstart.value)}`);
+
+
+                                return (
+                                    <NextCourseBox
+                                        key={course.uid.value}
+                                        headerTitle={displayName} // Verwende den Namen aus getCourseNameByNumber
+                                        headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                        date={new Date(course.dtstart.value).toLocaleDateString("de-DE", {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                        timeStart={formatTimeWithTimezone(course.dtstart.value)}
+                                        timeEnd={formatTimeWithTimezone(course.dtend.value)}
+                                        containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
+                                    />
+                                );
+                            })}
                             {/* <NextCourseBox
                                 headerTitle={"Programmieren"}
                                 headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}

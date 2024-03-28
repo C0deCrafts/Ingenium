@@ -100,8 +100,9 @@ export const AuthProvider = ({children}) => {
     };
 
     useEffect(() => {
-        getUserDetails(); // Load userData, if token and uid are available
+        getUserDetails(); // Load user, wenn Token und UID verfügbar sind
     }, [token, userId]);
+
 
     return <AuthContext.Provider value={{...authStatus, token, userId, userData, login, logout, loginError}}>{children}</AuthContext.Provider>
 }
