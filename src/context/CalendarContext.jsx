@@ -48,6 +48,7 @@ export const CalendarProvider = ({children}) => {
             // Displaying the sorted courses one below the other -> only for logging for better readability.
             const showCourses = sortedCourses.map(course => JSON.stringify(course)).join("\n");
             setIcalData(parsedData); // Set parsed iCal data in state
+            setIcalUrl(icalTestUrl);
         } catch (error) {
             console.error('Fehler beim Laden der iCal-Daten:', error);
         }
