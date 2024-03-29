@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -149,7 +149,8 @@ function Dashboard({navigation}) {
     useEffect(() => {
         if (icalData) {
             const filteredAndSorted = filterAndSortCourses(icalData);
-            setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
+            //setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
+            setNextCourses(filteredAndSorted); // Speichere nur die nächsten zwei Kurse
         }
     }, [icalData]);
 
@@ -221,7 +222,8 @@ function Dashboard({navigation}) {
                     <View>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Kurse</Text>
-                        <View style={styles.coursesContainer}>
+                        <View style={styles.coursesSection}>
+                            <ScrollView horizontal={true} style={styles.coursesContainer} showsHorizontalScrollIndicator={false}>
                             {nextCourses.map((course) => {
                                 // Extrahiere die Kursnummer aus der URL
                                 const crsMatch = course.url?.value.match(/crs_(\d+)/);
@@ -246,6 +248,7 @@ function Dashboard({navigation}) {
                                     />
                                 );
                             })}
+                            </ScrollView>
                         </View>
                     </View>
 
@@ -374,10 +377,12 @@ const styles = StyleSheet.create({
     },
     coursesContainer: {
         flexDirection: 'row',
-        justifyContent: "space-between",
+        //justifyContent: "space-between",
     },
     nextCourseBox: {
-        flexBasis: "48%",
+        //flexBasis: "48%",
+        //width: 170,
+        marginRight: 15
     },
     greetingContainer: {
         height: 90,
