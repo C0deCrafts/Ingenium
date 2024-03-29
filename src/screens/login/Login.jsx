@@ -6,7 +6,6 @@ import {
     Image,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
     Alert
 } from "react-native";
 import * as Linking from "expo-linking"
