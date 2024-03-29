@@ -68,9 +68,8 @@ export const extractCourses = (courses) => {
     return uniqueAndSortedCourses;
 };
 
-/*
 // NICHT GEFILTERT - ALLE KURSE INKL NUMMERN WERDEN ANGEZEIGT
-export const extractCourses = (courses) => {
+export const extractAllCourses = (courses) => {
     return courses.map(course => {
         const url = course.url?.value || "";
         const crsMatch = url.match(/crs_(\d+)/);
@@ -79,5 +78,16 @@ export const extractCourses = (courses) => {
 
         return { crsNummer, kursName };
     })
-}
-*/
+};
+
+
+export const getDay = (day) => {
+    const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+    return days[day] || "";
+};
+
+export const formatLocalTime = (time) => {
+    const date = new Date(time);
+    return date.toISOString().substring(11, 16);
+};
+

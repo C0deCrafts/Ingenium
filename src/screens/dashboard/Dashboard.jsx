@@ -17,7 +17,7 @@ import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
-import {filterAndSortCourses, parseIcalData, extractCourses, updateCourseNames} from "../../utils/utils";
+import {getDay, formatLocalTime, getRandomQuote, filterAndSortCourses} from "../../utils/utils";
 
 /**
  * ### Dashboard
@@ -66,10 +66,6 @@ function Dashboard({navigation}) {
         { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_DARKGREEN },
     ];
 
-    const getDay = (day) => {
-        const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
-        return days[day] || "";
-    };
 
     const getRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
@@ -109,19 +105,6 @@ function Dashboard({navigation}) {
     } else {
         greeting = "Noch wach?";
     }
-
-    // Funktion zur Formatierung der Uhrzeit im 24-Stunden-Format mit Berücksichtigung der Zeitzone
-    const formatTimeWithTimezone = (dateString) => {
-        const date = new Date(dateString);
-        const formatter = new Intl.DateTimeFormat('de-AT', {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Europe/Vienna', // Zeitzone auf MEZ/MEZS setzen
-            hour12: false // 24-Stunden-Format
-        });
-        return formatter.format(date);
-    };
-
 
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
@@ -168,6 +151,7 @@ function Dashboard({navigation}) {
         if (icalData) {
             // Annahme: icalData ist bereits ein Array von geparsten Events
             const filteredAndSorted = filterAndSortCourses(icalData);
+            //richtige Uhrzeit: "dtstart": {"params": [Object], "value": 2024-04-06T08:00:00.000Z}
             //console.log("Nächste Kurse:", filteredAndSorted);
             setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
         }
@@ -246,27 +230,22 @@ function Dashboard({navigation}) {
                                 // Extrahiere die Kursnummer aus der URL
                                 const crsMatch = course.url?.value.match(/crs_(\d+)/);
                                 const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
-
                                 // Hole den anzuzeigenden Kursnamen basierend auf der crsNummer
                                 const displayName = getCourseNameByNumber(crsNummer);
-
-                                console.log(`Original-Zeitstempel: ${course.dtstart.value}`);
-                                console.log(`Umgerechnete Zeit (MEZ/MEZS): ${formatTimeWithTimezone(course.dtstart.value)}`);
-
 
                                 return (
                                     <NextCourseBox
                                         key={course.uid.value}
                                         headerTitle={displayName} // Verwende den Namen aus getCourseNameByNumber
                                         headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
-                                        date={new Date(course.dtstart.value).toLocaleDateString("de-DE", {
+                                        date={new Date(course.dtstart.value).toLocaleDateString("de-AT", {
                                             weekday: 'long',
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric'
                                         })}
-                                        timeStart={formatTimeWithTimezone(course.dtstart.value)}
-                                        timeEnd={formatTimeWithTimezone(course.dtend.value)}
+                                        timeStart={formatLocalTime(course.dtstart.value)}
+                                        timeEnd={formatLocalTime(course.dtend.value)}
                                         containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
                                     />
                                 );

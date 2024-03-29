@@ -53,6 +53,7 @@ export const CalendarProvider = ({children}) => {
     }
 
     //Test function with actual ical data
+    //Zeit passt noch
     const loadIcalTestUrl = async () => {
         try {
             const response = await fetch(icalTestUrl);
