@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -17,7 +17,7 @@ import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
-import {getDay, formatLocalTime, getRandomQuote, filterAndSortCourses} from "../../utils/utils";
+import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
 
 /**
  * ### Dashboard
@@ -56,7 +56,6 @@ function Dashboard({navigation}) {
 
     const { icalData, getCourseNameByNumber } = useCalendar();
     const [nextCourses, setNextCourses] = useState([]);
-    const [preparedCourses, setPreparedCourses] = useState([]);
 
     // Dummy-Tasks
     const dummyTasks = [
@@ -149,10 +148,7 @@ function Dashboard({navigation}) {
 
     useEffect(() => {
         if (icalData) {
-            // Annahme: icalData ist bereits ein Array von geparsten Events
             const filteredAndSorted = filterAndSortCourses(icalData);
-            //richtige Uhrzeit: "dtstart": {"params": [Object], "value": 2024-04-06T08:00:00.000Z}
-            //console.log("Nächste Kurse:", filteredAndSorted);
             setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
         }
     }, [icalData]);
@@ -246,26 +242,10 @@ function Dashboard({navigation}) {
                                         })}
                                         timeStart={formatLocalTime(course.dtstart.value)}
                                         timeEnd={formatLocalTime(course.dtend.value)}
-                                        containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
+                                        containerStyle={[styles.nextCourseBox]}
                                     />
                                 );
                             })}
-                            {/* <NextCourseBox
-                                headerTitle={"Programmieren"}
-                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
-                                date={"Montag, 08. Jänner"}
-                                timeStart={"17:00"}
-                                timeEnd={"19:25"}
-                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
-                            />
-                            <NextCourseBox
-                                headerTitle={"Web"}
-                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_PINK}
-                                date={"Montag, 08. Jänner"}
-                                timeStart={"19:30"}
-                                timeEnd={"21:00"}
-                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxRight]}
-                            />*/}
                         </View>
                     </View>
 
@@ -394,16 +374,10 @@ const styles = StyleSheet.create({
     },
     coursesContainer: {
         flexDirection: 'row',
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     nextCourseBox: {
-        flex: 1
-    },
-    nextCourseBoxLeft: {
-        marginRight: 10
-    },
-    nextCourseBoxRight: {
-        marginLeft: 10
+        flexBasis: "48%",
     },
     greetingContainer: {
         height: 90,

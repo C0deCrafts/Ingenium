@@ -80,7 +80,6 @@ export const extractAllCourses = (courses) => {
     })
 };
 
-
 export const getDay = (day) => {
     const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     return days[day] || "";
