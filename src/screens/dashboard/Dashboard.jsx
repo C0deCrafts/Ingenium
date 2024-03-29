@@ -18,6 +18,7 @@ import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
 import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
+import Greeting from "../../components/Greeting";
 
 /**
  * ### Dashboard
@@ -38,10 +39,8 @@ function Dashboard({navigation}) {
     const isDarkMode = theme === DARKMODE;
 
     const {isDbReady, loadLists} = useDatabase();
-
     // State for managing the selected profile image.
     const [selectedImage, setSelectedImage] = useState(null);
-
     // Fetches and sets weather data based on the user's location.
     const locationName = useLocation();
     const [weatherData, setWeatherData] = useState({condition: '', icon: ICONS.WEATHER_ICONS.DEFAULT});
@@ -59,12 +58,11 @@ function Dashboard({navigation}) {
 
     // Dummy-Tasks
     const dummyTasks = [
-        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
-        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_AQUA },
+        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
+        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
         { id: 3, name: 'Aufgabe 3', daysLeft: 20, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_DARKGREEN },
+        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
     ];
-
 
     const getRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
@@ -88,22 +86,6 @@ function Dashboard({navigation}) {
     }
 
     const nextTasksCount = getNextTasksCount();
-
-    // Calculate the current hour
-    const currentHour = new Date().getHours();
-    let greeting;
-
-    if (currentHour < 5) {
-        greeting = "Im Nachtmodus?";
-    } else if (currentHour < 12) {
-        greeting = "Kaffee schon bereit?";
-    } else if (currentHour < 17) {
-        greeting = "Guten Tag!";
-    } else if (currentHour < 21) {
-        greeting = "Guten Abend,";
-    } else {
-        greeting = "Noch wach?";
-    }
 
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
@@ -132,8 +114,6 @@ function Dashboard({navigation}) {
             setQuote(getRandomQuote);
         }
         fetchData();
-        //console.log("IS DARKMODE?", isDarkMode)
-        //console.log("THEME DASHBOARD: ",theme)
     }, [isDbReady]);
 
     useEffect(() => {
@@ -150,7 +130,7 @@ function Dashboard({navigation}) {
         if (icalData) {
             const filteredAndSorted = filterAndSortCourses(icalData);
             //setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
-            setNextCourses(filteredAndSorted); // Speichere nur die nächsten zwei Kurse
+            setNextCourses(filteredAndSorted); // Speichere alle nächsten
         }
     }, [icalData]);
 
@@ -187,11 +167,7 @@ function Dashboard({navigation}) {
                     </TouchableOpacity>
 
                     {/* Guten Tag, Max Mustermann*/}
-                    <View style={styles.greetingContainer}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>{greeting}</Text>
-                        <Text
-                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>{userData?.firstname}</Text>
-                    </View>
+                    <Greeting name={userData?.firstname}/>
                     {/* Spacing */}
                     <View style={styles.spacing}></View>
                 </View>

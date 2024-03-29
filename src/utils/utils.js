@@ -53,6 +53,8 @@ export const extractCourses = (courses) => {
         const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
         const kursName = course.summary?.value || 'Unbekannter Kurs';
 
+        //console.log(crsNummer + ": " + kursName)
+
         return { crsNummer, kursName };
     }).filter(course => {
         // Prüfe, ob die `crsNummer` bereits im `uniqueCourses` Objekt vorhanden ist
@@ -90,3 +92,22 @@ export const formatLocalTime = (time) => {
     return date.toISOString().substring(11, 16);
 };
 
+export const getCourseNameByNumber = (crsNummer) => {
+    switch (crsNummer) {
+        case "147609": return "Betriebswirtschaft"
+        case "147613": return "Computerpraktikum";
+        case "147617": return "Digitale Ethik";
+        case "147619": return "Programmieren";
+        case "147621": return "Systemplanung";
+        case "147625": return "Technische Informatik";
+        case "147627": return "Wirtschaft und Recht";
+        case "147629": return "Netzwerktechnik";
+        case "147631": return "Mathematik";
+        case "153647": return "Englisch";
+        case "154021": return "Artificial Intelligence";
+        case "154063": return "Webprogrammierung";
+        case "155753": return "Deutsch";
+        case "156163": return "Datenbanken";
+        default: return "Unbekannter Kurs";
+    }
+};
