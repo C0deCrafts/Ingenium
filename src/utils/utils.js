@@ -1,12 +1,14 @@
 import ical from "cal-parser";
 
+// Function to parse iCal data
 export const parseIcalData = (input) => {
-    // Prüft, ob das übergebene Argument ein Objekt ist und den erforderlichen Schlüssel enthält
+    // Checks if the passed argument is an object and contains the required key
     const icalFormat = input && typeof input === 'object' ? input.dataIcalFormatted : input;
 
     if(!icalFormat) return [];
 
     try {
+        // Parses the iCal string
         const parsed = ical.parseString(icalFormat);
         //console.log("Parsed ical: ", parsed.events)
         return parsed.events;
@@ -16,9 +18,11 @@ export const parseIcalData = (input) => {
     }
 }
 
+// Function to filter and sort courses based on start time
 export const filterAndSortCourses = (courses) => {
     //console.log("icalData vor Filterung: ", courses);
     const now = new Date();
+    // Filters courses that start after the current time and sorts them by start time
     const filteredAndSortedCourses = courses
         .filter(course => new Date(course.dtstart.value) > now)
         .sort((a, b) => new Date(a.dtstart.value) - new Date(b.dtstart.value));
@@ -26,16 +30,15 @@ export const filterAndSortCourses = (courses) => {
     return filteredAndSortedCourses;
 };
 
-// Funktion, die gefilterte und sortierte Kurse aktualisiert,
-// indem sie den Kursnamen aus den einzigartigen Kursen zuordnet
+// Function to update course names based on course numbers
 export const updateCourseNames = (filteredAndSortedCourses, uniqueCourses) => {
-    // Erstelle ein Mapping von Kursnummer zu Kursname
+    // Creates a mapping of course number to course name
     const courseNameMapping = uniqueCourses.reduce((acc, course) => {
         acc[course.crsNummer] = course.kursName;
         return acc;
     }, {});
 
-    // Aktualisiere `headerTitle` für jeden Kurs in `filteredAndSortedCourses` basierend auf dem Mapping
+    // Updates `summary` for each course in `filteredAndSortedCourses` based on the mapping
     return filteredAndSortedCourses.map(course => {
         const crsMatch = course.url?.value.match(/crs_(\d+)/);
         const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
@@ -44,7 +47,7 @@ export const updateCourseNames = (filteredAndSortedCourses, uniqueCourses) => {
     });
 };
 
-// GEFILTERT - ALLE KURSE INKL NUMMERN WERDEN NUR EINMAL ANGEZEIGT
+// Function to extract unique courses and sort them by course number
 export const extractCourses = (courses) => {
     const uniqueCourses = {};
     const uniqueAndSortedCourses = courses.map(course => {
@@ -57,20 +60,20 @@ export const extractCourses = (courses) => {
 
         return { crsNummer, kursName };
     }).filter(course => {
-        // Prüfe, ob die `crsNummer` bereits im `uniqueCourses` Objekt vorhanden ist
+        // Checks if `crsNummer` already exists in `uniqueCourses` object
         if (uniqueCourses[course.crsNummer]) {
-            // Wenn ja, filtere dieses Element aus, da es bereits berücksichtigt wurde
+            // If yes, filters out this element as it has already been accounted for
             return false;
         }
-        // Markiere die `crsNummer` als vorhanden
+        // Marks the `crsNummer` as present
         uniqueCourses[course.crsNummer] = true;
         return true;
-    }).sort((a, b) => a.crsNummer.localeCompare(b.crsNummer)); // Sortiere die Kurse nach `crsNummer`
+    }).sort((a, b) => a.crsNummer.localeCompare(b.crsNummer)); // Sorts courses by `crsNummer`
 
     return uniqueAndSortedCourses;
 };
 
-// NICHT GEFILTERT - ALLE KURSE INKL NUMMERN WERDEN ANGEZEIGT
+// Function to extract all courses including numbers
 export const extractAllCourses = (courses) => {
     return courses.map(course => {
         const url = course.url?.value || "";
@@ -82,16 +85,19 @@ export const extractAllCourses = (courses) => {
     })
 };
 
+// Function to get day abbreviation from index
 export const getDay = (day) => {
     const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     return days[day] || "";
 };
 
+// Function to format local time from ISO string
 export const formatLocalTime = (time) => {
     const date = new Date(time);
     return date.toISOString().substring(11, 16);
 };
 
+// Function to get course name by course number
 export const getCourseNameByNumber = (crsNummer) => {
     switch (crsNummer) {
         case "147609": return "Betriebswirtschaft"
