@@ -69,7 +69,7 @@ export const getIcalUrl = async (uid, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log("iCalUrl: ", response.data)
+        //console.log("iCalUrl: ", response.data)
         return response.data;
     } catch (err) {
         if (axios.isAxiosError(err) && err.response) {
@@ -101,7 +101,7 @@ export const getIcalData = async (uid, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log("iCalData: ", response.data)
+        //console.log("iCalData: ", response.data)
         return response.data;
     } catch (err) {
         if (axios.isAxiosError(err) && err.response) {

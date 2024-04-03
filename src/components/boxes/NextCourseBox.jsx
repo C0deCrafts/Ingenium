@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     containerDark: {
-        flex: 1,
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS,
         flexDirection: "column",
@@ -88,9 +87,9 @@ const styles = StyleSheet.create({
     },
     textDateDark: {
         paddingTop: 20,
-        paddingLeft: 10,
-        color: DARKMODE.TEXT_COLOR,
+        paddingHorizontal: 10,
         fontSize: SIZES.SCREEN_TEXT_SMALL,
+        color: DARKMODE.TEXT_COLOR,
     },
     textTimeLight: {
         paddingTop: 10,

@@ -78,6 +78,7 @@ function CustomInputFieldLogin({
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                 onChangeText={onChangeTextHandler}
+                keyboardAppearance={isDarkMode ? "dark" : "light"}
                 /*
                 * IOS flickering on input Issue -closed by react native as it is an IOS bug -
                 * In IOS 17, setting text to secureEntry opens the password bar (enabling input of saved

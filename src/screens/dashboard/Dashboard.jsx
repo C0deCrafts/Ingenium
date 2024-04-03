@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ActivityIndicator, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES, windowHeight} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -16,6 +16,9 @@ import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
+import {useCalendar} from "../../context/CalendarContext";
+import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
+import Greeting from "../../components/Greeting";
 
 /**
  * ### Dashboard
@@ -36,10 +39,8 @@ function Dashboard({navigation}) {
     const isDarkMode = theme === DARKMODE;
 
     const {isDbReady, loadLists} = useDatabase();
-
     // State for managing the selected profile image.
     const [selectedImage, setSelectedImage] = useState(null);
-
     // Fetches and sets weather data based on the user's location.
     const locationName = useLocation();
     const [weatherData, setWeatherData] = useState({condition: '', icon: ICONS.WEATHER_ICONS.DEFAULT});
@@ -51,18 +52,17 @@ function Dashboard({navigation}) {
     const [quote, setQuote] = useState("");
 
     const { userData } = useAuth();
+
+    const { icalData, getCourseNameByNumber } = useCalendar();
+    const [nextCourses, setNextCourses] = useState([]);
+
     // Dummy-Tasks
     const dummyTasks = [
-        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_PINK },
-        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_AQUA },
+        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
+        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
         { id: 3, name: 'Aufgabe 3', daysLeft: 20, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_DARKGREEN },
+        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
     ];
-
-    const getDay = (day) => {
-        const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
-        return days[day] || "";
-    };
 
     const getRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
@@ -86,22 +86,6 @@ function Dashboard({navigation}) {
     }
 
     const nextTasksCount = getNextTasksCount();
-
-    // Calculate the current hour
-    const currentHour = new Date().getHours();
-    let greeting;
-
-    if (currentHour < 5) {
-        greeting = "Im Nachtmodus?";
-    } else if (currentHour < 12) {
-        greeting = "Kaffee schon bereit?";
-    } else if (currentHour < 17) {
-        greeting = "Guten Tag!";
-    } else if (currentHour < 21) {
-        greeting = "Guten Abend,";
-    } else {
-        greeting = "Noch wach?";
-    }
 
     //change the profil image and safe it to asyncStorage
     const handlePressImage = async () => {
@@ -130,8 +114,6 @@ function Dashboard({navigation}) {
             setQuote(getRandomQuote);
         }
         fetchData();
-        //console.log("IS DARKMODE?", isDarkMode)
-        //console.log("THEME DASHBOARD: ",theme)
     }, [isDbReady]);
 
     useEffect(() => {
@@ -143,6 +125,14 @@ function Dashboard({navigation}) {
         };
         getWeather();
     }, [locationName]);
+
+    useEffect(() => {
+        if (icalData) {
+            const filteredAndSorted = filterAndSortCourses(icalData);
+            //setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
+            setNextCourses(filteredAndSorted); // Speichere alle nächsten
+        }
+    }, [icalData]);
 
     // If the database is still loading, show the loading indicator
     if (!isDbReady) {
@@ -177,11 +167,7 @@ function Dashboard({navigation}) {
                     </TouchableOpacity>
 
                     {/* Guten Tag, Max Mustermann*/}
-                    <View style={styles.greetingContainer}>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.greetings]}>{greeting}</Text>
-                        <Text
-                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.headerName]}>{userData?.firstname}</Text>
-                    </View>
+                    <Greeting name={userData?.firstname}/>
                     {/* Spacing */}
                     <View style={styles.spacing}></View>
                 </View>
@@ -212,23 +198,33 @@ function Dashboard({navigation}) {
                     <View>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Kurse</Text>
-                        <View style={styles.coursesContainer}>
-                            <NextCourseBox
-                                headerTitle={"Programmieren"}
-                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
-                                date={"Montag, 08. Jänner"}
-                                timeStart={"17:00"}
-                                timeEnd={"19:25"}
-                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxLeft]}
-                            />
-                            <NextCourseBox
-                                headerTitle={"Web"}
-                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_PINK}
-                                date={"Montag, 08. Jänner"}
-                                timeStart={"19:30"}
-                                timeEnd={"21:00"}
-                                containerStyle={[styles.nextCourseBox, styles.nextCourseBoxRight]}
-                            />
+                        <View style={styles.coursesSection}>
+                            <ScrollView horizontal={true} style={styles.coursesContainer} showsHorizontalScrollIndicator={false}>
+                            {nextCourses.map((course) => {
+                                // Extrahiere die Kursnummer aus der URL
+                                const crsMatch = course.url?.value.match(/crs_(\d+)/);
+                                const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
+                                // Hole den anzuzeigenden Kursnamen basierend auf der crsNummer
+                                const displayName = getCourseNameByNumber(crsNummer);
+
+                                return (
+                                    <NextCourseBox
+                                        key={course.uid.value}
+                                        headerTitle={displayName} // Verwende den Namen aus getCourseNameByNumber
+                                        headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                        date={new Date(course.dtstart.value).toLocaleDateString("de-AT", {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                        timeStart={formatLocalTime(course.dtstart.value)}
+                                        timeEnd={formatLocalTime(course.dtend.value)}
+                                        containerStyle={[styles.nextCourseBox]}
+                                    />
+                                );
+                            })}
+                            </ScrollView>
                         </View>
                     </View>
 
@@ -357,16 +353,12 @@ const styles = StyleSheet.create({
     },
     coursesContainer: {
         flexDirection: 'row',
-        justifyContent: "space-between"
+        //justifyContent: "space-between",
     },
     nextCourseBox: {
-        flex: 1
-    },
-    nextCourseBoxLeft: {
-        marginRight: 10
-    },
-    nextCourseBoxRight: {
-        marginLeft: 10
+        //flexBasis: "48%",
+        //width: 170,
+        marginRight: 15
     },
     greetingContainer: {
         height: 90,
