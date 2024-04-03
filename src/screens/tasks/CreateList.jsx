@@ -6,7 +6,6 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import CustomInputField from "../../components/inputFields/CustomInputField";
 import {USER_COLORS, USER_ICONS} from "../../constants/customizationSettings";
 import ColorPickerButtons from "../../components/buttons/ColorPickerButtons";
-import CustomButton from "../../components/buttons/CustomButton";
 import SquareIcon from "../../components/SquareIcon";
 import {useDatabase} from "../../context/DatabaseContext";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";

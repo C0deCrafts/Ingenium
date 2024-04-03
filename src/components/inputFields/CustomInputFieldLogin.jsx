@@ -1,8 +1,7 @@
 import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import Icon from "../Icon";
-import {useState} from "react";
 import {ICONS} from "../../constants/icons";
 
 /**
