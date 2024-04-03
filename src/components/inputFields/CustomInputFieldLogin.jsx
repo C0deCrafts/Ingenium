@@ -17,6 +17,9 @@ import {ICONS} from "../../constants/icons";
  * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
  * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
  * @param {function} onChangeTextHandler - Event handler for on change text event.
+ * @param passwordVisible
+ * @param togglePasswordVisibility
+ * @param error
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
