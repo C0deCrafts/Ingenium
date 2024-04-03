@@ -4,12 +4,14 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
+import {useCalendar} from "../../context/CalendarContext";
+import * as Linking from "expo-linking";
 
 function Settings({navigation}){
-    const { theme, setSpecificTheme } = useTheme(); // Verwende den useTheme Hook
-
-    // Bestimme, ob der Switch aktiviert sein sollte basierend auf dem aktuellen Theme
+    const { theme, setSpecificTheme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+
+    const { icalUrl } = useCalendar();
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -45,6 +47,7 @@ function Settings({navigation}){
                     <CustomBoxButton buttonTextLeft="Stundenplan exportieren"
                                      iconName={ICONS.EXPORT.INACTIVE}
                                      iconColor={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                                     onPress={() => Linking.openURL(icalUrl)}
                     />
                 </View>
             </View>

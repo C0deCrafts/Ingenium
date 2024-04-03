@@ -1,4 +1,13 @@
-import {Text, View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, Platform} from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    Alert
+} from "react-native";
 import * as Linking from "expo-linking"
 import CustomButton from "../../components/buttons/CustomButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -8,6 +17,7 @@ import CustomInputFieldLogin from "../../components/inputFields/CustomInputField
 import {ICONS} from "../../constants/icons";
 import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
+import LoadingComponent from "../../components/LoadingComponent";
 
 /*
 Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
@@ -15,21 +25,45 @@ Zum Beispiel kannst du damit einen anderen Bildschirm aufrufen oder zurück zu e
 Bildschirm navigieren. Es stellt praktisch eine Schnittstelle bereit, um zwischen den Bildschirmen
 zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
 */
-function Login({navigation}){
+function Login(){
     const insets = useSafeAreaInsets();
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {login} = useAuth();
+    const [loginFailed, setLoginFailed] = useState(false);
+
+    const {login, loginError} = useAuth();
 
     const styles = getStyles(insets);
 
+    const togglePasswordVisibility = () => { // Funktion zum Umschalten der Sichtbarkeit
+        setPasswordVisible(!passwordVisible);
+    };
+
     const handleLogin = async () => {
-        login(userName, password);
+        setLoginFailed(false);
+
+        if (userName.trim() === "" || password.trim() === "") {
+            Alert.alert(
+                "Eingabefehler",
+                "Benutzername oder Passwortfeld darf nicht leer sein.",
+                [{text: "OK"}]
+            );
+            return; // Beenden der Funktion, um keine API-Anfrage zu senden
+        }
+        setLoading(true);
+        try {
+            await login(userName, password);
+        } catch (err) {
+            setLoginFailed(true);
+        } finally {
+            setLoading(false);
+        }
     }
 
     /**
@@ -62,6 +96,11 @@ function Login({navigation}){
         Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
     }
 
+    if (loading) {
+        return (
+            <LoadingComponent message={"Du wirst gerade eingelogged..."}/>
+        );
+    }
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/*Image and Greeting*/}
@@ -78,12 +117,30 @@ function Login({navigation}){
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}
+                keyboardVerticalOffset={25}
             >
-                <CustomInputFieldLogin placeholder="Nutzername" keyboardType={"default"} maxTextInputLength={25}
-                                       iconName={ICONS.LOGIN.USER} onChangeTextHandler={setUserName}/>
-                <CustomInputFieldLogin placeholder="Passwort" keyboardType={"default"} isPassword={true}
-                                       maxTextInputLength={25} iconName={ICONS.LOGIN.LOCK} onChangeTextHandler={setPassword}/>
-                <CustomButton title={"Anmelden"} onPressFunction={() => handleLogin()}/>
+                <CustomInputFieldLogin
+                    placeholder="Nutzername"
+                    keyboardType={"default"}
+                    maxTextInputLength={40}
+                    iconName={ICONS.LOGIN.USER}
+                    onChangeTextHandler={setUserName}
+                    error={loginFailed}
+                />
+                <CustomInputFieldLogin
+                    placeholder="Passwort"
+                    keyboardType="default"
+                    maxTextInputLength={40}
+                    iconName={passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK}
+                    isPassword={true}
+                    passwordVisible={passwordVisible}
+                    togglePasswordVisibility={togglePasswordVisibility}
+                    onChangeTextHandler={setPassword}
+                    error={loginFailed}
+                />
+                <CustomButton title={"Anmelden"}rt onPressFunction={() => handleLogin()}/>
+                {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
+                {loginError && <Text style={{ color: 'red', textAlign: "center" }}>{loginError}</Text>}
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>
@@ -110,14 +167,14 @@ function getStyles(insets) {
         containerLight: {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-            paddingTop: insets.top,
+            //paddingTop: insets.top,
             paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },
         containerDark: {
             flex: 1,
             backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-            paddingTop: insets.top,
+            //paddingTop: insets.top,
             paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
             justifyContent: "center"
         },

@@ -6,6 +6,7 @@ import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {DatabaseProvider} from "./src/context/DatabaseContext";
 import {AuthProvider} from "./src/context/AuthContext";
 import {LocationProvider} from "./src/context/LocationContext";
+import {CalendarProvider} from "./src/context/CalendarContext";
 
 // TODO: FIX Problem - if we on the login screen - database load the data
 // we want load the data if we are logged in
@@ -15,11 +16,13 @@ export default function App() {
             <GestureHandlerRootView style={{flex: 1}}>
                 <BottomSheetModalProvider>
                     <AuthProvider>
-                        <DatabaseProvider>
-                            <LocationProvider>
-                                <AppNavigation/>
-                            </LocationProvider>
-                        </DatabaseProvider>
+                        <CalendarProvider>
+                            <DatabaseProvider>
+                                <LocationProvider>
+                                    <AppNavigation/>
+                                </LocationProvider>
+                            </DatabaseProvider>
+                        </CalendarProvider>
                     </AuthProvider>
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>

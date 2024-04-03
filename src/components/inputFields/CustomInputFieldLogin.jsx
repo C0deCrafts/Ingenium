@@ -1,7 +1,8 @@
-import {StyleSheet, TextInput, View} from "react-native";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import Icon from "../Icon";
+import {ICONS} from "../../constants/icons";
 
 /**
  * ## CustomInputFieldLogin Component
@@ -16,6 +17,9 @@ import Icon from "../Icon";
  * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
  * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
  * @param {function} onChangeTextHandler - Event handler for on change text event.
+ * @param passwordVisible
+ * @param togglePasswordVisibility
+ * @param error
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
@@ -23,7 +27,17 @@ import Icon from "../Icon";
  *   isPassword={true}
  *   maxTextInputLength={25}/>
  */
-function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, isPassword, iconName, onChangeTextHandler}) {
+function CustomInputFieldLogin({
+              placeholder,
+              keyboardType,
+              maxTextInputLength,
+              isPassword,
+              iconName,
+              onChangeTextHandler,
+              passwordVisible, // Neu hinzugefügt
+              togglePasswordVisibility, // Neu hinzugefügt
+              error
+}) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -43,18 +57,30 @@ function CustomInputFieldLogin({placeholder, keyboardType, maxTextInputLength, i
     ];
     const inputKeyboardType = validKeyboardTypes.includes(keyboardType) ? keyboardType : "default";
 
+    const iconToShow = isPassword ? (passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK) : iconName;
+
     return (
-        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container]}>
-            <Icon name={iconName} size={24} color={isDarkMode? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}/>
+        <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container, error ? styles.inputError : null]}>
+            {/* Wenn isPassword true ist, rendern wir das Icon in einem TouchableOpacity für Interaktionen */}
+            {isPassword ? (
+                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                    <Icon name={iconToShow} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
+                </TouchableOpacity>
+            ) : (
+                // Wenn isPassword false ist, wird das Icon ohne TouchableOpacity gerendert
+                <Icon name={iconName} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
+            )}
             <TextInput
-                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input, {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input,
+                    {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
-                secureTextEntry={isPassword}
+                secureTextEntry={isPassword && !passwordVisible}
                 maxLength={maxTextInputLength}
                 placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                 selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                 onChangeText={onChangeTextHandler}
+                keyboardAppearance={isDarkMode ? "dark" : "light"}
                 /*
                 * IOS flickering on input Issue -closed by react native as it is an IOS bug -
                 * In IOS 17, setting text to secureEntry opens the password bar (enabling input of saved
@@ -98,6 +124,10 @@ const styles = StyleSheet.create({
     },
     containerDark: {
         backgroundColor: DARKMODE.INPUT_BOX_COLOR,
+    },
+    inputError: {
+        borderColor: 'red',
+        borderWidth: 1,
     },
     input: {
         fontSize: SIZES.TEXTINPUT_SIZE,
