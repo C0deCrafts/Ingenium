@@ -260,6 +260,9 @@ export const ICONS = {
         USER: require('../assets/icons/user.png'),
         LOCK: require('../assets/icons/lock.png'),
         UNLOCK: require('../assets/icons/unlock_line.png'),
+    },
+    TIMETABLEICONS: {
+        ARROW_BACK: require('../assets/icons/arrow-back-small.png'),
+        ARROW_NEXT: require('../assets/icons/arrow-forward-small.png')
     }
-
 };
