@@ -6,6 +6,7 @@ import {useCallback, useEffect, useState} from "react";
 import {fetchIcal, fillAgendaObjectWithCourseData, getSemesterDates} from "../../api/ingeapiCalendar";
 import {format} from 'date-fns';
 import {de} from "date-fns/locale";
+import { getDay as getAbbreviatedDay} from "../../utils/utils";
 import {
     Agenda,
     AgendaList,
@@ -84,8 +85,20 @@ function Timetable({navigation}) {
         )
     }
     const renderDay = (day, item) => {
+        let nameOfDay;
+        let date;
+        let month;
+        let isOneCurse = true;
+
+        if(day){
+            nameOfDay = getAbbreviatedDay(day.getDay());
+            date = day.getDate().toString().padStart(2, '0');
+            month = (day.getMonth() + 1).toString().padStart(2, '0');
+        }else{
+            isOneCurse = false;
+        }
         return (
-            <DateBoxForAgenda date={"03.04"} weekDay={"MO"}/>
+            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCurse={isOneCurse}/>
         )
     }
 

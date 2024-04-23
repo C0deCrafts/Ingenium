@@ -34,17 +34,24 @@ function CourseItemForAgenda(props) {
     return (
         course &&
         <View style={[styles.courseContainer, isDarkMode ? styles.courseContainerDark : styles.courseContainerLight]}>
-            <View style={styles.courseColorBlock}>
-                <Text style={styles.courseTitle}>{course.courseTitle}</Text>
-            </View>
             <View style={[styles.courseDescriptionContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
-                <View style={styles.courseTimeContainer}>
-                    <Text style={isDarkMode? styles.textDark : styles.textLight}>{course.courseStart}-</Text>
-                    <Text style={isDarkMode? styles.textDark : styles.textLight}>{course.courseEnd}</Text>
+                <View style={styles.titleTimeContainer}>
+                    <Text style={styles.courseTitle}
+                          numberOfLines = {2}
+                          ellipsizeMode={ "tail"}>
+                        {course.courseTitle}
+                    </Text>
+                    <View style={styles.courseTimeContainer}>
+                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>{course.courseStart}-</Text>
+                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>{course.courseEnd}</Text>
+                    </View>
                 </View>
-                <TouchableOpacity style={styles.courseLinkContainer} onPress={() => handleOpenCourseLink(course.courseURL)}>
-                    <Icon color={isDarkMode? styles.textDark : styles.textLight} size={24} name={ICONS.LINK.INACTIVE}/>
-                    <Text style={[isDarkMode? styles.textDark: styles.textLight, styles.textUnderline]}>Auf ILIAS ansehen</Text>
+                <TouchableOpacity style={[styles.courseLinkContainer, isDarkMode? styles.backGroundDark:styles.backGroundLight]}
+                                  onPress={() => handleOpenCourseLink(course.courseURL)}>
+                    <Text style={[isDarkMode? styles.textDark: styles.textLight, styles.linkText]}>
+                        Details
+                    </Text>
+                    <Icon color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_SMALL + 2} name={ICONS.FORWARD.ACTIVE}/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -66,13 +73,6 @@ const styles = StyleSheet.create({
     courseContainerDark: {
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
     },
-    courseColorBlock: {
-        width: '100%',
-        padding: 15,
-        backgroundColor: COLOR.BUTTONCOLOR,
-        borderTopRightRadius: SIZES.BORDER_RADIUS,
-        borderTopLeftRadius: SIZES.BORDER_RADIUS,
-    },
     courseTitle: {
         color: DARKMODE.TEXT_COLOR,
         fontWeight: SIZES.BUTTON_LABEL_WEIGHT,
@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
     courseDescriptionContainer: {
         flex: 1,
         padding: 15,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
     },
     containerLight: {
         backgroundColor: LIGHTMODE.BOX_COLOR,
@@ -96,35 +99,34 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     courseLinkContainer: {
-        paddingTop: SIZES.SPACING_VERTICAL_DEFAULT,
         flexDirection: "row",
-        columnGap: 10,
+        height: 80,
+        width: 80,
+        borderRadius: 40,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    titleTimeContainer: {
+        width: '60%',
+        height: '100%',
+        justifyContent: "space-between"
+    },
+    backGroundDark: {
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+    },
+    backGroundLight: {
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
     },
     textLight: {
         color: LIGHTMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
     },
     textDark: {
         color: DARKMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
     },
-    textUnderline: {
-        textDecorationLine: "underline",
-    },
-    noCourseContainerLight: {
-        backgroundColor: LIGHTMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        flex: 1,
-        padding: 15,
-        flexDirection: "row",
-        alignItems: "center"
-    },
-    noCourseContainerDark: {
-        backgroundColor: DARKMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        flex: 1,
-        padding: 15,
-        flexDirection: "row",
-        alignItems: "center",
+    linkText: {
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
+        paddingLeft: 5
     }
 });
