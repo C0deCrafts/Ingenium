@@ -48,8 +48,8 @@ export const fetchIcal = () => {
 /**
  * Parses the fetched ical data, and calls functions to:
  * - extract all necessary information about the courses
- * - format an array with the necessary structure for the AgendaList
- * - fill the array with all courses
+ * - format an object with the necessary structure for the Agenda component
+ * - fill the object with all the coursedates and coursedata for one semester
  * @param icalData the raw ical data fetched from Inge App API.
  * @returns {[]} An array with all courses formatted as the AgendaList accepts them.
  */
@@ -211,51 +211,9 @@ export const fillAgendaObjectWithCourseData = (courseItems, objectWithAgendaStru
                     courseTitle: c.courseSummary,
                     courseURL: c.courseURL
                 });
-                //console.log("My newly added valuearray ", value);
             }
         }
     });
     return objectWithAgendaStructure;
 }
-
-
-/**
- * Fills courseItems into the array with agenda list structure - the courses are added to the data array
- * of the day they take place. For days where no courses take place, an empty object is passed to the data
- * array, as this is needed for rendering a component on days without courses to the AgendaList.
- * @param courseItems {Array} an array of course items with structure defined by courseItem class.
- * @param arrayWithAgendaListStructure {Array}
- * @returns {*}
- */
-const fillAgendaListArrayWithCourses = (courseItems, arrayWithAgendaListStructure) => {
-    /*
-    * loop through the course Items one by one
-    * and add them to their corresponding date in
-    * the courseItemsWithAgendaListStructure array
-    * */
-    for(let i = 0; i < courseItems.length; i++) {
-        for(let j = 0; j < arrayWithAgendaListStructure.length; j++) {
-            //comparing dates with date-fns library to assure they get compared correctly (avoiding mistakes with
-            //using strict equality operator when comparing date strings
-            if(isEqualDateFns(courseItems[i].courseDate, arrayWithAgendaListStructure[j].title)){
-                arrayWithAgendaListStructure[j].data.push({
-                    courseTitle: courseItems[i].courseSummary,
-                    courseStart: courseItems[i].courseStart,
-                    courseEnd: courseItems[i].courseEnd,
-                    courseURL: courseItems[i].courseURL
-                });
-            }
-        }
-    }
-
-    //add an empty object to the data array if there is no course on that day
-    //to be able to render something on empty days in the AgendaList
-    arrayWithAgendaListStructure.forEach(c =>{
-        if(c.data.length === 0) {
-            c.data.push({});
-        }
-    });
-
-    return arrayWithAgendaListStructure;
-};
 

@@ -27,8 +27,7 @@ function Timetable({navigation}) {
     const windowWidth = Dimensions.get("window").width;
 
     const [coursesAreLoading, setCoursesAreLoading] = useState(true);
-    const [courseItemsState, setCourseItemsState] = useState([]);
-    const [markedDatesState, setMarkedDatesState] = useState({});
+    const [courseItemsState, setCourseItemsState] = useState({});
     const [calendarBoundaries, setCalendarBoundaries] = useState({
         startDate: null,
         endDate: null
@@ -68,13 +67,30 @@ function Timetable({navigation}) {
         setCalendarBoundaries({startDate: calendarStart, endDate: calendarEnd});
     }, []);
 
+    /**
+     * Handler which renders the empty dates
+     * @returns {JSX.Element} am empty view element as on days without courses nothing
+     *                        should be rendered
+     */
     const renderEmptyDateHandler = () => {
         return (
-            <View>
-                <Text>Keine Termine</Text>
+            <View styles={styles.emptyDateContainer}>
+                <View styles={[isDarkMode ? styles.separatorDark : styles.separatorLight, styles.emptyDateContainer]}/>
             </View>
-        );
+        )
     }
+
+    const renderEmptyDataHandler = () => {
+        return (
+            <View style={[styles.emptyDataContainer]}>
+                <Text style={[isDarkMode? styles.textDark : styles.text, styles.textNormal]}>
+                    Für diesen Zeitraum sind keine Termine verfügbar.
+                </Text>
+            </View>
+        )
+    }
+
+
 
     /**
      * sets the default locale of the calendar to German.
@@ -102,7 +118,7 @@ function Timetable({navigation}) {
     };
     LocaleConfig.defaultLocale = 'de';
 
-    /**
+    /**PROP RENDERITEM:
      * Renders the courses for the agenda list.
      * UseCallback without a dependency array, caches the function
      * returns the same function instance after every rerender. Without it
@@ -111,31 +127,6 @@ function Timetable({navigation}) {
      * (Since the function does not depend on external state or variables which
      * need to be up-to-date, it is not necessary to add dependencies)
      */
-    const renderItem = useCallback(({item}) => {
-        return (
-            <CourseItemForAgenda course={item}/>
-        );
-    });
-
-    /**
-     * Renders the left and right arrow next to the calendar heading
-     * @param direction {string}  The direction for which arrow is rendered:
-     *                              - 'left' renders left arrow
-     *                              - 'right' renders right arrow
-     * @returns {JSX.Element} a round blue Icon with a white arrow pointing left or right.
-     */
-    const renderCalendarArrows = (direction) => {
-        if (direction === 'left') {
-            return (
-                <Icon name={ICONS.TIMETABLEICONS.ARROW_BACK} size={24}/>
-            );
-        } else if (direction === 'right') {
-            return (
-                <Icon name={ICONS.TIMETABLEICONS.ARROW_NEXT} size={24}/>
-            );
-        }
-    }
-
     return (
         <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.container]}>
             <CustomDrawerHeader title="Stundenplan" onPress={() => navigation.openDrawer()}/>
@@ -143,7 +134,8 @@ function Timetable({navigation}) {
                 <Agenda
                     items={courseItemsState}
                     renderEmptyDate={renderEmptyDateHandler}
-                    renderItem={(item) => renderItem(item)}
+                    renderEmptyData={renderEmptyDataHandler}
+                    renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
                 />
             </View>
         </View>
@@ -176,6 +168,29 @@ function getStyles(insets) {
             },
             textDark: {
                 color: DARKMODE.TEXT_COLOR,
+            },
+            textNormal: {
+                fontSize: SIZES.SCREEN_TEXT_NORMAL
+            },
+            textAlignCenter: {
+                textAlign: "center",
+            },
+            emptyDataContainer: {
+                paddingTop: SIZES.SPACING_HORIZONTAL_DEFAULT,
+                paddingVertical: SIZES.SPACING_HORIZONTAL_DEFAULT
+            },
+            emptyDateContainer: {
+                flex: 1,
+            },
+            separatorLight: {
+                height: 1,
+                backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+                marginHorizontal: 10,
+            },
+            separatorDark: {
+                height: 1,
+                backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+                marginHorizontal: 10,
             }
         }
     );
