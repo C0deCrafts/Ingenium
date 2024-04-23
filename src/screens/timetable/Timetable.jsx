@@ -72,13 +72,6 @@ function Timetable({navigation}) {
      * @returns {JSX.Element} am empty view element as on days without courses nothing
      *                        should be rendered
      */
-    const renderEmptyDateHandler = () => {
-        return (
-            <View styles={styles.emptyDateContainer}>
-                <View styles={[isDarkMode ? styles.separatorDark : styles.separatorLight, styles.emptyDateContainer]}/>
-            </View>
-        )
-    }
 
     const renderEmptyDataHandler = () => {
         return (
@@ -89,6 +82,13 @@ function Timetable({navigation}) {
             </View>
         )
     }
+
+    const renderEmptyDateHandler = () => {
+        return (
+            <View style={[isDarkMode ? styles.emptySeparatorDark : styles.emptySeparatorLight]}>
+            </View>
+        );
+    };
 
 
 
@@ -179,18 +179,25 @@ function getStyles(insets) {
                 paddingTop: SIZES.SPACING_HORIZONTAL_DEFAULT,
                 paddingVertical: SIZES.SPACING_HORIZONTAL_DEFAULT
             },
-            emptyDateContainer: {
-                flex: 1,
+            itemSeparatorLight: {
+                borderBottomWidth: 1,
+                borderBottomColor: '#ccc',
+                padding: 10,
+                backgroundColor: LIGHTMODE.BACKGROUNDCOLOR, // Hintergrundfarbe für den Eintrag
             },
-            separatorLight: {
-                height: 1,
-                backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-                marginHorizontal: 10,
+            itemSeparatorDark: {
+                borderBottomWidth: 1,
+                borderBottomColor: '#666',
+                padding: 10,
+                backgroundColor: DARKMODE.BACKGROUNDCOLOR, // Hintergrundfarbe für den Eintrag
             },
-            separatorDark: {
+            emptySeparatorLight: {
                 height: 1,
-                backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-                marginHorizontal: 10,
+                backgroundColor: LIGHTMODE.TEXT_COLOR,
+            },
+            emptySeparatorDark: {
+                height: 1,
+                backgroundColor: DARKMODE.TEXT_COLOR,
             }
         }
     );
