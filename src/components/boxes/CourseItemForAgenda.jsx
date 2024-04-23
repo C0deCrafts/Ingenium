@@ -30,24 +30,9 @@ function CourseItemForAgenda(props) {
         }
     }
 
-    /**
-     * Check if the course prop received has no keys.
-     * The days without courses have an empty course object. For those
-     * the check defaults to true and an empty course object is rendered.
-     */
-    if(Object.keys(course).length === 0) {
-        return (
-            <View style={[styles.courseContainer, isDarkMode ? styles.courseContainerDark : styles.courseContainerLight]}>
-                <View style={isDarkMode ? styles.noCourseContainerDark : styles.noCourseContainerLight}>
-                    <Text style={[isDarkMode ? styles.textDark : styles.textLight]}>Heute keine Kurse</Text>
-                    <Image source={require('../../assets/images/sleeping-sloth.png')}/>
-                </View>
-            </View>
-        );
-    }
-
 
     return (
+        course &&
         <View style={[styles.courseContainer, isDarkMode ? styles.courseContainerDark : styles.courseContainerLight]}>
             <View style={styles.courseColorBlock}>
                 <Text style={styles.courseTitle}>{course.courseTitle}</Text>

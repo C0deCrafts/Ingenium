@@ -61,10 +61,10 @@ const convertIcalData = (icalData) => {
     let courseItems = createCourseItemArrayOfParsedIcsEvents(icsEvents);
 
     //create an array of required structure for Agendalist, containing all dates minYear to maxYear
-    const arrayWithAgendaListStructure = createArrayWithAllDatesOfSemester();
+    const objectWithAgendaStructure = createAgendaListDataObject();
 
     //fill array with agendaList structure with all course items
-    return fillAgendaListArrayWithCourses(courseItems, arrayWithAgendaListStructure);
+    return fillAgendaObjectWithCourseData(courseItems, objectWithAgendaStructure);;
 }
 
 /**
@@ -166,27 +166,21 @@ export const getSemesterDates = () => {
 }
 
 /**
- * Creates an array with the datastructure required by the AgendaList which will output the course items.
- * For all days rendered in  the agenda the Array must have an object with:
- * - key: title, value: date in format 'dd-MM-YYYY'
- * - key: data, value: [array with all course items happening that day]
- * For all dates to be rendered in the agenda every single date in the course date range must be present.
- * The function creates this structure with dates ranging from the 01st of January of minYear
- * and the 31st of december of maxYear.
- * The function is used to create a date range corresponding to the date range of the course items received by
- * the ics file fetched from Ilias.
- * @returns {[]}
+ * Creates an object holding all the dates of a semester as keys, with an empty array
+ * to which the course data will be assigned.
+ * Example structure: '2024-04-20'
+ * @returns {{}}
  */
-const createArrayWithAllDatesOfSemester = () => {
+const createAgendaListDataObject = () => {
     /*
-    *get the start and the end of the semester as min and max date for the agenda list
-     */
+   *get the start and the end of the semester as min and max date for the agenda list
+    */
     const {start, end} = getSemesterDates();
 
     const minDate = start;
     const maxDate = end;
 
-    const agendaListData = [];
+    const agendaListData = {};
 
     let currentDate = new Date(minDate);
 
@@ -195,14 +189,9 @@ const createArrayWithAllDatesOfSemester = () => {
 
         const sectionTitle = currentDate.toISOString().split('T')[0];
 
-        // Check if the date already exists in the array - to avoid duplicates due to daylight saving time
-        const existingDate = agendaListData.find(item => item.title === sectionTitle);
-
-        if (!existingDate) {
-            agendaListData.push({
-                title: sectionTitle,
-                data: []
-            });
+        //check if date already exists and skip it
+        if (!Object.keys(agendaListData).includes(sectionTitle)) {
+            agendaListData[sectionTitle] = [];
         }
 
         //increase currentDate by one day after each round in the loop
@@ -210,6 +199,25 @@ const createArrayWithAllDatesOfSemester = () => {
     }
     return agendaListData;
 }
+
+export const fillAgendaObjectWithCourseData = (courseItems, objectWithAgendaStructure) => {
+    courseItems.forEach(c => {
+        for (let [key, value] of Object.entries(objectWithAgendaStructure)) {
+            if(isEqualDateFns(key, c.courseDate)) {
+                value.push({
+                    courseDate: c.courseDate,
+                    courseStart: c.courseStart,
+                    courseEnd: c.courseEnd,
+                    courseTitle: c.courseSummary,
+                    courseURL: c.courseURL
+                });
+                //console.log("My newly added valuearray ", value);
+            }
+        }
+    });
+    return objectWithAgendaStructure;
+}
+
 
 /**
  * Fills courseItems into the array with agenda list structure - the courses are added to the data array
