@@ -17,6 +17,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {LocaleConfig} from "react-native-calendars/src/index";
 import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
 import Icon from "../../components/Icon";
+import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
 
 function Timetable({navigation}) {
     //import theme, safe area insets, and window dimensions
@@ -82,14 +83,11 @@ function Timetable({navigation}) {
             </View>
         )
     }
-
-    const renderEmptyDateHandler = () => {
+    const renderDay = (day, item) => {
         return (
-            <View style={[isDarkMode ? styles.emptySeparatorDark : styles.emptySeparatorLight]}>
-            </View>
-        );
-    };
-
+            <DateBoxForAgenda date={"03.04"} weekDay={"MO"}/>
+        )
+    }
 
 
     /**
@@ -133,9 +131,38 @@ function Timetable({navigation}) {
             <View style={styles.calendarContainer}>
                 <Agenda
                     items={courseItemsState}
-                    renderEmptyDate={renderEmptyDateHandler}
                     renderEmptyData={renderEmptyDataHandler}
                     renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
+                    renderDay={renderDay}
+                    /*
+                    theme={{
+                        //backgroundcolor of the month-calendar view
+                        calendarBackground: isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR,
+                        //color of the header between left and right arrow
+                        monthTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
+                        //fontweight of the header between left and right arrow
+                        textMonthFontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+                        //fontsize of the header between left and right arrow
+                        textMonthFontSize: SIZES.SCREEN_TEXT_NORMAL,
+                        //color of days of the month
+                        dayTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
+                        //color of today (number in month calendar view representing today)
+                        todayTextColor: COLOR.BUTTONCOLOR,
+                        //size of day numbers in month view
+                        textDayFontSize: SIZES.SCREEN_TEXT_SMALL,
+                        //Color of the week days displayed in the month view
+                        textSectionTitleColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
+                        //size of the text for the week days
+                        textDayHeaderFontSize: SIZES.SCREEN_TEXT_SMALL,
+                        //color of the mark behind the selected day
+                        selectedDayBackgroundColor: COLOR.BUTTONCOLOR,
+                        //color of 'not active' text f.e. days of next and previous month
+                        textDisabledColor: isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE,
+                        //set so the marked dates in last week are not cut off
+                        weekVerticalMargin: 5,
+                    }}
+
+                     */
                 />
             </View>
         </View>
