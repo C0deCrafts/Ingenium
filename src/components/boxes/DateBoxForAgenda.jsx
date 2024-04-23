@@ -7,10 +7,12 @@ const DateBoxForAgenda = ({isEmptyDate = false, date, weekDay}) => {
     const isDarkMode = theme === DARKMODE;
 
     return (
-        <View style={[styles.container, isDarkMode ? styles.containerDark : styles.containerLight,
+        <View style={isDarkMode ? styles.backgroundContainerDark : styles.backgroundContainerLight}>
+            <View style={[styles.container, isDarkMode ? styles.containerDark : styles.containerLight,
             !isEmptyDate && styles.blueBorder]}>
-            <Text style={styles.weekDay}>{weekDay}</Text>
-            <Text style={styles.date}>{date}</Text>
+            <Text style={[styles.weekDay, isDarkMode ? styles.textDark : styles.textLight]}>{weekDay}</Text>
+            <Text style={[styles.date, isDarkMode ? styles.textDark : styles.textLight]}>{date}</Text>
+            </View>
         </View>
     );
 };
@@ -20,19 +22,26 @@ export default DateBoxForAgenda;
 const styles = StyleSheet.create(
     {
         container: {
-            marginTop:SIZES.SPACING_VERTICAL_DEFAULT,
-            marginRight: SIZES.SPACING_HORIZONTAL_DEFAULT,
+            marginTop:SIZES.SPACING_VERTICAL_SMALL,
+            marginRight: 10,
             height: 200,
             borderRadius: 5,
             justifyContent: "space-between",
             padding: 15,
-            width: '35%'
         },
         containerLight: {
             backgroundColor: LIGHTMODE.BOX_COLOR,
         },
         containerDark: {
+            backgroundColor: DARKMODE.BOX_COLOR,
+        },
+        backgroundContainerLight: {
+            backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+            width: '35%',
+        },
+        backgroundContainerDark: {
             backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            width: '35%',
         },
         blueBorder: {
             borderLeftColor: COLOR.BUTTONCOLOR,
@@ -43,7 +52,7 @@ const styles = StyleSheet.create(
             alignSelf: "flex-end"
         },
         weekDay: {
-            fontSize: SIZES.SCREEN_TEXT_LARGE,
+            fontSize: SIZES.SCREEN_TEXT_LARGE - 10,
         },
         textLight: {
             color: LIGHTMODE.TEXT_COLOR,
