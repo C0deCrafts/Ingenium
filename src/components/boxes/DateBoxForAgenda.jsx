@@ -2,7 +2,7 @@ import {StyleSheet, View, Text} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
-const DateBoxForAgenda = ({isEmptyDate = false, date, weekDay, isOneCourse = true}) => {
+const DateBoxForAgenda = ({isEmptyDate = true, date, weekDay, isOneCourse = true}) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
@@ -12,7 +12,6 @@ const DateBoxForAgenda = ({isEmptyDate = false, date, weekDay, isOneCourse = tru
                         !isEmptyDate && styles.blueBorder]}>
                         <Text style={[styles.weekDay, isDarkMode ? styles.textDark : styles.textLight]}>{weekDay}</Text>
                         <Text style={[styles.date, isDarkMode ? styles.textDark : styles.textLight]}>{date}</Text>
-                        {!isOneCourse && <Text>TEST</Text>}
                     </View>
                 </View>)
     } else {

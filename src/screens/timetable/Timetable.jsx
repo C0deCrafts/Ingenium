@@ -2,7 +2,7 @@ import {View, StyleSheet, Text} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
 import { getDay as getAbbreviatedDay} from "../../utils/utils";
 import {
@@ -27,8 +27,6 @@ function Timetable({navigation}) {
         endDate: null
     });
 
-    const [isSameDay, setIsSameDay] = useState(true);
-    const [coursesOfADay, setCoursesOfADay] = useState([]);
 
     /*
     * TODO:
@@ -79,13 +77,16 @@ function Timetable({navigation}) {
             </View>
         )
     }
-    const renderDay = (day) => {
+    const renderDay = (day, item) => {
         let nameOfDay;
         let date;
         let month;
         let isOneCurse = true;
+        let isEmptyDate;
 
-
+        if(item) {
+            isEmptyDate = false;
+        }
         //console.log(`variable day is: ${day}`);
         if(day){
             nameOfDay = getAbbreviatedDay(day.getDay());
@@ -95,7 +96,7 @@ function Timetable({navigation}) {
             isOneCurse = false;
         }
         return (
-            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCourse={isOneCurse}/>
+            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCourse={isOneCurse} isEmptyDate={isEmptyDate}/>
         )
     };
 
