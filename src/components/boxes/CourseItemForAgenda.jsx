@@ -36,8 +36,10 @@ function CourseItemForAgenda(props) {
         <View style={[styles.courseContainer, isDarkMode ? styles.courseContainerDark : styles.courseContainerLight]}>
             {courses.map((c, index) => {
                 return(
-                    <>
-                    <View style={[styles.courseDescriptionContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
+                    <View key={index}>
+                    <View
+                        style={[styles.courseDescriptionContainer, isDarkMode? styles.containerDark : styles.containerLight]}
+                    >
                         <View style={styles.titleTimeContainer}>
                             <Text style={[styles.courseTitle, isDarkMode? styles.textDark : styles.textLight]}
                                   numberOfLines = {2}
@@ -58,7 +60,7 @@ function CourseItemForAgenda(props) {
                         </TouchableOpacity>
                     </View>
                         {index !== courses.length -1 && ( <View style={isDarkMode ? styles.emptySeparatorDark : styles.emptySeparatorLight}/>)}
-                    </>
+                    </View>
                 )
             })}
         </View>
@@ -72,7 +74,7 @@ export default memo(CourseItemForAgenda);
 const styles = StyleSheet.create({
     courseContainer: {
         flex: 1,
-        minHeight: 120,
+        //minHeight: 120,
         paddingTop: SIZES.SPACING_VERTICAL_SMALL
     },
     courseContainerLight: {
