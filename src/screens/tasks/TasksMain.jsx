@@ -17,6 +17,8 @@ import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
 import CardButton from "../../components/buttons/CardButton";
 
+import {formatDate} from "../../utils/utils"
+
 
 function TasksMain({navigation}) {
     //providing a safe area
@@ -151,6 +153,7 @@ function TasksMain({navigation}) {
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
                             {tasksNotDone.map((task, index) => {
+                                const date = formatDate(task.creationDate);
                                 return (
                                     <View key={task.taskId}>
                                         <TaskPreview
@@ -159,7 +162,7 @@ function TasksMain({navigation}) {
                                         taskTitle={task.taskTitle}
                                         isTaskTitlePreview={true}
                                         showDate={true}
-                                        dateText={"Fällig am ..."}
+                                        dateText={`Erstellt am ${date}`}
                                         taskIsInCompletedScreen={false}
                                         />
                                         {/* Adds a border, except after the last element */}

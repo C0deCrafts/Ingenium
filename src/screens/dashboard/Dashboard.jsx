@@ -55,6 +55,47 @@ function Dashboard({navigation}) {
 
     const { icalData, getCourseNameByNumber } = useCalendar();
     const [nextCourses, setNextCourses] = useState([]);
+    const [nextTasks, setNextTasks] = useState([]);
+
+    const {tasks} = useDatabase();
+
+    //das älteste Datum finden --> sortieren nach Datum
+    //nur die ersten
+    const tasksSortedByCreationDate = tasks.sort((a,b) => {
+        const dateA = new Date(a.creationDate);
+        const dateB = new Date(b.creationDate);
+        return dateA - dateB;
+    });
+
+    useEffect(() => {
+        let nextTasks = createNextTasksArray(tasksSortedByCreationDate);
+        setNextTasks(nextTasks);
+    }, [tasks]);
+
+    /**
+     * Creates an array of next task objects which have the following structure:
+     *                 id: id of task ,
+     *                 name: title of task,
+     *                 daysLeft: days until it needs to be completed (by now not implemented),
+     *                 backgroundColor: backgroundColor
+     * From the state variable tasks which needs to be sorted by date first.
+      * @param tasksSortedByCreationDate {[]} array of task objects as saved to SQLite sorted by creationDate (later dueDate!!)
+     * @returns {*[]}
+     */
+    const createNextTasksArray = (tasksSortedByCreationDate) => {
+        let nextTasks = [];
+        tasksSortedByCreationDate.filter(t => !t.isDone).forEach(t => {
+            nextTasks.push({
+                id: t.taskId,
+                name: t.taskTitle,
+                daysLeft: "",
+                backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
+            })
+        });
+        return nextTasks;
+    }
+
+
 
     // Dummy-Tasks
     const dummyTasks = [
@@ -233,13 +274,13 @@ function Dashboard({navigation}) {
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Aufgaben</Text>
 
-                            {dummyTasks.slice(0, nextTasksCount).map((task)=>(
+                            {nextTasks.slice(0, nextTasksCount).map((task)=>(
                                 <View style={styles.taskRow}
                                       key={task.id}
                                 >
                                 <NextTaskButton
                                     buttonTextLeft={task.name}
-                                    buttonTextRight={`in ${task.daysLeft} Tagen`}
+                                    //buttonTextRight={`in ${task.daysLeft} Tagen`}
                                     boxBackgroundColor={task.backgroundColor}
                                 />
                                 </View>

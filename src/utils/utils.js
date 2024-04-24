@@ -97,6 +97,15 @@ export const formatLocalTime = (time) => {
     return date.toISOString().substring(11, 16);
 };
 
+export const formatDate = (date) => {
+    date = new Date(date);
+    const day = date.getDate();
+    const month = (date.getMonth()+1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+
+
 // Function to get course name by course number
 export const getCourseNameByNumber = (crsNummer) => {
     switch (crsNummer) {
