@@ -2,20 +2,22 @@ import {StyleSheet, View, Text} from "react-native";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
-const DateBoxForAgenda = ({isEmptyDate = false, date, weekDay, isOneCurse = true}) => {
+const DateBoxForAgenda = ({isEmptyDate = false, date, weekDay, isOneCourse = true}) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    return (
-        <View style={isDarkMode ? styles.backgroundContainerDark : styles.backgroundContainerLight}>
-            <View style={[styles.container, isDarkMode ? styles.containerDark : styles.containerLight,
-            !isEmptyDate && styles.blueBorder]}>
-            <Text style={[styles.weekDay, isDarkMode ? styles.textDark : styles.textLight]}>{weekDay}</Text>
-            <Text style={[styles.date, isDarkMode ? styles.textDark : styles.textLight]}>{date}</Text>
-                {!isOneCurse&&<Text>TEST</Text>}
-            </View>
-        </View>
-    );
+    if (isOneCourse) {
+        return (<View style={isDarkMode ? styles.backgroundContainerDark : styles.backgroundContainerLight}>
+                    <View style={[styles.container, isDarkMode ? styles.containerDark : styles.containerLight,
+                        !isEmptyDate && styles.blueBorder]}>
+                        <Text style={[styles.weekDay, isDarkMode ? styles.textDark : styles.textLight]}>{weekDay}</Text>
+                        <Text style={[styles.date, isDarkMode ? styles.textDark : styles.textLight]}>{date}</Text>
+                        {!isOneCourse && <Text>TEST</Text>}
+                    </View>
+                </View>)
+    } else {
+        return null;
+    }
 };
 
 export default DateBoxForAgenda;
@@ -23,12 +25,12 @@ export default DateBoxForAgenda;
 const styles = StyleSheet.create(
     {
         container: {
-            marginTop:SIZES.SPACING_VERTICAL_SMALL,
+            marginTop: SIZES.SPACING_VERTICAL_SMALL,
             marginRight: 10,
-            height: 100,
             borderRadius: 5,
             justifyContent: "space-between",
             padding: 15,
+            flex: 1
         },
         containerLight: {
             backgroundColor: LIGHTMODE.BOX_COLOR,

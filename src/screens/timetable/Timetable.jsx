@@ -1,23 +1,16 @@
-import {View, StyleSheet, Dimensions, ActivityIndicator, Text} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useCallback, useEffect, useState} from "react";
-import {fetchIcal, fillAgendaObjectWithCourseData, getSemesterDates} from "../../api/ingeapiCalendar";
-import {format} from 'date-fns';
-import {de} from "date-fns/locale";
+import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
 import { getDay as getAbbreviatedDay} from "../../utils/utils";
 import {
     Agenda,
-    AgendaList,
-    CalendarProvider,
-    ExpandableCalendar,
 } from "react-native-calendars";
-import {ICONS} from "../../constants/icons";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {LocaleConfig} from "react-native-calendars/src/index";
 import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
-import Icon from "../../components/Icon";
 import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
 
 function Timetable({navigation}) {
@@ -26,14 +19,16 @@ function Timetable({navigation}) {
     const isDarkMode = theme === DARKMODE;
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
-    const windowWidth = Dimensions.get("window").width;
 
     const [coursesAreLoading, setCoursesAreLoading] = useState(true);
     const [courseItemsState, setCourseItemsState] = useState({});
     const [calendarBoundaries, setCalendarBoundaries] = useState({
         startDate: null,
         endDate: null
-    })
+    });
+
+    const [isSameDay, setIsSameDay] = useState(true);
+    const [coursesOfADay, setCoursesOfADay] = useState([]);
 
     /*
     * TODO:
@@ -84,12 +79,14 @@ function Timetable({navigation}) {
             </View>
         )
     }
-    const renderDay = (day, item) => {
+    const renderDay = (day) => {
         let nameOfDay;
         let date;
         let month;
         let isOneCurse = true;
 
+
+        //console.log(`variable day is: ${day}`);
         if(day){
             nameOfDay = getAbbreviatedDay(day.getDay());
             date = day.getDate().toString().padStart(2, '0');
@@ -98,14 +95,27 @@ function Timetable({navigation}) {
             isOneCurse = false;
         }
         return (
-            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCurse={isOneCurse}/>
+            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCourse={isOneCurse}/>
         )
-    }
+    };
 
     const renderEmptyDate = () => {
         return (
-            <View style={isDarkMode? styles.containerDark : styles.containerLight}/>
+            <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
+                <View style={isDarkMode? styles.boxDark:styles.boxLight}/>
+            </View>
         )
+    }
+
+    const renderItem = (item, firstItemInDay) => {
+        if (firstItemInDay) {
+            const coursesOfDay = courseItemsState[item.courseDate];
+            return (
+                <CourseItemForAgenda courses={coursesOfDay}/>
+            );
+        } else {
+            return null;
+        }
     }
 
 
@@ -151,7 +161,8 @@ function Timetable({navigation}) {
                 <Agenda
                     items={courseItemsState}
                     renderEmptyData={renderEmptyDataHandler}
-                    renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
+                    //renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
+                    renderItem={(item, firstItemInDay) => renderItem(item, firstItemInDay)}
                     renderDay={renderDay}
                     renderEmptyDate={renderEmptyDate}
                     theme={{
@@ -178,7 +189,7 @@ function Timetable({navigation}) {
                         //color of 'not active' text f.e. days of next and previous month
                         textDisabledColor: isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE,
                     }}
-                    style={isDarkMode ? styles.agendaContainerDark : styles.agendaContainerLight}
+                    style={[isDarkMode ? styles.agendaContainerDark : styles.agendaContainerLight]}
                 />
             </View>
         </View>
@@ -234,19 +245,24 @@ function getStyles(insets) {
                 padding: 10,
                 backgroundColor: DARKMODE.BACKGROUNDCOLOR, // Hintergrundfarbe für den Eintrag
             },
-            emptySeparatorLight: {
-                height: 1,
-                backgroundColor: LIGHTMODE.TEXT_COLOR,
-            },
-            emptySeparatorDark: {
-                height: 1,
-                backgroundColor: DARKMODE.TEXT_COLOR,
-            },
             agendaContainerLight: {
-                backgroundColor: LIGHTMODE.BACKGROUNDCOLOR
+                backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
             },
             agendaContainerDark: {
-                backgroundColor: DARKMODE.BACKGROUNDCOLOR
+                backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+            },
+            boxLight: {
+                backgroundColor: LIGHTMODE.BOX_COLOR,
+                borderRadius: SIZES.BORDER_RADIUS,
+                flex: 1
+            },
+            boxDark: {
+                backgroundColor: DARKMODE.BOX_COLOR,
+                borderRadius: SIZES.BORDER_RADIUS,
+                flex: 1
+            },
+            boxSpacing: {
+                paddingTop: SIZES.SPACING_VERTICAL_SMALL,
             }
         }
     );

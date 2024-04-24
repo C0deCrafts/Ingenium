@@ -1,5 +1,5 @@
-import {Text, View, StyleSheet, Image, TouchableOpacity} from "react-native";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {memo} from "react";
 import {useTheme} from "../../context/ThemeContext";
 import * as Linking from "expo-linking";
@@ -17,7 +17,7 @@ function CourseItemForAgenda(props) {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {course} = props;
+    const {courses} = props;
 
     const handleOpenCourseLink = async (courseURL) => {
         //canOpenURL checks if the given URL can be opened, the Promise resolves either to true or false
@@ -32,28 +32,35 @@ function CourseItemForAgenda(props) {
 
 
     return (
-        course &&
+        courses &&
         <View style={[styles.courseContainer, isDarkMode ? styles.courseContainerDark : styles.courseContainerLight]}>
-            <View style={[styles.courseDescriptionContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
-                <View style={styles.titleTimeContainer}>
-                    <Text style={styles.courseTitle}
-                          numberOfLines = {2}
-                          ellipsizeMode={ "tail"}>
-                        {course.courseTitle}
-                    </Text>
-                    <View style={styles.courseTimeContainer}>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>{course.courseStart}-</Text>
-                        <Text style={isDarkMode ? styles.textDark : styles.textLight}>{course.courseEnd}</Text>
+            {courses.map((c, index) => {
+                return(
+                    <>
+                    <View style={[styles.courseDescriptionContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
+                        <View style={styles.titleTimeContainer}>
+                            <Text style={[styles.courseTitle, isDarkMode? styles.textDark : styles.textLight]}
+                                  numberOfLines = {2}
+                                  ellipsizeMode={ "tail"}>
+                                {c.courseTitle}
+                            </Text>
+                            <View style={styles.courseTimeContainer}>
+                                <Text style={isDarkMode ? styles.textDark : styles.textLight}>{c.courseStart}-</Text>
+                                <Text style={isDarkMode ? styles.textDark : styles.textLight}>{c.courseEnd}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity style={[styles.courseLinkContainer, isDarkMode? styles.backGroundDark:styles.backGroundLight]}
+                                          onPress={() => handleOpenCourseLink(c.courseURL)}>
+                            <Text style={[isDarkMode? styles.textDark: styles.textLight, styles.linkText]}>
+                                Details
+                            </Text>
+                            <Icon color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_SMALL + 2} name={ICONS.FORWARD.ACTIVE}/>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <TouchableOpacity style={[styles.courseLinkContainer, isDarkMode? styles.backGroundDark:styles.backGroundLight]}
-                                  onPress={() => handleOpenCourseLink(course.courseURL)}>
-                    <Text style={[isDarkMode? styles.textDark: styles.textLight, styles.linkText]}>
-                        Details
-                    </Text>
-                    <Icon color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} size={SIZES.SCREEN_TEXT_SMALL + 2} name={ICONS.FORWARD.ACTIVE}/>
-                </TouchableOpacity>
-            </View>
+                        {index !== courses.length -1 && ( <View style={isDarkMode ? styles.emptySeparatorDark : styles.emptySeparatorLight}/>)}
+                    </>
+                )
+            })}
         </View>
     );
 }
@@ -64,8 +71,9 @@ export default memo(CourseItemForAgenda);
 
 const styles = StyleSheet.create({
     courseContainer: {
-      flex:1,
-      paddingBottom: SIZES.SPACING_VERTICAL_DEFAULT,
+        flex: 1,
+        minHeight: 120,
+        paddingTop: SIZES.SPACING_VERTICAL_SMALL
     },
     courseContainerLight: {
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
@@ -87,13 +95,11 @@ const styles = StyleSheet.create({
     },
     containerLight: {
         backgroundColor: LIGHTMODE.BOX_COLOR,
-        borderBottomLeftRadius: SIZES.BORDER_RADIUS,
-        borderBottomRightRadius: SIZES.BORDER_RADIUS
+        borderRadius: SIZES.BORDER_RADIUS
     },
     containerDark: {
         backgroundColor: DARKMODE.BOX_COLOR,
-        borderBottomLeftRadius: SIZES.BORDER_RADIUS,
-        borderBottomRightRadius: SIZES.BORDER_RADIUS
+        borderRadius: SIZES.BORDER_RADIUS
     },
     courseTimeContainer: {
         flexDirection: "row",
@@ -128,5 +134,13 @@ const styles = StyleSheet.create({
     linkText: {
         fontSize: SIZES.SCREEN_TEXT_SMALL,
         paddingLeft: 5
-    }
+    },
+    emptySeparatorLight: {
+        height: 1,
+        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+    },
+    emptySeparatorDark: {
+        height: 1,
+        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+    },
 });

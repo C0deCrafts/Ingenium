@@ -63,3 +63,18 @@ Wenn Ihr Code ohne sie nicht funktioniert,
 suchen Sie das zugrunde liegende Problem und beheben Sie es zuerst. 
 Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
+
+
+-- HOMESCREEN - Creation Date + isDone Filter, + in db speichern (Tasks)
+-- alles durchklicken, wichtigkeit zusammenschreiben was unbedingt notwenig ist
+-- Mitteilung auf Aufgaben ändern - Bottom
+-- Feature Seiten gleichmäßig
+-- DrawerMenü - Responsive!!
+-- Profil bearbeiten weg!
+-- Loading Indicator + Datebox Kalender!
+-- Text bei keine nächsten Aufgaben / Tasks im Homescreen!
+-- Kalender hintergrund weiß??
+-- evtl. today button??
+-- Kalender undefinded!!
+-- Kalender Monat oben drüber!!!
+-- Fetch Call und Kalendermethoden zusammenführen
