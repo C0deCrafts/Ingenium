@@ -64,17 +64,46 @@ suchen Sie das zugrunde liegende Problem und beheben Sie es zuerst.
 Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
 
+-- Fetch Call und Kalendermethoden zusammenführen -- gemeinsam
 
--- HOMESCREEN - Creation Date + isDone Filter, + in db speichern (Tasks)
--- alles durchklicken, wichtigkeit zusammenschreiben was unbedingt notwenig ist
--- Mitteilung auf Aufgaben ändern - Bottom
--- Feature Seiten gleichmäßig
--- DrawerMenü - Responsive!!
--- Profil bearbeiten weg!
--- Loading Indicator + Datebox Kalender!
--- Text bei keine nächsten Aufgaben / Tasks im Homescreen!
--- Kalender hintergrund weiß??
--- evtl. today button??
--- Kalender undefinded!!
--- Kalender Monat oben drüber!!!
--- Fetch Call und Kalendermethoden zusammenführen
+-- Responsive ÜBERALL!!!! Apple!!
+
+-- Login: Schatten weg oder weniger? --Sabrina (+Dokumentation)
+    -- evtl Lösung zum fixen, dass password nach links verschoben wird, hinter dem Icon
+
+-- Homescreen: -- Sabrina (+Dokumentation)
+    -- wenn keine nächsten Kurse oder nächste Aufgabe, render "keine nächsten ...."
+       inkl richtige Größe der Box
+    -- evtl Design überdenken Nächste Aufgaben
+    -- Responsive testen
+    -- nächste Aufgaben kein BUTTON!
+
+-- BottomTabNavigation: -- Sabrina
+    -- Mitteilung austauschen mit Aufgaben
+-- DrawerNavigation: -- gemeinsam
+    -- Resonsive
+    -- Profil weg -- Sabrina
+  
+-- Stundenplan -- Jelena
+    --Loading Indicator, 
+    --Monat oben drüber, 
+    --today button, 
+    --hintergrund weiß in Darkmode??
+    --evtl bei Montag statt Sonntag beginnen
+    --evtl unter Kalender noch ein padding - aktuell das problem, dass überall padding angewendet wird
+    --evtl Kalender mit Borderradius 5
+    --MarkedDayDots auf Ingeniumfarbe anpassen
+
+-- Aufgaben -- Jelena
+    -- Erstellt am.. ausgeben (statt Fällig/Erledigt am bis V2)
+    -- V2 oder wenn Zeit ist - Kalenderpicker?
+    -- gemeinsames Design für V2 Features --> Inbox, Details
+    -- bei keine NächsteTodo's Infotext - keine nächsten Todos (ebenso bei Erledigt Screen)
+
+-- Einstellungen passt
+-- Kontakt passt
+
+-- Abmelden und neu Anmelden - Defaultscreen Home + Drawer geschlossen!! -- Sabrina
+
+-- Dokumentation
+    --evtl Github Docs oder Github Pages
