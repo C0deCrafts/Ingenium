@@ -68,8 +68,12 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
 -- Responsive ÜBERALL!!!! Apple!!
 
--- Login: Schatten weg oder weniger? --Sabrina (+Dokumentation)
+√ Login: Schatten weg oder weniger? --Sabrina (+Dokumentation) √ ERLEDIGT
     -- evtl Lösung zum fixen, dass password nach links verschoben wird, hinter dem Icon
+
+    Alles gelöst! Password verschwindet nicht mehr hinter dem Icon (Problem wurde mit Flex: 1 gelöst)
+    Password wird nur mehr angezeigt, solange der User am Icon oben bleibt - sobald er nicht mehr auf das Icon tippt, wird das
+    Password wieder versteckt
 
 -- Homescreen: -- Sabrina (+Dokumentation)
     -- wenn keine nächsten Kurse oder nächste Aufgabe, render "keine nächsten ...."
