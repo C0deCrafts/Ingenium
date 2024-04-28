@@ -71,8 +71,7 @@ function CustomInputFieldLogin({
                 <Icon name={iconName} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
             )}
             <TextInput
-                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input,
-                    {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword && !passwordVisible}
@@ -111,13 +110,6 @@ const styles = StyleSheet.create({
         columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         height: 50,
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        elevation: 5
     },
     containerLight: {
         backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
@@ -130,6 +122,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     input: {
+        flex: 1,
         fontSize: SIZES.TEXTINPUT_SIZE,
         textAlign: "left",
     },
@@ -138,6 +131,9 @@ const styles = StyleSheet.create({
     },
     inputDark: {
         color: DARKMODE.TEXTINPUT_COLOR,
+    },
+    iconContainer: {
+
     },
     textLight: {
         color: LIGHTMODE.TEXT_COLOR

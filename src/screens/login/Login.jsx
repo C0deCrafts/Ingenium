@@ -19,12 +19,42 @@ import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 
-/*
-Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
-Zum Beispiel kannst du damit einen anderen Bildschirm aufrufen oder zurück zu einem vorherigen
-Bildschirm navigieren. Es stellt praktisch eine Schnittstelle bereit, um zwischen den Bildschirmen
-zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
-*/
+/**
+ * ### Login Component
+ *
+ * This component manages the user login process within the application. It supports both dark and light themes,
+ * allowing users to enter their username and password. It also handles interactions like logging in, toggling
+ * the visibility of passwords, and provides links for password recovery and contacting support.
+ *
+ * #### Functionality:
+ * - **Theme Adjustment**: Uses the `useTheme` hook to check whether the theme is dark or light, and changes the
+ *   interface to match.
+ * - **State Management**: Keeps track of user inputs such as username and password, whether the app is loading,
+ *   and if a login attempt has failed.
+ * - **Validation Checks**: Makes sure that neither the username nor password fields are empty before the user can submit them.
+ * - **Password Visibility Toggling**: Lets users choose to show or hide their password while typing.
+ * - **External Links**: Offers users ways to reset their password or contact support through external links.
+ *
+ * #### Structure:
+ * 1. **Main View Container**: Changes its style based on the theme, ensuring it works well on all devices.
+ * 2. **Image and Greeting Section**: Shows the company logo and welcoming messages.
+ * 3. **Input Fields and Login Button**:
+ *    - **KeyboardAvoidingView**: Makes sure text inputs can be seen when the keyboard is visible, especially on iOS.
+ *    - **Custom Input Fields**: Two fields for entering the username and password. They include icons that show what to enter
+ *      and if there are errors.
+ * 4. **Action Links**:
+ *    - **Forgot Password**: Allows users to email for help with resetting their password.
+ *    - **Contact Support**: Links to the company’s contact page for users who need extra help or to create an account.
+ *
+ * #### Elements:
+ * - **Image**: Displays the company logo.
+ * - **Text**: Includes elements for greetings and instructions for users.
+ * - **CustomInputFieldLogin**: Custom components for user inputs.
+ * - **CustomButton**: A button that starts the login process when clicked.
+ * - **TouchableOpacity**: Interactive texts that help users reset their password or contact support.
+ *
+ * Each part of the component is designed to make the user experience smooth and straightforward, while keeping it secure and easy to use.
+ */
 function Login(){
     const insets = useSafeAreaInsets();
     const {theme} = useTheme();
@@ -41,10 +71,18 @@ function Login(){
 
     const styles = getStyles(insets);
 
-    const togglePasswordVisibility = () => { // Funktion zum Umschalten der Sichtbarkeit
+    /**
+     * Toggles the visibility of the password input field.
+     */
+    const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+    /**
+     * Handles the user login operation. It performs basic validation checks
+     * and uses the `login` function from the `useAuth` context to authenticate the user.
+     * Sets various states based on the outcome of the authentication attempt.
+     */
     const handleLogin = async () => {
         setLoginFailed(false);
 
@@ -67,8 +105,8 @@ function Login(){
     }
 
     /**
-     * Opens the Ingenium Websites contact section, if the URL is valid.
-     * If it is not supported an error message is printed to the console.
+     * Opens the external contact URL in a browser if it's supported.
+     * If the URL is not supported, logs an error message.
      */
     const handleOpenIngeniumWebsite = async () => {
         //canOpenURL checks if the given URL can be opened, the Promise resolves either to true or false
@@ -81,7 +119,11 @@ function Login(){
         }
     }
 
-    const forgotPassword = () => {
+    /**
+     * Sends an email to reset the password for the account using the default email app.
+     * The email includes a preset subject and body text asking for password reset help.
+     */
+    const forgotPassword = async () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
         const body = "Sehr geehrtes Support-Team,\n" +
             "\n" +
@@ -93,7 +135,7 @@ function Login(){
             "\n" +
             "Mit freundlichen Grüßen,\n"
         ;
-        Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
+        await Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
     }
 
     if (loading) {
@@ -111,9 +153,7 @@ function Login(){
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS
                     Zugangsdaten zur Anmeldung.</Text>
             </View>
-            {/*Input and Login Button
-            wrapped in Keyboardavoiding view, to make sure the login input fields are accessible when the keyboard is open
-            */}
+            {/*Input and Login Button wrapped in Keyboardavoiding view, to make sure the login input fields are accessible when the keyboard is open*/}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}
@@ -138,20 +178,18 @@ function Login(){
                     onChangeTextHandler={setPassword}
                     error={loginFailed}
                 />
-                <CustomButton title={"Anmelden"}rt onPressFunction={() => handleLogin()}/>
-                {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
+                    <CustomButton title={"Anmelden"} onPressFunction={handleLogin}/>
+                {/* Display the error message if loginError has a value */}
                 {loginError && <Text style={{ color: 'red', textAlign: "center" }}>{loginError}</Text>}
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>
-                <TouchableOpacity onPress={() => {
-                    forgotPassword()
-                }}>
+                <TouchableOpacity onPress={forgotPassword}>
                     <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textButton, styles.textXS]}>Password vergessen?</Text>
                 </TouchableOpacity>
                 <View style={styles.footer}>
                     <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen Account?</Text>
-                    <TouchableOpacity onPress={() => handleOpenIngeniumWebsite()}>
+                    <TouchableOpacity onPress={handleOpenIngeniumWebsite}>
                         <Text style={[isDarkMode? styles.textDark : styles.textLight ,styles.textButton, styles.textXS]}>Kontaktiere Ingenium</Text>
                     </TouchableOpacity>
                 </View>
@@ -162,6 +200,12 @@ function Login(){
 
 export default Login;
 
+/**
+ * Defines the styles used in the Login component.
+ * It handles different styles for light and dark mode based on the theme.
+ *
+ * @param insets - Safe area insets used for dynamic spacing.
+ */
 function getStyles(insets) {
     return StyleSheet.create({
         containerLight: {
