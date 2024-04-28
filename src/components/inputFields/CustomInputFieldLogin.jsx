@@ -7,25 +7,39 @@ import {ICONS} from "../../constants/icons";
 /**
  * ## CustomInputFieldLogin Component
  *
- * This component represents a custom input field for login screens.
- * It provides a styled text input field for entering login credentials.
- * The appearance of the input field is determined by the current theme (dark/light).
+ * This component represents a custom input field primarily used for login screens.
+ * It provides a styled TextInput for entering login credentials and integrates an optional icon for additional interactivity,
+ * such as toggling password visibility. The component's style adapts to the current theme setting (dark or light).
  *
- * @param {string} placeholder - The placeholder text displayed when the input field is empty.
- * @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").
- * @param {number} maxTextInputLength - The maximum length of the text input allowed.
- * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
- * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
- * @param {function} onChangeTextHandler - Event handler for on change text event.
- * @param passwordVisible
- * @param togglePasswordVisibility
- * @param error
+ * ### Features:
+ * - **Dynamic Theme Adaptation**: Changes the background and text color of the input field based on the current theme (dark or light).
+ * - **Password Visibility Toggle**: Allows users to toggle the visibility of their password, enhancing usability.
+ * - **Validation Styles**: Provides visual feedback by changing the border color when an error is detected.
+ * - **Icon Interactivity**: Includes an interactive icon for password fields that toggles the visibility state on press.
+ *
+ *
+ *  @param {string} placeholder - The placeholder text displayed when the input field is empty.
+ *  @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").
+ *  @param {number} maxTextInputLength - The maximum length of the text input allowed.
+ *  @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
+ *  @param {string | object} iconName - The name of an icon specified in constants/icons.js, rendered next to the input field.
+ *  @param {function} onChangeTextHandler - Function to handle changes in text input.
+ *  @param {boolean} passwordVisible - Controls whether the password is visible or obscured.
+ *  @param {function} setPasswordVisible - Function to toggle the visibility of the password.
+ *  @param {boolean} error - Indicates an error state in the input field that affects its styling.
+ *
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
- *   keyboardType={"default"}
+ *   keyboardType="default"
  *   isPassword={true}
- *   maxTextInputLength={25}/>
+ *   maxTextInputLength={25}
+ *   iconName={ICONS.LOGIN.USER}
+ *   onChangeTextHandler={(text) => setPassword(text)}
+ *   passwordVisible={passwordVisible}
+ *   setPasswordVisible={setPasswordVisible}
+ *   error={hasError}
+ * />
  */
 function CustomInputFieldLogin({
               placeholder,
@@ -35,7 +49,7 @@ function CustomInputFieldLogin({
               iconName,
               onChangeTextHandler,
               passwordVisible, // Neu hinzugefügt
-              togglePasswordVisibility, // Neu hinzugefügt
+              setPasswordVisible, // Neu hinzugefügt
               error
 }) {
     const {theme} = useTheme();
@@ -63,7 +77,9 @@ function CustomInputFieldLogin({
         <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container, error ? styles.inputError : null]}>
             {/* Wenn isPassword true ist, rendern wir das Icon in einem TouchableOpacity für Interaktionen */}
             {isPassword ? (
-                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                <TouchableOpacity onPressIn={() => setPasswordVisible(true)}
+                                  onPressOut={() => setPasswordVisible(false)}
+                                  style={styles.iconContainer}>
                     <Icon name={iconToShow} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
                 </TouchableOpacity>
             ) : (

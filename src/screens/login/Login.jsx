@@ -29,31 +29,31 @@ import LoadingComponent from "../../components/LoadingComponent";
  * #### Functionality:
  * - **Theme Adjustment**: Uses the `useTheme` hook to check whether the theme is dark or light, and changes the
  *   interface to match.
- * - **State Management**: Keeps track of user inputs such as username and password, whether the app is loading,
- *   and if a login attempt has failed.
- * - **Validation Checks**: Makes sure that neither the username nor password fields are empty before the user can submit them.
- * - **Password Visibility Toggling**: Lets users choose to show or hide their password while typing.
- * - **External Links**: Offers users ways to reset their password or contact support through external links.
+ * - **State Management**: Keeps track of user inputs such as username and password, loading status, visibility of the password,
+ *   and whether a login attempt has failed.
+ * - **Validation Checks**: Ensures that neither the username nor password fields are empty before allowing submission.
+ * - **Password Visibility Toggling**: Allows users to toggle the visibility of their password using an icon.
+ * - **External Links**: Provides links for users to reset their password or contact support.
  *
  * #### Structure:
- * 1. **Main View Container**: Changes its style based on the theme, ensuring it works well on all devices.
- * 2. **Image and Greeting Section**: Shows the company logo and welcoming messages.
+ * 1. **Main View Container**: Adapts its style based on the theme, ensuring compatibility with all devices.
+ * 2. **Image and Greeting Section**: Displays the company logo and welcome messages.
  * 3. **Input Fields and Login Button**:
- *    - **KeyboardAvoidingView**: Makes sure text inputs can be seen when the keyboard is visible, especially on iOS.
- *    - **Custom Input Fields**: Two fields for entering the username and password. They include icons that show what to enter
- *      and if there are errors.
+ *    - **KeyboardAvoidingView**: Ensures that text inputs remain visible when the keyboard is active, especially on iOS.
+ *    - **Custom Input Fields**: Fields for entering the username and password, which include icons to indicate the required data type and
+ *      toggle visibility of the password.
  * 4. **Action Links**:
- *    - **Forgot Password**: Allows users to email for help with resetting their password.
- *    - **Contact Support**: Links to the company’s contact page for users who need extra help or to create an account.
+ *    - **Forgot Password**: Allows users to send an email to request help with resetting their password.
+ *    - **Contact Support**: Provides a link to the company’s contact page for users who need additional assistance or want to create an account.
  *
  * #### Elements:
  * - **Image**: Displays the company logo.
- * - **Text**: Includes elements for greetings and instructions for users.
- * - **CustomInputFieldLogin**: Custom components for user inputs.
- * - **CustomButton**: A button that starts the login process when clicked.
- * - **TouchableOpacity**: Interactive texts that help users reset their password or contact support.
+ * - **Text**: Provides greeting and instructions for users.
+ * - **CustomInputFieldLogin**: Custom components for user input fields, with properties to manage text input, password visibility, and validation errors.
+ * - **CustomButton**: Triggers the login process when clicked.
+ * - **TouchableOpacity**: Used for interactive texts that help users reset their password or contact support.
  *
- * Each part of the component is designed to make the user experience smooth and straightforward, while keeping it secure and easy to use.
+ * Each component part is designed to enhance user experience by making the interaction smooth, straightforward, secure, and user-friendly.
  */
 function Login(){
     const insets = useSafeAreaInsets();
@@ -70,13 +70,6 @@ function Login(){
     const {login, loginError} = useAuth();
 
     const styles = getStyles(insets);
-
-    /**
-     * Toggles the visibility of the password input field.
-     */
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    };
 
     /**
      * Handles the user login operation. It performs basic validation checks
@@ -161,7 +154,7 @@ function Login(){
             >
                 <CustomInputFieldLogin
                     placeholder="Nutzername"
-                    keyboardType={"default"}
+                    keyboardType="default"
                     maxTextInputLength={40}
                     iconName={ICONS.LOGIN.USER}
                     onChangeTextHandler={setUserName}
@@ -174,7 +167,7 @@ function Login(){
                     iconName={passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK}
                     isPassword={true}
                     passwordVisible={passwordVisible}
-                    togglePasswordVisibility={togglePasswordVisibility}
+                    setPasswordVisible={setPasswordVisible}
                     onChangeTextHandler={setPassword}
                     error={loginFailed}
                 />
