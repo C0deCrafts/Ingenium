@@ -84,6 +84,8 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
 -- BottomTabNavigation: -- Sabrina
     -- Mitteilung austauschen mit Aufgaben
+    //Notification badge - zu Inbox hinzugefügt, wird mit BottomTab Mitteilungen synchronisiert, Funktion zum zählen der Notifications aktuell im Tab Context
+    //sollte für die Pushbenachrichtigungen in V2 in woanders ausgelagert werden
 -- DrawerNavigation: -- gemeinsam
     -- Resonsive
     -- Profil weg -- Sabrina
