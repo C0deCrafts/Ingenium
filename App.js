@@ -7,6 +7,7 @@ import {DatabaseProvider} from "./src/context/DatabaseContext";
 import {AuthProvider} from "./src/context/AuthContext";
 import {LocationProvider} from "./src/context/LocationContext";
 import {CalendarProvider} from "./src/context/CalendarContext";
+import {TabProvider} from "./src/navigation/context/TabContext";
 
 // TODO: FIX Problem - if we on the login screen - database load the data
 // we want load the data if we are logged in
@@ -16,13 +17,9 @@ export default function App() {
             <GestureHandlerRootView style={{flex: 1}}>
                 <BottomSheetModalProvider>
                     <AuthProvider>
-                        <CalendarProvider>
-                            <DatabaseProvider>
-                                <LocationProvider>
-                                    <AppNavigation/>
-                                </LocationProvider>
-                            </DatabaseProvider>
-                        </CalendarProvider>
+                        <TabProvider>
+                            <AppNavigation/>
+                        </TabProvider>
                     </AuthProvider>
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>

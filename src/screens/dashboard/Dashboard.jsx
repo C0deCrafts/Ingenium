@@ -176,11 +176,11 @@ function Dashboard({navigation}) {
     }, [icalData]);
 
     // If the database is still loading, show the loading indicator
-    if (!isDbReady) {
+    /*if (!isDbReady) {
         return (
             <LoadingComponent message={"Laden..."}/>
         );
-    }
+    }*/
 
     return (
         <View style={{flex: 1, backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}}>

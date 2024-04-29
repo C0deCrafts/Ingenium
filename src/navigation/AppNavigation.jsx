@@ -8,6 +8,9 @@ import { useTheme } from "../context/ThemeContext";
 import {useAuth} from "../context/AuthContext";
 import {useEffect, useState} from "react";
 import LoadingComponent from "../components/LoadingComponent";
+import {DatabaseProvider} from "../context/DatabaseContext";
+import {LocationProvider} from "../context/LocationContext";
+import {CalendarProvider} from "../context/CalendarContext";
 
 function AppNavigation() {
     const {initialized, isAuthenticated} = useAuth();
@@ -25,20 +28,31 @@ function AppNavigation() {
     // Statusbar-Stil basierend auf dem aktuellen Thema einstellen
     const statusBarStyle = theme === LIGHTMODE ? 'dark-content' : 'light-content';
 
-    if (loading || !initialized) {
+    if (!initialized) {
         // Ladebildschirm anzeigen, während die Authentifizierungsprüfung läuft
         return (
-            <LoadingComponent message={"Laden..."}/>
+            <LoadingComponent message={"Initialisierung läuft..."}/>
         );
     }
 
     return(
-            <TabProvider>
-                <NavigationContainer ref={navigationRef}>
-                    <StatusBar barStyle={statusBarStyle} />
-                    {isAuthenticated ? <DrawerNavigation /> : <LoginNavigation/>}
-                </NavigationContainer>
-            </TabProvider>
+        <NavigationContainer ref={navigationRef}>
+            <StatusBar barStyle={statusBarStyle}/>
+            {
+                //Nur initialisieren, wenn Benutzer authentifiziert ist
+                isAuthenticated ? (
+                    <DatabaseProvider>
+                        <LocationProvider>
+                            <CalendarProvider>
+                                <DrawerNavigation />
+                            </CalendarProvider>
+                        </LocationProvider>
+                    </DatabaseProvider>
+                ) : (
+                    <LoginNavigation />
+                )
+            }
+        </NavigationContainer>
     )
 }
 
