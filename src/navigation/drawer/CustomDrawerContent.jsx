@@ -8,16 +8,39 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../context/ThemeContext";
 import {useAuth} from "../../context/AuthContext";
+import {useState} from "react";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const CustomDrawerContent = ({navigation}) => {
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    const [loading, setLoading] = useState(false);
+
     const {logout, token} = useAuth();
 
     const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
     const styles = getStyles(insets);
+
+    const handleLogout = async () => {
+        //Schließe den Drawer
+        //löst hoffentlich das Problem, dass manchmal der Drawer geöffnet ist, wenn man sich schnell
+        //auslogged und wieder einlogged
+        //muss ausreichend getestet werden - der Fehler tritt nur sehr selten auf
+        setLoading(true);
+        navigation.closeDrawer();
+        setTimeout(async ()=> {
+            await logout();
+            setLoading(false)
+        }, 250);
+    }
+
+    if (loading) {
+        return (
+            <LoadingComponent message={"Du wirst gerade ausgelogged..."}/>
+        );
+    }
 
     return (
         <View style={isDarkMode ? styles.drawerContainerDark : styles.drawerContainerLight}>
@@ -130,7 +153,7 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Kontakt</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={logout} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
+                    <TouchableOpacity onPress={handleLogout} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LOGOUT.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
