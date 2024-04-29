@@ -18,6 +18,7 @@ import TaskPreview from "../../components/taskComponents/TaskPreview";
 import CardButton from "../../components/buttons/CardButton";
 
 import {formatDate} from "../../utils/utils"
+import {useTabContext} from "../../navigation/context/TabContext";
 
 
 function TasksMain({navigation}) {
@@ -36,6 +37,8 @@ function TasksMain({navigation}) {
     const [modalIsVisible, setModalIsVisible] = useState(false);
     //state to control the editing mode for the taskList View
     const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
+
+    const {notificationCount} = useTabContext();
 
 
     {/*EVENT HANDLERS*/}
@@ -183,7 +186,9 @@ function TasksMain({navigation}) {
                                         () => [navigation.navigate("CompletedTasks_Stack"),
                                             setEditTaskListsIsActive(false)]}
                         />
-                        <CardButton buttonTitle={"Inbox"} buttonIcon={ICONS.TASKICONS.INBOX}
+                        <CardButton buttonTitle={"Inbox"}
+                                    badgeCount={notificationCount}
+                                    buttonIcon={ICONS.TASKICONS.INBOX}
                                     onPressHandler={
                                         () => [navigation.navigate("Inbox_Stack"),
                                             setEditTaskListsIsActive(false)]}

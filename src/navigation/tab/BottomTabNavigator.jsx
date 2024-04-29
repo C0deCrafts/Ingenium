@@ -46,7 +46,7 @@ function ButtonTabNavigator() {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {navigateAndSetSelectedTab} = useTabContext();
+    const {navigateAndSetSelectedTab, notificationCount} = useTabContext();
 
     const badge = 3; //notification symbol + wert
 
@@ -109,7 +109,7 @@ function ButtonTabNavigator() {
                         }}
                         options={{
                             tabBarLabel: "Mitteilung",
-                            tabBarBadge: badge,
+                            tabBarBadge: notificationCount > 0 ? notificationCount : null,
                             tabBarIcon: ({color, size, focused}) => (
                                 <Icon name={focused ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}
                                       size={size}

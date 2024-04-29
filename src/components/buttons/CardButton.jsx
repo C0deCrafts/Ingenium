@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
 import Icon from "../Icon";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
@@ -15,7 +15,7 @@ import {useTheme} from "../../context/ThemeContext";
  * @returns {JSX.Element}
  * @constructor
  */
-function CardButton({buttonIcon, buttonTitle, onPressHandler}) {
+function CardButton({buttonIcon, buttonTitle, onPressHandler, badgeCount}) {
     //theme context provider hook
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -25,11 +25,17 @@ function CardButton({buttonIcon, buttonTitle, onPressHandler}) {
             style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight, styles.cardButton]}
             onPress={onPressHandler}
         >
-            <Icon name={buttonIcon}
-                  color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                  size={22}/>
-            <Text
-                style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{buttonTitle}</Text>
+            <View style={styles.iconAndBadgeContainer}>
+                <Icon name={buttonIcon}
+                      color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                      size={22}/>
+                {badgeCount > 0 && (
+                    <View style={styles.badge}>
+                        <Text style={styles.badgeText}>{badgeCount}</Text>
+                    </View>
+                )}
+            </View>
+            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>{buttonTitle}</Text>
         </TouchableOpacity>
     );
 }
@@ -38,12 +44,12 @@ export default CardButton;
 
 const styles = StyleSheet.create({
     contentBoxLight: {
-    backgroundColor: LIGHTMODE.BOX_COLOR,
+        backgroundColor: LIGHTMODE.BOX_COLOR,
         borderRadius: SIZES.BORDER_RADIUS,
     },
     contentBoxDark: {
         backgroundColor: DARKMODE.BOX_COLOR,
-            borderRadius: SIZES.BORDER_RADIUS,
+        borderRadius: SIZES.BORDER_RADIUS,
     },
     cardButton: {
         width: '48%',
@@ -59,5 +65,23 @@ const styles = StyleSheet.create({
     },
     textNormal: {
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
+    },
+    iconAndBadgeContainer: {
+        flexDirection: 'row',
+        justifyContent: "space-between"
+    },
+    badge: {
+        backgroundColor: 'red',
+        paddingHorizontal: 5,
+        minWidth: 22,
+        height: 22,
+        borderRadius: 11,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    badgeText: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: '500',
     },
 });

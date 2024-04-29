@@ -10,6 +10,12 @@ export const navigationRef = createNavigationContainerRef();
 export const TabProvider = ({ children }) => {
     const [currentRoute, setCurrentRoute] = useState();
     const [drawerEnabled, setDrawerEnabled] = useState(true);
+    const [notificationCount, setNotificationCount] = useState(10);
+
+    /*useEffect(() => {
+    // Logik hinzufügen, um die Mitteilungen zu empfangen und zu zählen
+    // Zum Beispiel könnte das Abhören von Push-Benachrichtigungen hier integriert werden.
+    }, []);*/
 
     const navigateAndSetSelectedTab = (routeName, stackName) => {
         setCurrentRoute(routeName); // Allgemeiner Zustand für aktuelle Route
@@ -30,7 +36,7 @@ export const TabProvider = ({ children }) => {
     };
 
     return (
-        <TabContext.Provider value={{ currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled}}>
+        <TabContext.Provider value={{ currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled, notificationCount, setNotificationCount}}>
             {children}
         </TabContext.Provider>
     );
