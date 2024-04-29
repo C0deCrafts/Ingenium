@@ -107,7 +107,7 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 -- Einstellungen passt
 -- Kontakt passt
 
--- Abmelden und neu Anmelden - Defaultscreen Home + Drawer geschlossen!! -- Sabrina
+√ Abmelden und neu Anmelden - Defaultscreen Home + Drawer geschlossen!! -- Sabrina
 
 -- Dokumentation
     --evtl Github Docs oder Github Pages
