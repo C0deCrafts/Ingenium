@@ -9,27 +9,22 @@ export const navigationRef = createNavigationContainerRef();
 
 export const TabProvider = ({ children }) => {
     const [currentRoute, setCurrentRoute] = useState("Dashboard_Tab");
-    const [activeTab, setActiveTab] = useState('Dashboard_Tab');
-
     //setze prob ob das DrawerMenü aufgeht oder nicht!! (wird in DrawerNav verwendet)
     const [drawerEnabled, setDrawerEnabled] = useState(true);
     const [notificationCount, setNotificationCount] = useState(10);
 
+    const [forceColorChange, setForceColorChange] = useState(false);
     /*useEffect(() => {
     // Logik hinzufügen, um die Mitteilungen zu empfangen und zu zählen
     // Zum Beispiel könnte das Abhören von Push-Benachrichtigungen hier integriert werden.
     }, []);*/
-    useEffect(() => {
-        console.log("activeTab: ", activeTab)
-    }, [activeTab]);
-
 
     const navigateAndSetSelectedTab = (routeName, stackName) => {
         console.log(`navigateAndSetSelectedTab aufgerufen mit routeName: ${routeName} und stackName: ${stackName}`);
 
         // Aktuellen Routennamen setzen
+        console.log(`Aktualisiere Route auf: ${routeName}`);
         setCurrentRoute(routeName);
-        setActiveTab(routeName); // setzen des aktiven Tabs beim Navigieren
         console.log(`Aktuelle Route gesetzt auf: ${routeName}`);
 
         if (!navigationRef.isReady()) {
@@ -40,6 +35,7 @@ export const TabProvider = ({ children }) => {
         // Navigation zum TaskMain und dann Push zum Inbox Screen
         if (routeName === 'Notification_Tab') {
             console.log("Navigiere zum TaskMain und dann zum Inbox Screen");
+            //nochmal überlegen
             navigationRef.navigate(stackName, { screen: 'TaskMain', params: { screen: 'Inbox' } });
         } else if (stackName) {
             console.log(`Reset Stack zu: ${stackName}`);
@@ -54,7 +50,7 @@ export const TabProvider = ({ children }) => {
     };
 
     return (
-        <TabContext.Provider value={{ activeTab, setActiveTab, currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled, notificationCount, setNotificationCount}}>
+        <TabContext.Provider value={{currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled, notificationCount, setNotificationCount, forceColorChange, setForceColorChange}}>
             {children}
         </TabContext.Provider>
     );

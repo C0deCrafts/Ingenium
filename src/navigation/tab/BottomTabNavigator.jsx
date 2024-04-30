@@ -46,44 +46,11 @@ function ButtonTabNavigator() {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {navigateAndSetSelectedTab, notificationCount, activeTab} = useTabContext();
-
-    const getActiveTintColor = () => {
-        if (activeTab) {
-            // Wenn aus dem Drawer navigiert wird, nutze eine andere Farbe und setze den Mitteilung-Tab optisch inaktiv
-            return isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE;
-        } else {
-            return isDarkMode ? DARKMODE.ICONCOLOR_ACTIVE : LIGHTMODE.ICONCOLOR_ACTIVE;
-        }
-    };
-
-    /*
-      <Tab.Screen name="Notification_Tab"
-                        component={TaskStack}
-                        listeners={{
-                            focus: () => {
-                                const stackName = isNavigatedFromDrawer ? "Task_Stack" : "Inbox_Stack";
-                                navigateAndSetSelectedTab("Notification_Tab", stackName);
-                            },
-                        }}
-                        options={{
-                            tabBarLabel: "Mitteilung",
-                            tabBarBadge: notificationCount > 0 ? notificationCount : null,
-                            tabBarIcon: ({color, size, focused}) => (
-                                <Icon name={focused && activeTabColor ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}
-                                      size={size}
-                                      color={color}
-                                />
-                            ),
-                            tabBarActiveTintColor: getActiveTintColor(),
-                            tabBarInactiveTintColor: isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE,
-                        }}
-            />
-    * */
-
+    const {navigateAndSetSelectedTab, notificationCount, forceColorChange} = useTabContext();
 
     return (
-        <Tab.Navigator initialRouteName="Dashboard_Tab"
+        <Tab.Navigator key={forceColorChange}
+                       initialRouteName="Dashboard_Tab"
                        screenOptions={{
             headerShown: false,
             tabBarStyle: {
@@ -103,9 +70,7 @@ function ButtonTabNavigator() {
             <Tab.Screen name="Timetable_Tab"
                         component={TimetableStack}
                         listeners={{
-                            //?? weiß nicht ob ich das brauch
                             focus: () => {
-                                // aktivierter Tab, navigation zu Stack bzw eigentlich zur componente im Stack
                                 navigateAndSetSelectedTab("Timetable_Tab", "Timetable_Stack")
                             },
                         }}
@@ -118,12 +83,12 @@ function ButtonTabNavigator() {
                                 />
                             ),
                         }}
+
             />
             <Tab.Screen name="Dashboard_Tab"
                         component={DashboardStack}
                         listeners={{
                             focus: () => {
-                                // aktivierter Tab, navigation zu Stack bzw eigentlich zur componente im Stack
                                 navigateAndSetSelectedTab("Dashboard_Tab", "Dashboard_Stack")
                             },
                         }}
@@ -141,7 +106,7 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                // aktivierter Tab, navigation zu Stack + und weiter zu Screen Inbox (muss noch implementiert werden)
+                                console.log("================================>Mitteilung fokussiert");
                                 navigateAndSetSelectedTab("Notification_Tab", "Inbox_Stack")
                             },
                         }}
@@ -160,16 +125,14 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                // aktivierter Tab, navigation zu Stack bzw eigentlich zur componente im Stack
-                                // ebenso muss hier auch im DrawerMenü Task markiert werden, muss noch implementiert werden
+                                console.log("================================>Task_Tab fokussiert");
                                 navigateAndSetSelectedTab("Task_Tab", "Task_Stack")
                             },
                         }}
                         options={{
-                            //tabBarButton: () => null
+                            tabBarButton: () => null
                         }}
             />
-            {/*Task_Tab soll noch versteckt werden, muss noch implementiert werden!*/}
         </Tab.Navigator>
     )
 }

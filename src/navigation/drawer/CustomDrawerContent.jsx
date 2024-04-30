@@ -8,7 +8,7 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../context/ThemeContext";
 import {useAuth} from "../../context/AuthContext";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import LoadingComponent from "../../components/LoadingComponent";
 
 const CustomDrawerContent = ({navigation}) => {
@@ -35,6 +35,13 @@ const CustomDrawerContent = ({navigation}) => {
             setLoading(false)
         }, 250);
     }
+
+    useEffect(() => {
+        // Dies erzwingt ein Update des Drawer-Layouts, wenn sich die aktuelle Route ändert.
+        // Du könntest hier Logik hinzufügen, um zu überprüfen, ob die Route wirklich aktualisiert werden muss.
+        console.log("Aktuelle Route im Drawer aktualisiert:", currentRoute);
+    }, [currentRoute]);
+
 
     if (loading) {
         return (

@@ -190,7 +190,10 @@ function TasksMain({navigation}) {
                                     badgeCount={notificationCount}
                                     buttonIcon={ICONS.TASKICONS.INBOX}
                                     onPressHandler={
-                                        () => [navigation.navigate("Inbox_Stack"),
+                                    // händische navigation, damit der Tab markiert wird!
+                                        () => [navigation.navigate("Notification_Tab", {
+                                            screen: "Inbox_Stack"
+                                        }),
                                             setEditTaskListsIsActive(false)]}
                         />
                     </View>

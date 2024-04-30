@@ -3,6 +3,7 @@ import { decode as atob } from 'base-64';
 
 // Base URL of the backend
 const BASE_URL = "http://192.168.178.33:8080/ingeapp/api/v1";
+// IP Adresse ändern!!!
 
 // Function to decode JWT to extract user information
 export const decodeJWT = (token) => {
