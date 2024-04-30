@@ -2,14 +2,14 @@ import {Text, View, StyleSheet} from "react-native";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {navigationRef, useTabContext} from "../../navigation/context/TabContext";
+import {navigationRef, useNavContext} from "../../navigation/context/NavContext";
 import { useNavigation } from '@react-navigation/native';
 import {useEffect} from 'react';
 
 function Inbox(){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const { navigateAndSetSelectedTab, setForceColorChange } = useTabContext();
+    const { navigateAndSetSelectedTab, setForceColorChange } = useNavContext();
     const navigation = useNavigation();
 
 

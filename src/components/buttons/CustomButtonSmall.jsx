@@ -10,7 +10,6 @@ import {COLOR, SIZES} from "../../constants/styleSettings";
  *
  * @param title - The text displayed on the button.
  * @param onPressFunction - Function to be called when the button is pressed.
- * @returns {JSX.Element} - A small button, designed according to the app's button styling guidelines.
  *
  * @example
  * ```jsx

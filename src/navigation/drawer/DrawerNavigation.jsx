@@ -2,12 +2,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Contact, ProfileSettings, Settings} from "../../screens";
 import BottomTabNavigator from "../tab/BottomTabNavigator";
 import CustomDrawerContent from "./CustomDrawerContent";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../context/NavContext";
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
-    const {drawerEnabled} = useTabContext();
+    const {drawerEnabled} = useNavContext();
 
     return (
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props}/>}

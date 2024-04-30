@@ -43,7 +43,7 @@ import LoadingComponent from "../../components/LoadingComponent";
  *    - **Custom Input Fields**: Fields for entering the username and password, which include icons to indicate the required data type and
  *      toggle visibility of the password.
  * 4. **Action Links**:
- *    - **Forgot Password**: Allows users to send an email to request help with resetting their password.
+ *    - **Forgot Password**: Allows users to email request help with resetting their password.
  *    - **Contact Support**: Provides a link to the company’s contact page for users who need additional assistance or want to create an account.
  *
  * #### Elements:
@@ -133,7 +133,7 @@ function Login(){
 
     if (loading) {
         return (
-            <LoadingComponent message={"Du wirst gerade eingelogged..."}/>
+            <LoadingComponent message={"Du wirst gerade eingeloggt..."}/>
         );
     }
     return (
@@ -146,7 +146,7 @@ function Login(){
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS
                     Zugangsdaten zur Anmeldung.</Text>
             </View>
-            {/*Input and Login Button wrapped in Keyboardavoiding view, to make sure the login input fields are accessible when the keyboard is open*/}
+            {/*Input and Login Button wrapped in Keyboard avoiding view, to make sure the login input fields are accessible when the keyboard is open*/}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}

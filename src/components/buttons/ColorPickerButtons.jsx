@@ -8,7 +8,6 @@ import {View, StyleSheet, TouchableOpacity} from "react-native";
  *
  * @param {string} color - The background color of the button.
  * @param {Function} onPress - Function to handle color selection.
- * @returns {JSX.Element} - ColorPickerButtons component
  *
  * @example
  * // Create a state to hold the current color

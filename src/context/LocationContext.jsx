@@ -1,7 +1,7 @@
 import * as Location from "expo-location";
 import { createContext, useContext, useEffect, useState } from "react";
 
-const LocationContext = createContext();
+const LocationContext = createContext({});
 
 export const useLocation = () => useContext(LocationContext);
 

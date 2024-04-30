@@ -5,16 +5,12 @@ import {
     Inbox, ListTasks,
     TasksMain
 } from "../../screens";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../context/NavContext";
 
 const Stack = createStackNavigator();
 
-//inbox evt?? navigationRef.navigate('Timetable_Tab', { screen: 'Timetable_Stack' });
-
 function TaskStack() {
-    const {drawerEnabled, setDrawerEnabled} = useTabContext();
-
-    //console.log("??" +drawerEnabled);
+    const {setDrawerEnabled} = useNavContext();
 
     return (
         <Stack.Navigator initialRouteName="Task_Stack"

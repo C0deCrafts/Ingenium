@@ -11,7 +11,6 @@ import {COLOR} from "../../constants/styleSettings";
  *                                  needed.
  * @param iconName - Name of the Icon to be displayed in the button. For this prop a constant listed in the
  *                   'icons.js' file should be used.
- * @returns {JSX.Element} - A round blue button with a custom white Icon in the center.
  *
  * @example
  * ```jsx

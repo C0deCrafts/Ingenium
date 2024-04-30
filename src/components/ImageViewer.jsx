@@ -9,7 +9,6 @@ import {Image} from "react-native";
  * @param placeholderImageSource - The source of the placeholder image.
  * @param selectedImage - The source of the selected image to be displayed.
  * @param styles - Custom styles for the image viewer.
- * @returns {JSX.Element} - The rendered image viewer as a React element.
  *
  * @example
  * // Import the ImageViewer component

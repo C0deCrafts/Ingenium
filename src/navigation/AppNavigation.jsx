@@ -1,5 +1,5 @@
 import {NavigationContainer} from "@react-navigation/native";
-import {navigationRef, TabProvider} from "./context/TabContext";
+import {navigationRef} from "./context/NavContext";
 import {StatusBar} from "react-native";
 import DrawerNavigation from "./drawer/DrawerNavigation";
 import LoginNavigation from "./LoginNavigation";
@@ -25,24 +25,13 @@ function AppNavigation() {
         }
     }, [initialized]);
 
-
-    /*useEffect(() => {
-//Hilfsfunktion um die Routen zu ermitteln
-    const unsubscribe = navigationRef.addListener("state", () => {
-        console.log("Neuer Navigationszustand: ", navigationRef.getCurrentRoute());
-        console.log("------------------------------------------------------------------")
-        console.log("Komplette Routeninformation: ", navigationRef.getRootState());
-        console.log("==================================================================")
-    });
-
-    return () => unsubscribe();
-}, []);*/
-
     // Statusbar-Stil basierend auf dem aktuellen Thema einstellen
     const statusBarStyle = theme === LIGHTMODE ? 'dark-content' : 'light-content';
 
-    if (!initialized) {
+    if (loading) {
         // Ladebildschirm anzeigen, während die Authentifizierungsprüfung läuft
+        // verhindert, dass man zuerst am Loginscreen landet - so ist es optisch schöner
+        // könnte ersetzt werden durch Splashscreen
         return (
             <LoadingComponent message={"Initialisierung läuft..."}/>
         );

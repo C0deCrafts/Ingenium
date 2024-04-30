@@ -113,3 +113,14 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
 -- Dokumentation
     --evtl Github Docs oder Github Pages
+
+Zusätzliches:
+-- AppNavigation.jsx
+if (loading) {
+// Ladebildschirm anzeigen, während die Authentifizierungsprüfung läuft
+// verhindert, dass man zuerst am Loginscreen landet - so ist es optisch schöner
+// könnte ersetzt werden durch Splashscreen
+return (
+<LoadingComponent message={"Initialisierung läuft..."}/>
+);
+}

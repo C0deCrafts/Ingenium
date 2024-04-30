@@ -15,7 +15,6 @@ import {motivationalQuotes} from "../../constants/motivationalQuotes";
 import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
-import LoadingComponent from "../../components/LoadingComponent";
 import {useCalendar} from "../../context/CalendarContext";
 import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
 import Greeting from "../../components/Greeting";
@@ -95,16 +94,6 @@ function Dashboard({navigation}) {
         return nextTasks;
     }
 
-
-
-    // Dummy-Tasks
-    const dummyTasks = [
-        { id: 1, name: 'Aufgabe 1', daysLeft: 8, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-        { id: 2, name: 'Aufgabe 2', daysLeft: 15, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-        { id: 3, name: 'Aufgabe 3', daysLeft: 20, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-        { id: 4, name: 'Aufgabe 4', daysLeft: 30, backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE },
-    ];
-
     const getRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
         return motivationalQuotes[randomIndex];
@@ -174,13 +163,6 @@ function Dashboard({navigation}) {
             setNextCourses(filteredAndSorted); // Speichere alle nächsten
         }
     }, [icalData]);
-
-    // If the database is still loading, show the loading indicator
-    /*if (!isDbReady) {
-        return (
-            <LoadingComponent message={"Laden..."}/>
-        );
-    }*/
 
     return (
         <View style={{flex: 1, backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}}>
@@ -287,7 +269,6 @@ function Dashboard({navigation}) {
                             ))}
                     </View>
                 </View>
-
             </View>
         </View>
     )

@@ -58,6 +58,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
  * @param {boolean} showCustomElement - Optional flag to determine whether to display a clickable icon next to the back button.
  *                             Default is false.
  * @param customElement - Optional additional JSX Element to be displayed on the right edge of the header.
+ * @param backLabel
  */
 function CustomBackButton({
                               onPress,

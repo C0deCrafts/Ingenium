@@ -12,7 +12,7 @@ import {useTheme} from "../../context/ThemeContext";
  * @param buttonIcon Icon to be shown on the CardButton.
  * @param buttonTitle Title to be shown on the CardButton.
  * @param onPressHandler {function} A function that sets the behaviour on press event of the CardButton.
- * @returns {JSX.Element}
+ * @param badgeCount
  * @constructor
  */
 function CardButton({buttonIcon, buttonTitle, onPressHandler, badgeCount}) {

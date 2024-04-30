@@ -14,7 +14,6 @@ import {useTheme} from "../../context/ThemeContext";
  * @param timeStart - The start time of the course.
  * @param timeEnd - The end time of the course.
  * @param containerStyle - Custom styles for the container.
- * @returns {JSX.Element} - The rendered next course box as a React element.
  *
  * @example
  * // Import the NextCourseBox component

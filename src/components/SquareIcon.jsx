@@ -17,7 +17,6 @@ import {SIZES} from "../constants/styleSettings";
  * @param color - The color of the icon - default "white"
  * @param backgroundColor - The background color of the square behind the icon.
  * @param isUserIcon
- * @returns {JSX.Element} - A JSX element which renders the icon.
  *
  * @example
  * // Inside your component, use the BoxIcon component like this:

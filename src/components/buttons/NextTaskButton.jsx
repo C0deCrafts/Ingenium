@@ -12,7 +12,6 @@ import {useTheme} from "../../context/ThemeContext";
  * @param buttonTextRight - The text to be displayed on the right side of the button.
  * @param boxBackgroundColor - The background color of the button.
  * @param onPress - Function to be called when the button is pressed.
- * @returns {JSX.Element} - The rendered next task button as a React element.
  *
  * @example
  * // Import the NextTaskButton component

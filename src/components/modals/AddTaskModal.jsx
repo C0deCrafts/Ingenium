@@ -2,7 +2,7 @@ import {View, StyleSheet, Modal} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomButton from "../buttons/CustomButton";
 import {ICONS} from "../../constants/icons";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import RoundButton from "../buttons/RoundButton";
 
@@ -17,8 +17,6 @@ import RoundButton from "../buttons/RoundButton";
  * @param onPressCreateTask {function}  handles the press of Modals 'Neue Aufgabe' Button
  * @param onPressCreateList {function}  handles the press of Modals 'Neue Liste' Button
  * @param visible {boolean} a boolean value which handles the visibility of the Modal
- * @returns {JSX.Element}
- * @constructor
  */
 function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, visible}) {
     //providing a safe area

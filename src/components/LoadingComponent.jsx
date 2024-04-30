@@ -1,6 +1,6 @@
 import {ActivityIndicator, View, StyleSheet, Modal, Text} from 'react-native';
 import {useTheme} from "../context/ThemeContext";
-import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
+import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
 
 function LoadingComponent({message}){
     const {theme} = useTheme();

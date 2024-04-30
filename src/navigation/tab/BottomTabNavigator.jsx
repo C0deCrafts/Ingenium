@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TaskStack from "../stack/TaskStack";
 import DashboardStack from "../stack/DashboardStack";
 import TimetableStack from "../stack/TimetableStack";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../context/NavContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -47,11 +47,8 @@ const Tab = createBottomTabNavigator();
 function ButtonTabNavigator() {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const navigation = useNavigation();
 
-    //forceColorChange löschen
-
-    const {navigateAndSetSelectedTab, notificationCount} = useTabContext();
+    const {navigateAndSetSelectedTab, notificationCount} = useNavContext();
 
     return (
         <Tab.Navigator initialRouteName="Dashboard_Tab"
@@ -75,6 +72,7 @@ function ButtonTabNavigator() {
                         component={TimetableStack}
                         listeners={{
                             focus: () => {
+                                //listener damit Stundenplan im Drawer auf aktiv gesetzt wird
                                 navigateAndSetSelectedTab("Timetable_Tab", "Timetable_Stack")
                             },
                         }}
@@ -93,6 +91,7 @@ function ButtonTabNavigator() {
                         component={DashboardStack}
                         listeners={{
                             focus: () => {
+                                //listener damit Dashboard im Drawer auf aktiv gesetzt wird
                                 navigateAndSetSelectedTab("Dashboard_Tab", "Dashboard_Stack")
                             },
                         }}
@@ -110,11 +109,8 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                console.log("================================>Mitteilung fokussiert");
+                                //Abfrage ob Inbox_Stack im navigateAndSetSelectedTab
                                 navigateAndSetSelectedTab("Notification_Tab", "Inbox_Stack")
-                                /*navigation.navigate("Notification_Tab", {
-                                    screen: "Inbox_Stack"
-                                })*/
                             },
                         }}
                         options={{
@@ -132,11 +128,12 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                console.log("================================>Task_Tab fokussiert");
+                                //listener damit Aufgaben im Drawer auf aktiv gesetzt wird
                                 navigateAndSetSelectedTab("Task_Tab", "Task_Stack")
                             },
                         }}
                         options={{
+                            //Tab wird ausgeblendet
                             tabBarButton: () => null
                         }}
             />

@@ -18,7 +18,6 @@ import {USER_ICONS} from "../constants/customizationSettings";
  * @param size - The size of the icon.
  * @param color - The color of the icon
  * @param isUserIcon
- * @returns {JSX.Element} - The rendered icon as a React element.
  *
  * @example
  * // Import the Icon component

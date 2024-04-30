@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useAuth} from "./AuthContext";
-import {getIcalData, getIcalUrl} from "../api/backendServices";
+import {getICalData, getICalUrl} from "../api/backendServices";
 import {extractCourses, parseIcalData, getCourseNameByNumber} from "../utils/utils";
 
 const CalendarContext = createContext({});
@@ -19,10 +19,10 @@ export const CalendarProvider = ({children}) => {
     const loadCalendarData = async () => {
         if(token && userId){
             try {
-                const url = await getIcalUrl(userId, token);
+                const url = await getICalUrl(userId, token);
                 setIcalUrl(url);
                 //console.log("URL: ", url)
-                const data = await getIcalData(userId, token);
+                const data = await getICalData(userId, token);
                 const parsedData = parseIcalData(data);
                 setIcalData(parsedData);
                 //console.log("DATA: ", parsedData);

@@ -99,8 +99,8 @@ function CustomInputFieldLogin({
                 /*
                 * IOS flickering on input Issue -closed by react native as it is an IOS bug -
                 * In IOS 17, setting text to secureEntry opens the password bar (enabling input of saved
-                * passwords) which appearantly causes the flickering
-                * was able to solve with one solution from github issues page:
+                * passwords) which apparently causes the flickering
+                * was able to solve with one solution from gitHub issues page:
                 *  oneTimeCode disables the password bar
                 *
                 * https://github.com/facebook/react-native/issues/39411

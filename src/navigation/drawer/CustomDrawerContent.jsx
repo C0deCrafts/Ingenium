@@ -2,13 +2,13 @@ import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import * as WebBrowser from "expo-web-browser"
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { useTabContext } from "../context/TabContext";
+import { useNavContext } from "../context/NavContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../context/ThemeContext";
 import {useAuth} from "../../context/AuthContext";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import LoadingComponent from "../../components/LoadingComponent";
 
 const CustomDrawerContent = ({navigation}) => {
@@ -20,7 +20,7 @@ const CustomDrawerContent = ({navigation}) => {
 
     const {logout, token} = useAuth();
 
-    const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
+    const { currentRoute, navigateAndSetSelectedTab } = useNavContext();
     const styles = getStyles(insets);
 
     const handleLogout = async () => {
@@ -35,13 +35,6 @@ const CustomDrawerContent = ({navigation}) => {
             setLoading(false)
         }, 250);
     }
-
-    useEffect(() => {
-        // Dies erzwingt ein Update des Drawer-Layouts, wenn sich die aktuelle Route ändert.
-        // Du könntest hier Logik hinzufügen, um zu überprüfen, ob die Route wirklich aktualisiert werden muss.
-        console.log("Aktuelle Route im Drawer aktualisiert:", currentRoute);
-    }, [currentRoute]);
-
 
     if (loading) {
         return (

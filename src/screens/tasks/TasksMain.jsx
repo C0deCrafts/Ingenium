@@ -18,7 +18,7 @@ import TaskPreview from "../../components/taskComponents/TaskPreview";
 import CardButton from "../../components/buttons/CardButton";
 
 import {formatDate} from "../../utils/utils"
-import {useTabContext} from "../../navigation/context/TabContext";
+import {useNavContext} from "../../navigation/context/NavContext";
 
 
 function TasksMain({navigation}) {
@@ -38,7 +38,7 @@ function TasksMain({navigation}) {
     //state to control the editing mode for the taskList View
     const [editTaskListsIsActive, setEditTaskListsIsActive] = useState(false);
 
-    const {notificationCount} = useTabContext();
+    const {notificationCount} = useNavContext();
 
 
     {/*EVENT HANDLERS*/}
