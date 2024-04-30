@@ -36,7 +36,7 @@ export const fetchIcal = () => {
         .then( async response => {
             /*save response data to variable*/
             const icalData = response.data;
-            console.log( "Success fetching IcalData with AXIOS:");
+            //console.log( "Success fetching IcalData with AXIOS:");
 
             /*parse and save the data needed from an event to a data structure which can be used by Agenda List*/
             return convertIcalData(icalData);

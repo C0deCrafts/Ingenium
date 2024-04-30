@@ -48,7 +48,7 @@ function Timetable({navigation}) {
                 let eventItems = await fetchIcal();
                 setCoursesAreLoading(false);
                 setCourseItemsState(eventItems);
-                console.log("IN TIMETABLE: Event data successfully received", /*eventItems*/);
+                //console.log("IN TIMETABLE: Event data successfully received", /*eventItems*/);
             } catch (e) {
                 console.log("Error obtaining event data", e);
             }

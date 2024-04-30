@@ -1,16 +1,16 @@
-import ical from "cal-parser";
+import iCal from "cal-parser";
 
 // Function to parse iCal data
-export const parseIcalData = (input) => {
+export const parseICalData = (input) => {
     // Checks if the passed argument is an object and contains the required key
-    const icalFormat = input && typeof input === 'object' ? input.dataIcalFormatted : input;
+    const iCalFormat = input && typeof input === 'object' ? input.dataIcalFormatted : input;
 
-    if(!icalFormat) return [];
+    if(!iCalFormat) return [];
 
     try {
         // Parses the iCal string
-        const parsed = ical.parseString(icalFormat);
-        //console.log("Parsed ical: ", parsed.events)
+        const parsed = iCal.parseString(iCalFormat);
+        //console.log("Parsed iCal: ", parsed.events)
         return parsed.events;
     } catch (err) {
         console.error("Fehler beim Parsen der iCal-Daten: ", err)
@@ -20,7 +20,7 @@ export const parseIcalData = (input) => {
 
 // Function to filter and sort courses based on start time
 export const filterAndSortCourses = (courses) => {
-    //console.log("icalData vor Filterung: ", courses);
+    //console.log("iCalData vor Filterung: ", courses);
     const now = new Date();
     // Filters courses that start after the current time and sorts them by start time
     const filteredAndSortedCourses = courses

@@ -52,7 +52,7 @@ function Dashboard({navigation}) {
 
     const { userData } = useAuth();
 
-    const { icalData, getCourseNameByNumber } = useCalendar();
+    const { iCalData, getCourseNameByNumber } = useCalendar();
     const [nextCourses, setNextCourses] = useState([]);
     const [nextTasks, setNextTasks] = useState([]);
 
@@ -157,12 +157,12 @@ function Dashboard({navigation}) {
     }, [locationName]);
 
     useEffect(() => {
-        if (icalData) {
-            const filteredAndSorted = filterAndSortCourses(icalData);
+        if (iCalData) {
+            const filteredAndSorted = filterAndSortCourses(iCalData);
             //setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
             setNextCourses(filteredAndSorted); // Speichere alle nächsten
         }
-    }, [icalData]);
+    }, [iCalData]);
 
     return (
         <View style={{flex: 1, backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}}>

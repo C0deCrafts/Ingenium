@@ -9,8 +9,7 @@ function Inbox(){
     const isDarkMode = theme === DARKMODE;
 
     const handleGoBack = () => {
-        console.log("Navigation goBack wurde in der Inbox aufgerufen")
-
+        //console.log("Navigation goBack wurde in der Inbox aufgerufen")
         navigationRef.reset({
             index: 0,
             routes: [{ name: 'Task_Tab', params: { screen: 'Task_Stack' } }],
