@@ -7,6 +7,8 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
+import { useNavigation } from '@react-navigation/native';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -45,12 +47,14 @@ const Tab = createBottomTabNavigator();
 function ButtonTabNavigator() {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
+    const navigation = useNavigation();
 
-    const {navigateAndSetSelectedTab, notificationCount, forceColorChange} = useTabContext();
+    //forceColorChange löschen
+
+    const {navigateAndSetSelectedTab, notificationCount} = useTabContext();
 
     return (
-        <Tab.Navigator key={forceColorChange}
-                       initialRouteName="Dashboard_Tab"
+        <Tab.Navigator initialRouteName="Dashboard_Tab"
                        screenOptions={{
             headerShown: false,
             tabBarStyle: {
@@ -108,6 +112,9 @@ function ButtonTabNavigator() {
                             focus: () => {
                                 console.log("================================>Mitteilung fokussiert");
                                 navigateAndSetSelectedTab("Notification_Tab", "Inbox_Stack")
+                                /*navigation.navigate("Notification_Tab", {
+                                    screen: "Inbox_Stack"
+                                })*/
                             },
                         }}
                         options={{

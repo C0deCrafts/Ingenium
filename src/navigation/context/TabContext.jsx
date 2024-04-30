@@ -24,6 +24,8 @@ export const TabProvider = ({ children }) => {
 
         // Aktuellen Routennamen setzen
         console.log(`Aktualisiere Route auf: ${routeName}`);
+
+        //NotTab oder TaskTab
         setCurrentRoute(routeName);
         console.log(`Aktuelle Route gesetzt auf: ${routeName}`);
 
@@ -35,8 +37,10 @@ export const TabProvider = ({ children }) => {
         // Navigation zum TaskMain und dann Push zum Inbox Screen
         if (routeName === 'Notification_Tab') {
             console.log("Navigiere zum TaskMain und dann zum Inbox Screen");
-            //nochmal überlegen
-            navigationRef.navigate(stackName, { screen: 'TaskMain', params: { screen: 'Inbox' } });
+            navigationRef.reset({
+                index: 0,
+                routes: [{ name: stackName, params: { screen: stackName } }],
+            });
         } else if (stackName) {
             console.log(`Reset Stack zu: ${stackName}`);
             navigationRef.reset({

@@ -3,11 +3,15 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {navigationRef, useTabContext} from "../../navigation/context/TabContext";
+import { useNavigation } from '@react-navigation/native';
+import {useEffect} from 'react';
 
 function Inbox(){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
     const { navigateAndSetSelectedTab, setForceColorChange } = useTabContext();
+    const navigation = useNavigation();
+
 
     const handleGoBack = () => {
         //fix das Problem, dass bei IOS Wishgeste handleGoBack NICHT aufgerufen wird!!
