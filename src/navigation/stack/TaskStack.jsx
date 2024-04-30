@@ -5,7 +5,7 @@ import {
     Inbox, ListTasks,
     TasksMain
 } from "../../screens";
-import {useNavContext} from "../context/NavContext";
+import {useNavContext} from "../../context/NavContext";
 
 const Stack = createStackNavigator();
 

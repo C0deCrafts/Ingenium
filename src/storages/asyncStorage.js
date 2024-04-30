@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const saveProfileImage = async (imageUri) => {
     try {
         await AsyncStorage.setItem("storedProfileImage", imageUri);
-        console.log("Bild erfolgreich gespeichert");
+        //console.log("Bild erfolgreich gespeichert");
     } catch (err) {
         console.error("Fehler beim Speichern des Profilbildes: ", err);
     }
@@ -24,8 +24,8 @@ export const loadProfileImage = async () => {
 export const saveThemeMode = async (themeMode) => {
     try {
         await AsyncStorage.setItem('themeMode', themeMode);
-        console.log("THEME MODE:", themeMode)
-        console.log("Theme-Modus erfolgreich gespeichert");
+        //console.log("THEME MODE:", themeMode)
+        //console.log("Theme-Modus erfolgreich gespeichert");
     } catch (err) {
         console.error("Fehler beim Speichern des Theme-Modus: ", err);
     }

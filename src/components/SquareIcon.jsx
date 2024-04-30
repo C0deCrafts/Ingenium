@@ -16,7 +16,8 @@ import {SIZES} from "../constants/styleSettings";
  * @param {string} color - The color of the icon. Default is "white".
  * @param {string} backgroundColor - The background color of the square behind the icon.
  * @param {boolean} isUserIcon - Optional. Specifies if the icon is a user icon.
- *
+ * @param size - Optional. Set the size of the SquareIcon Component
+ * @param customIconSize - Optional. Set the size of the icon inside the SquareIcon Component.
  * @example
  * // Inside your component, use the BoxIcon component like this:
  * <SquareIcon
@@ -25,15 +26,24 @@ import {SIZES} from "../constants/styleSettings";
  *   backgroundColor="#0080FF"
  * />
  */
-function SquareIcon({name, color="white", backgroundColor, isUserIcon}) {
+function SquareIcon({
+         name,
+         color="white",
+         backgroundColor,
+         isUserIcon,
+         size = 35,
+         customIconSize = SIZES.SQUARE_ICON_SIZE
+}) {
     const containerStyle = {
         ...styles.square,
         backgroundColor: backgroundColor, // use prop for backgroundColor
+        width: size,
+        height: size,
     };
 
     return (
         <View style={containerStyle}>
-            <Icon name={name} size={SIZES.SQUARE_ICON_SIZE} color={color} isUserIcon={isUserIcon}/>
+            <Icon name={name} size={customIconSize} color={color} isUserIcon={isUserIcon}/>
         </View>
     );
 }
@@ -42,8 +52,8 @@ export default SquareIcon;
 
 const styles = StyleSheet.create({
     square: {
-        height: 35,
-        width: 35,
+        //height: 35,
+        //width: 35,
         borderRadius: SIZES.BORDER_RADIUS,
         justifyContent: "center",
         alignItems: "center"

@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TaskStack from "../stack/TaskStack";
 import DashboardStack from "../stack/DashboardStack";
 import TimetableStack from "../stack/TimetableStack";
-import {useNavContext} from "../context/NavContext";
+import {useNavContext} from "../../context/NavContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";

@@ -1,5 +1,5 @@
 import {NavigationContainer} from "@react-navigation/native";
-import {navigationRef} from "./context/NavContext";
+import {navigationRef} from "../context/NavContext";
 import {StatusBar} from "react-native";
 import DrawerNavigation from "./drawer/DrawerNavigation";
 import LoginNavigation from "./LoginNavigation";

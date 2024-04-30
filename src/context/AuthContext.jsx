@@ -1,6 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {decodeJWT, getUserData, loginService} from "../api/backendServices";
 import {getItem, removeItem, saveItem} from "../storages/secureStorage";
+import {navigationRef} from "./NavContext";
 
 const AuthContext = createContext({});
 
@@ -81,7 +82,19 @@ export const AuthProvider = ({children}) => {
         setUserId(null);
         setUserData(null);
         setAuthStatus({ initialized: true, isAuthenticated: false });
-        console.log("Ausgeloggt und Daten bereinigt");
+        //console.log("Ausgeloggt und Daten bereinigt");
+
+        // Navigationsstack zurücksetzen
+        if (navigationRef.isReady()) {
+            console.log("Navigation ist bereit, wird zurückgesetzt...");
+            navigationRef.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
+            console.log("Navigation zurückgesetzt zum Login-Screen");
+        } else {
+            console.log("Navigation ist nicht bereit zum Zurücksetzen");
+        }
     }
 
     // Function to get on object with user details ->

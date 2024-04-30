@@ -18,7 +18,7 @@ import TaskPreview from "../../components/taskComponents/TaskPreview";
 import CardButton from "../../components/buttons/CardButton";
 
 import {formatDate} from "../../utils/utils"
-import {useNavContext} from "../../navigation/context/NavContext";
+import {useNavContext} from "../../context/NavContext";
 
 
 function TasksMain({navigation}) {
@@ -280,7 +280,9 @@ function TasksMain({navigation}) {
                                                 iconBoxBackgroundColor={list.iconBackgroundColor}
                                                 iconColor={"white"}
                                                 showForwardIcon={false}
-                                                onPress={() => handleNavigateToListTasks(list.listId)}
+                                                onPress={() => {
+                                                    handleNavigateToListTasks(list.listId)
+                                                }}
                                                 isUserIcon={true}
                                             />
                                             {/* Adds a border, except after the last element */}

@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Text, StyleSheet, View} from "react-native";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
@@ -11,7 +11,6 @@ import {useTheme} from "../../context/ThemeContext";
  * @param buttonTextLeft - The text to be displayed on the left side of the button.
  * @param buttonTextRight - The text to be displayed on the right side of the button.
  * @param boxBackgroundColor - The background color of the button.
- * @param onPress - Function to be called when the button is pressed.
  *
  * @example
  * // Import the NextTaskButton component
@@ -28,27 +27,30 @@ import {useTheme} from "../../context/ThemeContext";
 function NextTaskButton({
                              buttonTextLeft,
                              buttonTextRight,
-                             boxBackgroundColor,
-                             onPress,
+                             leftComponent: LeftComponent,
                          }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
     return (
-        <TouchableOpacity onPress={onPress}
-                          style={[
-                              isDarkMode ? styles.containerDark : styles.containerLight,
-                          ]}>
-            <View style={{
+        <View style={[
+            isDarkMode ? styles.containerDark : styles.containerLight,
+        ]}>
+            {/*<View style={{
                 width: 70,
                 height: 60,
                 backgroundColor: boxBackgroundColor,
                 borderBottomLeftRadius: SIZES.BORDER_RADIUS,
                 borderTopLeftRadius: SIZES.BORDER_RADIUS,
-            }}></View>
-            <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>
-            <Text style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
-        </TouchableOpacity>
+            }}></View>*/}
+            {LeftComponent && <LeftComponent/>}
+            <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+            >{buttonTextLeft}</Text>
+            <Text
+                style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
+        </View>
     )
 }
 
@@ -70,23 +72,26 @@ const styles = StyleSheet.create({
     },
     buttonLabelLight: {
         flexGrow: 1,
+        width: 10,
         marginLeft: 15,
         fontSize: SIZES.TEXT_SIZE,
-        color: LIGHTMODE.TEXT_COLOR
+        color: LIGHTMODE.TEXT_COLOR,
+        marginRight: 10
     },
     buttonLabelDark: {
         flexGrow: 1,
         marginLeft: 10,
         fontSize: SIZES.TEXT_SIZE,
-        color: DARKMODE.TEXT_COLOR
+        color: DARKMODE.TEXT_COLOR,
+        marginRight: 10
     },
     secondButtonLabelLight: {
-        fontSize: SIZES.TEXT_SIZE - 3,
+        fontSize: SIZES.SCREEN_TEXT_XS,
         color: LIGHTMODE.TEXT_COLOR,
         marginRight: 15,
     },
     secondButtonLabelDark: {
-        fontSize: SIZES.TEXT_SIZE - 3,
+        fontSize: SIZES.SCREEN_TEXT_XS,
         color: DARKMODE.TEXT_COLOR,
         marginRight: 15,
     },

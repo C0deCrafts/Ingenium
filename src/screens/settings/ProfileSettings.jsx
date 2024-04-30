@@ -8,7 +8,7 @@ function ProfileSettings({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    console.log("isDarkMode in ProfileSettings", isDarkMode);
+    //console.log("isDarkMode in ProfileSettings", isDarkMode);
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>

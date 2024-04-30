@@ -4,7 +4,7 @@ import {ThemeProvider} from "./src/context/ThemeContext";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {AuthProvider} from "./src/context/AuthContext";
-import {NavProvider} from "./src/navigation/context/NavContext";
+import {NavProvider} from "./src/context/NavContext";
 
 export default function App() {
     return (

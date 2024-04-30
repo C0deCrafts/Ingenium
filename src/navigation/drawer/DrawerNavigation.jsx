@@ -2,7 +2,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Contact, ProfileSettings, Settings} from "../../screens";
 import BottomTabNavigator from "../tab/BottomTabNavigator";
 import CustomDrawerContent from "./CustomDrawerContent";
-import {useNavContext} from "../context/NavContext";
+import {useNavContext} from "../../context/NavContext";
 
 const Drawer = createDrawerNavigator();
 

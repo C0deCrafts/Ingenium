@@ -18,6 +18,7 @@ import {useAuth} from "../../context/AuthContext";
 import {useCalendar} from "../../context/CalendarContext";
 import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
 import Greeting from "../../components/Greeting";
+import SquareIcon from "../../components/SquareIcon";
 
 /**
  * ### Dashboard
@@ -56,7 +57,7 @@ function Dashboard({navigation}) {
     const [nextCourses, setNextCourses] = useState([]);
     const [nextTasks, setNextTasks] = useState([]);
 
-    const {tasks} = useDatabase();
+    const {tasks, lists} = useDatabase();
 
     //das älteste Datum finden --> sortieren nach Datum
     //nur die ersten
@@ -71,25 +72,20 @@ function Dashboard({navigation}) {
         setNextTasks(nextTasks);
     }, [tasks]);
 
-    /**
-     * Creates an array of next task objects which have the following structure:
-     *                 id: id of task ,
-     *                 name: title of task,
-     *                 daysLeft: days until it needs to be completed (by now not implemented),
-     *                 backgroundColor: backgroundColor
-     * From the state variable tasks which needs to be sorted by date first.
-      * @param tasksSortedByCreationDate {[]} array of task objects as saved to SQLite sorted by creationDate (later dueDate!!)
-     * @returns {*[]}
-     */
     const createNextTasksArray = (tasksSortedByCreationDate) => {
         let nextTasks = [];
         tasksSortedByCreationDate.filter(t => !t.isDone).forEach(t => {
-            nextTasks.push({
-                id: t.taskId,
-                name: t.taskTitle,
-                daysLeft: "",
-                backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
-            })
+            const list = lists.find(l => l.listId === t.listId);
+            if (list) {
+                nextTasks.push({
+                    id: t.taskId,
+                    name: t.taskTitle,
+                    listId: t.listId, // Ensure listId is included here
+                    listIcon: list?.iconName,
+                    iconBackgroundColor: list?.iconBackgroundColor,
+                    backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
+                });
+            }
         });
         return nextTasks;
     }
@@ -262,8 +258,17 @@ function Dashboard({navigation}) {
                                 >
                                 <NextTaskButton
                                     buttonTextLeft={task.name}
-                                    //buttonTextRight={`in ${task.daysLeft} Tagen`}
+                                    //buttonTextRight={`in ${task.daysLeft} Tagen fällig`}
+                                    //überfällig wenn zu lange (in ROT)
                                     boxBackgroundColor={task.backgroundColor}
+                                    leftComponent={()=> (
+                                        <SquareIcon name={task.listIcon}
+                                                    backgroundColor={task.iconBackgroundColor}
+                                                    isUserIcon={true}
+                                                    size={60}
+                                                    customIconSize={35}
+                                        />
+                                    )}
                                 />
                                 </View>
                             ))}
@@ -366,7 +371,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: SIZES.SCREEN_HEADER,
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
-        paddingVertical: SIZES.SPACING_HORIZONTAL_SMALL
+        paddingVertical: SIZES.SPACING_HORIZONTAL_DEFAULT - 5
     },
     headerName: {
         fontSize: SIZES.SCREEN_HEADER + 10,

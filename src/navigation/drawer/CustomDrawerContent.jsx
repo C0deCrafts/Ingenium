@@ -2,7 +2,7 @@ import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import * as WebBrowser from "expo-web-browser"
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { useNavContext } from "../context/NavContext";
+import { useNavContext } from "../../context/NavContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
