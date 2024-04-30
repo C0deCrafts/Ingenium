@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { createNavigationContainerRef } from '@react-navigation/native';
 
 export const TabContext = createContext();
@@ -8,7 +8,10 @@ export const useTabContext = () => useContext(TabContext);
 export const navigationRef = createNavigationContainerRef();
 
 export const TabProvider = ({ children }) => {
-    const [currentRoute, setCurrentRoute] = useState();
+    const [currentRoute, setCurrentRoute] = useState("Dashboard_Tab");
+    const [activeTab, setActiveTab] = useState('Dashboard_Tab');
+
+    //setze prob ob das DrawerMenü aufgeht oder nicht!! (wird in DrawerNav verwendet)
     const [drawerEnabled, setDrawerEnabled] = useState(true);
     const [notificationCount, setNotificationCount] = useState(10);
 
@@ -16,27 +19,42 @@ export const TabProvider = ({ children }) => {
     // Logik hinzufügen, um die Mitteilungen zu empfangen und zu zählen
     // Zum Beispiel könnte das Abhören von Push-Benachrichtigungen hier integriert werden.
     }, []);*/
+    useEffect(() => {
+        console.log("activeTab: ", activeTab)
+    }, [activeTab]);
+
 
     const navigateAndSetSelectedTab = (routeName, stackName) => {
-        setCurrentRoute(routeName); // Allgemeiner Zustand für aktuelle Route
+        console.log(`navigateAndSetSelectedTab aufgerufen mit routeName: ${routeName} und stackName: ${stackName}`);
 
-        if (navigationRef.isReady()) {
-            if (stackName) {
-                // Wenn ein stackName angegeben ist, führe einen Reset durch, um den Stack zu diesem Tab zurückzusetzen
-                navigationRef.reset({
-                    index: 0,
-                    routes: [{name: stackName, params: {screen: routeName}}],
-                });
-            } else {
-                // Wenn kein stackName angegeben ist, navigiere zur Route
-                navigationRef.navigate(routeName);
-            }
+        // Aktuellen Routennamen setzen
+        setCurrentRoute(routeName);
+        setActiveTab(routeName); // setzen des aktiven Tabs beim Navigieren
+        console.log(`Aktuelle Route gesetzt auf: ${routeName}`);
 
+        if (!navigationRef.isReady()) {
+            console.log("Navigation ist nicht bereit. Bitte warten...");
+            return;
+        }
+
+        // Navigation zum TaskMain und dann Push zum Inbox Screen
+        if (routeName === 'Notification_Tab') {
+            console.log("Navigiere zum TaskMain und dann zum Inbox Screen");
+            navigationRef.navigate(stackName, { screen: 'TaskMain', params: { screen: 'Inbox' } });
+        } else if (stackName) {
+            console.log(`Reset Stack zu: ${stackName}`);
+            navigationRef.reset({
+                index: 0,
+                routes: [{ name: stackName, params: { screen: routeName } }],
+            });
+        } else {
+            console.log(`Navigiere ohne Stack zu: ${routeName}`);
+            navigationRef.navigate(routeName);
         }
     };
 
     return (
-        <TabContext.Provider value={{ currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled, notificationCount, setNotificationCount}}>
+        <TabContext.Provider value={{ activeTab, setActiveTab, currentRoute, navigateAndSetSelectedTab, drawerEnabled, setDrawerEnabled, notificationCount, setNotificationCount}}>
             {children}
         </TabContext.Provider>
     );

@@ -83,16 +83,16 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Stundenplan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab')}
-                                      style={currentRoute === 'Notification_Tab'
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Task_Tab')}
+                                      style={currentRoute === 'Task_Tab'
                                           ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
                                           : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
                     }
                     >
-                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
+                        <Icon name={currentRoute === 'Task_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Notification_Tab' ?
+                        <Text style={currentRoute === 'Task_Tab' ?
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Aufgaben</Text>
                     </TouchableOpacity>

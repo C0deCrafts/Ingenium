@@ -7,7 +7,7 @@ import {useTabContext} from "../context/TabContext";
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
-    const {drawerEnabled, setDrawerEnabled} = useTabContext();
+    const {drawerEnabled} = useTabContext();
 
     return (
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props}/>}

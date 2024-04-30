@@ -25,6 +25,19 @@ function AppNavigation() {
         }
     }, [initialized]);
 
+
+    /*useEffect(() => {
+//Hilfsfunktion um die Routen zu ermitteln
+    const unsubscribe = navigationRef.addListener("state", () => {
+        console.log("Neuer Navigationszustand: ", navigationRef.getCurrentRoute());
+        console.log("------------------------------------------------------------------")
+        console.log("Komplette Routeninformation: ", navigationRef.getRootState());
+        console.log("==================================================================")
+    });
+
+    return () => unsubscribe();
+}, []);*/
+
     // Statusbar-Stil basierend auf dem aktuellen Thema einstellen
     const statusBarStyle = theme === LIGHTMODE ? 'dark-content' : 'light-content';
 

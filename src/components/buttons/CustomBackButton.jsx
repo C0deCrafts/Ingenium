@@ -64,7 +64,8 @@ function CustomBackButton({
                               showTitle = false,
                               title,
                               showCustomElement = false,
-                              customElement
+                              customElement,
+                              backLabel = "Zurück"
                           }) {
     const insets = useSafeAreaInsets();
     const {theme} = useTheme();
@@ -80,7 +81,7 @@ function CustomBackButton({
                       color={isDarkMode ? DARKMODE.ICONCOLOR : LIGHTMODE.ICONCOLOR}
                 />
                 <View>
-                    <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>Zurück</Text>
+                    <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>{backLabel}</Text>
                 </View>
             </TouchableOpacity>
             {/*optional title will be shown only if showTitle is true and a title was provided*/}
