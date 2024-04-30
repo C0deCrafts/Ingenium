@@ -16,7 +16,7 @@ function DrawerNavigation() {
                               swipeEnabled: drawerEnabled,
                           })}
         >
-            {/* Wenn keine spezifischen Aktionen bei Fokus benötigt werden, können die listeners entfernt werden */}
+            {/* Die Listeners müssen beibehalten werden, um sicherzustellen, dass die Tabs im Drawer korrekt gesetzt werden. */}
             <Drawer.Screen name="Dashboard_Drawer" component={BottomTabNavigator} />
             <Drawer.Screen name="Timetable_Drawer" component={BottomTabNavigator} />
             <Drawer.Screen name="Task_Drawer" component={BottomTabNavigator}/>

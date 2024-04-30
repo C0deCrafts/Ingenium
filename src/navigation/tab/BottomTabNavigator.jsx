@@ -7,8 +7,6 @@ import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import { useNavigation } from '@react-navigation/native';
-
 
 const Tab = createBottomTabNavigator();
 
@@ -17,8 +15,6 @@ const Tab = createBottomTabNavigator();
  *
  * This component creates a bottom tab navigator using React Navigation.<p>
  * It includes tabs for tasks, dashboard, and timetable.
- *
- * @returns {JSX.Element} - The rendered bottom tab navigator
  *
  * @example
  * // Import the BottomTabNavigator component
@@ -72,7 +68,7 @@ function ButtonTabNavigator() {
                         component={TimetableStack}
                         listeners={{
                             focus: () => {
-                                //listener damit Stundenplan im Drawer auf aktiv gesetzt wird
+                                // Listener to set the Timetable tab as active in the drawer
                                 navigateAndSetSelectedTab("Timetable_Tab", "Timetable_Stack")
                             },
                         }}
@@ -91,7 +87,7 @@ function ButtonTabNavigator() {
                         component={DashboardStack}
                         listeners={{
                             focus: () => {
-                                //listener damit Dashboard im Drawer auf aktiv gesetzt wird
+                                // Listener to set the Dashboard tab as active in the drawer
                                 navigateAndSetSelectedTab("Dashboard_Tab", "Dashboard_Stack")
                             },
                         }}
@@ -109,7 +105,7 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                //Abfrage ob Inbox_Stack im navigateAndSetSelectedTab
+                                // Check if the routeName is 'Notification_Tab', if so, navigate to the 'Inbox_Stack'
                                 navigateAndSetSelectedTab("Notification_Tab", "Inbox_Stack")
                             },
                         }}
@@ -128,12 +124,12 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                //listener damit Aufgaben im Drawer auf aktiv gesetzt wird
+                                // Listener to set the Task tab as active in the drawer
                                 navigateAndSetSelectedTab("Task_Tab", "Task_Stack")
                             },
                         }}
                         options={{
-                            //Tab wird ausgeblendet
+                            // Hide the tab
                             tabBarButton: () => null
                         }}
             />

@@ -2,29 +2,19 @@ import {Text, View, StyleSheet} from "react-native";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {navigationRef, useNavContext} from "../../navigation/context/NavContext";
-import { useNavigation } from '@react-navigation/native';
-import {useEffect} from 'react';
+import {navigationRef} from "../../navigation/context/NavContext";
 
 function Inbox(){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
-    const { navigateAndSetSelectedTab, setForceColorChange } = useNavContext();
-    const navigation = useNavigation();
-
 
     const handleGoBack = () => {
-        //fix das Problem, dass bei IOS Wishgeste handleGoBack NICHT aufgerufen wird!!
         console.log("Navigation goBack wurde in der Inbox aufgerufen")
-        //setForceColorChange(true);
-        //navigateAndSetSelectedTab('Task_Tab', 'Task_Stack');
 
-        //das löst das problem, und die tabfarbe ändert sich!
         navigationRef.reset({
             index: 0,
             routes: [{ name: 'Task_Tab', params: { screen: 'Task_Stack' } }],
         });
-
     }
 
     return (
@@ -33,7 +23,6 @@ function Inbox(){
                 onPress={handleGoBack}
                 showTitle={true}
                 title={"Inbox"}
-                backLabel={"Zurück zu Tasks"}
             />
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 <Text style={isDarkMode ? styles.textDark : styles.textLight}>Inbox</Text>

@@ -18,16 +18,15 @@ const CustomDrawerContent = ({navigation}) => {
 
     const [loading, setLoading] = useState(false);
 
-    const {logout, token} = useAuth();
+    const {logout} = useAuth();
 
     const { currentRoute, navigateAndSetSelectedTab } = useNavContext();
     const styles = getStyles(insets);
 
     const handleLogout = async () => {
-        //Schließe den Drawer
-        //löst hoffentlich das Problem, dass manchmal der Drawer geöffnet ist, wenn man sich schnell
-        //auslogged und wieder einlogged
-        //muss ausreichend getestet werden - der Fehler tritt nur sehr selten auf
+        // Close the drawer
+        // Hopefully resolves the issue where the drawer is sometimes open when quickly logging out and logging back in
+        // Needs sufficient testing - the error occurs very rarely
         setLoading(true);
         navigation.closeDrawer();
         setTimeout(async ()=> {
