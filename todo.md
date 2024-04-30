@@ -78,12 +78,12 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 -- Homescreen: -- Sabrina (+Dokumentation)
     -- wenn keine nächsten Kurse oder nächste Aufgabe, render "keine nächsten ...."
        inkl richtige Größe der Box
-    -- evtl Design überdenken Nächste Aufgaben
+    √ evtl Design überdenken Nächste Aufgaben
     -- Responsive testen
-    -- nächste Aufgaben kein BUTTON!
+    √ nächste Aufgaben kein BUTTON!
 
--- BottomTabNavigation: -- Sabrina
-    -- Mitteilung austauschen mit Aufgaben
+√ BottomTabNavigation: -- Sabrina
+    //Navigation wurde richtiggestellt
     //Notification badge - zu Inbox hinzugefügt, wird mit BottomTab Mitteilungen synchronisiert, Funktion zum zählen der Notifications aktuell im Tab Context
     //sollte für die Pushbenachrichtigungen in V2 in woanders ausgelagert werden
 -- DrawerNavigation: -- gemeinsam

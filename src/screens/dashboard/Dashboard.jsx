@@ -19,6 +19,7 @@ import {useCalendar} from "../../context/CalendarContext";
 import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
 import Greeting from "../../components/Greeting";
 import SquareIcon from "../../components/SquareIcon";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 /**
  * ### Dashboard
@@ -58,6 +59,10 @@ function Dashboard({navigation}) {
     const [nextTasks, setNextTasks] = useState([]);
 
     const {tasks, lists} = useDatabase();
+
+    //providing a safe area
+    const insets = useSafeAreaInsets();
+    const styles = getStyles(insets);
 
     //das älteste Datum finden --> sortieren nach Datum
     //nur die ersten
@@ -248,30 +253,35 @@ function Dashboard({navigation}) {
                     </View>
 
                     {/*Box 3, Nächste Aufgaben*/}
-                    <View>
+                    <View style={styles.nextTaskContainer}>
                         <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
                             Aufgaben</Text>
-
-                            {nextTasks.slice(0, nextTasksCount).map((task)=>(
+                        {nextTasks.length === 0 ? (
+                            <View style={isDarkMode ? styles.emptyContainerDark : styles.emptyContainerLight}>
+                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.emptyContainerText]}>Keine nächsten Aufgaben</Text>
+                            </View>
+                        ) : (
+                            nextTasks.slice(0, nextTasksCount).map((task)=>(
                                 <View style={styles.taskRow}
                                       key={task.id}
                                 >
-                                <NextTaskButton
-                                    buttonTextLeft={task.name}
-                                    //buttonTextRight={`in ${task.daysLeft} Tagen fällig`}
-                                    //überfällig wenn zu lange (in ROT)
-                                    boxBackgroundColor={task.backgroundColor}
-                                    leftComponent={()=> (
-                                        <SquareIcon name={task.listIcon}
-                                                    backgroundColor={task.iconBackgroundColor}
-                                                    isUserIcon={true}
-                                                    size={60}
-                                                    customIconSize={35}
-                                        />
-                                    )}
-                                />
+                                    <NextTaskButton
+                                        buttonTextLeft={task.name}
+                                        //buttonTextRight={`in ${task.daysLeft} Tagen fällig`}
+                                        //überfällig wenn zu lange (in ROT)
+                                        boxBackgroundColor={task.backgroundColor}
+                                        leftComponent={()=> (
+                                            <SquareIcon name={task.listIcon}
+                                                        backgroundColor={task.iconBackgroundColor}
+                                                        isUserIcon={true}
+                                                        size={60}
+                                                        customIconSize={35}
+                                            />
+                                        )}
+                                    />
                                 </View>
-                            ))}
+                            ))
+                        )}
                     </View>
                 </View>
             </View>
@@ -281,7 +291,9 @@ function Dashboard({navigation}) {
 
 export default Dashboard;
 
-const styles = StyleSheet.create({
+function getStyles(insets){
+
+    return StyleSheet.create({
     containerLight: {
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
@@ -421,4 +433,26 @@ const styles = StyleSheet.create({
     spacing: {
         marginVertical: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
     },
-})
+    nextTaskContainer:{
+        flex: 1,
+    },
+    emptyContainerLight: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: LIGHTMODE.BOX_COLOR,
+        borderRadius: SIZES.BORDER_RADIUS,
+        marginBottom: 10
+    },
+    emptyContainerDark: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: DARKMODE.BOX_COLOR,
+        borderRadius: SIZES.BORDER_RADIUS,
+        marginBottom: 10
+    },
+    emptyContainerText: {
+        fontSize: SIZES.TEXT_SIZE
+    }
+})}
