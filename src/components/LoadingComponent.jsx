@@ -2,6 +2,21 @@ import {ActivityIndicator, View, StyleSheet, Modal, Text} from 'react-native';
 import {useTheme} from "../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
 
+/**
+ * ### Loading Component
+ *
+ * Renders a loading indicator with an optional message.
+ * This component is typically used to indicate that data is being loaded.
+ *
+ * @param {string} message - Optional. A message to be displayed below the loading indicator.
+ *
+ * @example
+ * // Import the LoadingComponent component
+ * import LoadingComponent from "../../components/LoadingComponent";
+ * // Inside your component's render method, use the LoadingComponent component like this:
+ * <LoadingComponent message="Loading..." />
+ * // This will render a loading indicator with the specified message.
+ */
 function LoadingComponent({message}){
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;

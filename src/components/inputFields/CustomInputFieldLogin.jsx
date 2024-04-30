@@ -5,18 +5,17 @@ import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
 /**
- * ## CustomInputFieldLogin Component
+ * ### CustomInputFieldLogin Component
  *
  * This component represents a custom input field primarily used for login screens.
  * It provides a styled TextInput for entering login credentials and integrates an optional icon for additional interactivity,
  * such as toggling password visibility. The component's style adapts to the current theme setting (dark or light).
  *
- * ### Features:
+ * #### Features:
  * - **Dynamic Theme Adaptation**: Changes the background and text color of the input field based on the current theme (dark or light).
  * - **Password Visibility Toggle**: Allows users to toggle the visibility of their password, enhancing usability.
  * - **Validation Styles**: Provides visual feedback by changing the border color when an error is detected.
  * - **Icon Interactivity**: Includes an interactive icon for password fields that toggles the visibility state on press.
- *
  *
  *  @param {string} placeholder - The placeholder text displayed when the input field is empty.
  *  @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").

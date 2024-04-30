@@ -3,22 +3,22 @@ import Icon from "../Icon";
 import {COLOR} from "../../constants/styleSettings";
 
 /**
- * ## RoundButton Component
+ * ### RoundButton Component
  * The component renders a round button in the App's main button color, with an Icon in its center.
  *
  * @param {function} onPress - Function to be called when the button is pressed.
  * @param {object} buttonStyle - Optional style object which can be used to style the button further / position it where
  *                                  needed.
- * @param iconName - Name of the Icon to be displayed in the button. For this prop a constant listed in the
+ * @param {string | Object} iconName - Name of the Icon to be displayed in the button. For this prop a constant listed in the
  *                   'icons.js' file should be used.
  *
  * @example
  * ```jsx
  * <RoundButton
- *                             onPress={onPressCloseModal}
- *                             buttonStyle={styles.roundButtonPosition}
- *                             iconName={ICONS.TASKICONS.CLOSE}
- *                         />
+ *   onPress={onPressCloseModal}
+ *   buttonStyle={styles.roundButtonPosition}
+ *   iconName={ICONS.TASKICONS.CLOSE}
+ * />
  * ```
  */
 function RoundButton({onPress, buttonStyle, iconName}) {

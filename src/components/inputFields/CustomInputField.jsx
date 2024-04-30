@@ -18,8 +18,8 @@ import SquareIcon from "../SquareIcon";
  * @param {string} iconBoxBackgroundColor - The background color of the icon's box.
  * @param {function} onChangeText - A function that will be called when the text input's content changes. It receives the current text value as its argument.
  * @param {string} value - The value of the input field. This prop is required for controlled input components, where the parent component controls the value of the input field.
+ * @param {boolean} isUserIcon - Optional flag to determine if the icon is a custom user icon (default is false).
  *
- * @param isUserIcon
  * @example
  * // Inside your component's render method, use the CustomInputField component like this:
  * <CustomInputField

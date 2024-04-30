@@ -7,7 +7,7 @@ import {View, StyleSheet, TouchableOpacity} from "react-native";
  * The onPress prop is a function to handle color selection.
  *
  * @param {string} color - The background color of the button.
- * @param {Function} onPress - Function to handle color selection.
+ * @param {function} onPress - Function to handle color selection.
  *
  * @example
  * // Create a state to hold the current color

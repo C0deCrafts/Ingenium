@@ -8,12 +8,15 @@ import {useTheme} from "../../context/ThemeContext";
  * Renders a box displaying information about the next course.
  * This component accepts props such as headerTitle, headerBackgroundColor, date, timeStart, timeEnd, and containerStyle.
  *
- * @param headerTitle - The title of the course.
- * @param headerBackgroundColor - The background color of the header.
- * @param date - The date of the course.
- * @param timeStart - The start time of the course.
- * @param timeEnd - The end time of the course.
- * @param containerStyle - Custom styles for the container.
+ * #### Features:
+ * - **Customizable Header Background Color**: Allows customizing the header with an individual background color for each course to enable visual differentiation between different courses.
+ *
+ * @param {string} headerTitle - The title of the course.
+ * @param {string} headerBackgroundColor - The background color of the header.
+ * @param {string} date - The date of the course.
+ * @param {string} timeStart - The start time of the course.
+ * @param {string} timeEnd - The end time of the course.
+ * @param {Object} containerStyle - Custom styles for the container.
  *
  * @example
  * // Import the NextCourseBox component

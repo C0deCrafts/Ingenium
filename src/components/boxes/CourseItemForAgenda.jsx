@@ -7,6 +7,7 @@ import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
 function CourseItemForAgenda(props) {
+
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 

@@ -3,13 +3,13 @@ import {COLOR, SIZES} from "../../constants/styleSettings";
 
 
 /**
- * ## CustomButtonSmall Component
+ * ### CustomButtonSmall Component
  *
  * Renders a small custom button designed according to the app's button styling guidelines.
  * A title and onPress function can be specified.
  *
- * @param title - The text displayed on the button.
- * @param onPressFunction - Function to be called when the button is pressed.
+ * @param {string} title - The text displayed on the button.
+ * @param {function} onPressFunction - Function to be called when the button is pressed.
  *
  * @example
  * ```jsx

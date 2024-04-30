@@ -4,16 +4,31 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 
 /**
- * ## CardButton Component
+ * ### CardButton Component
  *
  * Renders a Card with BorderRadius and lightmode or darkMode Boxcolor.
  * With a customizable title, Icon and onPressHandler.
  *
+ * #### Features:
+ * - **Badge Count**: Allows displaying a notification count on the CardButton to highlight important information.
+ *
  * @param buttonIcon Icon to be shown on the CardButton.
  * @param buttonTitle Title to be shown on the CardButton.
  * @param onPressHandler {function} A function that sets the behaviour on press event of the CardButton.
- * @param badgeCount
- * @constructor
+ * @param badgeCount - Count for the badge to be displayed on the CardButton.
+ *
+ * @example
+ * // Import the CardButton component
+ * import CardButton from "../../components/CardButton";
+ * // Inside your component's render method, use the CardButton component like this:
+ * <CardButton
+ *    buttonIcon={"iconName"}
+ *    buttonTitle={"Button Title"}
+ *    onPressHandler={() => {console.log("Button pressed")}}
+ *    badgeCount={3}
+ * />
+ *
+ * // This will render a CardButton with the specified icon, title, and badge count, with the specified behavior on press.
  */
 function CardButton({buttonIcon, buttonTitle, onPressHandler, badgeCount}) {
     //theme context provider hook

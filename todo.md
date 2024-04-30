@@ -124,3 +124,6 @@ return (
 <LoadingComponent message={"Initialisierung läuft..."}/>
 );
 }
+
+
+// dokumentation - bis inkl components ordner kontrolliert und ergänzt - nur code den ich geschrieben habe
