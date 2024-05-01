@@ -57,6 +57,7 @@ export const CalendarProvider = ({children}) => {
     // Load iCal test data when token or user ID changes
     useEffect(() => {
         loadICalTestUrl();
+        //loadCalendarData();
     }, [token, userId])
 
     return (

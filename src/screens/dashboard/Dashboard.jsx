@@ -56,6 +56,7 @@ function Dashboard({navigation}) {
 
     const { iCalData, getCourseNameByNumber } = useCalendar();
     const [nextCourses, setNextCourses] = useState([]);
+    const [isLoadingCourses, setIsLoadingCourses] = useState(true);
     const [nextTasks, setNextTasks] = useState([]);
 
     const {tasks, lists} = useDatabase();
@@ -159,9 +160,14 @@ function Dashboard({navigation}) {
 
     useEffect(() => {
         if (iCalData) {
-            const filteredAndSorted = filterAndSortCourses(iCalData);
-            //setNextCourses(filteredAndSorted.slice(0, 2)); // Speichere nur die nächsten zwei Kurse
-            setNextCourses(filteredAndSorted); // Speichere alle nächsten
+            try {
+                const filteredAndSorted = filterAndSortCourses(iCalData);
+                setNextCourses(filteredAndSorted); // Speichere alle nächsten Kurse
+                setIsLoadingCourses(false);
+            } catch (error) {
+                console.error("Fehler beim Laden der Kursdaten", error);
+                setIsLoadingCourses(false);
+            }
         }
     }, [iCalData]);
 
@@ -219,38 +225,57 @@ function Dashboard({navigation}) {
                     </View>
 
                     {/*Box 2, Nächste Kurse*/}
-                    <View>
-                        <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
-                            Kurse</Text>
-                        <View style={styles.coursesSection}>
-                            <ScrollView horizontal={true} style={styles.coursesContainer} showsHorizontalScrollIndicator={false}>
-                            {nextCourses.map((course) => {
-                                // Extrahiere die Kursnummer aus der URL
-                                const crsMatch = course.url?.value.match(/crs_(\d+)/);
-                                const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
-                                // Hole den anzuzeigenden Kursnamen basierend auf der crsNummer
-                                const displayName = getCourseNameByNumber(crsNummer);
+                        {isLoadingCourses ? (
+                            <View style={styles.nextCourseContainer}>
+                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
+                                    Kurse</Text>
+                                <View style={isDarkMode ? styles.emptyContainerCourseDark : styles.emptyContainerCourseLight}>
+                                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.emptyContainerText]}>Kurse werden geladen...</Text>
+                                </View>
+                            </View>
+                        ) : nextCourses.length === 0 ? (
+                                <View style={styles.nextCourseContainer}>
+                                    <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
+                                        Kurse</Text>
+                            <View style={isDarkMode ? styles.emptyContainerCourseDark : styles.emptyContainerCourseLight}>
+                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.emptyContainerText]}>Keine nächsten Kurse</Text>
+                            </View>
+                                </View>
+                        ) : (
+                            <View>
+                                <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>Nächste
+                                    Kurse</Text>
+                            <View style={styles.coursesSection}>
+                                <ScrollView horizontal={true} style={styles.coursesContainer} showsHorizontalScrollIndicator={false}>
+                                    {nextCourses.map((course) => {
+                                        // Extrahiere die Kursnummer aus der URL
+                                        const crsMatch = course.url?.value.match(/crs_(\d+)/);
+                                        const crsNummer = crsMatch ? crsMatch[1] : 'Unbekannt';
+                                        // Hole den anzuzeigenden Kursnamen basierend auf der crsNummer
+                                        const displayName = getCourseNameByNumber(crsNummer);
 
-                                return (
-                                    <NextCourseBox
-                                        key={course.uid.value}
-                                        headerTitle={displayName} // Verwende den Namen aus getCourseNameByNumber
-                                        headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
-                                        date={new Date(course.dtstart.value).toLocaleDateString("de-AT", {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric'
-                                        })}
-                                        timeStart={formatLocalTime(course.dtstart.value)}
-                                        timeEnd={formatLocalTime(course.dtend.value)}
-                                        containerStyle={[styles.nextCourseBox]}
-                                    />
-                                );
-                            })}
-                            </ScrollView>
-                        </View>
-                    </View>
+                                        return (
+                                            <NextCourseBox
+                                                key={course.uid.value}
+                                                headerTitle={displayName} // Verwende den Namen aus getCourseNameByNumber
+                                                headerBackgroundColor={COLOR.ICONCOLOR_CUSTOM_BLUE}
+                                                date={new Date(course.dtstart.value).toLocaleDateString("de-AT", {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                })}
+                                                timeStart={formatLocalTime(course.dtstart.value)}
+                                                timeEnd={formatLocalTime(course.dtend.value)}
+                                                containerStyle={[styles.nextCourseBox]}
+                                            />
+                                        );
+                                    })}
+                                </ScrollView>
+                            </View>
+                            </View>
+                        )}
+
 
                     {/*Box 3, Nächste Aufgaben*/}
                     <View style={styles.nextTaskContainer}>
@@ -436,6 +461,9 @@ function getStyles(insets){
     nextTaskContainer:{
         flex: 1,
     },
+    nextCourseContainer: {
+        flex: 1,
+    },
     emptyContainerLight: {
         flex: 1,
         justifyContent: "center",
@@ -452,7 +480,23 @@ function getStyles(insets){
         borderRadius: SIZES.BORDER_RADIUS,
         marginBottom: 10
     },
-    emptyContainerText: {
-        fontSize: SIZES.TEXT_SIZE
-    }
-})}
+        emptyContainerCourseLight: {
+        flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: LIGHTMODE.BOX_COLOR,
+            borderRadius: SIZES.BORDER_RADIUS,
+            marginBottom: 10
+        },
+        emptyContainerCourseDark: {
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: DARKMODE.BOX_COLOR,
+            borderRadius: SIZES.BORDER_RADIUS,
+            marginBottom: 10
+        },
+        emptyContainerText: {
+            fontSize: SIZES.TEXT_SIZE
+        }
+    })
+}
