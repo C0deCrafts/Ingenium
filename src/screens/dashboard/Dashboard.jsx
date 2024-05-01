@@ -242,12 +242,14 @@ function Dashboard({navigation}) {
                         <View style={isDarkMode ? styles.dateTimeWeatherBoxDark : styles.dateTimeWeatherBoxLight}>
                             <Text
                                 style={[isDarkMode ? styles.textDark : styles.textLight, styles.textDateName]}>{getDay(day) + ", " + date + "." + month}</Text>
-                            <View style={styles.temperature}>
-                                <Text
-                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperature]}>{weatherData.temperature}</Text>
-                                <Text
-                                    style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperatureSymbol]}>°</Text>
-                            </View>
+                            {weatherData.temperature && (
+                                    <View style={styles.temperature}>
+                                        <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperature]}>{weatherData.temperature}</Text>
+                                        <Text
+                                            style={[isDarkMode ? styles.textDark : styles.textLight, styles.textTemperatureSymbol]}>°</Text>
+                                    </View>
+                            )}
                             <Icon name={weatherData.icon} size={100}
                                   color={isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR}/>
                         </View>
