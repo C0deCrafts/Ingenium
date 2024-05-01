@@ -75,11 +75,11 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
     Password wird nur mehr angezeigt, solange der User am Icon oben bleibt - sobald er nicht mehr auf das Icon tippt, wird das
     Password wieder versteckt
 
--- Homescreen: -- Sabrina (+Dokumentation)
-    -- wenn keine nächsten Kurse oder nächste Aufgabe, render "keine nächsten ...."
+√ Homescreen: -- Sabrina (+Dokumentation)
+    √ wenn keine nächsten Kurse oder nächste Aufgabe, render "keine nächsten ...."
        inkl richtige Größe der Box
     √ evtl Design überdenken Nächste Aufgaben
-    -- Responsive testen
+    √ Responsive testen
     √ nächste Aufgaben kein BUTTON!
 
 √ BottomTabNavigation: -- Sabrina
