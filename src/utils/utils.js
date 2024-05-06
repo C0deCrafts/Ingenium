@@ -233,13 +233,6 @@ export const groupTasksByCompletionDate = (tasks) => {
     return groups;
 };
 
-
-
-
-
-
-
-
 // Function to get course name by course number
 export const getCourseNameByNumber = (crsNummer) => {
     switch (crsNummer) {
