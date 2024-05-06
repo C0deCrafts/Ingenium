@@ -7,6 +7,7 @@ import CustomCalendar from "../../components/CustomCalendar";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import {useTask} from "../../context/TaskContext";
+import {useState} from "react";
 
 function CreateTaskDetails({navigation}){
     const { theme } = useTheme();
@@ -41,7 +42,7 @@ function CreateTaskDetails({navigation}){
                     Fällig am
                 </Text>
                 <View style={styles.calendarBox}>
-                   <CustomCalendar onDayPress={handleSelectedDate}/>
+                   <CustomCalendar initialDate={taskDetails.dueDate} onDayPress={handleSelectedDate}/>
                 </View>
                 <ScrollView style={styles.buttonContainer}
                             bounces={false}
