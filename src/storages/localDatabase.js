@@ -56,6 +56,7 @@ export const localDatabase = () => {
                       imageURL TEXT,
                       url TEXT,
                       isDone INTEGER,
+                      doneDate TEXT,
                       shared INTEGER,
                       reminder INTEGER,
                       FOREIGN KEY (listId) REFERENCES taskLists(listId)
@@ -196,13 +197,28 @@ export const localDatabase = () => {
      */
     const updateTaskIsDone = async (taskId, isDone) => {
         const db = await getDatabase();
-        const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ? WHERE taskId = ?;`
-        const args = [isDone === 0 ? 1 : 0, taskId];
+        const currentDate = new Date().toISOString();
+        const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ?, doneDate = ? WHERE taskId = ?;`
+        //const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ?, doneDate = CASE WHEN ? = 1 THEN ? ELSE NULL END WHERE taskId = ?;`;
+        const args = [isDone === 0 ? 1 : 0, currentDate, taskId];
+        //const args = [isDone ? 1 : 0, isDone ? 1 : 0, currentDate, taskId];
 
         await db.transactionAsync(async tx => {
             await tx.executeSqlAsync(updateTaskIsDoneSql, args); // Update isDone property
         },readOnly)
     }
+
+    const deleteOldCompletedTasks = async () => {
+        const db = await getDatabase();
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+        const deleteOldTasksSql = `DELETE FROM tasks WHERE isDone = 1 AND doneDate < ?;`;
+        const args = [thirtyDaysAgo];
+
+        await db.transactionAsync(async tx => {
+            await tx.executeSqlAsync(deleteOldTasksSql, args);
+        }, readOnly);
+    };
+
 
     /**
      * Function to edit a task from the database
