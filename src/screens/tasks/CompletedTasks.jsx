@@ -5,6 +5,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
+import {formatDate, groupTasksByCompletionDate} from "../../utils/utils";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -26,6 +27,17 @@ function CompletedTasks({navigation}){
 
     //filter tasks to show tasks belonging to currentList && isDone is false
     const tasksDone = tasks.filter(task => task.isDone);
+    const groupedTasks = groupTasksByCompletionDate(tasksDone);
+
+    const groupTitles = {
+        today: "Heute",
+        yesterday: "Gestern",
+        dayBeforeYesterday: "Vorgestern",
+        lastWeek: "Vorherige 7 Tage",
+        fourteenDays: "Nach 14 Tagen",
+        expiringSoon: "Bald auslaufend"
+    };
+
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -51,36 +63,40 @@ function CompletedTasks({navigation}){
 
                 {/*COMPLETED TASKS*/}
                 <ScrollView
-                    style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}
                     showsVerticalScrollIndicator={false}
                     bounces={false}
-                    contentContainerStyle={styles.scrollViewContentContainer}
                 >
-                    {   /*
-                        shows tasks of all taskLists which have the property done === true
-                        */
-
-                            tasksDone.map((task, index) => {
-                                return (
-                                    <View key={task.taskId}>
-                                        {/*render a TaskTitleElement for each task*/}
-                                        <TaskPreview
-                                        p_taskId={task.taskId}
-                                        p_taskIsDone={task.isDone}
-                                        taskTitle={task.taskTitle}
-                                        isTaskTitlePreview={false}
-                                        showDate={true}
-                                        dateText={"Erledigt am ..."}
-                                        taskIsInCompletedScreen={true}
-                                        />
-                                        {/* Adds a border, except after the last element */}
-                                        {index !== tasksDone.length - 1 && (
-                                            <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
-                                        )}
+                    {/* shows tasks of all taskLists which have the property done === true */
+                        Object.keys(groupedTasks).map(group => (
+                                groupedTasks[group].length > 0 && (
+                                    <View key={group}>
+                                        <View>
+                                            <Text style={styles.header}>{groupTitles[group]}</Text>
+                                        </View>
+                                        <View style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}>
+                                            {groupedTasks[group].map((task, index) => (
+                                                <View key={task.taskId}
+                                                >
+                                                    {/*render a TaskTitleElement for each task*/}
+                                                    <TaskPreview
+                                                        p_taskId={task.taskId}
+                                                        p_taskIsDone={task.isDone}
+                                                        taskTitle={task.taskTitle}
+                                                        isTaskTitlePreview={false}
+                                                        showDate={true}
+                                                        dateText={`Erledigt am ${formatDate(task.doneDate)}`}
+                                                        taskIsInCompletedScreen={true}
+                                                    />
+                                                    {/* Adds a border, except after the last element */}
+                                                    {index !== groupedTasks[group].length - 1 && (
+                                                        <View style={isDarkMode ? styles.separatorDark : styles.separatorLight}/>
+                                                    )}
+                                                </View>
+                                            ))}
+                                        </View>
                                     </View>
                                 )
-                            })
-                    }
+                            ))}
                 </ScrollView>
             </View>
         </View>
@@ -102,8 +118,7 @@ function getStyles(insets) {
             paddingHorizontal: SIZES.DEFAULT_MARGIN_HORIZONTAL_SCREEN,
         },
         contentContainer: {
-            paddingBottom: insets.bottom + 10,
-            paddingTop: insets.top + 10,
+            marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
             flex: 1,
             rowGap: SIZES.SPACING_VERTICAL_DEFAULT,
         },
@@ -114,6 +129,10 @@ function getStyles(insets) {
         contentBoxDark: {
             backgroundColor: DARKMODE.BOX_COLOR,
             borderRadius: SIZES.BORDER_RADIUS,
+        },
+        header: {
+            fontSize: SIZES.SCREEN_HEADER,
+            paddingVertical: SIZES.SPACES_VERTICAL_BETWEEN_BOXES
         },
         instructionBox: {
         paddingHorizontal: 10,
@@ -136,10 +155,6 @@ function getStyles(insets) {
         },
         textItalic: {
             fontStyle: "italic"
-        },
-        scrollViewContentContainer: {
-            paddingHorizontal: 10,
-            paddingVertical: 10,
         },
         separatorLight: {
             height: 1,

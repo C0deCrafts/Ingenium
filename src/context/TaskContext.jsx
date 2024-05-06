@@ -20,9 +20,9 @@ export const TaskProvider = ({children}) => {
         }))
     }
     // Debugging: Zeige den aktuellen Zustand, wenn er sich ändert
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("==============TaskContext: ", taskDetails);
-    }, [taskDetails]);
+    }, [taskDetails]);*/
 
 
     return (

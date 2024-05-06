@@ -25,14 +25,13 @@ export const DatabaseProvider = ({children}) => {
             //await localDatabase().debugDB();
             await localDatabase().createTable();
             //console.log("Datenbank und Tabellen wurden erfolgreich initialisiert.");
-
             //console.log("Sicherstellung, dass die 'Ingenium'-Liste existiert.");
             await ensureListExists("Ingenium", "HAT", COLOR.ICONCOLOR_CUSTOM_BLUE); // Ensure a default list exists
-
             await loadLists();
             //console.log("Alle Listen wurden erfolgreich geladen.");
-
             setIsDbReady(true);
+            //delete tasks where doneDate < 30 days
+            await localDatabase().deleteOldCompletedTasks();
         } catch (err) {
             setError(err.message);
             //console.log("Fehler im DatabaseContext - initializeDatabase():", err);
@@ -156,7 +155,7 @@ export const DatabaseProvider = ({children}) => {
 
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
-                initializeDatabase();
+          initializeDatabase();
     }, []);
 
 

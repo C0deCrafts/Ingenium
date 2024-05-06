@@ -198,16 +198,28 @@ export const localDatabase = () => {
     const updateTaskIsDone = async (taskId, isDone) => {
         const db = await getDatabase();
         const currentDate = new Date().toISOString();
+
+        //for testing:
+        /*const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate()-30);
+        const updateDate = currentDate.toISOString();*/
+
         const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ?, doneDate = ? WHERE taskId = ?;`
-        //const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ?, doneDate = CASE WHEN ? = 1 THEN ? ELSE NULL END WHERE taskId = ?;`;
+
         const args = [isDone === 0 ? 1 : 0, currentDate, taskId];
-        //const args = [isDone ? 1 : 0, isDone ? 1 : 0, currentDate, taskId];
+
+        //for testing:
+        /*const args = [isDone === 0 ? 1 : 0, updateDate, taskId];*/
 
         await db.transactionAsync(async tx => {
             await tx.executeSqlAsync(updateTaskIsDoneSql, args); // Update isDone property
         },readOnly)
     }
 
+    /**
+     * Function to delete completed task where dueDate > 30 days from the database.
+     * @returns {Promise<void>}
+     */
     const deleteOldCompletedTasks = async () => {
         const db = await getDatabase();
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -262,6 +274,7 @@ export const localDatabase = () => {
         deleteTask,
         updateTaskIsDone,
         updateTask,
+        deleteOldCompletedTasks,
         debugDB
     }
 

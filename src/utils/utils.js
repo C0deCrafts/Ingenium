@@ -180,9 +180,64 @@ const countDaysUntilDue = (dueDateString) => {
     const differenceInMilliseconds = dueDate - currentDate;
     // Convert milliseconds to days
     const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-
     return differenceInDays;
 };
+
+export const groupTasksByCompletionDate = (tasks) => {
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const yesterday = new Date(now.setDate(now.getDate() - 1));
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+    const dayBeforeYesterday = new Date(yesterday.setDate(yesterday.getDate() - 1));
+    const dayBeforeYesterdayStr = dayBeforeYesterday.toISOString().slice(0, 10);
+    const lastWeek = new Date(dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 6));
+    const lastWeekStr = lastWeek.toISOString().slice(0, 10);
+    const fourteenDaysAgo = new Date(lastWeek.setDate(lastWeek.getDate() - 7));
+    const fourteenDaysAgoStr = fourteenDaysAgo.toISOString().slice(0, 10);
+    const twentyFiveDaysAgo = new Date(now.setDate(now.getDate() - 25));
+    const twentyFiveDaysAgoStr = twentyFiveDaysAgo.toISOString().slice(0, 10);
+
+    //console.log("Today Str:", todayStr);
+    //console.log("Yesterday Str:", yesterdayStr);
+    //console.log("Day Before Yesterday Str:", dayBeforeYesterdayStr);
+    //console.log("Last Week Str:", lastWeekStr);
+
+    const groups = {
+        today: [],
+        yesterday: [],
+        dayBeforeYesterday: [],
+        lastWeek: [],
+        fourteenDays: [],
+        expiringSoon: []  // Tasks that are 25 days or older
+    };
+
+    tasks.forEach(task => {
+        const taskDateStr = task.doneDate.slice(0, 10);
+
+        if (taskDateStr === todayStr) {
+            groups.today.push(task);
+        } else if (taskDateStr === yesterdayStr) {
+            groups.yesterday.push(task);
+        } else if (taskDateStr === dayBeforeYesterdayStr) {
+            groups.dayBeforeYesterday.push(task);
+        } else if (taskDateStr >= lastWeekStr && taskDateStr < dayBeforeYesterdayStr) {
+            groups.lastWeek.push(task);
+        } else if (taskDateStr >= fourteenDaysAgoStr && taskDateStr < lastWeekStr) {
+            groups.fourteenDays.push(task);
+        } else if (taskDateStr >= twentyFiveDaysAgoStr) {
+            groups.expiringSoon.push(task);
+        }
+    });
+
+    //console.log("Final Groups:", JSON.stringify(groups, null, 2));
+    return groups;
+};
+
+
+
+
+
+
 
 
 // Function to get course name by course number
