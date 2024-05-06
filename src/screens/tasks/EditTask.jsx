@@ -52,7 +52,22 @@ function EditTask({navigation, route}){
 
     const handleGoBack = () => {
         //Evtl Abfrage ob wirklich alle Änderungen nicht gepseichert werden sollen
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+        if (taskDetails.taskTitle.trim() === "") {
+            navigation.goBack();
+            return;
+        }
+        Alert.alert("Abbrechen?", "Möchtest du dass deine Änderungen verworfen werden?",[
+            {
+                text: "Ja",
+                onPress: () => navigation.goBack(),
+                style: "cancel"
+            },
+            {
+                text: "Abbrechen"
+            }
+        ], {
+            cancelable: false
+        })
     };
 
     const handleUpdateTask = async () => {
@@ -107,7 +122,7 @@ function EditTask({navigation, route}){
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
             <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
-                <CustomButtonSmall title={"Fertig"} onPressFunction={handleUpdateTask}/>
+                <CustomButtonSmall title={"Speichern"} onPressFunction={handleUpdateTask}/>
             }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
                 {/* Header */}

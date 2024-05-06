@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.BORDER_RADIUS,
         justifyContent: "center",
         height: 30,
-        width: 65
+        width: 85
     },
     buttonLabel: {
         color: COLOR.BUTTONLABEL,

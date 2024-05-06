@@ -185,24 +185,6 @@ function Dashboard({navigation}) {
     });
 
     // Function to create an array of next tasks
-    /*const createNextTasksArray = (tasksSortedByCreationDate) => {
-        let nextTasks = [];
-        tasksSortedByCreationDate.filter(t => !t.isDone).forEach(t => {
-            const list = lists.find(l => l.listId === t.listId);
-            if (list) {
-                nextTasks.push({
-                    id: t.taskId,
-                    name: t.taskTitle,
-                    listId: t.listId, // Ensure listId is included here
-                    listIcon: list?.iconName,
-                    iconBackgroundColor: list?.iconBackgroundColor,
-                    backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
-                });
-            }
-        });
-        return nextTasks;
-    }*/
-    // Function to create an array of next tasks
     const createNextTasksArray = (tasksSortedByCreationDate) => {
         let nextTasks = [];
         const sortedTasksByDueDate = sortTasksByDueDate(tasksSortedByCreationDate); // Sort tasks by due date

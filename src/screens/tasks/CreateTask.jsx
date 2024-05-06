@@ -142,15 +142,29 @@ function CreateTask({navigation, route}) {
         // navigation.navigate("EditTaskDetails_Screen", {title, notes});
     };
     const handleGoBack = () => {
-        //Evlt Abfrage ob CreateTask abgebrochen werden soll?
-        navigation.goBack();
+        if (taskDetails.taskTitle.trim() === "") {
+            navigation.goBack();
+            return;
+        }
+        Alert.alert("Abbrechen?", "Möchtest du dass deine Änderungen verworfen werden?",[
+            {
+                text: "Ja",
+                onPress: () => navigation.goBack(),
+                style: "cancel"
+            },
+            {
+                text: "Abbrechen"
+            }
+        ], {
+            cancelable: false
+        })
     };
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
             <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
-                <CustomButtonSmall title={"Fertig"} onPressFunction={handleAddTask
+                <CustomButtonSmall title={"Speichern"} onPressFunction={handleAddTask
                 }/>
             }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
