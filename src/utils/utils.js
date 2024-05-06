@@ -212,7 +212,7 @@ export const groupTasksByCompletionDate = (tasks) => {
     };
 
     tasks.forEach(task => {
-        const taskDateStr = task.doneDate.slice(0, 10);
+        const taskDateStr = task.doneDate?.slice(0, 10);
 
         if (taskDateStr === todayStr) {
             groups.today.push(task);

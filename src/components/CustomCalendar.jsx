@@ -7,12 +7,12 @@ import {useTheme} from "../context/ThemeContext";
 import {getCurrentDateStringForReactNativeCalendar} from "../utils/utils";
 import {useState} from "react";
 
-function CustomCalendar({onDayPress}){
+function CustomCalendar({onDayPress, initialDate}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
     const minDate = getCurrentDateStringForReactNativeCalendar();
 
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(initialDate);
 
     LocaleConfig.locales['de'] = {
         monthNames: [
@@ -39,8 +39,6 @@ function CustomCalendar({onDayPress}){
     const handleDayPress = (day) => {
         console.log('ausgewählter Tag', day);
         setSelectedDate(day.dateString);
-
-
         if (onDayPress) {
             onDayPress(day.dateString); // Weiterleitung des ausgewählten Datums an die Eltern-Komponente
         }

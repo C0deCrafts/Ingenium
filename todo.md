@@ -101,9 +101,9 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
     --MarkedDayDots auf Ingeniumfarbe anpassen
 
 -- Aufgaben -- Jelena
-    -- Erstellt am.. ausgeben (statt Fällig/Erledigt am bis V2)
-    -- V2 oder wenn Zeit ist - Kalenderpicker?
-    -- gemeinsames Design für V2 Features --> Inbox, Details
+    √ Erstellt am.. ausgeben (statt Fällig/Erledigt am bis V2) - fällig/erledigt wurde implementiert
+    √ V2 oder wenn Zeit ist - Kalenderpicker? - Kalenderpicker wurde implementiert
+    -- gemeinsames Design für V2 Features --> Inbox
     -- bei keine NächsteTodo's Infotext - keine nächsten Todos (ebenso bei Erledigt Screen)
 
 -- Einstellungen passt
@@ -127,3 +127,10 @@ return (
 
 
 // dokumentation - bis inkl components ordner kontrolliert und ergänzt - nur code den ich geschrieben habe
+
+-- DetailsScreen aktualisiert und alle Screens wo dueDate in Verwendung kommt!
+-- ACHTUNG!! TODO - es wurde eine neue Variable in der DB ergänzt - Expo App muss komplett vom
+-- Device gelöscht werden inkl aller Einstellungen, sonst funktioniert es nicht!!
+
+-- Einstellungen / Allgemein / iPhone-Speicher / Expo Go / App löschen
+-- dann neu vom App Store installieren und starten :)

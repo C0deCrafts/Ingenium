@@ -1,7 +1,6 @@
 import {Text, View, StyleSheet, ScrollView} from "react-native";
 import {useTheme} from "../../context/ThemeContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
@@ -10,10 +9,6 @@ import {formatDate, groupTasksByCompletionDate} from "../../utils/utils";
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
-
-    //providing a safe area
-    const insets = useSafeAreaInsets();
-    const styles = getStyles(insets);
 
     const {tasks} = useDatabase();
 
@@ -37,7 +32,6 @@ function CompletedTasks({navigation}){
         fourteenDays: "Nach 14 Tagen",
         expiringSoon: "Bald auslaufend"
     };
-
 
     return (
         <View  style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -105,8 +99,7 @@ function CompletedTasks({navigation}){
 
 export default CompletedTasks;
 
-function getStyles(insets) {
-    return StyleSheet.create({
+const styles = StyleSheet.create({
         containerLight: {
             flex: 1,
             backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
@@ -167,4 +160,3 @@ function getStyles(insets) {
             marginHorizontal: 10,
         },
     })
-}
