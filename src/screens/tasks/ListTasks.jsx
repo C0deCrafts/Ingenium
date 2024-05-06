@@ -10,6 +10,7 @@ import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import RoundButton from "../../components/buttons/RoundButton";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
+import {formatDate, sortTasksByDueDate} from "../../utils/utils";
 
 function ListTasks({route, navigation}){
     //state to control the editing mode for the taskList View
@@ -130,6 +131,12 @@ function ListTasks({route, navigation}){
      */
     const listTasksNotDone = listId ? tasks.filter(task => !task.isDone && task.listId === listId) : tasks.filter(task => !task.isDone);
 
+    /*const reformatDate = (dateString) => {
+        const parts = dateString.split('-'); // Teilt den String in ein Array [YYYY, MM, DD]
+        return `${parts[2]}.${parts[1]}.${parts[0]}`; // Stellt das Array in neuer Reihenfolge zusammen
+    };*/
+    const sortedTasks = sortTasksByDueDate(listTasksNotDone);
+
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
             <CustomBackButton
@@ -164,7 +171,8 @@ function ListTasks({route, navigation}){
                     bounces={false}
                 >
                     {
-                            listTasksNotDone.map(task => {
+                            sortedTasks.map(task => {
+                                const date = task.dueDate ? `Fällig am ${formatDate(task.dueDate)}` : "";
 
                                 if(editTasksIsActive) {
                                    return (
@@ -206,7 +214,7 @@ function ListTasks({route, navigation}){
                                                         styles.textXS,
                                                         styles.textItalic
                                                         ]}>
-                                                        fällig am {/*new Date(task.dueDate).toLocaleDateString('de-DE')*/}
+                                                        {date}
                                                     </Text>}
                                                 </View>
                                                 <TouchableOpacity
@@ -235,7 +243,7 @@ function ListTasks({route, navigation}){
                                            taskNotes={task.taskNotes}
                                            isTaskTitlePreview={false}
                                            showDate={true}
-                                           dateText={"Fällig am..."}
+                                           dateText={date}
                                            isTaskCardWithNotes={true}
                                            />
                                         </View>

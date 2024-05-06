@@ -16,7 +16,13 @@ import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import {useCalendar} from "../../context/CalendarContext";
-import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
+import {
+    getDay,
+    formatLocalTime,
+    filterAndSortCourses,
+    sortTasksByDueDate,
+    getDueDateStatus
+} from "../../utils/utils";
 import Greeting from "../../components/Greeting";
 import SquareIcon from "../../components/SquareIcon";
 
@@ -179,7 +185,7 @@ function Dashboard({navigation}) {
     });
 
     // Function to create an array of next tasks
-    const createNextTasksArray = (tasksSortedByCreationDate) => {
+    /*const createNextTasksArray = (tasksSortedByCreationDate) => {
         let nextTasks = [];
         tasksSortedByCreationDate.filter(t => !t.isDone).forEach(t => {
             const list = lists.find(l => l.listId === t.listId);
@@ -189,6 +195,26 @@ function Dashboard({navigation}) {
                     name: t.taskTitle,
                     listId: t.listId, // Ensure listId is included here
                     listIcon: list?.iconName,
+                    iconBackgroundColor: list?.iconBackgroundColor,
+                    backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
+                });
+            }
+        });
+        return nextTasks;
+    }*/
+    // Function to create an array of next tasks
+    const createNextTasksArray = (tasksSortedByCreationDate) => {
+        let nextTasks = [];
+        const sortedTasksByDueDate = sortTasksByDueDate(tasksSortedByCreationDate); // Sort tasks by due date
+        sortedTasksByDueDate.filter(t => !t.isDone).forEach(t => {
+            const list = lists.find(l => l.listId === t.listId);
+            if (list) {
+                nextTasks.push({
+                    id: t.taskId,
+                    name: t.taskTitle,
+                    listId: t.listId, // Ensure listId is included here
+                    listIcon: list?.iconName,
+                    dueDate: t.dueDate,
                     iconBackgroundColor: list?.iconBackgroundColor,
                     backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
                 });
@@ -335,7 +361,7 @@ function Dashboard({navigation}) {
                                 >
                                     <NextTaskButton
                                         buttonTextLeft={task.name}
-                                        //buttonTextRight={`in ${task.daysLeft} Tagen fällig`}
+                                        buttonTextRight={getDueDateStatus(task.dueDate)}
                                         //überfällig wenn zu lange (in ROT)
                                         boxBackgroundColor={task.backgroundColor}
                                         leftComponent={() => (
@@ -527,6 +553,7 @@ const styles =  StyleSheet.create({
             marginBottom: 10
         },
         emptyContainerCourseDark: {
+            flex: 1,
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: DARKMODE.BOX_COLOR,

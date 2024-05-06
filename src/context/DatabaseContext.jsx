@@ -147,10 +147,10 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().updateTask(task);
             await loadLists();
-            //console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
+            console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
         } catch (err) {
             setError(err.message);
-            //console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
+            console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
         }
     };
 

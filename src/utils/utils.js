@@ -99,11 +99,90 @@ export const formatLocalTime = (time) => {
 
 export const formatDate = (date) => {
     date = new Date(date);
-    const day = date.getDate();
+    const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth()+1).toString().padStart(2, '0');
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
 }
+
+export const sortTasksByDueDate = (tasks) => {
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split('.');
+        return new Date(year, month - 1, day);
+    };
+
+    const reformatDate = (dateString) => {
+        const parts = dateString.split('-');
+        return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    };
+
+    return [...tasks].sort((a, b) => {
+        const dateA = a.dueDate ? parseDate(reformatDate(a.dueDate)) : new Date(8640000000000000);
+        const dateB = b.dueDate ? parseDate(reformatDate(b.dueDate)) : new Date(8640000000000000);
+
+        return dateA - dateB;
+    });
+};
+
+
+// Funktion, um das aktuelle Datum im gewünschten Format zu erhalten
+export const getCurrentDateStringForReactNativeCalendar = () => {
+    // Get today's date
+    const today = new Date();
+
+    // Extract year, month, and day
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Month starts from 0, so add 1
+    const day = today.getDate().toString().padStart(2, '0');
+
+    // Construct and return the date in the desired format
+    return `${year}-${month}-${day}`;
+};
+
+// Function to get due date status
+export const getDueDateStatus = (dueDate) => {
+    const differenceInDays = countDaysUntilDue(dueDate);
+
+    if (isNaN(differenceInDays)) {
+        return ""; //wenn es kein Datum gibt, bzw NaN zurückkommt
+    } else if (differenceInDays === 0) {
+        return "jetzt fällig";
+    } else if (differenceInDays === 1) {
+        return "in einem Tag";
+    } else if (differenceInDays < 0) {
+        return "überfällig";
+    } else {
+        return `in ${differenceInDays} Tagen`;
+    }
+};
+
+// Function to count days until due date
+const countDaysUntilDue = (dueDateString) => {
+    //zusätzliche NaN Überprüfung
+    if(!dueDateString){
+        return NaN;
+    }
+    // Convert dueDateString to Date object
+    const dueDate = new Date(dueDateString);
+    // Get current date
+    const currentDate = new Date();
+
+    //zusätzliche NaN Überprüfung
+    if(isNaN(dueDate.getTime())){
+        return NaN;
+    }
+
+    // Set time component of dueDate and currentDate to midnight to ignore time difference
+    dueDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds = dueDate - currentDate;
+    // Convert milliseconds to days
+    const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+    return differenceInDays;
+};
 
 
 // Function to get course name by course number

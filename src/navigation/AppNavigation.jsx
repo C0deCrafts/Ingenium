@@ -4,23 +4,24 @@ import {StatusBar} from "react-native";
 import DrawerNavigation from "./drawer/DrawerNavigation";
 import LoginNavigation from "./LoginNavigation";
 import {LIGHTMODE} from "../constants/styleSettings";
-import { useTheme } from "../context/ThemeContext";
+import {useTheme} from "../context/ThemeContext";
 import {useAuth} from "../context/AuthContext";
 import {useEffect, useState} from "react";
 import LoadingComponent from "../components/LoadingComponent";
 import {DatabaseProvider} from "../context/DatabaseContext";
 import {LocationProvider} from "../context/LocationContext";
 import {CalendarProvider} from "../context/CalendarContext";
+import {TaskProvider} from "../context/TaskContext";
 
 function AppNavigation() {
     const {initialized, isAuthenticated} = useAuth();
     //Darkmode - Lightmode
-    const { theme } = useTheme();
+    const {theme} = useTheme();
     //Ladezustand
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (initialized){
+        if (initialized) {
             setLoading(false)
         }
     }, [initialized]);
@@ -46,7 +47,9 @@ function AppNavigation() {
                     <DatabaseProvider>
                         <LocationProvider>
                             <CalendarProvider>
-                                <DrawerNavigation />
+                                <TaskProvider>
+                                    <DrawerNavigation/>
+                                </TaskProvider>
                             </CalendarProvider>
                         </LocationProvider>
                     </DatabaseProvider>

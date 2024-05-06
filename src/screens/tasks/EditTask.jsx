@@ -6,8 +6,9 @@ import {useDatabase} from "../../context/DatabaseContext";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
+import {useTask} from "../../context/TaskContext";
 
 
 function EditTask({navigation, route}){
@@ -15,49 +16,62 @@ function EditTask({navigation, route}){
     const isDarkMode = theme === DARKMODE;
 
     //load methods and state from the DatabaseContext
-    const {updateTask, lists} = useDatabase();
+    const {updateTask, tasks, lists} = useDatabase();
 
     //access the task on which user pressed 'edit' button, to set the fields to the initial values
     const {taskToEdit} = route.params;
     //find the list the taskToEdit was assigned to, to show it as the default list in the UI
     const listOfTaskToEdit = lists.find(list => list.listId === taskToEdit.listId);
-
-    // State variables for the form - initialized with values from taskToEdit
-    const [taskTitle, setTaskTitle] = useState(taskToEdit.taskTitle);
-    const [taskNotes, setTaskNotes] = useState(taskToEdit.taskNotes);
-
-    // State for the database attributes
-    const [listId, setListId] = useState(taskToEdit.listId);
     const [selectedListName, setSelectedListName] = useState(listOfTaskToEdit.listName); // Default list name
 
     //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
     const inputAccessoryViewID = 'uniqueID'; //?
-
     // Reference for the select list modal
     const selectListModalRef = useRef(null); //?
 
+    const {taskDetails, updateTaskDetails} = useTask();
+
+    // Update-Funktionen, die du anstelle der lokalen set-Funktionen verwenden kannst - TaskContext wird aktualisiert
+    const handleChangeTaskTitle = (title) => {
+        updateTaskDetails({ taskTitle: title });
+    };
+
+    const handleChangeTaskNotes = (notes) => {
+        updateTaskDetails({ taskNotes: notes });
+    };
+
+    const handleChangeListId = (listId) => {
+        updateTaskDetails({ listId: listId });
+    };
+
+    useEffect(() => {
+        if(taskToEdit){
+            updateTaskDetails(taskToEdit);// Hier wird die initialen Daten in den Context geladen
+        }
+    }, [taskToEdit]);
+
     const handleGoBack = () => {
+        //Evtl Abfrage ob wirklich alle Änderungen nicht gepseichert werden sollen
         navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
     };
 
     const handleUpdateTask = async () => {
-        if (taskTitle.trim() === "") {
+        if (taskDetails.taskTitle.trim() === "") {
             Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
             return;
         }
-
-        await updateTask({
-            listId: listId,
-            taskTitle: taskTitle,
-            taskNotes: taskNotes,
-            dueDate: "", // Passing the empty string
-            imageURL: "", // Passing the empty string
-            url: "",
-            isDone: false,
-            shared: false,
-            reminder: false,
-            taskId: taskToEdit.taskId,
-        });
+            await updateTask({
+                listId: taskDetails.listId,
+                taskTitle: taskDetails.taskTitle,
+                taskNotes: taskDetails.taskNotes,
+                dueDate: taskDetails.dueDate,
+                imageURL: taskDetails.imageURL,
+                url: taskDetails.url,
+                isDone: taskDetails.isDone,
+                shared: taskDetails.shared,
+                reminder: taskDetails.reminder,
+                taskId: taskDetails.taskId,
+            });
         navigation.goBack();
     }
 
@@ -73,19 +87,20 @@ function EditTask({navigation, route}){
 
     // Funktion zum Auswählen einer Liste aus dem Modal
     const handleListSelection = (selectedList) => {
-        setListId(selectedList.listId);
+        handleChangeListId(selectedList.listId);
         setSelectedListName(selectedList.listName);
-        //console.log(selectedList); // Gib das gesamte Listenelement aus
-        //console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
         selectListModalRef.current?.dismiss();
     };
 
-
     // Function to navigate to the edit task details screen
-    const navigateToEditTaskDetails = () => {
+    const navigateToEditTaskDetails = async () => {
+        if (taskDetails.taskTitle.trim() === "") {
+            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
+            return;
+        }
         // Dismiss the keyboard and navigate to the edit task details screen
         Keyboard.dismiss();
-        console.log("Still need to implement this... with passing a parameter to the route as well!!!");
+        navigation.navigate("CreateTaskDetails_Screen");
     };
 
     return (
@@ -109,8 +124,8 @@ function EditTask({navigation, route}){
                             placeholder={"Titel"}
                             placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                             style={isDarkMode ? styles.inputDark : styles.inputLight}
-                            onChangeText={(value) => setTaskTitle(value)}
-                            value={taskTitle}
+                            onChangeText={handleChangeTaskTitle}
+                            value={taskDetails.taskTitle}
 
                             selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                             keyboardAppearance={isDarkMode ? "dark" : "light"}
@@ -122,8 +137,8 @@ function EditTask({navigation, route}){
                                    placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                    style={isDarkMode ? styles.inputDarkNotes : styles.inputLightNotes}
 
-                                   onChangeText={(value) => setTaskNotes(value)}
-                                   value={taskNotes}
+                                   onChangeText={handleChangeTaskNotes}
+                                   value={taskDetails.taskNotes}
 
                                    selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                    maxLength={1000}

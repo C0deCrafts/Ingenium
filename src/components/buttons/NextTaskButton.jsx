@@ -32,6 +32,9 @@ function NextTaskButton({
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
 
+    // Dynamically determine text color based on buttonTextRight
+    const secondButtonLabelStyle = (buttonTextRight.toLowerCase().includes('jetzt fällig') || buttonTextRight.toLowerCase().includes('überfällig')) && styles.overdueText;
+
     return (
         <View style={[
             isDarkMode ? styles.containerDark : styles.containerLight,
@@ -49,7 +52,7 @@ function NextTaskButton({
                   ellipsizeMode="tail"
             >{buttonTextLeft}</Text>
             <Text
-                style={isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight}>{buttonTextRight}</Text>
+                style={[isDarkMode ? styles.secondButtonLabelDark : styles.secondButtonLabelLight, secondButtonLabelStyle]}>{buttonTextRight}</Text>
         </View>
     )
 }
@@ -98,5 +101,8 @@ const styles = StyleSheet.create({
     boxColor: {
         width: 50,
         height: 50,
-    }
+    },
+    overdueText: {
+        color: 'red',
+    },
 })
