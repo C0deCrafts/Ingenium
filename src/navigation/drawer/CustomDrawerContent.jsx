@@ -27,6 +27,7 @@ const CustomDrawerContent = ({navigation}) => {
         // Close the drawer
         // Hopefully resolves the issue where the drawer is sometimes open when quickly logging out and logging back in
         // Needs sufficient testing - the error occurs very rarely
+        // TODO: manchmal öffnet die APP nach dem Einloggen den letzten Screen?? Dann funktioniert die Navigation nicht mehr
         setLoading(true);
         navigation.closeDrawer();
         setTimeout(async ()=> {
