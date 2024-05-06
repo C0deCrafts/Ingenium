@@ -7,7 +7,6 @@ import CustomCalendar from "../../components/CustomCalendar";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import {useTask} from "../../context/TaskContext";
-import {useState} from "react";
 
 function CreateTaskDetails({navigation}){
     const { theme } = useTheme();
