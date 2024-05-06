@@ -16,7 +16,7 @@ function EditTask({navigation, route}){
     const isDarkMode = theme === DARKMODE;
 
     //load methods and state from the DatabaseContext
-    const {updateTask, tasks, lists} = useDatabase();
+    const {updateTask, lists} = useDatabase();
 
     //access the task on which user pressed 'edit' button, to set the fields to the initial values
     const {taskToEdit} = route.params;

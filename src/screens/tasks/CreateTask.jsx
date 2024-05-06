@@ -26,7 +26,7 @@ function CreateTask({navigation, route}) {
     const isDarkMode = theme === DARKMODE;
 
     //load methods and state from the DatabaseContext
-    const {addTask, lists, deleteTask} = useDatabase();
+    const {addTask, lists} = useDatabase();
 
     const { taskDetails, updateTaskDetails } = useTask();
 

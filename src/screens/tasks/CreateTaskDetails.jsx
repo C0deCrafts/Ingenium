@@ -8,7 +8,7 @@ import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import {useTask} from "../../context/TaskContext";
 
-function CreateTaskDetails({navigation, route}){
+function CreateTaskDetails({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
     const insets = useSafeAreaInsets();

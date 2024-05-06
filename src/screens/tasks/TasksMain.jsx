@@ -135,12 +135,6 @@ function TasksMain({navigation}) {
     //filtering Tasks for tasksview, to only show tasks which are not done
     const tasksNotDone = tasks.filter(task => !task.isDone);
 
-    const parseDate = (dateString) => {
-        // Umwandeln des europäischen Datumsformats DD.MM.YYYY in ein Date-Objekt
-        const [day, month, year] = dateString.split('.');
-        return new Date(year, month - 1, day); // Monat -1, weil JavaScript Monate von 0 bis 11 zählt
-    };
-
     const sortedTasks = sortTasksByDueDate(tasksNotDone);
 
     return (

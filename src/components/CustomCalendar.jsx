@@ -1,19 +1,16 @@
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../constants/styleSettings";
-import {Text, View, StyleSheet} from "react-native";
+import {View, StyleSheet} from "react-native";
 import Icon from "./Icon";
 import {ICONS} from "../constants/icons";
 import {useTheme} from "../context/ThemeContext";
 import {getCurrentDateStringForReactNativeCalendar} from "../utils/utils";
-import {useDatabase} from "../context/DatabaseContext";
-import {useEffect, useState} from "react";
-import {calendarBackground} from "react-native-calendars/src/style";
+import {useState} from "react";
 
 function CustomCalendar({onDayPress}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
     const minDate = getCurrentDateStringForReactNativeCalendar();
-    const { tasks, updateTask } = useDatabase();
 
     const [selectedDate, setSelectedDate] = useState(null);
 
