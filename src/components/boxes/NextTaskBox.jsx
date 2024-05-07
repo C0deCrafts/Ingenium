@@ -10,21 +10,27 @@ import {useTheme} from "../../context/ThemeContext";
  *
  * @param buttonTextLeft - The text to be displayed on the left side of the button.
  * @param buttonTextRight - The text to be displayed on the right side of the button.
- * @param boxBackgroundColor - The background color of the button.
+ * @param leftComponent - Optional custom component to be rendered on the left side of the button.
  *
  * @example
- * // Import the NextTaskButton component
- * import NextTaskButton from "../../components/NextTaskButton";
- * // Inside your component's render method, use the NextTaskButton component like this:
- * <NextTaskButton
+ * // Import the NextTaskBox component
+ * import NextTaskBox from "../../components/NextTaskBox";
+ * // Inside your component's render method, use the NextTaskBox component like this:
+ * <NextTaskBox
  *    buttonTextLeft={"Task 1"}
  *    buttonTextRight={"in 2 days"}
- *    boxBackgroundColor={"#3498db"}
- *    onPress={() => console.log("Button pressed")}
+ *    leftComponent={() => (
+ *        <SquareIcon name={task.listIcon}
+ *                    backgroundColor={task.iconBackgroundColor}
+ *                    isUserIcon={true}
+ *                    size={60}
+ *                    customIconSize={35}
+ *                    />
+ *        )}
  * />
  * // This will render a next task button with the specified information and styling.
  */
-function NextTaskButton({
+function NextTaskBox({
                              buttonTextLeft,
                              buttonTextRight,
                              leftComponent: LeftComponent,
@@ -39,13 +45,6 @@ function NextTaskButton({
         <View style={[
             isDarkMode ? styles.containerDark : styles.containerLight,
         ]}>
-            {/*<View style={{
-                width: 70,
-                height: 60,
-                backgroundColor: boxBackgroundColor,
-                borderBottomLeftRadius: SIZES.BORDER_RADIUS,
-                borderTopLeftRadius: SIZES.BORDER_RADIUS,
-            }}></View>*/}
             {LeftComponent && <LeftComponent/>}
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}
                   numberOfLines={1}
@@ -57,7 +56,7 @@ function NextTaskButton({
     )
 }
 
-export default NextTaskButton;
+export default NextTaskBox;
 
 const styles = StyleSheet.create({
     containerLight: {

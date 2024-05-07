@@ -8,7 +8,7 @@ import {useDatabase} from "../../context/DatabaseContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
-import NextTaskButton from "../../components/buttons/NextTaskButton";
+import NextTaskBox from "../../components/boxes/NextTaskBox";
 import NextCourseBox from "../../components/boxes/NextCourseBox";
 import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
@@ -64,7 +64,7 @@ import SquareIcon from "../../components/SquareIcon";
  * - **ImageViewer**: Shows the current profile image or a default image if none is set.
  * - **Icon**: Used in different places, like the camera icon for updating the profile image and icons for the weather.
  * - **Greeting**: A text element that shows customized greetings.
- * - **NextTaskButton and NextCourseBox**: Special components that display the next tasks and courses.
+ * - **NextTaskBox and NextCourseBox**: Special components that display the next tasks and courses.
  * - **ScrollView**: Enables horizontal scrolling in the courses section to manage extra content in a user-friendly way.
  *
  * Each part of the Dashboard is designed to make user interactions easy and effective by organizing
@@ -341,7 +341,7 @@ function Dashboard({navigation}) {
                                 <View style={styles.taskRow}
                                       key={task.id}
                                 >
-                                    <NextTaskButton
+                                    <NextTaskBox
                                         buttonTextLeft={task.name}
                                         buttonTextRight={getDueDateStatus(task.dueDate)}
                                         //überfällig wenn zu lange (in ROT)

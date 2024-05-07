@@ -47,8 +47,8 @@ function CustomInputFieldLogin({
               isPassword,
               iconName,
               onChangeTextHandler,
-              passwordVisible, // Neu hinzugefügt
-              setPasswordVisible, // Neu hinzugefügt
+              passwordVisible,
+              setPasswordVisible,
               error
 }) {
     const {theme} = useTheme();

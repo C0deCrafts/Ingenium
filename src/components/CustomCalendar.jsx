@@ -7,6 +7,25 @@ import {useTheme} from "../context/ThemeContext";
 import {getCurrentDateStringForReactNativeCalendar} from "../utils/utils";
 import {useState} from "react";
 
+/**
+ * ### Custom Calendar Component
+ *
+ * Renders a customizable calendar using react-native-calendars library.
+ * This component allows selection of dates and customization of appearance based on theme.
+ *
+ * @param onDayPress - Function to be called when a day is pressed.
+ * @param initialDate - Initial date to be marked on the calendar if exists.
+ *
+ * @example
+ * // Import the CustomCalendar component
+ * import CustomCalendar from "../components/CustomCalendar";
+ * // Inside your component's render method, use the CustomCalendar component like this:
+ * <CustomCalendar
+ *    onDayPress={(selectedDate) => console.log("Selected date:", selectedDate)}
+ *    initialDate={"2024-05-07"}
+ * />
+ * // This will render a customizable calendar component with specified initial date and day press handler.
+ */
 function CustomCalendar({onDayPress, initialDate}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -14,6 +33,7 @@ function CustomCalendar({onDayPress, initialDate}){
 
     const [selectedDate, setSelectedDate] = useState(initialDate);
 
+    // Localization configuration for German language
     LocaleConfig.locales['de'] = {
         monthNames: [
             'Januar',
@@ -36,14 +56,16 @@ function CustomCalendar({onDayPress, initialDate}){
     };
     LocaleConfig.defaultLocale = 'de';
 
+    // Handler for day press event
     const handleDayPress = (day) => {
         console.log('ausgewählter Tag', day);
         setSelectedDate(day.dateString);
         if (onDayPress) {
-            onDayPress(day.dateString); // Weiterleitung des ausgewählten Datums an die Eltern-Komponente
+            onDayPress(day.dateString); // Pass selected date to parent component
         }
     }
 
+    // Marked dates with selected date customization
     const markedDates = {
         [selectedDate]: {
             selected: true,
@@ -64,9 +86,12 @@ function CustomCalendar({onDayPress, initialDate}){
             theme={{
                 calendarBackground: isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR,
                 textSectionTitleColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
-                textMonthFontSize: SIZES.SCREEN_TEXT_NORMAL + 2, // Größe des Monatsnamens im Header
-                textMonthFontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT, // Schriftart: Fett
-                monthTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR, // Farbe des Monatsnamens
+                // Font size of month name in header
+                textMonthFontSize: SIZES.SCREEN_TEXT_NORMAL + 2,
+                // Font weight: Bold
+                textMonthFontWeight: SIZES.DRAWER_HEADER_FONTWEIGHT,
+                // Month name color
+                monthTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
                 dayTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
                 todayTextColor: COLOR.BUTTONCOLOR,
                 textDisabledColor: isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE,
@@ -92,7 +117,6 @@ function CustomCalendar({onDayPress, initialDate}){
                     )}
                 </View>
             )}
-            //onPressArrowLeft={handleOnPressArrowLeft}
             // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
             disableAllTouchEventsForDisabledDays={true}
         />

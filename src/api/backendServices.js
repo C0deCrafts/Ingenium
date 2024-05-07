@@ -114,7 +114,7 @@ export const getICalUrl = async (uid, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        //console.log("iCalUrl: ", response.data)
+        // console.log("iCalUrl: ", response.data)
 
         // Return the iCal URL from the response
         return response.data;
@@ -122,7 +122,7 @@ export const getICalUrl = async (uid, token) => {
         if (axios.isAxiosError(err) && err.response) {
             // Access to the HTTP status code
             const statusCode = err.response.status;
-            //console.log(`Fehler beim Abrufen der iCal URL: ${statusCode}`);
+            // console.log(`Fehler beim Abrufen der iCal URL: ${statusCode}`);
 
             // Handle errors while fetching iCal URL
             switch (statusCode) {
@@ -169,9 +169,9 @@ export const getICalData = async (uid, token) => {
         return response.data;
     } catch (err) {
         if (axios.isAxiosError(err) && err.response) {
-            // Zugriff auf den HTTP-Statuscode
+            // Access to the HTTP status code
             const statusCode = err.response.status;
-            //console.error(`Fehler beim Abrufen der iCal Daten: ${statusCode}`);
+            // console.error(`Fehler beim Abrufen der iCal Daten: ${statusCode}`);
             switch (statusCode) {
                 case 404:
                     console.error("Die iCal Daten wurden nicht gefunden.");
