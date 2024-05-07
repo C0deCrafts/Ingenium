@@ -166,6 +166,8 @@ function Timetable({navigation}) {
                     renderItem={(item, firstItemInDay) => renderItem(item, firstItemInDay)}
                     renderDay={renderDay}
                     renderEmptyDate={renderEmptyDate}
+                    // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
+                    firstDay={1}
                     theme={{
                         //backgroundcolor of the month-calendar view
                         calendarBackground: isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR,

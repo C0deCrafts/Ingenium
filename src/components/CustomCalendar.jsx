@@ -69,7 +69,7 @@ function CustomCalendar({onDayPress, initialDate}){
                 monthTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR, // Farbe des Monatsnamens
                 dayTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
                 todayTextColor: COLOR.BUTTONCOLOR,
-                textDisabledColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,
+                textDisabledColor: isDarkMode ? DARKMODE.TEXT_COLOR_OPAQUE : LIGHTMODE.TEXT_COLOR_OPAQUE,
             }}
             markedDates={markedDates}
             // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
