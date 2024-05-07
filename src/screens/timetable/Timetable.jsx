@@ -1,8 +1,8 @@
-import {View, StyleSheet, Text, Button} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
 import { getDay as getAbbreviatedDay} from "../../utils/utils";
 import {
