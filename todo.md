@@ -92,13 +92,13 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
   
 -- Stundenplan -- Jelena
     --Loading Indicator, 
-    --Monat oben drüber, 
-    --today button, 
-    --hintergrund weiß in Darkmode??
-    --evtl bei Montag statt Sonntag beginnen
-    --evtl unter Kalender noch ein padding - aktuell das problem, dass überall padding angewendet wird
-    --evtl Kalender mit Borderradius 5
-    --MarkedDayDots auf Ingeniumfarbe anpassen
+    ! Monat oben drüber,  -- GEHT BEI AGENDA leider nicht (nur AgendaList)
+    ! today button, -- GEHT BEI AGENDA leider nicht (nur AgendaList)
+    √ hintergrund weiß in Darkmode?? - musste das original stylesheet von react native calendar überschreiben
+    √ evtl bei Montag statt Sonntag beginnen
+    √ evtl unter Kalender noch ein padding - aktuell das problem, dass überall padding angewendet wird - musste das original stylesheet von react native calendar überschreiben
+    √ evtl Kalender mit Borderradius 5 - musste das original stylesheet von react native calendar überschreiben
+    ! MarkedDayDots auf Ingeniumfarbe anpassen - fällt nicht auf, würd ich lassen - weil da muss ich glaub ich auch das style überschreiben und das stylesheet hab ich im githubcode nicht gefunden
 
 -- Aufgaben -- Jelena
     √ Erstellt am.. ausgeben (statt Fällig/Erledigt am bis V2) - fällig/erledigt wurde implementiert
@@ -106,8 +106,8 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
     -- gemeinsames Design für V2 Features --> Inbox
     -- bei keine NächsteTodo's Infotext - keine nächsten Todos (ebenso bei Erledigt Screen)
 
--- Einstellungen passt
--- Kontakt passt
+√ Einstellungen passt
+√ Kontakt passt
 
 √ Abmelden und neu Anmelden - Defaultscreen Home + Drawer geschlossen!! -- Sabrina
 

@@ -1,8 +1,8 @@
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet, Text, Button} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
 import { getDay as getAbbreviatedDay} from "../../utils/utils";
 import {
@@ -19,6 +19,8 @@ function Timetable({navigation}) {
     const isDarkMode = theme === DARKMODE;
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
+
+    //brauchen wir noch alle states?
 
     const [coursesAreLoading, setCoursesAreLoading] = useState(true);
     const [courseItemsState, setCourseItemsState] = useState({});
@@ -168,10 +170,33 @@ function Timetable({navigation}) {
                     renderEmptyDate={renderEmptyDate}
                     // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
                     firstDay={1}
+                    hideKnob={false}
+                    showClosingKnob={true}
                     theme={{
+                        "stylesheet.agenda.main": {
+                            reservations: {
+                                backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,
+                                flex: 1,
+                                marginTop: 120,
+                            },
+                            dayHeader: {
+                                width: 32,
+                                textAlign: 'center',
+                                fontSize: SIZES.SCREEN_TEXT_SMALL,
+                                fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+                                color: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR
+                            },
+                            header: {
+                                overflow: 'hidden',
+                                justifyContent: 'flex-end',
+                                position: 'absolute',
+                                height: '100%',
+                                width: '100%',
+                                borderRadius: SIZES.BORDER_RADIUS
+                            },
+                        },
                         //backgroundcolor of the month-calendar view
                         calendarBackground: isDarkMode ? DARKMODE.BOX_COLOR : LIGHTMODE.BOX_COLOR,
-
                         //color of the header between left and right arrow
                         monthTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
                         //fontweight of the header between left and right arrow
@@ -183,6 +208,8 @@ function Timetable({navigation}) {
                         dayTextColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
                         //color of today (number in month calendar view representing today)
                         todayTextColor: COLOR.BUTTONCOLOR,
+                        textDayHeaderFontWeight: SIZES.SCREEN_HEADER_WEIGHT,
+                        textDayHeaderFontSize: SIZES.SCREEN_TEXT_NORMAL,
 
                         //Color of the week days displayed in the month view
                         textSectionTitleColor: isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR,
@@ -250,9 +277,12 @@ function getStyles(insets) {
             },
             agendaContainerLight: {
                 backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
+                borderRadius: SIZES.BORDER_RADIUS
+
             },
             agendaContainerDark: {
                 backgroundColor: DARKMODE.BACKGROUNDCOLOR,
+                borderRadius: SIZES.BORDER_RADIUS,
             },
             boxLight: {
                 backgroundColor: LIGHTMODE.BOX_COLOR,
