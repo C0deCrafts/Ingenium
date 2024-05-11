@@ -65,7 +65,7 @@ function CompletedTasks({navigation}){
                                 groupedTasks[group].length > 0 && (
                                     <View key={group}>
                                         <View>
-                                            <Text style={styles.header}>{groupTitles[group]}</Text>
+                                            <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>{groupTitles[group]}</Text>
                                         </View>
                                         <View style={[isDarkMode ? styles.contentBoxDark : styles.contentBoxLight]}>
                                             {groupedTasks[group].map((task, index) => (
