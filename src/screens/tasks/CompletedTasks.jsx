@@ -28,8 +28,7 @@ function CompletedTasks({navigation}){
         today: "Heute",
         yesterday: "Gestern",
         dayBeforeYesterday: "Vorgestern",
-        lastWeek: "Vorherige 7 Tage",
-        fourteenDays: "Nach 14 Tagen",
+        thisMonth: "Dieses Monat",
         expiringSoon: "Bald auslaufend"
     };
 

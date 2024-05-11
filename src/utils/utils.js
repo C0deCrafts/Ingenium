@@ -190,8 +190,8 @@ export const groupTasksByCompletionDate = (tasks) => {
     const yesterdayStr = yesterday.toISOString().slice(0, 10);
     const dayBeforeYesterday = new Date(yesterday.setDate(yesterday.getDate() - 1));
     const dayBeforeYesterdayStr = dayBeforeYesterday.toISOString().slice(0, 10);
-    const lastWeek = new Date(dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 6));
-    const lastWeekStr = lastWeek.toISOString().slice(0, 10);
+    //const lastWeek = new Date(dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 6));
+    //const lastWeekStr = lastWeek.toISOString().slice(0, 10);
     //const fourteenDaysAgo = new Date(lastWeek.setDate(lastWeek.getDate() - 7));
     //const fourteenDaysAgoStr = fourteenDaysAgo.toISOString().slice(0, 10);
     const twentyFiveDaysAgo = new Date(now.setDate(now.getDate() - 25));
@@ -208,8 +208,7 @@ export const groupTasksByCompletionDate = (tasks) => {
         today: [],
         yesterday: [],
         dayBeforeYesterday: [],
-        lastWeek: [],
-        fourteenDays: [],
+        thisMonth: [],
         expiringSoon: []  // Tasks that are 25 days or older
     };
 
@@ -222,11 +221,13 @@ export const groupTasksByCompletionDate = (tasks) => {
             groups.yesterday.push(task);
         } else if (taskDateStr === dayBeforeYesterdayStr) {
             groups.dayBeforeYesterday.push(task);
-        } else if (taskDateStr >= lastWeekStr && taskDateStr < dayBeforeYesterdayStr) {
-            groups.lastWeek.push(task);
-        } else if (taskDateStr < lastWeekStr && taskDateStr >= twentyFiveDaysAgoStr) {
-            groups.fourteenDays.push(task);
+            // 11.05 / 10.05 / 09.05 /
+            // 08.05 - 15.04 / 14.04 - 11.04
+            // 10.05
+        } else if (taskDateStr < dayBeforeYesterdayStr && taskDateStr > twentyFiveDaysAgoStr) {
+            groups.thisMonth.push(task);
         } else if (taskDateStr < twentyFiveDaysAgoStr) {
+            //14.04 - 11.04
             groups.expiringSoon.push(task);
         }
     });

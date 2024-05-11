@@ -208,7 +208,7 @@ export const localDatabase = () => {
         //for testing:
         //const currentDate = new Date();
         //ab -30 wird gelöscht
-        //currentDate.setDate(currentDate.getDate()-30);
+        //currentDate.setDate(currentDate.getDate()-2);
         //const manipulatedDate = currentDate.toISOString();
         //const updateTaskIsDoneSql = `UPDATE tasks SET isDone = ?, doneDate = ? WHERE taskId = ?;`
         //const args = [isDone === 0 ? 1 : 0, manipulatedDate, taskId];

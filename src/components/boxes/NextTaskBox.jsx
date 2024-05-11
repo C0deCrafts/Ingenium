@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     },
     buttonLabelDark: {
         flexGrow: 1,
-        marginLeft: 10,
+        width: 10,
+        marginLeft: 15,
         fontSize: SIZES.TEXT_SIZE,
         color: DARKMODE.TEXT_COLOR,
         marginRight: 10
