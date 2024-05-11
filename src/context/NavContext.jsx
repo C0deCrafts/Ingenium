@@ -12,8 +12,8 @@ export const NavProvider = ({ children }) => {
     const [currentRoute, setCurrentRoute] = useState("Dashboard_Tab");
     // Set a flag to determine whether the drawer menu is open or closed (used in DrawerNav)
     const [drawerEnabled, setDrawerEnabled] = useState(true);
-    // for counting the push notifications
-    const [notificationCount, setNotificationCount] = useState(10);
+    // for counting the push notifications (default 0 - if you set a value you will see a badge in the Tab and inbox button)
+    const [notificationCount, setNotificationCount] = useState(0);
 
     /*useEffect(() => {
     // Add logic to receive and count notifications

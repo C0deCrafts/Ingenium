@@ -1,7 +1,7 @@
 import {createStackNavigator} from "@react-navigation/stack";
 import {
     CompletedTasks,
-    CreateList, CreateTask, CreateTaskDetails, EditTask, EditTaskDetails,
+    CreateList, CreateTask, CreateTaskDetails, EditTask,
     Inbox, ListTasks,
     TasksMain
 } from "../../screens";
@@ -44,13 +44,6 @@ function TaskStack() {
 
             />
             <Stack.Screen name="EditTask_Screen" component={EditTask}
-                          listeners={{
-                              focus: () => {
-                                  return setDrawerEnabled(false);
-                              }
-                          }}
-            />
-            <Stack.Screen name="EditTaskDetails_Screen" component={EditTaskDetails}
                           listeners={{
                               focus: () => {
                                   return setDrawerEnabled(false);

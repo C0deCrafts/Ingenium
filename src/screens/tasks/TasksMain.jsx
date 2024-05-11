@@ -17,7 +17,7 @@ import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
 import CardButton from "../../components/buttons/CardButton";
 
-import {formatDate} from "../../utils/utils"
+import {formatDate, sortTasksByDueDate} from "../../utils/utils"
 import {useNavContext} from "../../context/NavContext";
 
 
@@ -135,6 +135,8 @@ function TasksMain({navigation}) {
     //filtering Tasks for tasksview, to only show tasks which are not done
     const tasksNotDone = tasks.filter(task => !task.isDone);
 
+    const sortedTasks = sortTasksByDueDate(tasksNotDone);
+
     return (
         <>
             <View style={[isDarkMode ? styles.containerDark : styles.containerLight]}>
@@ -155,8 +157,9 @@ function TasksMain({navigation}) {
                             bounces={true}
                             contentContainerStyle={styles.scrollViewContentContainer}
                         >
-                            {tasksNotDone.map((task, index) => {
-                                const date = formatDate(task.creationDate);
+                            {/*SORTIEREN!!*/}
+                            {sortedTasks.map((task, index) => {
+                                const date = task.dueDate ? `Fällig am ${formatDate(task.dueDate)}` : "";
                                 return (
                                     <View key={task.taskId}>
                                         <TaskPreview
@@ -165,7 +168,7 @@ function TasksMain({navigation}) {
                                         taskTitle={task.taskTitle}
                                         isTaskTitlePreview={true}
                                         showDate={true}
-                                        dateText={`Erstellt am ${date}`}
+                                        dateText={date}
                                         taskIsInCompletedScreen={false}
                                         />
                                         {/* Adds a border, except after the last element */}

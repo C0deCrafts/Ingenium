@@ -8,7 +8,7 @@ import {useDatabase} from "../../context/DatabaseContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import ImageViewer from "../../components/ImageViewer";
-import NextTaskButton from "../../components/buttons/NextTaskButton";
+import NextTaskBox from "../../components/boxes/NextTaskBox";
 import NextCourseBox from "../../components/boxes/NextCourseBox";
 import {loadProfileImage, saveProfileImage} from "../../storages/asyncStorage";
 import {motivationalQuotes} from "../../constants/motivationalQuotes";
@@ -16,7 +16,13 @@ import {useLocation} from "../../context/LocationContext";
 import fetchCurrentWeather from '../../api/weather';
 import {useAuth} from "../../context/AuthContext";
 import {useCalendar} from "../../context/CalendarContext";
-import {getDay, formatLocalTime, filterAndSortCourses} from "../../utils/utils";
+import {
+    getDay,
+    formatLocalTime,
+    filterAndSortCourses,
+    sortTasksByDueDate,
+    getDueDateStatus
+} from "../../utils/utils";
 import Greeting from "../../components/Greeting";
 import SquareIcon from "../../components/SquareIcon";
 
@@ -58,7 +64,7 @@ import SquareIcon from "../../components/SquareIcon";
  * - **ImageViewer**: Shows the current profile image or a default image if none is set.
  * - **Icon**: Used in different places, like the camera icon for updating the profile image and icons for the weather.
  * - **Greeting**: A text element that shows customized greetings.
- * - **NextTaskButton and NextCourseBox**: Special components that display the next tasks and courses.
+ * - **NextTaskBox and NextCourseBox**: Special components that display the next tasks and courses.
  * - **ScrollView**: Enables horizontal scrolling in the courses section to manage extra content in a user-friendly way.
  *
  * Each part of the Dashboard is designed to make user interactions easy and effective by organizing
@@ -181,7 +187,8 @@ function Dashboard({navigation}) {
     // Function to create an array of next tasks
     const createNextTasksArray = (tasksSortedByCreationDate) => {
         let nextTasks = [];
-        tasksSortedByCreationDate.filter(t => !t.isDone).forEach(t => {
+        const sortedTasksByDueDate = sortTasksByDueDate(tasksSortedByCreationDate); // Sort tasks by due date
+        sortedTasksByDueDate.filter(t => !t.isDone).forEach(t => {
             const list = lists.find(l => l.listId === t.listId);
             if (list) {
                 nextTasks.push({
@@ -189,6 +196,7 @@ function Dashboard({navigation}) {
                     name: t.taskTitle,
                     listId: t.listId, // Ensure listId is included here
                     listIcon: list?.iconName,
+                    dueDate: t.dueDate,
                     iconBackgroundColor: list?.iconBackgroundColor,
                     backgroundColor: COLOR.ICONCOLOR_CUSTOM_BLUE
                 });
@@ -333,9 +341,9 @@ function Dashboard({navigation}) {
                                 <View style={styles.taskRow}
                                       key={task.id}
                                 >
-                                    <NextTaskButton
+                                    <NextTaskBox
                                         buttonTextLeft={task.name}
-                                        //buttonTextRight={`in ${task.daysLeft} Tagen fällig`}
+                                        buttonTextRight={getDueDateStatus(task.dueDate)}
                                         //überfällig wenn zu lange (in ROT)
                                         boxBackgroundColor={task.backgroundColor}
                                         leftComponent={() => (
@@ -527,6 +535,7 @@ const styles =  StyleSheet.create({
             marginBottom: 10
         },
         emptyContainerCourseDark: {
+            flex: 1,
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: DARKMODE.BOX_COLOR,

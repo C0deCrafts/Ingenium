@@ -3,7 +3,7 @@ import { decode as atob } from 'base-64';
 
 // Base URL of the backend - change the BASE_URL if you are in another network
 // in future change the BASE_URL to the backend hosting url
-const BASE_URL = "http://192.168.178.33:8080/ingeapp/api/v1";
+const BASE_URL = "http://192.168.178.35:8080/ingeapp/api/v1";
 
 /**
  * ### decodeJWT
@@ -114,7 +114,7 @@ export const getICalUrl = async (uid, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        //console.log("iCalUrl: ", response.data)
+        // console.log("iCalUrl: ", response.data)
 
         // Return the iCal URL from the response
         return response.data;
@@ -122,7 +122,7 @@ export const getICalUrl = async (uid, token) => {
         if (axios.isAxiosError(err) && err.response) {
             // Access to the HTTP status code
             const statusCode = err.response.status;
-            //console.log(`Fehler beim Abrufen der iCal URL: ${statusCode}`);
+            // console.log(`Fehler beim Abrufen der iCal URL: ${statusCode}`);
 
             // Handle errors while fetching iCal URL
             switch (statusCode) {
@@ -169,9 +169,9 @@ export const getICalData = async (uid, token) => {
         return response.data;
     } catch (err) {
         if (axios.isAxiosError(err) && err.response) {
-            // Zugriff auf den HTTP-Statuscode
+            // Access to the HTTP status code
             const statusCode = err.response.status;
-            //console.error(`Fehler beim Abrufen der iCal Daten: ${statusCode}`);
+            // console.error(`Fehler beim Abrufen der iCal Daten: ${statusCode}`);
             switch (statusCode) {
                 case 404:
                     console.error("Die iCal Daten wurden nicht gefunden.");
