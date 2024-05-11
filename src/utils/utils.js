@@ -192,8 +192,8 @@ export const groupTasksByCompletionDate = (tasks) => {
     const dayBeforeYesterdayStr = dayBeforeYesterday.toISOString().slice(0, 10);
     const lastWeek = new Date(dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 6));
     const lastWeekStr = lastWeek.toISOString().slice(0, 10);
-    const fourteenDaysAgo = new Date(lastWeek.setDate(lastWeek.getDate() - 7));
-    const fourteenDaysAgoStr = fourteenDaysAgo.toISOString().slice(0, 10);
+    //const fourteenDaysAgo = new Date(lastWeek.setDate(lastWeek.getDate() - 7));
+    //const fourteenDaysAgoStr = fourteenDaysAgo.toISOString().slice(0, 10);
     const twentyFiveDaysAgo = new Date(now.setDate(now.getDate() - 25));
     const twentyFiveDaysAgoStr = twentyFiveDaysAgo.toISOString().slice(0, 10);
 
@@ -201,6 +201,8 @@ export const groupTasksByCompletionDate = (tasks) => {
     //console.log("Yesterday Str:", yesterdayStr);
     //console.log("Day Before Yesterday Str:", dayBeforeYesterdayStr);
     //console.log("Last Week Str:", lastWeekStr);
+    //console.log("14 Str:", fourteenDaysAgoStr);
+    //console.log("Exp: ", twentyFiveDaysAgoStr)
 
     const groups = {
         today: [],
@@ -222,9 +224,9 @@ export const groupTasksByCompletionDate = (tasks) => {
             groups.dayBeforeYesterday.push(task);
         } else if (taskDateStr >= lastWeekStr && taskDateStr < dayBeforeYesterdayStr) {
             groups.lastWeek.push(task);
-        } else if (taskDateStr >= fourteenDaysAgoStr && taskDateStr < lastWeekStr) {
+        } else if (taskDateStr < lastWeekStr && taskDateStr >= twentyFiveDaysAgoStr) {
             groups.fourteenDays.push(task);
-        } else if (taskDateStr >= twentyFiveDaysAgoStr) {
+        } else if (taskDateStr < twentyFiveDaysAgoStr) {
             groups.expiringSoon.push(task);
         }
     });
