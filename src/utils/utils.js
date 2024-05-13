@@ -124,6 +124,10 @@ export const sortTasksByDueDate = (tasks) => {
     });
 };
 
+export const sortTasksByDoneDate = (tasks) => {
+    return tasks.sort((a, b) => new Date(b.doneDate) - new Date(a.doneDate));
+}
+
 
 // Funktion, um das aktuelle Datum im gewünschten Format zu erhalten
 export const getCurrentDateStringForReactNativeCalendar = () => {

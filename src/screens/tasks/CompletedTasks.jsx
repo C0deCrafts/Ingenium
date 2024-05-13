@@ -4,7 +4,7 @@ import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
-import {formatDate, groupTasksByCompletionDate} from "../../utils/utils";
+import {formatDate, groupTasksByCompletionDate, sortTasksByDoneDate} from "../../utils/utils";
 
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
@@ -22,7 +22,7 @@ function CompletedTasks({navigation}){
 
     //filter tasks to show tasks belonging to currentList && isDone is false
     const tasksDone = tasks.filter(task => task.isDone);
-    const groupedTasks = groupTasksByCompletionDate(tasksDone);
+    const groupedTasks = groupTasksByCompletionDate(sortTasksByDoneDate(tasksDone));
 
     const groupTitles = {
         today: "Heute",
