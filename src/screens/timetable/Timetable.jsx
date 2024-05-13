@@ -190,7 +190,7 @@ function Timetable({navigation}) {
                                 overflow: 'hidden',
                                 justifyContent: 'flex-end',
                                 position: 'absolute',
-                                height: '100%',
+                                height: '101%', //damit der markierte kreis nicht abgeschnitten wird
                                 width: '100%',
                                 borderRadius: SIZES.BORDER_RADIUS
                             },
@@ -278,7 +278,6 @@ function getStyles(insets) {
             agendaContainerLight: {
                 backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
                 borderRadius: SIZES.BORDER_RADIUS
-
             },
             agendaContainerDark: {
                 backgroundColor: DARKMODE.BACKGROUNDCOLOR,
