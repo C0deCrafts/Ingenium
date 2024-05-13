@@ -3,7 +3,7 @@ import {localDatabase} from "../storages/localDatabase";
 import {COLOR} from "../constants/styleSettings";
 
 // Create a context for the database operations
-const DatabaseContext = createContext();
+const DatabaseContext = createContext({});
 
 // Custom hook to access the database context
 export const useDatabase = () => useContext(DatabaseContext);
@@ -25,14 +25,13 @@ export const DatabaseProvider = ({children}) => {
             //await localDatabase().debugDB();
             await localDatabase().createTable();
             //console.log("Datenbank und Tabellen wurden erfolgreich initialisiert.");
-
             //console.log("Sicherstellung, dass die 'Ingenium'-Liste existiert.");
             await ensureListExists("Ingenium", "HAT", COLOR.ICONCOLOR_CUSTOM_BLUE); // Ensure a default list exists
-
             await loadLists();
             //console.log("Alle Listen wurden erfolgreich geladen.");
-
             setIsDbReady(true);
+            //delete tasks where doneDate < 30 days
+            await localDatabase().deleteOldCompletedTasks();
         } catch (err) {
             setError(err.message);
             //console.log("Fehler im DatabaseContext - initializeDatabase():", err);
@@ -90,7 +89,7 @@ export const DatabaseProvider = ({children}) => {
             //console.log("Liste erfolgreich hinzugefügt");
         } catch (err) {
             setError(err.message);
-            //console.error("Fehler beim Hinzufügen der Liste:", err.message);
+            //console.error("Fehler beim Hinzufügen der Liste: ", err.message);
         }
     };
 
@@ -102,7 +101,7 @@ export const DatabaseProvider = ({children}) => {
             //console.log("Task erfolgreich hinzugefügt");
         } catch (err) {
             setError(err.message);
-            //console.error("Fehler beim Hinzufügen des Tasks:", err);
+            //console.error("Fehler beim Hinzufügen des Tasks: ", err);
         }
     }
 
@@ -114,7 +113,7 @@ export const DatabaseProvider = ({children}) => {
             //console.log("Liste erfolgreich gelöscht");
         } catch (err) {
             setError(err.message);
-            //console.error("Fehler beim Löschen der Liste:", err);
+            //console.error("Fehler beim Löschen der Liste: ", err);
         }
     };
 
@@ -126,7 +125,7 @@ export const DatabaseProvider = ({children}) => {
             //console.log("Task erfolgreich gelöscht");
         } catch (err) {
             setError(err.message);
-            //console.error("Fehler beim Löschen des Tasks:", err);
+            //console.error("Fehler beim Löschen des Tasks: ", err);
         }
     };
 
@@ -138,7 +137,7 @@ export const DatabaseProvider = ({children}) => {
             //console.log("Task isDone erfolgreich getogglet");
         } catch (err) {
             setError(err.message);
-            //console.error("Fehler beim togglen von isDone:", err);
+            //console.error("Fehler beim togglen von isDone: ", err);
         }
     };
 
@@ -147,24 +146,24 @@ export const DatabaseProvider = ({children}) => {
         try {
             await localDatabase().updateTask(task);
             await loadLists();
-            //console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
+            console.log(`Task: ${task.taskTitle} - aus Liste mit Id: ${task.listId} erfolgreich upgedatet`);
         } catch (err) {
             setError(err.message);
-            //console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
+            console.error(`Fehler beim updated der properties von Task: ${task.taskTitle} `, err);
         }
     };
 
     // useEffect to initialize the database when the component mounts
     useEffect(() => {
-                initializeDatabase();
+          initializeDatabase();
     }, []);
 
 
     // useEffect to log updated lists for debugging purposes
-    useEffect(() => {
+    /*useEffect(() => {
         const dataString = JSON.stringify(lists, null, 2); // Convert lists to a string for logging
-        //console.log("Aktualisierte Listen: ", dataString);
-    }, [lists]); // This effect depends on the `lists` state variable and triggers on every change
+        console.log("Aktualisierte Listen: ", dataString);
+    }, [lists]); // This effect depends on the `lists` state variable and triggers on every change*/
 
     // Provide the database context and its operations to the child components
     return (

@@ -5,27 +5,40 @@ import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
 /**
- * ## CustomInputFieldLogin Component
+ * ### CustomInputFieldLogin Component
  *
- * This component represents a custom input field for login screens.
- * It provides a styled text input field for entering login credentials.
- * The appearance of the input field is determined by the current theme (dark/light).
+ * This component represents a custom input field primarily used for login screens.
+ * It provides a styled TextInput for entering login credentials and integrates an optional icon for additional interactivity,
+ * such as toggling password visibility. The component's style adapts to the current theme setting (dark or light).
  *
- * @param {string} placeholder - The placeholder text displayed when the input field is empty.
- * @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").
- * @param {number} maxTextInputLength - The maximum length of the text input allowed.
- * @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
- * @param iconName - Renders and Icon if the name of an Icon constant specified in constants icon.js is used.
- * @param {function} onChangeTextHandler - Event handler for on change text event.
- * @param passwordVisible
- * @param togglePasswordVisibility
- * @param error
+ * #### Features:
+ * - **Dynamic Theme Adaptation**: Changes the background and text color of the input field based on the current theme (dark or light).
+ * - **Password Visibility Toggle**: Allows users to toggle the visibility of their password, enhancing usability.
+ * - **Validation Styles**: Provides visual feedback by changing the border color when an error is detected.
+ * - **Icon Interactivity**: Includes an interactive icon for password fields that toggles the visibility state on press.
+ *
+ *  @param {string} placeholder - The placeholder text displayed when the input field is empty.
+ *  @param {string} keyboardType - The type of keyboard to display for the input field (e.g., "default", "numeric", "email-address").
+ *  @param {number} maxTextInputLength - The maximum length of the text input allowed.
+ *  @param {boolean} isPassword - Determines whether the input field should display characters as a password (default is false).
+ *  @param {string | object} iconName - The name of an icon specified in constants/icons.js, rendered next to the input field.
+ *  @param {function} onChangeTextHandler - Function to handle changes in text input.
+ *  @param {boolean} passwordVisible - Controls whether the password is visible or obscured.
+ *  @param {function} setPasswordVisible - Function to toggle the visibility of the password.
+ *  @param {boolean} error - Indicates an error state in the input field that affects its styling.
+ *
  * @example
  * <CustomInputFieldLogin
  *   placeholder="Password"
- *   keyboardType={"default"}
+ *   keyboardType="default"
  *   isPassword={true}
- *   maxTextInputLength={25}/>
+ *   maxTextInputLength={25}
+ *   iconName={ICONS.LOGIN.USER}
+ *   onChangeTextHandler={(text) => setPassword(text)}
+ *   passwordVisible={passwordVisible}
+ *   setPasswordVisible={setPasswordVisible}
+ *   error={hasError}
+ * />
  */
 function CustomInputFieldLogin({
               placeholder,
@@ -34,8 +47,8 @@ function CustomInputFieldLogin({
               isPassword,
               iconName,
               onChangeTextHandler,
-              passwordVisible, // Neu hinzugefügt
-              togglePasswordVisibility, // Neu hinzugefügt
+              passwordVisible,
+              setPasswordVisible,
               error
 }) {
     const {theme} = useTheme();
@@ -63,7 +76,9 @@ function CustomInputFieldLogin({
         <View style={[isDarkMode ? styles.containerDark : styles.containerLight, styles.container, error ? styles.inputError : null]}>
             {/* Wenn isPassword true ist, rendern wir das Icon in einem TouchableOpacity für Interaktionen */}
             {isPassword ? (
-                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
+                <TouchableOpacity onPressIn={() => setPasswordVisible(true)}
+                                  onPressOut={() => setPasswordVisible(false)}
+                                  style={styles.iconContainer}>
                     <Icon name={iconToShow} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
                 </TouchableOpacity>
             ) : (
@@ -71,8 +86,7 @@ function CustomInputFieldLogin({
                 <Icon name={iconName} size={24} color={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR} />
             )}
             <TextInput
-                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input,
-                    {shadowColor: isDarkMode ? "#363636" : "#d0d0d0"}]}
+                style={[isDarkMode ? styles.inputDark : styles.inputLight, styles.input]}
                 placeholder={placeholder}
                 keyboardType={inputKeyboardType}
                 secureTextEntry={isPassword && !passwordVisible}
@@ -84,8 +98,8 @@ function CustomInputFieldLogin({
                 /*
                 * IOS flickering on input Issue -closed by react native as it is an IOS bug -
                 * In IOS 17, setting text to secureEntry opens the password bar (enabling input of saved
-                * passwords) which appearantly causes the flickering
-                * was able to solve with one solution from github issues page:
+                * passwords) which apparently causes the flickering
+                * was able to solve with one solution from gitHub issues page:
                 *  oneTimeCode disables the password bar
                 *
                 * https://github.com/facebook/react-native/issues/39411
@@ -111,13 +125,6 @@ const styles = StyleSheet.create({
         columnGap: SIZES.SPACING_HORIZONTAL_DEFAULT,
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
         height: 50,
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        elevation: 5
     },
     containerLight: {
         backgroundColor: LIGHTMODE.INPUT_BOX_COLOR,
@@ -130,6 +137,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     input: {
+        flex: 1,
         fontSize: SIZES.TEXTINPUT_SIZE,
         textAlign: "left",
     },
@@ -138,6 +146,9 @@ const styles = StyleSheet.create({
     },
     inputDark: {
         color: DARKMODE.TEXTINPUT_COLOR,
+    },
+    iconContainer: {
+
     },
     textLight: {
         color: LIGHTMODE.TEXT_COLOR

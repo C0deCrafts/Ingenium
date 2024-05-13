@@ -6,10 +6,9 @@ import {Image} from "react-native";
  * Renders an image viewer to display the selected image or a placeholder image.
  * This component is typically used to display a profile image.
  *
- * @param placeholderImageSource - The source of the placeholder image.
- * @param selectedImage - The source of the selected image to be displayed.
- * @param styles - Custom styles for the image viewer.
- * @returns {JSX.Element} - The rendered image viewer as a React element.
+ * @param {Object} placeholderImageSource - The source of the placeholder image.
+ * @param {string} selectedImage - The source of the selected image to be displayed.
+ * @param {Object} styles - Custom styles for the image viewer.
  *
  * @example
  * // Import the ImageViewer component

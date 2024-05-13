@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TaskStack from "../stack/TaskStack";
 import DashboardStack from "../stack/DashboardStack";
 import TimetableStack from "../stack/TimetableStack";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../../context/NavContext";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
@@ -15,8 +15,6 @@ const Tab = createBottomTabNavigator();
  *
  * This component creates a bottom tab navigator using React Navigation.<p>
  * It includes tabs for tasks, dashboard, and timetable.
- *
- * @returns {JSX.Element} - The rendered bottom tab navigator
  *
  * @example
  * // Import the BottomTabNavigator component
@@ -46,12 +44,11 @@ function ButtonTabNavigator() {
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {navigateAndSetSelectedTab} = useTabContext();
-
-    const badge = 3; //notification symbol + wert
+    const {navigateAndSetSelectedTab, notificationCount} = useNavContext();
 
     return (
-        <Tab.Navigator initialRouteName="Dashboard_Tab" screenOptions={{
+        <Tab.Navigator initialRouteName="Dashboard_Tab"
+                       screenOptions={{
             headerShown: false,
             tabBarStyle: {
                 backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,
@@ -65,11 +62,13 @@ function ButtonTabNavigator() {
             },
             tabBarActiveTintColor: isDarkMode ? DARKMODE.ICONCOLOR_ACTIVE : LIGHTMODE.ICONCOLOR_ACTIVE,
             tabBarInactiveTintColor: isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE,
-        }}>
+        }}
+        >
             <Tab.Screen name="Timetable_Tab"
                         component={TimetableStack}
                         listeners={{
                             focus: () => {
+                                // Listener to set the Timetable tab as active in the drawer
                                 navigateAndSetSelectedTab("Timetable_Tab", "Timetable_Stack")
                             },
                         }}
@@ -82,11 +81,13 @@ function ButtonTabNavigator() {
                                 />
                             ),
                         }}
+
             />
             <Tab.Screen name="Dashboard_Tab"
                         component={DashboardStack}
                         listeners={{
                             focus: () => {
+                                // Listener to set the Dashboard tab as active in the drawer
                                 navigateAndSetSelectedTab("Dashboard_Tab", "Dashboard_Stack")
                             },
                         }}
@@ -104,18 +105,32 @@ function ButtonTabNavigator() {
                         component={TaskStack}
                         listeners={{
                             focus: () => {
-                                navigateAndSetSelectedTab("Notification_Tab", "Task_Stack")
+                                // Check if the routeName is 'Notification_Tab', if so, navigate to the 'Inbox_Stack'
+                                navigateAndSetSelectedTab("Notification_Tab", "Inbox_Stack")
                             },
                         }}
                         options={{
                             tabBarLabel: "Mitteilung",
-                            tabBarBadge: badge,
+                            tabBarBadge: notificationCount > 0 ? notificationCount : null,
                             tabBarIcon: ({color, size, focused}) => (
                                 <Icon name={focused ? ICONS.NOTIFICATION.ACTIVE : ICONS.NOTIFICATION.INACTIVE}
                                       size={size}
                                       color={color}
                                 />
                             ),
+                        }}
+            />
+            <Tab.Screen name="Task_Tab"
+                        component={TaskStack}
+                        listeners={{
+                            focus: () => {
+                                // Listener to set the Task tab as active in the drawer
+                                navigateAndSetSelectedTab("Task_Tab", "Task_Stack")
+                            },
+                        }}
+                        options={{
+                            // Hide the tab
+                            tabBarButton: () => null
                         }}
             />
         </Tab.Navigator>

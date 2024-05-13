@@ -2,22 +2,45 @@ import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import * as WebBrowser from "expo-web-browser"
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { useTabContext } from "../context/TabContext";
+import { useNavContext } from "../../context/NavContext";
 import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import Icon from "../../components/Icon";
 import {ICONS} from "../../constants/icons";
 import {useTheme} from "../../context/ThemeContext";
 import {useAuth} from "../../context/AuthContext";
+import {useState} from "react";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const CustomDrawerContent = ({navigation}) => {
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {logout, token} = useAuth();
+    const [loading, setLoading] = useState(false);
 
-    const { currentRoute, navigateAndSetSelectedTab } = useTabContext();
+    const {logout} = useAuth();
+
+    const { currentRoute, navigateAndSetSelectedTab } = useNavContext();
     const styles = getStyles(insets);
+
+    const handleLogout = async () => {
+        // Close the drawer
+        // Hopefully resolves the issue where the drawer is sometimes open when quickly logging out and logging back in
+        // Needs sufficient testing - the error occurs very rarely
+        // TODO: manchmal öffnet die APP nach dem Einloggen den letzten Screen?? Dann funktioniert die Navigation nicht mehr
+        setLoading(true);
+        navigation.closeDrawer();
+        setTimeout(async ()=> {
+            await logout();
+            setLoading(false)
+        }, 250);
+    }
+
+    if (loading) {
+        return (
+            <LoadingComponent message={"Du wirst gerade ausgelogged..."}/>
+        );
+    }
 
     return (
         <View style={isDarkMode ? styles.drawerContainerDark : styles.drawerContainerLight}>
@@ -60,16 +83,16 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Stundenplan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Notification_Tab')}
-                                      style={currentRoute === 'Notification_Tab'
+                    <TouchableOpacity onPress={() => navigateAndSetSelectedTab('Task_Tab')}
+                                      style={currentRoute === 'Task_Tab'
                                           ? isDarkMode ? styles.drawerItemsSelectedDark : styles.drawerItemsSelectedLight
                                           : isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight
                     }
                     >
-                        <Icon name={currentRoute === 'Notification_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
+                        <Icon name={currentRoute === 'Task_Tab' ? ICONS.TASKS.ACTIVE : ICONS.TASKS.INACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>
-                        <Text style={currentRoute === 'Notification_Tab' ?
+                        <Text style={currentRoute === 'Task_Tab' ?
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Aufgaben</Text>
                     </TouchableOpacity>
@@ -130,7 +153,7 @@ const CustomDrawerContent = ({navigation}) => {
                             isDarkMode ? styles.drawerItemTextSelectedDark : styles.drawerItemTextSelectedLight :
                             isDarkMode ? styles.drawerItemTextDark : styles.drawerItemTextLight}>Kontakt</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={logout} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
+                    <TouchableOpacity onPress={handleLogout} style={isDarkMode ? styles.drawerItemsDark : styles.drawerItemsLight}>
                         <Icon name={ICONS.LOGOUT.ACTIVE}
                               size={SIZES.DRAWER_ICONS_SIZE}
                               color={isDarkMode ? DARKMODE.ICONCOLOR_INACTIVE : LIGHTMODE.ICONCOLOR_INACTIVE}/>

@@ -2,13 +2,13 @@ import {Text, StyleSheet, TouchableOpacity} from "react-native";
 import {COLOR, SIZES} from "../../constants/styleSettings";
 
 /**
- * ## CustomButton Component
+ * ### CustomButton Component
  *
  * This component represents a custom button with a specified title and onPress function.
  * It allows users to interact with the button by pressing it.
  *
  * @param {string} title - The text displayed on the button.
- * @param {Function} onPressFunction - Function to be called when the button is pressed.
+ * @param {function} onPressFunction - Function to be called when the button is pressed.
  *
  * @example
  * // Inside your component's render method, use the CustomButton component like this:

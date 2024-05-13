@@ -1,20 +1,16 @@
 import {createStackNavigator} from "@react-navigation/stack";
 import {
     CompletedTasks,
-    CreateList, CreateTask, CreateTaskDetails, EditTask, EditTaskDetails,
+    CreateList, CreateTask, CreateTaskDetails, EditTask,
     Inbox, ListTasks,
     TasksMain
 } from "../../screens";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../../context/NavContext";
 
 const Stack = createStackNavigator();
 
-//inbox evt?? navigationRef.navigate('Timetable_Tab', { screen: 'Timetable_Stack' });
-
 function TaskStack() {
-    const {drawerEnabled, setDrawerEnabled} = useTabContext();
-
-    //console.log("??" +drawerEnabled);
+    const {setDrawerEnabled} = useNavContext();
 
     return (
         <Stack.Navigator initialRouteName="Task_Stack"
@@ -48,13 +44,6 @@ function TaskStack() {
 
             />
             <Stack.Screen name="EditTask_Screen" component={EditTask}
-                          listeners={{
-                              focus: () => {
-                                  return setDrawerEnabled(false);
-                              }
-                          }}
-            />
-            <Stack.Screen name="EditTaskDetails_Screen" component={EditTaskDetails}
                           listeners={{
                               focus: () => {
                                   return setDrawerEnabled(false);

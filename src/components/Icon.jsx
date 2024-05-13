@@ -12,13 +12,12 @@ import {USER_ICONS} from "../constants/customizationSettings";
  *
  * This component accepts a name, size and color as props to customize the rendered icon.
  *
- * @param name - The name of the icon to display should match one of the names
+ * @param {string | any} name - The name of the icon to display should match one of the names
  * listed in the 'icons.js' file, followed by either '.ACTIVE' or '.INACTIVE'.
  * It's recommended to use the values from the constants provided in that file
- * @param size - The size of the icon.
- * @param color - The color of the icon
- * @param isUserIcon
- * @returns {JSX.Element} - The rendered icon as a React element.
+ * @param {number} size - The size of the icon.
+ * @param {string} color - The color of the icon
+ * @param {boolean} isUserIcon - Optional flag to determine if the icon is a user icon (default is false).
  *
  * @example
  * // Import the Icon component

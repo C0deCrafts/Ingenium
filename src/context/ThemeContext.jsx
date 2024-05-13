@@ -1,16 +1,15 @@
 import {createContext, useContext, useEffect, useState} from 'react';
 import { LIGHTMODE, DARKMODE } from '../constants/styleSettings';
 import {loadThemeMode, saveThemeMode} from "../storages/asyncStorage";
-import {ActivityIndicator, View} from "react-native";
+//import {ActivityIndicator, View} from "react-native";
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({});
 
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState(); // App Start - Default - Light Mode
-    const [isLoading, setIsLoading] = useState(true);
-
+    const [theme, setTheme] = useState(LIGHTMODE);
+    //const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const loadTheme = async () => {
@@ -22,23 +21,19 @@ export const ThemeProvider = ({ children }) => {
                 }else {
                     setTheme(LIGHTMODE);
                 }
-
             }
-            setIsLoading(false);
+            //setIsLoading(false);
         };
         loadTheme();
     }, []);
 
-    /*useEffect(() => {
-        console.log("Aktuelle THEME nach dem Laden: ", theme);
-    }, [theme]);*/
-
-
-    if (isLoading) {
+    //Beobachten, möglicherweise wird das nicht benötigt
+    //Achtung eigene Komponente funktioniert nicht, da diese bereits auf useTheme zugreift
+    /*if (isLoading) {
         return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" />
         </View>;
-    }
+    }*/
 
     const setSpecificTheme = async (newTheme) => {
         setTheme(newTheme);

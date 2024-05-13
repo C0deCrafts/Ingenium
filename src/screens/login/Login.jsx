@@ -19,12 +19,42 @@ import {useState} from "react";
 import {useAuth} from "../../context/AuthContext";
 import LoadingComponent from "../../components/LoadingComponent";
 
-/*
-Die navigation-Prop ermöglicht es deinem Bildschirm, mit anderen Bildschirmen zu interagieren.
-Zum Beispiel kannst du damit einen anderen Bildschirm aufrufen oder zurück zu einem vorherigen
-Bildschirm navigieren. Es stellt praktisch eine Schnittstelle bereit, um zwischen den Bildschirmen
-zu navigieren, ohne dass du dich um die Details der Navigation kümmern musst.
-*/
+/**
+ * ### Login Component
+ *
+ * This component manages the user login process within the application. It supports both dark and light themes,
+ * allowing users to enter their username and password. It also handles interactions like logging in, toggling
+ * the visibility of passwords, and provides links for password recovery and contacting support.
+ *
+ * #### Functionality:
+ * - **Theme Adjustment**: Uses the `useTheme` hook to check whether the theme is dark or light, and changes the
+ *   interface to match.
+ * - **State Management**: Keeps track of user inputs such as username and password, loading status, visibility of the password,
+ *   and whether a login attempt has failed.
+ * - **Validation Checks**: Ensures that neither the username nor password fields are empty before allowing submission.
+ * - **Password Visibility Toggling**: Allows users to toggle the visibility of their password using an icon.
+ * - **External Links**: Provides links for users to reset their password or contact support.
+ *
+ * #### Structure:
+ * 1. **Main View Container**: Adapts its style based on the theme, ensuring compatibility with all devices.
+ * 2. **Image and Greeting Section**: Displays the company logo and welcome messages.
+ * 3. **Input Fields and Login Button**:
+ *    - **KeyboardAvoidingView**: Ensures that text inputs remain visible when the keyboard is active, especially on iOS.
+ *    - **Custom Input Fields**: Fields for entering the username and password, which include icons to indicate the required data type and
+ *      toggle visibility of the password.
+ * 4. **Action Links**:
+ *    - **Forgot Password**: Allows users to email request help with resetting their password.
+ *    - **Contact Support**: Provides a link to the company’s contact page for users who need additional assistance or want to create an account.
+ *
+ * #### Elements:
+ * - **Image**: Displays the company logo.
+ * - **Text**: Provides greeting and instructions for users.
+ * - **CustomInputFieldLogin**: Custom components for user input fields, with properties to manage text input, password visibility, and validation errors.
+ * - **CustomButton**: Triggers the login process when clicked.
+ * - **TouchableOpacity**: Used for interactive texts that help users reset their password or contact support.
+ *
+ * Each component part is designed to enhance user experience by making the interaction smooth, straightforward, secure, and user-friendly.
+ */
 function Login(){
     const insets = useSafeAreaInsets();
     const {theme} = useTheme();
@@ -41,10 +71,11 @@ function Login(){
 
     const styles = getStyles(insets);
 
-    const togglePasswordVisibility = () => { // Funktion zum Umschalten der Sichtbarkeit
-        setPasswordVisible(!passwordVisible);
-    };
-
+    /**
+     * Handles the user login operation. It performs basic validation checks
+     * and uses the `login` function from the `useAuth` context to authenticate the user.
+     * Sets various states based on the outcome of the authentication attempt.
+     */
     const handleLogin = async () => {
         setLoginFailed(false);
 
@@ -67,8 +98,8 @@ function Login(){
     }
 
     /**
-     * Opens the Ingenium Websites contact section, if the URL is valid.
-     * If it is not supported an error message is printed to the console.
+     * Opens the external contact URL in a browser if it's supported.
+     * If the URL is not supported, logs an error message.
      */
     const handleOpenIngeniumWebsite = async () => {
         //canOpenURL checks if the given URL can be opened, the Promise resolves either to true or false
@@ -81,7 +112,11 @@ function Login(){
         }
     }
 
-    const forgotPassword = () => {
+    /**
+     * Sends an email to reset the password for the account using the default email app.
+     * The email includes a preset subject and body text asking for password reset help.
+     */
+    const forgotPassword = async () => {
         const subject = "Passwortrücksetzung für ILIAS-Konto";
         const body = "Sehr geehrtes Support-Team,\n" +
             "\n" +
@@ -93,12 +128,12 @@ function Login(){
             "\n" +
             "Mit freundlichen Grüßen,\n"
         ;
-        Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
+        await Linking.openURL(`mailto:office@ingenium.co.at?subject=${subject}&body=${body}`);
     }
 
     if (loading) {
         return (
-            <LoadingComponent message={"Du wirst gerade eingelogged..."}/>
+            <LoadingComponent message={"Du wirst gerade eingeloggt..."}/>
         );
     }
     return (
@@ -111,9 +146,7 @@ function Login(){
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textNormal]}>Nutze deine ILIAS
                     Zugangsdaten zur Anmeldung.</Text>
             </View>
-            {/*Input and Login Button
-            wrapped in Keyboardavoiding view, to make sure the login input fields are accessible when the keyboard is open
-            */}
+            {/*Input and Login Button wrapped in Keyboard avoiding view, to make sure the login input fields are accessible when the keyboard is open*/}
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.inputFieldContainer}
@@ -121,7 +154,7 @@ function Login(){
             >
                 <CustomInputFieldLogin
                     placeholder="Nutzername"
-                    keyboardType={"default"}
+                    keyboardType="default"
                     maxTextInputLength={40}
                     iconName={ICONS.LOGIN.USER}
                     onChangeTextHandler={setUserName}
@@ -134,24 +167,22 @@ function Login(){
                     iconName={passwordVisible ? ICONS.LOGIN.UNLOCK : ICONS.LOGIN.LOCK}
                     isPassword={true}
                     passwordVisible={passwordVisible}
-                    togglePasswordVisibility={togglePasswordVisibility}
+                    setPasswordVisible={setPasswordVisible}
                     onChangeTextHandler={setPassword}
                     error={loginFailed}
                 />
-                <CustomButton title={"Anmelden"}rt onPressFunction={() => handleLogin()}/>
-                {/* Anzeigen der Fehlermeldung, wenn loginError einen Wert hat */}
+                    <CustomButton title={"Anmelden"} onPressFunction={handleLogin}/>
+                {/* Display the error message if loginError has a value */}
                 {loginError && <Text style={{ color: 'red', textAlign: "center" }}>{loginError}</Text>}
             </KeyboardAvoidingView>
             {/*Forgot Password & Create Account*/}
             <View style={[styles.container, styles.paddingTop]}>
-                <TouchableOpacity onPress={() => {
-                    forgotPassword()
-                }}>
+                <TouchableOpacity onPress={forgotPassword}>
                     <Text style={[isDarkMode? styles.textDark : styles.textLight, styles.textButton, styles.textXS]}>Password vergessen?</Text>
                 </TouchableOpacity>
                 <View style={styles.footer}>
                     <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.textXS]}>Keinen Account?</Text>
-                    <TouchableOpacity onPress={() => handleOpenIngeniumWebsite()}>
+                    <TouchableOpacity onPress={handleOpenIngeniumWebsite}>
                         <Text style={[isDarkMode? styles.textDark : styles.textLight ,styles.textButton, styles.textXS]}>Kontaktiere Ingenium</Text>
                     </TouchableOpacity>
                 </View>
@@ -162,6 +193,12 @@ function Login(){
 
 export default Login;
 
+/**
+ * Defines the styles used in the Login component.
+ * It handles different styles for light and dark mode based on the theme.
+ *
+ * @param insets - Safe area insets used for dynamic spacing.
+ */
 function getStyles(insets) {
     return StyleSheet.create({
         containerLight: {

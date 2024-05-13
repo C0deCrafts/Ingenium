@@ -10,12 +10,13 @@ import {
 import {useTheme} from "../../context/ThemeContext";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import CustomBoxButton from "../../components/buttons/CustomBoxButton";
 import {ICONS} from "../../constants/icons";
 import SelectListModal from "../../components/modals/SelectListModal";
 import {useDatabase} from "../../context/DatabaseContext";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
+import {useTask} from "../../context/TaskContext";
 
 //ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
 //und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
@@ -27,17 +28,9 @@ function CreateTask({navigation, route}) {
     //load methods and state from the DatabaseContext
     const {addTask, lists} = useDatabase();
 
-    // State variables for the form
-    const [taskTitle, setTaskTitle] = useState("");
-    const [taskNotes, setTaskNotes] = useState("");
-    //const [dueDate, setDueDate] = useState(""); ??? brauchen wir das ??
-    const [creationDate, setCreationDate] = useState(new Date().toISOString());
-    //const [imageURL, setImageURL] = useState(""); ??? brauchen wir das ??
-    //const [url, setUrl] = useState(""); ??? brauchen wir das ??
-    //const [isDone, setIsDone] = useState(false); ??? brauchen wir das ??
-    //const [shared, setShared] = useState(false); ??? brauchen wir das ??
-    //const [reminder, setReminder] = useState(false); ??? brauchen wir das ??
+    const { taskDetails, updateTaskDetails } = useTask();
 
+    const [creationDate, setCreationDate] = useState(new Date().toISOString());
 
     /* route.params --> explanation:
    User enters the Screen from ListTasks and clicks on add task (round blue button):
@@ -53,15 +46,7 @@ function CreateTask({navigation, route}) {
     //if it is undefined, initialize it with 1 - which is the id of Ingenium List
     const defaultListId = listIdForAddTask? listIdForAddTask : 1;
     const defaultListName = lists.find(list => list.listId === defaultListId).listName;
-
-    console.log("listIdForAddTask",listIdForAddTask);
-    console.log("defaultListId",defaultListId);
-
-
-    // State for the database attributes
-    const [listId, setListId] = useState(defaultListId);
     const [selectedListName, setSelectedListName] = useState(defaultListName); // Default list name
-
 
     //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
     const inputAccessoryViewID = 'uniqueID'; //?
@@ -69,25 +54,55 @@ function CreateTask({navigation, route}) {
     // Reference for the select list modal
     const selectListModalRef = useRef(null); //?
 
-    const handleAddTask = async () => {
-        if (taskTitle.trim() === "") {
-            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
-            return;
-        }
-
-        setCreationDate(new Date().toISOString()); //?
-
-        await addTask({
-            listId: listId,
-            taskTitle: taskTitle,
-            taskNotes: taskNotes,
-            dueDate: "", // Passing the empty string
-            creationDate: creationDate,
-            imageURL: "", // Passing the empty string
-            url: "",
+    useEffect(() => {
+        updateTaskDetails({
+            listId: defaultListId, // Verwende listId aus den Parametern oder setze default auf 1
+            taskId: null, // Keine taskId, da es ein neuer Task ist
+            taskTitle: '',
+            taskNotes: '',
+            dueDate: '',
+            imageURL: '',
+            url: '',
             isDone: false,
             shared: false,
             reminder: false,
+            creationDate: '',
+        })
+    }, []);
+
+
+    const handleChangeTaskTitle = (title) => {
+        updateTaskDetails({ taskTitle: title });
+    };
+
+    const handleChangeTaskNotes = (notes) => {
+        updateTaskDetails({ taskNotes: notes });
+    };
+
+    const handleChangeListId = (listId) => {
+        updateTaskDetails({ listId: listId });
+    };
+
+
+    const handleAddTask = async () => {
+        if (taskDetails.taskTitle.trim() === "") {
+            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
+            return;
+        }
+        setCreationDate(new Date().toISOString()); //?
+
+        await addTask({
+            listId: taskDetails.listId,
+            taskTitle: taskDetails.taskTitle,
+            taskNotes: taskDetails.taskNotes,
+            dueDate: taskDetails.dueDate,
+            creationDate: creationDate,
+            imageURL: taskDetails.imageURL,
+            url: taskDetails.url,
+            isDone: false,
+            shared: taskDetails.shared,
+            reminder: taskDetails.reminder,
+            taskId: taskDetails.taskId,
         });
         navigation.goBack();
     }
@@ -104,7 +119,8 @@ function CreateTask({navigation, route}) {
 
     // Funktion zum Auswählen einer Liste aus dem Modal
     const handleListSelection = (selectedList) => {
-        setListId(selectedList.listId);
+        //setListId(selectedList.listId);
+        handleChangeListId(selectedList.listId);
         setSelectedListName(selectedList.listName);
         //console.log(selectedList); // Gib das gesamte Listenelement aus
         //console.log(selectedList.listId + "listId, " + selectedList.listName + ": Name");
@@ -113,22 +129,42 @@ function CreateTask({navigation, route}) {
 
 
     // Function to navigate to the edit task details screen
-    const navigateToAddTaskDetails = () => {
+    const navigateToAddTaskDetails = async () => {
+        if (taskDetails.taskTitle.trim() === "") {
+            Alert.alert("Fehler", "Bitte einen Titel eingeben", [{text: "OK"}]);
+            return;
+        }
         // Dismiss the keyboard and navigate to the edit task details screen
         Keyboard.dismiss();
+        //console.log("TASKDATA: ", taskData)
         navigation.navigate("CreateTaskDetails_Screen");
         // Optional: Pass additional props like title and notes to the EditTaskDetails screen for further use
         // navigation.navigate("EditTaskDetails_Screen", {title, notes});
     };
     const handleGoBack = () => {
-        navigation.goBack();
+        if (taskDetails.taskTitle.trim() === "") {
+            navigation.goBack();
+            return;
+        }
+        Alert.alert("Abbrechen?", "Möchtest du dass deine Änderungen verworfen werden?",[
+            {
+                text: "Ja",
+                onPress: () => navigation.goBack(),
+                style: "cancel"
+            },
+            {
+                text: "Abbrechen"
+            }
+        ], {
+            cancelable: false
+        })
     };
 
     return (
         <View style={isDarkMode ? styles.containerDark : styles.containerLight}>
             {/* Custom back button */}
             <CustomBackButton onPress={handleGoBack} showCustomElement={true} customElement={
-                <CustomButtonSmall title={"Fertig"} onPressFunction={handleAddTask
+                <CustomButtonSmall title={"Speichern"} onPressFunction={handleAddTask
                 }/>
             }/>
             <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
@@ -146,8 +182,8 @@ function CreateTask({navigation, route}) {
                             placeholder={"Titel"}
                             placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                             style={isDarkMode ? styles.inputDark : styles.inputLight}
-                            onChangeText={(value) => setTaskTitle(value)}
-                            value={taskTitle}
+                            onChangeText={handleChangeTaskTitle}
+                            value={taskDetails.taskTitle}
 
                             selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                             keyboardAppearance={isDarkMode ? "dark" : "light"}
@@ -159,8 +195,8 @@ function CreateTask({navigation, route}) {
                                    placeholderTextColor={isDarkMode ? DARKMODE.PLACEHOLDER_TEXTCOLOR : LIGHTMODE.PLACEHOLDER_TEXTCOLOR}
                                    style={isDarkMode ? styles.inputDarkNotes : styles.inputLightNotes}
 
-                                   onChangeText={(value) => setTaskNotes(value)}
-                                   value={taskNotes}
+                                   onChangeText={handleChangeTaskNotes}
+                                   value={taskDetails.taskNotes}
 
                                    selectionColor={isDarkMode ? DARKMODE.CURSOR_COLOR : LIGHTMODE.CURSOR_COLOR}
                                    maxLength={1000}

@@ -21,7 +21,7 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  * @param p_taskId The id of the displayed task, which is passed to the component to be used in the updateTaskIsDone function.
  * @param p_taskIsDone The isDone property of the displayed task:
  *                      - controls the appearance of the toggle button (if task is done button is filled, if it is not
- *                      done button is only outlined.
+ *                      done button is only outlined.)
  *                      - For updating the isDone property, it is passed the updateTaskIsDone function as a parameter.
  * @param taskTitle The title of the task which will be displayed.
  * @param taskNotes Thee notes belonging to the displayed task, which will be shown if isTaskCardWithNotes is set to true.
@@ -34,7 +34,6 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  * @param isTaskCardWithNotes {boolean} Option true: The Task is displayed in a Box with border radius and the toggle Icon
  *                             the title the date and the notes are displayed.
  *                            Option false: Only the toggle Icon the title and the date are displayed.
- * @returns {JSX.Element}
  * @constructor
  */
 
@@ -50,7 +49,7 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
 
     const [togglingIsActive, setTogglingIsActive] = useState(false);
 
-    //useref to prevent the effect from running on the initial render of the component
+    //useRef to prevent the effect from running on the initial render of the component
     const isInitialRender = useRef(true);
 
     //effect will execute whenever one of the dependencies changes
@@ -96,7 +95,6 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
      * Renders the correct title:
      * - Normally it shows the title of the task
      * - If the user clicks on the toggle button, it shows '...Aufgabe wird verschoben'
-     * @returns {JSX.Element} A text element.
      */
     const showTitleOrUpdate = () => {
         if(togglingIsActive) {
@@ -124,7 +122,6 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
     /**
      * Renders the taskContent which is same for all Screens:
      * toggleIcon, title and date
-     * @returns {JSX.Element}
      */
     const showTaskContent = () => {
         {/*Icon and title are aligned on the same height when only a preview title is shown
@@ -182,7 +179,6 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
 export default TaskPreview;
 
 const styles = StyleSheet.create({
-
     textLight: {
     color: LIGHTMODE.TEXT_COLOR,
     },
@@ -200,6 +196,9 @@ const styles = StyleSheet.create({
     },
     textXS: {
         fontSize: SIZES.SCREEN_TEXT_XS,
+    },
+    textSmall:{
+        fontSize: SIZES.SCREEN_TEXT_SMALL,
     },
     textAlignRight: {
         textAlign: "right"

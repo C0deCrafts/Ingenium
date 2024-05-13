@@ -2,12 +2,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Contact, ProfileSettings, Settings} from "../../screens";
 import BottomTabNavigator from "../tab/BottomTabNavigator";
 import CustomDrawerContent from "./CustomDrawerContent";
-import {useTabContext} from "../context/TabContext";
+import {useNavContext} from "../../context/NavContext";
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
-    const {drawerEnabled, setDrawerEnabled} = useTabContext();
+    const {drawerEnabled} = useNavContext();
 
     return (
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props}/>}
@@ -16,7 +16,7 @@ function DrawerNavigation() {
                               swipeEnabled: drawerEnabled,
                           })}
         >
-            {/* Wenn keine spezifischen Aktionen bei Fokus benötigt werden, können die listeners entfernt werden */}
+            {/* Die Listeners müssen beibehalten werden, um sicherzustellen, dass die Tabs im Drawer korrekt gesetzt werden. */}
             <Drawer.Screen name="Dashboard_Drawer" component={BottomTabNavigator} />
             <Drawer.Screen name="Timetable_Drawer" component={BottomTabNavigator} />
             <Drawer.Screen name="Task_Drawer" component={BottomTabNavigator}/>

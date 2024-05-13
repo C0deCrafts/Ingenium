@@ -6,7 +6,7 @@ import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 /**
- * ## CustomBackButton Component
+ * ### CustomBackButton Component
  *
  * This component represents a custom back button used in stack navigation headers.
  * It allows users to navigate back to the previous screen when pressed.
@@ -58,13 +58,15 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
  * @param {boolean} showCustomElement - Optional flag to determine whether to display a clickable icon next to the back button.
  *                             Default is false.
  * @param customElement - Optional additional JSX Element to be displayed on the right edge of the header.
+ * @param backLabel - Optional label to be displayed to the right of the arrow icon.
  */
 function CustomBackButton({
                               onPress,
                               showTitle = false,
                               title,
                               showCustomElement = false,
-                              customElement
+                              customElement,
+                              backLabel = "Zurück"
                           }) {
     const insets = useSafeAreaInsets();
     const {theme} = useTheme();
@@ -80,7 +82,7 @@ function CustomBackButton({
                       color={isDarkMode ? DARKMODE.ICONCOLOR : LIGHTMODE.ICONCOLOR}
                 />
                 <View>
-                    <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>Zurück</Text>
+                    <Text style={isDarkMode ? styles.headerTitleDark : styles.headerTitleLight}>{backLabel}</Text>
                 </View>
             </TouchableOpacity>
             {/*optional title will be shown only if showTitle is true and a title was provided*/}

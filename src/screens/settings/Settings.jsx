@@ -11,7 +11,7 @@ function Settings({navigation}){
     const { theme, setSpecificTheme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const { icalUrl } = useCalendar();
+    const { iCalUrl } = useCalendar();
 
     return (
         <View  style={isDarkMode ? styles.containerDark : styles.containerLight}>
@@ -47,7 +47,7 @@ function Settings({navigation}){
                     <CustomBoxButton buttonTextLeft="Stundenplan exportieren"
                                      iconName={ICONS.EXPORT.INACTIVE}
                                      iconColor={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
-                                     onPress={() => Linking.openURL(icalUrl)}
+                                     onPress={() => Linking.openURL(iCalUrl)}
                     />
                 </View>
             </View>

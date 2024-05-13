@@ -1,8 +1,12 @@
-import {Text, View, StyleSheet} from "react-native";
+import {Text, View, StyleSheet, Alert, ScrollView} from "react-native";
 import {useTheme} from "../../context/ThemeContext";
-import {DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
+import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import CustomBackButton from "../../components/buttons/CustomBackButton";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import CustomCalendar from "../../components/CustomCalendar";
+import CustomBoxButton from "../../components/buttons/CustomBoxButton";
+import {ICONS} from "../../constants/icons";
+import {useTask} from "../../context/TaskContext";
 
 function CreateTaskDetails({navigation}){
     const { theme } = useTheme();
@@ -10,8 +14,19 @@ function CreateTaskDetails({navigation}){
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    const handleGoBack = () => {
-        navigation.goBack(); // goBack() aufrufen, wenn der Button gedrückt wird
+    //taskDetails evtl. für calenderpicker anzeige des tags dueDate wenn vorhanden
+    const { taskDetails, updateTaskDetails } = useTask();
+
+    const handleGoBack = async () => {
+        navigation.goBack();
+    };
+
+    // Funktion, um das Datum vom Kalender zu empfangen
+    const handleSelectedDate = (date) => {
+        updateTaskDetails({
+            dueDate: date
+        })
+        console.log("Empfangenes Datum: ", date);
     };
 
     return (
@@ -21,25 +36,50 @@ function CreateTaskDetails({navigation}){
                 onPress={handleGoBack}
                 showTitle={true}
                 title={"Details"}/>
-            <View style={isDarkMode ? styles.contentDark : styles.contentLight}>
+            <View style={styles.content}>
                 <Text style={[isDarkMode ? styles.textDark : styles.textLight, styles.header]}>
-                    Datum
+                    Fällig am
                 </Text>
-                <View style={styles.spacing}></View>
-                <View style={isDarkMode ? styles.calendarBoxDark : styles.calendarBoxLight}>
-                    <Text style={isDarkMode ? styles.textDark : styles.textLight}>Kalender</Text>
+                <View style={styles.calendarBox}>
+                   <CustomCalendar initialDate={taskDetails.dueDate} onDayPress={handleSelectedDate}/>
                 </View>
-                <View style={styles.spacing}></View>
-                <View style={isDarkMode ? styles.boxDark : styles.boxLight}>
-                    <Text style={isDarkMode ? styles.textDarkFeatures : styles.textLightFeatures}>
-                        In der Version 2 unserer App werden folgende Features enthalten sein:
-                        Möglichkeit, Aufgaben direkt im Kalender zu speichern.
-                        Benachrichtigungen, die Sie daran erinnern, bevor eine Aufgabe fällig ist.
-                        Option, Bilder mit Ihren Aufgaben zu verknüpfen und zu speichern.
-                        Möglichkeit, URLs als Teil einer Aufgabe zu speichern.
-                        Funktion zum Teilen von Aufgaben mit anderen Nutzern.
-                    </Text>
-                </View>
+                <ScrollView style={styles.buttonContainer}
+                            bounces={false}
+                            showsVerticalScrollIndicator={false}
+                >
+                    <View style={styles.box}>
+                        <CustomBoxButton
+                            buttonTextLeft={" Erinnern"}
+                            iconBoxBackgroundColor={COLOR.BUTTONCOLOR}
+                            iconColor={COLOR.BUTTONLABEL}
+                            iconName={ICONS.NOTIFICATION.INACTIVE}
+                            extraPadding={5}
+                            showForwardIcon={false}
+                            onPress={() => Alert.alert("In Version 2 verfügbar!")}
+                        />
+                    </View>
+                    <View style={styles.box}>
+                        <CustomBoxButton
+                            buttonTextLeft={" Bild hinzufügen"}
+                            iconName={ICONS.TASKICONS.ADD}
+                            iconColor={isDarkMode ? DARKMODE.TEXT_COLOR : LIGHTMODE.TEXT_COLOR}
+                            extraPadding={5}
+                            showForwardIcon={false}
+                            onPress={() => Alert.alert(" In Version 2 verfügbar!")}
+                        />
+                    </View>
+                    <View style={styles.box}>
+                        <CustomBoxButton
+                            buttonTextLeft={" Aufgabe teilen"}
+                            iconBoxBackgroundColor={COLOR.BUTTONCOLOR}
+                            iconColor={COLOR.BUTTONLABEL}
+                            iconName={ICONS.EXPORT.INACTIVE}
+                            extraPadding={5}
+                            showForwardIcon={false}
+                            onPress={() => Alert.alert(" In Version 2 verfügbar!")}
+                        />
+                    </View>
+                </ScrollView>
             </View>
         </View>
     )
@@ -53,32 +93,23 @@ return StyleSheet.create({
     containerLight: {
         flex: 1,
         backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
+        paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT,
     },
     containerDark: {
         flex: 1,
         backgroundColor: DARKMODE.BACKGROUNDCOLOR,
         paddingHorizontal: SIZES.SPACING_HORIZONTAL_DEFAULT
     },
-    // Content styles for light and dark mode
-    contentLight: {
+    content: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BACKGROUNDCOLOR,
-        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
-        paddingBottom: insets.bottom + 10
+        flexDirection: "column",
+        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER - 10,
+        paddingBottom: insets.bottom + 10,
     },
-    contentDark: {
-        flex: 1,
-        backgroundColor: DARKMODE.BACKGROUNDCOLOR,
-        marginTop: SIZES.MARGIN_TOP_FROM_BACKBUTTON_HEADER,
-        paddingBottom: insets.bottom + 10
-    },
-    // Header text styles
     header: {
         fontSize: SIZES.SCREEN_HEADER,
         fontWeight: SIZES.SCREEN_HEADER_WEIGHT,
     },
-    // Text styles for light and dark mode
     textLight: {
         color: LIGHTMODE.TEXT_COLOR,
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
@@ -87,48 +118,17 @@ return StyleSheet.create({
         color: DARKMODE.TEXT_COLOR,
         fontSize: SIZES.SCREEN_TEXT_NORMAL,
     },
-    textLightFeatures: {
-        color: LIGHTMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL,
-        textAlign: "justify",
-        padding: 10
-    },
-    textDarkFeatures: {
-        color: DARKMODE.TEXT_COLOR,
-        fontSize: SIZES.SCREEN_TEXT_NORMAL,
-        textAlign: "justify",
-        padding: 10
-    },
-    // Spacing between elements
     spacing: {
-        marginVertical: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
+        marginBottom: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
     },
-    calendarBoxLight: {
-        backgroundColor: LIGHTMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        height: 200, //platzhalter
-        alignItems: "center", //platzhalter
-        justifyContent: "center" //platzhalter
+    calendarBox: {
+        marginTop: SIZES.SPACES_VERTICAL_BETWEEN_BOXES,
+        marginBottom: SIZES.SPACES_VERTICAL_BETWEEN_BOXES * 2,
     },
-    calendarBoxDark: {
-        backgroundColor: DARKMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        height: 200, //platzhalter
-        alignItems: "center", //platzhalter
-        justifyContent: "center" //platzhalter
-    },
-    boxLight: {
+    buttonContainer: {
         flex: 1,
-        backgroundColor: LIGHTMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        alignItems: "center", //platzhalter
-        justifyContent: "center" //platzhalter
     },
-    boxDark: {
-        flex: 1,
-        backgroundColor: DARKMODE.BOX_COLOR,
-        borderRadius: SIZES.BORDER_RADIUS,
-        alignItems: "center", //platzhalter
-        justifyContent: "center" //platzhalter
-    }
+    box: {
+        marginBottom: SIZES.SPACES_VERTICAL_BETWEEN_BOXES
+    },
 })}

@@ -15,7 +15,6 @@ import {useTheme} from "../../context/ThemeContext";
  *
  * @param isDone {boolean} Determines whether the circle is filled or outlined.
  * @param isActivated {boolean} Determines whether the icon has opacity or not.
- * @returns {JSX.Element} The toggle Icon.
  */
 
 function ToggleDoneIcon({isDone, isActivated}) {

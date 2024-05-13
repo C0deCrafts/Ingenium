@@ -2,7 +2,7 @@ import axios from "axios";
 import {isEqual as isEqualDateFns} from 'date-fns';
 
 
-/****************************************Working WITH CALENDARDATA******************************************/
+/****************************************Working WITH CALENDAR DATA******************************************/
 let icalFileLiveIlias = 'https://ilias.ingenium.co.at/calendar.php?client_id=ingenium&token=8339093b3398627d800ed5635c6543f8';
 
 
@@ -36,7 +36,7 @@ export const fetchIcal = () => {
         .then( async response => {
             /*save response data to variable*/
             const icalData = response.data;
-            console.log( "Success fetching IcalData with AXIOS:");
+            //console.log( "Success fetching IcalData with AXIOS:");
 
             /*parse and save the data needed from an event to a data structure which can be used by Agenda List*/
             return convertIcalData(icalData);
@@ -64,7 +64,7 @@ const convertIcalData = (icalData) => {
     const objectWithAgendaStructure = createAgendaListDataObject();
 
     //fill array with agendaList structure with all course items
-    return fillAgendaObjectWithCourseData(courseItems, objectWithAgendaStructure);;
+    return fillAgendaObjectWithCourseData(courseItems, objectWithAgendaStructure);
 }
 
 /**

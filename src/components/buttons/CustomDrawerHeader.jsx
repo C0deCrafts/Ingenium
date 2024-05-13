@@ -6,7 +6,7 @@ import {useTheme} from "../../context/ThemeContext";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 /**
- * ## CustomDrawerHeader Component
+ * ### CustomDrawerHeader Component
  *
  * This component represents a custom header for drawer navigation.
  * It displays a burger menu icon on the left side and a title on the right side.
@@ -14,7 +14,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
  * The appearance of the header is determined by the current theme (dark/light).
  *
  * @param {string} title - The title to be displayed in the header.
- * @param {Function} onPress - Function to be called when the menu icon is pressed.
+ * @param {function} onPress - Function to be called when the menu icon is pressed.
  *
  * @example
  * // Inside your drawer navigation component, use the CustomDrawerHeader component like this:

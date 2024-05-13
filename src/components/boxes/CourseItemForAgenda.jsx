@@ -6,14 +6,8 @@ import * as Linking from "expo-linking";
 import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
-/**
- *
- * @param props
- * @returns {JSX.Element}
- * @constructor
- */
 function CourseItemForAgenda(props) {
-    //import theme for light and darkmode
+
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 

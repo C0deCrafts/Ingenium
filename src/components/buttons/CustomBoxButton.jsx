@@ -5,7 +5,7 @@ import {ICONS} from "../../constants/icons";
 import SquareIcon from "../SquareIcon";
 
 /**
- * ## CustomBoxButton Component
+ * ### CustomBoxButton Component
  *
  * This component represents a custom button with a box icon, left and right text labels, and an optional forward icon.
  * It allows users to interact with the button by pressing it.
@@ -13,15 +13,15 @@ import SquareIcon from "../SquareIcon";
  *
  * @param {string} buttonTextLeft - The text label displayed on the left side of the button.
  * @param {string} buttonTextRight - The text label displayed on the right side of the button.
- * @param iconName - The name of the icon to be displayed inside the box.
- * @param iconColor - The color of the icon.
- * @param iconBoxBackgroundColor - The background color of the icon's box.
+ * @param {string | Object} iconName - The name of the icon to be displayed inside the box.
+ * @param {string} iconColor - The color of the icon.
+ * @param {string} iconBoxBackgroundColor - The background color of the icon's box.
  * @param {Function} onPress - Function to be called when the button is pressed.
  * @param {boolean} [showForwardIcon=true] - Optional. Determines whether to display the forward icon (default is true).
  * @param {number} [extraPadding=0] - Optional. Extra padding to be applied to the button (default is 0).
- *
- * @param isUserIcon
- * @param isSelected
+ * @param {boolean} [isUserIcon] - Optional. Determines if the icon is a user icon.
+ * @param {boolean} [isSelected=false] - Optional. Determines if the button is selected (default is false).
+
  * @example
  * // Inside your component's render method, use the CustomBoxButton component like this:
  * <CustomBoxButton
@@ -48,7 +48,7 @@ function CustomBoxButton({
                              showForwardIcon = true,
                              extraPadding = 0,
                              isUserIcon,
-                             isSelected = false, // Standardwert ist false
+                             isSelected = false,
                          }) {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
@@ -61,7 +61,7 @@ function CustomBoxButton({
                           style={[
                               isDarkMode ? styles.containerDark : styles.containerLight,
                               {padding: containerPadding}, // Applying the calculated padding,
-                              isSelected ? styles.selected : null, // Anwenden des ausgewählten Styles, falls isSelected true ist
+                              isSelected ? styles.selected : null,
                           ]}>
             <SquareIcon name={iconName} color={iconColor} backgroundColor={iconBoxBackgroundColor} isUserIcon={isUserIcon}/>
             <Text style={isDarkMode ? styles.buttonLabelDark : styles.buttonLabelLight}>{buttonTextLeft}</Text>

@@ -3,14 +3,13 @@ import {COLOR, SIZES} from "../../constants/styleSettings";
 
 
 /**
- * ## CustomButtonSmall Component
+ * ### CustomButtonSmall Component
  *
  * Renders a small custom button designed according to the app's button styling guidelines.
  * A title and onPress function can be specified.
  *
- * @param title - The text displayed on the button.
- * @param onPressFunction - Function to be called when the button is pressed.
- * @returns {JSX.Element} - A small button, designed according to the app's button styling guidelines.
+ * @param {string} title - The text displayed on the button.
+ * @param {function} onPressFunction - Function to be called when the button is pressed.
  *
  * @example
  * ```jsx
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.BORDER_RADIUS,
         justifyContent: "center",
         height: 30,
-        width: 65
+        width: 85
     },
     buttonLabel: {
         color: COLOR.BUTTONLABEL,

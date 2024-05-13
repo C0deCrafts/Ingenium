@@ -2,6 +2,21 @@ import { Text, View, StyleSheet } from 'react-native';
 import {SIZES, DARKMODE, LIGHTMODE} from '../constants/styleSettings';
 import {useTheme} from "../context/ThemeContext";
 
+/**
+ * ### Greeting Component
+ *
+ * Renders a greeting message based on the current time and the provided name.
+ * The greeting message changes dynamically based on the time of day.
+ *
+ * @param {string} name - The name to be displayed in the greeting message.
+ *
+ * @example
+ * // Import the Greeting component
+ * import Greeting from "../components/Greeting";
+ * // Inside your component's render method, use the Greeting component like this:
+ * <Greeting name={"John"} />
+ * // This will render a greeting message based on the current time and display the provided name.
+ */
 const Greeting = ({ name }) => {
     const {theme} = useTheme();
     const isDarkMode = theme === DARKMODE;
