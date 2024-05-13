@@ -226,7 +226,7 @@ export const groupTasksByCompletionDate = (tasks) => {
             // 10.05
         } else if (taskDateStr < dayBeforeYesterdayStr && taskDateStr > twentyFiveDaysAgoStr) {
             groups.thisMonth.push(task);
-        } else if (taskDateStr < twentyFiveDaysAgoStr) {
+        } else if (taskDateStr <= twentyFiveDaysAgoStr) {
             //14.04 - 11.04
             groups.expiringSoon.push(task);
         }
