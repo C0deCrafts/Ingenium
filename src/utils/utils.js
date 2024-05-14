@@ -264,7 +264,7 @@ export const getCourseNameByNumber = (crsNummer) => {
 
 //*************METHODS USED FOR AGENDA IN TIMETABLE***************
 /**
- * A class defining the structure for courseItems to be displayed in the timetable.
+ * A class defining the structure for courseItems to be displayed in the timetable's Agenda.
  */
 class courseItem {
     constructor(courseDate, courseSummary, courseStart, courseEnd, courseURL) {
@@ -278,7 +278,7 @@ class courseItem {
 
 
 /**
- * Takes the Event Array of the parsed IcalData (returned by the function parseIcalData)
+ * Takes the Event Array of the parsed IcalData (returned by the function parseIcalData of cal-parser)
  * and applies all functions needed to:
  * - extract all necessary information about the courses
  * - format an object with the necessary structure for the Agenda component
@@ -300,6 +300,7 @@ export const convertIcalDataToAgendaStructure = (parsedIcalEventArray) => {
 
 /**
  * Creates an array of course items with the exact properties needed to display them in the timetable.
+ * Each courseItem is an instance of the courseItem class.
  * @param courses The event array received from the calparser containing the course data.
  * @returns {[]} An array of course item objects.
  */
@@ -386,8 +387,16 @@ export const getSemesterDates = () => {
 /**
  * Creates an object holding all the dates of a semester as keys, with an empty array as value,
  * to which the course data will be assigned.
- * Example structure: '2024-04-20'....
- * @returns {{}}
+ *
+ * The object has the following key value pairs:
+ * - key: a key for each day in 'YYYY-MM-dd' format
+ * - value: an empty array which will hold all the course objects.
+ *
+ *  EXAMPLE:'2024-04-20': []
+ *
+ * The object must hold the date-key for each day that should be visible in the Agenda.
+ * If the dates for days without courses should be visible, the date must be included!!
+ * @returns {{}} Object with structure required by Agenda.
  */
 const createAgendaListDataObject = () => {
     /*
@@ -420,9 +429,18 @@ const createAgendaListDataObject = () => {
 
 /**
  * Fills the object expected by Agenda in timetable, with all the courseItems of the current Semester.
- * @param courseItems
- * @param objectWithAgendaStructure
- * @returns {*}
+ *
+ * Example of a key value pair of the returned object:
+ *
+     *'2024-05-17': [{"courseDate":"2024-05-17",
+     * "courseStart":"13:55",
+     * "courseEnd":"17:50",
+     * "courseTitle":"WIRE (KIF-GRZ-2209)",
+     * "courseURL":"https://ilias.ingenium.co.at/goto.php?target=crs_147627&client_id=ingenium"}]
+ *
+ * @param courseItems {[]} Array holding courseItem objects returned by 'createCourseItemArrayOfParsedIcsEvents'.
+ * @param objectWithAgendaStructure {{}} Object with AgendaListStructure returned by 'createAgendaListDataObject'.
+ * @returns {{}} Object holding all the courseData for the current Semester.
  */
 export const fillAgendaObjectWithCourseData = (courseItems, objectWithAgendaStructure) => {
     courseItems.forEach(c => {

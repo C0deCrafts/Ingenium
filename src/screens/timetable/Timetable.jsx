@@ -11,6 +11,14 @@ import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
 import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
 import {useCalendar} from "../../context/CalendarContext";
 
+/**
+ * ### Timetable Component
+ *
+ * This is a Screen component rendering the courses...
+ * @param navigation
+ * @returns {JSX.Element}
+ */
+
 function Timetable({navigation}) {
     //import theme, safe area insets, and window dimensions
     const {theme} = useTheme();
@@ -38,12 +46,10 @@ function Timetable({navigation}) {
      * are set to the start and end date of the semester.
      */
     useEffect(() => {
-
-
+        //course data from calendar context
         if(iCalDataTimetable) {
             setCourseItemsState(iCalDataTimetable);
         }
-
 
         //min and max date for the calendar
         const {start, end} = getSemesterDates();
@@ -55,44 +61,52 @@ function Timetable({navigation}) {
 
 
     /**
+     * ### Method renderDay
      *
-     * @param day
-     * @param item
+     * This method is passed to the renderDay prop of the Agenda component. It is responsible
+     * for customizing the look of a single day in the Agenda (overrides the default look of React Native Calendars).
+     * This is achieved by rendering the DateBoxForAgenda component for each day.
+     *
+     * The handler receives the two props day and item from the object passed to the prop 'items' of the Agenda component.
+     * It is called for each item inside the item array of each date key  (Agenda items prop 'courseItemsState').
+     *
+     *  Day is undefined for all but the first courseItem in a day.
+     *
+     * @param day {{}} Current day's date in ISO format.
+     * @param item {{}} A courseItem object.
      * @returns {JSX.Element}
      */
     const renderDay = (day, item) => {
         let nameOfDay;
         let date;
         let month;
-        let isOneCurse = true;
+        let isFirstCourse = true;
         let isEmptyDate;
 
+        //if item is not undefined, it is a date with courses
+        //the emptyDate prop of the DateBoxForAgenda must be set to false
         if(item) {
             isEmptyDate = false;
         }
 
+        //if day is defined the props passed to DateBox component are initialized
         if(day){
             nameOfDay = getAbbreviatedDay(day.getDay());
             date = day.getDate().toString().padStart(2, '0');
             month = (day.getMonth() + 1).toString().padStart(2, '0');
         }else{
-            isOneCurse = false;
+            //if day is undefined, it means the function is called for another than
+            //the first item in that day - the isFirstRenderDayCall prop must be set
+            //to false, so the Date Box is not shown multiple times for the same day
+            isFirstCourse = false;
         }
         return (
             <DateBoxForAgenda date={date+"."+month}
                               weekDay={nameOfDay}
-                              isOneCourse={isOneCurse}
+                              isFirstRenderDayCall={isFirstCourse}
                               isEmptyDate={isEmptyDate}/>
         )
     };
-
-    const renderEmptyDate = () => {
-        return (
-            <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
-                <View style={isDarkMode? styles.boxDark:styles.boxLight}/>
-            </View>
-        )
-    }
 
     /**
      * Renders courses in the agenda.
@@ -111,6 +125,17 @@ function Timetable({navigation}) {
             return null;
         }
     }
+
+
+    const renderEmptyDate = () => {
+        return (
+            <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
+                <View style={isDarkMode? styles.boxDark:styles.boxLight}/>
+            </View>
+        )
+    }
+
+
 
 
     /**
@@ -145,6 +170,10 @@ function Timetable({navigation}) {
             <CustomDrawerHeader title="Stundenplan" onPress={() => navigation.openDrawer()}/>
             <View style={styles.calendarContainer}>
                 <Agenda
+                    /**
+                    * expects an object of key-value pairs with following structure:
+                    * key: 'YYYY-MM-ddd' - value: [{agendaItem}, {agendaItem}]
+                    */
                     items={courseItemsState}
                     renderItem={(item, firstItemInDay) => renderItem(item, firstItemInDay)}
                     renderDay={renderDay}
@@ -157,7 +186,9 @@ function Timetable({navigation}) {
                     // are greyed out and not clickable
                     minDate={calendarBoundaries.startDate}
                     maxDate={calendarBoundaries.endDate}
+                    //styles for the customization of the calendartheme
                     theme={{
+                        //styles used to override the stylesheet of Agenda component
                         "stylesheet.agenda.main": {
                             reservations: {
                                 backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,

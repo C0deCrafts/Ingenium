@@ -6,6 +6,15 @@ import * as Linking from "expo-linking";
 import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
+
+/**
+ *### Course Item For Agenda Component
+ *
+ *
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function CourseItemForAgenda(props) {
 
     const { theme } = useTheme();
