@@ -1,7 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useAuth} from "./AuthContext";
 import {getICalData, getICalUrl} from "../api/backendServices";
-import {extractCourses, parseICalData, getCourseNameByNumber} from "../utils/utils";
+import {extractCourses, parseICalData, getCourseNameByNumber, convertIcalDataToAgendaStructure} from "../utils/utils";
 
 const CalendarContext = createContext({});
 
@@ -9,7 +9,8 @@ export const useCalendar = () => useContext(CalendarContext);
 
 export const CalendarProvider = ({children}) => {
     const [iCalUrl, setICalUrl] = useState(null);
-    const [iCalData, setICalData] = useState(null);
+    const [iCalDataDashboard, setICalDataDashboard] = useState(null);
+    const [iCalDataTimetable, setICalDataTimetable] = useState(null);
     const {token, userId} = useAuth(); // Access authentication context
 
     // Test URL for iCal data
@@ -24,7 +25,7 @@ export const CalendarProvider = ({children}) => {
                 //console.log("URL: ", url)
                 const data = await getICalData(userId, token);
                 const parsedData = parseICalData(data);
-                setICalData(parsedData);
+                setICalDataDashboard(parsedData);
                 //console.log("DATA: ", parsedData);
             } catch (err) {
                 console.log("Fehler beim Laden der Kalenderdaten: ", err);
@@ -42,13 +43,23 @@ export const CalendarProvider = ({children}) => {
             }
             const testData = await response.text();
             const parsedData = parseICalData(testData); // Parse iCal test data
+
+            //PREPARE AND SET ICAL-DATA FOR DASHBOARD
             const courseData = extractCourses(parsedData); // Extract courses from parsed data
             const sortedCourses = courseData.sort((a, b) => a.crsNummer.localeCompare(b.crsNummer)); // Sort courses by course number
-
             // Displaying the sorted courses one below the other -> only for logging for better readability.
             const showCourses = sortedCourses.map(course => JSON.stringify(course)).join("\n");
-            setICalData(parsedData); // Set parsed iCal data in state
+            //set IcalData for the Dashboard
+            setICalDataDashboard(parsedData); // Set parsed iCal data in state
+
+            //PREPARE AND SET ICAL-DATA FOR TIMETABLE
+            const coursesForTimetable = convertIcalDataToAgendaStructure(parsedData);
+            //set IcalData for the Timetable
+            setICalDataTimetable(coursesForTimetable);
+
+            //set the IcalUrl currently in use
             setICalUrl(iCalTestUrl);
+
         } catch (error) {
             console.error('Fehler beim Laden der iCal-Daten:', error);
         }
@@ -61,7 +72,7 @@ export const CalendarProvider = ({children}) => {
     }, [token, userId])
 
     return (
-        <CalendarContext.Provider value={{iCalUrl, iCalData, getCourseNameByNumber}}>
+        <CalendarContext.Provider value={{iCalUrl, iCalData: iCalDataDashboard, getCourseNameByNumber, iCalDataTimetable}}>
             {children}
         </CalendarContext.Provider>
     );

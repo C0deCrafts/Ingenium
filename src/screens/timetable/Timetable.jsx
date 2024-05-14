@@ -1,17 +1,15 @@
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useEffect, useState} from "react";
-import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
-import { getDay as getAbbreviatedDay} from "../../utils/utils";
-import {
-    Agenda,
-} from "react-native-calendars";
+import { getDay as getAbbreviatedDay, getSemesterDates} from "../../utils/utils";
+import {Agenda} from "react-native-calendars";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {LocaleConfig} from "react-native-calendars/src/index";
 import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
 import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
+import {useCalendar} from "../../context/CalendarContext";
 
 function Timetable({navigation}) {
     //import theme, safe area insets, and window dimensions
@@ -20,8 +18,11 @@ function Timetable({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
+    //import the fetched IcalData with structure needed by Agenda
+    const {iCalDataTimetable} = useCalendar();
 
-    //objects holding the courses displayed in the agenda
+
+    //object holding the courses displayed in the Agenda
     const [courseItemsState, setCourseItemsState] = useState({});
     //object holding the starting and ending date of the current semester
     const [calendarBoundaries, setCalendarBoundaries] = useState({
@@ -33,21 +34,16 @@ function Timetable({navigation}) {
     /**
      * UseEffect initializes the calendar with data and sets min and max boundaries for the calendar.
      * The empty dependency array causes it to run on the first mounting of the component. The data
-     * gets fetched and set to the state 'courseItemsState'. The min- and max- boundaries of the calendar
+     * is provided from CalendarContext and set to the state 'courseItemsState'. The min- and max- boundaries of the calendar
      * are set to the start and end date of the semester.
      */
     useEffect(() => {
-        async function obtainData() {
-            try {
-                //fetch the ICal Data to be displayed in the calendar
-                let eventItems = await fetchIcal();
-                setCourseItemsState(eventItems);
-                //console.log("IN TIMETABLE: Event data successfully received", /*eventItems*/);
-            } catch (e) {
-                console.log("Error obtaining event data", e);
-            }
+
+
+        if(iCalDataTimetable) {
+            setCourseItemsState(iCalDataTimetable);
         }
-        obtainData();
+
 
         //min and max date for the calendar
         const {start, end} = getSemesterDates();

@@ -1,25 +1,13 @@
 # Todos bei den TaskLists
 
-- EditTaskScreen & CreateTaskScreen - duplizierten Code / Styles auslagern?
-- EditTaskDetails Screen anelgen --> das gleiche, duplizierten Code vermeiden ja / nein?
-- TASKICONS -- nur Icons welche für die UI sind aus diesem File holen
-- Usability bezüglich des togglens von Task isDone noch weiter verbessern
+- EditTaskScreen & CreateTaskScreen - duplizierten Code / Styles auslagern? --> EditTaskDetails das gleiche, duplizierten Code vermeiden ja / nein?
+
 
 BEZÜGLICH DEM USEEFFECT FÜR INITIALIZEDATABASE: noch überlegen wo / wann dies eingesetzt werden sollte
 
 Gemeinsam Machen:
 - Wenn Tasks fertig: Über alle Styles gemeinsam drüberschauen (vor allem die Paddings in den ScreenContainern und
 den ContentBoxen abgleichen) + Responsive Design
-
-- EditTask Screen gehört noch gemacht -- wer?
-
-
-Für Später:
-- Datum bei Aufgaben hinzufügen (TaskDetails Screen)
-- Bei den Screens - EditTaskDetails hinzufügen
-- Alle Anpassungen in Sachen nach Datum filtern und anzeigen (wenn Fälligkeitsdatum
-- schon vorbei etc.) erst später wenn wir den Kalender machen
-
 
 WEITERE TODO's Performance -
 
@@ -64,7 +52,7 @@ suchen Sie das zugrunde liegende Problem und beheben Sie es zuerst.
 Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
 
 
--- Fetch Call und Kalendermethoden zusammenführen -- gemeinsam
+√ Fetch Call und Kalendermethoden zusammenführen -- gemeinsam - erledigt
 
 -- Responsive ÜBERALL!!!! Apple!!
 
@@ -91,7 +79,7 @@ Dann können Sie hinzufügen, um die Leistung zu verbessern.memo
     -- Profil weg -- Sabrina
   
 -- Stundenplan -- Jelena
-    --Loading Indicator, 
+    √ Loading Indicator - erledigt
     ! Monat oben drüber,  -- GEHT BEI AGENDA leider nicht (nur AgendaList)
     ! today button, -- GEHT BEI AGENDA leider nicht (nur AgendaList)
     √ hintergrund weiß in Darkmode?? - musste das original stylesheet von react native calendar überschreiben
