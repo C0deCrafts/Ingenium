@@ -14,10 +14,36 @@ import {useCalendar} from "../../context/CalendarContext";
 /**
  * ### Timetable Component
  *
- * This is a Screen component rendering the courses...
- * @param navigation
- * @returns {JSX.Element}
+ * This component displays a calendar with all courses for a semester.
+ * The upper part of the screen shows an expandable calendar, where all the days with courses are marked and days are clickable.
+ * The lower part of the screen shows a scrollable Agenda with all courses for a day. To achieve this behavior,
+ * the Agenda Component of the react-native-calendars library is used.
+ *
+ * #### Functionality:
+ * - **Theme Adjustment**: Utilizes the `useTheme` hook to check if the theme is dark or light and adjusts
+ * the display accordingly.
+ * - **Getting External Data**: Retrieves the course data in Ical format from the Apps backend. The course data is
+ * fetched in the CalenderContext and the iCalDataTimetable state  is accessed through the useCalendar hook in the component.
+ * - **External Links**: Provides External links for each course leading to the ILIAS platform, which provides further
+ * details about the course.
+ *
+ * #### Structure:
+ * 1. **Header with Navigation Drawer**: Includes a button that allows users to open the navigation menu.
+ * 2. **Agenda**:
+ *  - **Expandable Calendar**: A calendar that can be opened/closed from month to week view, scrolled vertically, and
+ * used to select a specific date.
+ *  - **Timetable in Agenda Format**: A list that displays all days with all the courses of a semester.
+ *
+ * #### Elements:
+ * - **CustomDrawerHeader**: A custom header component for opening the drawer navigation.
+ * - **CourseItemForAgenda**: Component to render individual course items in the agenda.
+ * - **DateBoxForAgenda**: Component to render a box for date display for each day in the agenda.
+ * - **Agenda**: Agenda component from react-native-calendars.
+ *
+ * This components goal is to organize course information, making it easy for users to manage their schedules.
  */
+
+
 
 function Timetable({navigation}) {
     //import theme, safe area insets, and window dimensions
@@ -61,8 +87,6 @@ function Timetable({navigation}) {
 
 
     /**
-     * ### Method renderDay
-     *
      * This method is passed to the renderDay prop of the Agenda component. It is responsible
      * for customizing the look of a single day in the Agenda (overrides the default look of React Native Calendars).
      * This is achieved by rendering the DateBoxForAgenda component for each day.
@@ -111,9 +135,15 @@ function Timetable({navigation}) {
     /**
      * Renders courses in the agenda.
      *
-     * @param item
-     * @param firstItemInDay
-     * @returns {JSX.Element|null}
+     * Receives the following props:
+     * @param item {{}} CourseItem object from data array of 'courseItemsState' object passed to Agendas prop 'items'.
+     * @param firstItemInDay {boolean} Boolean value indicating whether it is the first object in the data array.
+     *
+     * The first item in day prop is used render the component CourseItemsForAgenda only once (when firstItemInDay is true).
+     * As the component itself takes care of rendering one or up to multiple courses. This behaviour is necessary as
+     * in the UI only one date box should be displayed next to all the courses of a day.
+     *
+     * @returns {JSX.Element|null} Returns a CourseItemForAgendaComponent which holds all courses of a day.
      */
     const renderItem = (item, firstItemInDay) => {
         if (firstItemInDay) {
@@ -126,7 +156,12 @@ function Timetable({navigation}) {
         }
     }
 
-
+    /**
+     * Renders an empty box for days without a course in the Agenda. Is called whenever the data array under
+     * the specified date key is empty.
+     *
+     * @returns {JSX.Element} An empty Box with Box background-color corresponding to user's theme preference.
+     */
     const renderEmptyDate = () => {
         return (
             <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
@@ -139,7 +174,7 @@ function Timetable({navigation}) {
 
 
     /**
-     * sets the default locale of the calendar to German.
+     * Sets the default locale of the calendar to German.
      * @type {{today: string, dayNames: string[], monthNamesShort: string[], dayNamesShort: string[], monthNames: string[]}}
      */
     LocaleConfig.locales['de'] = {

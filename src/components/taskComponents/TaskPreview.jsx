@@ -34,7 +34,6 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  * @param isTaskCardWithNotes {boolean} Option true: The Task is displayed in a Box with border radius and the toggle Icon
  *                             the title the date and the notes are displayed.
  *                            Option false: Only the toggle Icon the title and the date are displayed.
- * @constructor
  */
 
 //If there is time: make it possible to undo the toggling - when UI effect 'task is being moved' is active user should still
