@@ -129,8 +129,8 @@ const createCourseItemArrayOfParsedIcsEvents = (courses) => {
  * Returns the start and end date for the current school semester.
  * Used to initialize the calendar  with the starting and ending date of the current school semester (should
  * only render exactly that period)
- * sommersemester: start is set to 01.02. and end is set to 31.08
- * wintersemester: start is set to 01.09. and end is set to 01.03.
+ * Sommersemester: start is set to 01.02. and end is set to 31.08
+ * Wintersemester: start is set to 01.09. and end is set to 01.03.
  * in both winter and summersemester february is rendered, as the federal states of austria have different semester breaks
  * during februrary.
  * @returns {{start, end}}

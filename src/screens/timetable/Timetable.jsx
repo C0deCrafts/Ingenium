@@ -20,35 +20,27 @@ function Timetable({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    //brauchen wir noch alle states?
 
-    const [coursesAreLoading, setCoursesAreLoading] = useState(true);
+    //objects holding the courses displayed in the agenda
     const [courseItemsState, setCourseItemsState] = useState({});
+    //object holding the starting and ending date of the current semester
     const [calendarBoundaries, setCalendarBoundaries] = useState({
         startDate: null,
         endDate: null
     });
 
 
-    /*
-    * TODO:
-    * solve getting the Virtualized list is slow to update error -- according to open issues on Github a library problem, which
-    * needs to be solved
-    *
-    * use code from calendarcontext and utils.js + add my code to those files / think of how to organize my code better
-    *
-    * check if I can simplify my code + comment and clean all my code
-    * */
-
     /**
      * UseEffect initializes the calendar with data and sets min and max boundaries for the calendar.
+     * The empty dependency array causes it to run on the first mounting of the component. The data
+     * gets fetched and set to the state 'courseItemsState'. The min- and max- boundaries of the calendar
+     * are set to the start and end date of the semester.
      */
     useEffect(() => {
         async function obtainData() {
             try {
                 //fetch the ICal Data to be displayed in the calendar
                 let eventItems = await fetchIcal();
-                setCoursesAreLoading(false);
                 setCourseItemsState(eventItems);
                 //console.log("IN TIMETABLE: Event data successfully received", /*eventItems*/);
             } catch (e) {
@@ -64,21 +56,14 @@ function Timetable({navigation}) {
         setCalendarBoundaries({startDate: calendarStart, endDate: calendarEnd});
     }, []);
 
-    /**
-     * Handler which renders the empty dates
-     * @returns {JSX.Element} am empty view element as on days without courses nothing
-     *                        should be rendered
-     */
 
-    const renderEmptyDataHandler = () => {
-        return (
-            <View style={[styles.emptyDataContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
-                <Text style={[isDarkMode? styles.textDark : styles.text, styles.textNormal]}>
-                    Für diesen Zeitraum sind keine Termine verfügbar.
-                </Text>
-            </View>
-        )
-    }
+
+    /**
+     *
+     * @param day
+     * @param item
+     * @returns {JSX.Element}
+     */
     const renderDay = (day, item) => {
         let nameOfDay;
         let date;
@@ -89,7 +74,7 @@ function Timetable({navigation}) {
         if(item) {
             isEmptyDate = false;
         }
-        //console.log(`variable day is: ${day}`);
+
         if(day){
             nameOfDay = getAbbreviatedDay(day.getDay());
             date = day.getDate().toString().padStart(2, '0');
@@ -98,7 +83,10 @@ function Timetable({navigation}) {
             isOneCurse = false;
         }
         return (
-            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCourse={isOneCurse} isEmptyDate={isEmptyDate}/>
+            <DateBoxForAgenda date={date+"."+month}
+                              weekDay={nameOfDay}
+                              isOneCourse={isOneCurse}
+                              isEmptyDate={isEmptyDate}/>
         )
     };
 
@@ -110,6 +98,13 @@ function Timetable({navigation}) {
         )
     }
 
+    /**
+     * Renders courses in the agenda.
+     *
+     * @param item
+     * @param firstItemInDay
+     * @returns {JSX.Element|null}
+     */
     const renderItem = (item, firstItemInDay) => {
         if (firstItemInDay) {
             const coursesOfDay = courseItemsState[item.courseDate];
@@ -148,23 +143,13 @@ function Timetable({navigation}) {
     };
     LocaleConfig.defaultLocale = 'de';
 
-    /**PROP RENDERITEM:
-     * Renders the courses for the agenda list.
-     * UseCallback without a dependency array, caches the function
-     * returns the same function instance after every rerender. Without it
-     * a new function instance would be created on every rerender potentially
-     * triggering other rerenders, and by that impacting performance.
-     * (Since the function does not depend on external state or variables which
-     * need to be up-to-date, it is not necessary to add dependencies)
-     */
+
     return (
         <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.container]}>
             <CustomDrawerHeader title="Stundenplan" onPress={() => navigation.openDrawer()}/>
             <View style={styles.calendarContainer}>
                 <Agenda
                     items={courseItemsState}
-                    renderEmptyData={renderEmptyDataHandler}
-                    //renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
                     renderItem={(item, firstItemInDay) => renderItem(item, firstItemInDay)}
                     renderDay={renderDay}
                     renderEmptyDate={renderEmptyDate}
@@ -172,6 +157,10 @@ function Timetable({navigation}) {
                     firstDay={1}
                     hideKnob={false}
                     showClosingKnob={true}
+                    //min- and maxDates -> in the calendat dates before and after that
+                    // are greyed out and not clickable
+                    minDate={calendarBoundaries.startDate}
+                    maxDate={calendarBoundaries.endDate}
                     theme={{
                         "stylesheet.agenda.main": {
                             reservations: {

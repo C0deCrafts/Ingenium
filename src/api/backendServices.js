@@ -3,7 +3,7 @@ import { decode as atob } from 'base-64';
 
 // Base URL of the backend - change the BASE_URL if you are in another network
 // in future change the BASE_URL to the backend hosting url
-const BASE_URL = "http://192.168.178.35:8080/ingeapp/api/v1";
+const BASE_URL = "http://192.168.1.172:8080/ingeapp/api/v1";
 
 /**
  * ### decodeJWT
