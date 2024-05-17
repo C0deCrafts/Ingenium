@@ -17,7 +17,7 @@ import {ICONS} from "../../constants/icons";
  *
  * @example
  * // Import the CourseItemForAgenda component
- * import CourseItemForAgenda from "../../components/CourseItemForAgenda";
+ * import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
  *
  * // Inside your component's render method, use the CourseItemForAgenda component like this:
  *  <CourseItemForAgenda courses={coursesOfDay}/>

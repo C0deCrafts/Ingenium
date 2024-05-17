@@ -9,10 +9,12 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  *## TaskPreview Component
  *
  * This component is used to render a customizable Preview of a task's title with toggle button and due- / completion-date
- * and the notes belonging to a task.
+ * and the notes belonging to a task. It is responsible for updating the tasks isDone property on click of the toggleIcon
+ * displayed next to the tasks. The UI will respond with a short effect, showing a message 'the task is being moved to
+ * completed tasks', after the user clicked on the toggle button, to ensure a seamless user experience.
  *
  * Display Options:
- * - It can be controlled whether the whole title or just a preview are shown (prop: isTaskTitlePreview)
+ * - It can be controlled whether the whole title or just a preview are shown (prop: isTaskTitlePreview).
  * - It can be controlled whether the date is shown (props: showDate and dateText)
  * - It can be controlled whether:
  *      - the task is displayed as a ContentCard with background (toggleIcon, title, date, notes)

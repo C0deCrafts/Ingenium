@@ -13,10 +13,21 @@ import RoundButton from "../buttons/RoundButton";
  * As well as a button for closing the Modal.
  *
  * The Modal takes following parameters:
- * @param onPressCloseModal {function}  handles the press of Modals round 'Close' Button
- * @param onPressCreateTask {function}  handles the press of Modals 'Neue Aufgabe' Button
- * @param onPressCreateList {function}  handles the press of Modals 'Neue Liste' Button
+ * @param onPressCloseModal {Function}  handles the press of Modals round 'Close' Button
+ * @param onPressCreateTask {Function}  handles the press of Modals 'Neue Aufgabe' Button
+ * @param onPressCreateList {Function}  handles the press of Modals 'Neue Liste' Button
  * @param visible {boolean} a boolean value which handles the visibility of the Modal
+ *
+ * @example
+ * // Import the AddTaskModal component
+ * import AddTaskModal from "../../components/modals/AddTaskModal";
+ *
+ * // Inside your component's render method, use the AddTaskModal component like this:
+ * <AddTaskModal
+ *                         visible={true/false}
+ *                         onPressCreateList={handleCreateList}
+ *                         onPressCreateTask={handleCreateTask}
+ *                         onPressCloseModal={handleCloseModal}
  */
 function AddTaskModal({onPressCloseModal, onPressCreateTask, onPressCreateList, visible}) {
     //providing a safe area

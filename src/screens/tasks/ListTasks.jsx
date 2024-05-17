@@ -100,7 +100,7 @@ function ListTasks({route, navigation}){
     /*
     access the parameter listId passed from the TasksMain Screen
     is a valid listId if a list was chosen
-    is null if the button "Alle" for showing all Tasks was pressed
+    is undefined if the button "Alle" for showing all Tasks was pressed
      */
     const {listId} = route.params;
 

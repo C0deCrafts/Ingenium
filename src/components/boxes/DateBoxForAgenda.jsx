@@ -21,7 +21,7 @@ import {useTheme} from "../../context/ThemeContext";
  *
  * @example
  * // Import the DateBoxForAgenda component
- * import DateBoxForAgenda from "../../components/DateBoxForAgenda";
+ * import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
  *
  * // Return the component in the renderDay handler of the Agenda for each day:
  * <DateBoxForAgenda date={"04.02"}

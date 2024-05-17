@@ -40,10 +40,12 @@ export const DatabaseProvider = ({children}) => {
         }
     }
 
-    // Function to add a new list to the database - OPTIMIZED -> I DON'T KNOW IF WE NEED - BUT WITH performance.now() WE CAN SHOW THE PERFORMANCE FOR DEBUGGING
+    // Function to add a new list to the database - OPTIMIZED -> I DON'T KNOW IF WE NEED - BUT WITH performance.now()
+    // WE CAN SHOW THE PERFORMANCE FOR DEBUGGING
     const loadLists = async () => {
         // Entferne setIsLoading Aufrufe hier, falls das Laden der Listen schnell erfolgt
-        // und die UI nicht direkt beeinflusst wird, um unnötige Rerenders zu vermeiden. (laut Chat GPT - muss noch geprüft werden ob das Sinn macht?)
+        // und die UI nicht direkt beeinflusst wird, um unnötige Rerenders zu vermeiden.
+        // (laut Chat GPT - muss noch geprüft werden ob das Sinn macht?)
         try {
             //const start = performance.now();
 
@@ -105,7 +107,14 @@ export const DatabaseProvider = ({children}) => {
         }
     }
 
-    // Function to delete a list from the database
+    /**
+     *  Function to delete a list from the database.
+     *
+     *  Calls the following methods:
+     *  deleteTaskList: from the localDatabase.js - executes the SQL-statement for deletion.
+     *  loadLists: updates the lists state by retrieving all the lists saved in the database.
+     */
+
     const deleteList = async (listId) => {
         try {
             await localDatabase().deleteTaskList(listId);
