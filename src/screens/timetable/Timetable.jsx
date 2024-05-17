@@ -133,9 +133,9 @@ function Timetable({navigation}) {
     };
 
     /**
-     * Renders courses in the agenda.
+     * This method renders courses in the agenda.
      *
-     * Receives the following props:
+     * It receives the following props:
      * @param item {{}} CourseItem object from data array of 'courseItemsState' object passed to Agendas prop 'items'.
      * @param firstItemInDay {boolean} Boolean value indicating whether it is the first object in the data array.
      *
