@@ -12,9 +12,9 @@ import {useTheme} from "../../context/ThemeContext";
  * #### Features:
  * - **Badge Count**: Allows displaying a notification count on the CardButton to highlight important information.
  *
- * @param buttonIcon Icon to be shown on the CardButton.
- * @param buttonTitle Title to be shown on the CardButton.
- * @param onPressHandler {function} A function that sets the behaviour on press event of the CardButton.
+ * @param buttonIcon - Icon to be shown on the CardButton.
+ * @param buttonTitle {string} - Title to be shown on the CardButton.
+ * @param onPressHandler {function} - A function that sets the behaviour on press event of the CardButton.
  * @param badgeCount - Count for the badge to be displayed on the CardButton.
  *
  * @example

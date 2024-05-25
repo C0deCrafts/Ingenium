@@ -1,17 +1,49 @@
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet} from "react-native";
 import CustomDrawerHeader from "../../components/buttons/CustomDrawerHeader";
 import {COLOR, DARKMODE, LIGHTMODE, SIZES} from "../../constants/styleSettings";
 import {useTheme} from "../../context/ThemeContext";
 import {useEffect, useState} from "react";
-import {fetchIcal, getSemesterDates} from "../../api/ingeapiCalendar";
-import { getDay as getAbbreviatedDay} from "../../utils/utils";
-import {
-    Agenda,
-} from "react-native-calendars";
+import { getDay as getAbbreviatedDay, getSemesterDates} from "../../utils/utils";
+import {Agenda} from "react-native-calendars";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {LocaleConfig} from "react-native-calendars/src/index";
 import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
 import DateBoxForAgenda from "../../components/boxes/DateBoxForAgenda";
+import {useCalendar} from "../../context/CalendarContext";
+
+/**
+ * ### Timetable Component
+ *
+ * This component displays a calendar with all courses for a semester.
+ * The upper part of the screen shows an expandable calendar, where all the days with courses are marked and days are clickable.
+ * The lower part of the screen shows a scrollable Agenda with all courses for a day. To achieve this behavior,
+ * the Agenda Component of the react-native-calendars library is used.
+ *
+ * #### Functionality:
+ * - **Theme Adjustment**: Utilizes the `useTheme` hook to check if the theme is dark or light and adjusts
+ * the display accordingly.
+ * - **Getting External Data**: Retrieves the course data in Ical format from the Apps backend. The course data is
+ * fetched in the CalenderContext and the iCalDataTimetable state  is accessed through the useCalendar hook in the component.
+ * - **External Links**: Provides External links for each course leading to the ILIAS platform, which provides further
+ * details about the course.
+ *
+ * #### Structure:
+ * 1. **Header with Navigation Drawer**: Includes a button that allows users to open the navigation menu.
+ * 2. **Agenda**:
+ *  - **Expandable Calendar**: A calendar that can be opened/closed from month to week view, scrolled vertically, and
+ * used to select a specific date.
+ *  - **Timetable in Agenda Format**: A list that displays all days with all the courses of a semester.
+ *
+ * #### Elements:
+ * - **CustomDrawerHeader**: A custom header component for opening the drawer navigation.
+ * - **CourseItemForAgenda**: Component to render individual course items in the agenda.
+ * - **DateBoxForAgenda**: Component to render a box for date display for each day in the agenda.
+ * - **Agenda**: Agenda component from react-native-calendars.
+ *
+ * This components goal is to organize course information, making it easy for users to manage their schedules.
+ */
+
+
 
 function Timetable({navigation}) {
     //import theme, safe area insets, and window dimensions
@@ -20,42 +52,30 @@ function Timetable({navigation}) {
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    //brauchen wir noch alle states?
+    //import the fetched IcalData with structure needed by Agenda
+    const {iCalDataTimetable} = useCalendar();
 
-    const [coursesAreLoading, setCoursesAreLoading] = useState(true);
+
+    //object holding the courses displayed in the Agenda
     const [courseItemsState, setCourseItemsState] = useState({});
+    //object holding the starting and ending date of the current semester
     const [calendarBoundaries, setCalendarBoundaries] = useState({
         startDate: null,
         endDate: null
     });
 
 
-    /*
-    * TODO:
-    * solve getting the Virtualized list is slow to update error -- according to open issues on Github a library problem, which
-    * needs to be solved
-    *
-    * use code from calendarcontext and utils.js + add my code to those files / think of how to organize my code better
-    *
-    * check if I can simplify my code + comment and clean all my code
-    * */
-
     /**
      * UseEffect initializes the calendar with data and sets min and max boundaries for the calendar.
+     * The empty dependency array causes it to run on the first mounting of the component. The data
+     * is provided from CalendarContext and set to the state 'courseItemsState'. The min- and max- boundaries of the calendar
+     * are set to the start and end date of the semester.
      */
     useEffect(() => {
-        async function obtainData() {
-            try {
-                //fetch the ICal Data to be displayed in the calendar
-                let eventItems = await fetchIcal();
-                setCoursesAreLoading(false);
-                setCourseItemsState(eventItems);
-                //console.log("IN TIMETABLE: Event data successfully received", /*eventItems*/);
-            } catch (e) {
-                console.log("Error obtaining event data", e);
-            }
+        //course data from calendar context
+        if(iCalDataTimetable) {
+            setCourseItemsState(iCalDataTimetable);
         }
-        obtainData();
 
         //min and max date for the calendar
         const {start, end} = getSemesterDates();
@@ -64,52 +84,67 @@ function Timetable({navigation}) {
         setCalendarBoundaries({startDate: calendarStart, endDate: calendarEnd});
     }, []);
 
-    /**
-     * Handler which renders the empty dates
-     * @returns {JSX.Element} am empty view element as on days without courses nothing
-     *                        should be rendered
-     */
 
-    const renderEmptyDataHandler = () => {
-        return (
-            <View style={[styles.emptyDataContainer, isDarkMode? styles.containerDark : styles.containerLight]}>
-                <Text style={[isDarkMode? styles.textDark : styles.text, styles.textNormal]}>
-                    Für diesen Zeitraum sind keine Termine verfügbar.
-                </Text>
-            </View>
-        )
-    }
+
+    /**
+     * This method is passed to the renderDay prop of the Agenda component. It is responsible
+     * for customizing the look of a single day in the Agenda (overrides the default look of React Native Calendars).
+     * This is achieved by rendering the DateBoxForAgenda component for each day.
+     *
+     * The handler receives the two props day and item from the object passed to the prop 'items' of the Agenda component.
+     * It is called for each item inside the item array of each date key  (Agenda items prop 'courseItemsState').
+     *
+     *  Day is undefined for all but the first courseItem in a day.
+     *
+     * @param day {{}} Current day's date in ISO format.
+     * @param item {{}} A courseItem object.
+     * @returns {JSX.Element}
+     */
     const renderDay = (day, item) => {
         let nameOfDay;
         let date;
         let month;
-        let isOneCurse = true;
+        let isFirstCourse = true;
         let isEmptyDate;
 
+        //if item is not undefined, it is a date with courses
+        //the emptyDate prop of the DateBoxForAgenda must be set to false
         if(item) {
             isEmptyDate = false;
         }
-        //console.log(`variable day is: ${day}`);
+
+        //if day is defined the props passed to DateBox component are initialized
         if(day){
             nameOfDay = getAbbreviatedDay(day.getDay());
             date = day.getDate().toString().padStart(2, '0');
             month = (day.getMonth() + 1).toString().padStart(2, '0');
         }else{
-            isOneCurse = false;
+            //if day is undefined, it means the function is called for another than
+            //the first item in that day - the isFirstRenderDayCall prop must be set
+            //to false, so the Date Box is not shown multiple times for the same day
+            isFirstCourse = false;
         }
         return (
-            <DateBoxForAgenda date={date+"."+month} weekDay={nameOfDay} isOneCourse={isOneCurse} isEmptyDate={isEmptyDate}/>
+            <DateBoxForAgenda date={date+"."+month}
+                              weekDay={nameOfDay}
+                              isFirstRenderDayCall={isFirstCourse}
+                              isEmptyDate={isEmptyDate}/>
         )
     };
 
-    const renderEmptyDate = () => {
-        return (
-            <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
-                <View style={isDarkMode? styles.boxDark:styles.boxLight}/>
-            </View>
-        )
-    }
-
+    /**
+     * This method renders courses in the agenda.
+     *
+     * It receives the following props:
+     * @param item {{}} CourseItem object from data array of 'courseItemsState' object passed to Agendas prop 'items'.
+     * @param firstItemInDay {boolean} Boolean value indicating whether it is the first object in the data array.
+     *
+     * The first item in day prop is used render the component CourseItemsForAgenda only once (when firstItemInDay is true).
+     * As the component itself takes care of rendering one or up to multiple courses. This behaviour is necessary as
+     * in the UI only one date box should be displayed next to all the courses of a day.
+     *
+     * @returns {JSX.Element|null} Returns a CourseItemForAgendaComponent which holds all courses of a day.
+     */
     const renderItem = (item, firstItemInDay) => {
         if (firstItemInDay) {
             const coursesOfDay = courseItemsState[item.courseDate];
@@ -121,9 +156,25 @@ function Timetable({navigation}) {
         }
     }
 
+    /**
+     * Renders an empty box for days without a course in the Agenda. Is called whenever the data array under
+     * the specified date key is empty.
+     *
+     * @returns {JSX.Element} An empty Box with Box background-color corresponding to user's theme preference.
+     */
+    const renderEmptyDate = () => {
+        return (
+            <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.boxSpacing]}>
+                <View style={isDarkMode? styles.boxDark:styles.boxLight}/>
+            </View>
+        )
+    }
+
+
+
 
     /**
-     * sets the default locale of the calendar to German.
+     * Sets the default locale of the calendar to German.
      * @type {{today: string, dayNames: string[], monthNamesShort: string[], dayNamesShort: string[], monthNames: string[]}}
      */
     LocaleConfig.locales['de'] = {
@@ -148,23 +199,17 @@ function Timetable({navigation}) {
     };
     LocaleConfig.defaultLocale = 'de';
 
-    /**PROP RENDERITEM:
-     * Renders the courses for the agenda list.
-     * UseCallback without a dependency array, caches the function
-     * returns the same function instance after every rerender. Without it
-     * a new function instance would be created on every rerender potentially
-     * triggering other rerenders, and by that impacting performance.
-     * (Since the function does not depend on external state or variables which
-     * need to be up-to-date, it is not necessary to add dependencies)
-     */
+
     return (
         <View style={[isDarkMode? styles.containerDark : styles.containerLight, styles.container]}>
             <CustomDrawerHeader title="Stundenplan" onPress={() => navigation.openDrawer()}/>
             <View style={styles.calendarContainer}>
                 <Agenda
+                    /**
+                    * expects an object of key-value pairs with following structure:
+                    * key: 'YYYY-MM-ddd' - value: [{agendaItem}, {agendaItem}]
+                    */
                     items={courseItemsState}
-                    renderEmptyData={renderEmptyDataHandler}
-                    //renderItem={useCallback((item) => <CourseItemForAgenda course={item}/>)}
                     renderItem={(item, firstItemInDay) => renderItem(item, firstItemInDay)}
                     renderDay={renderDay}
                     renderEmptyDate={renderEmptyDate}
@@ -172,7 +217,13 @@ function Timetable({navigation}) {
                     firstDay={1}
                     hideKnob={false}
                     showClosingKnob={true}
+                    //min- and maxDates -> in the calendat dates before and after that
+                    // are greyed out and not clickable
+                    minDate={calendarBoundaries.startDate}
+                    maxDate={calendarBoundaries.endDate}
+                    //styles for the customization of the calendartheme
                     theme={{
+                        //styles used to override the stylesheet of Agenda component
                         "stylesheet.agenda.main": {
                             reservations: {
                                 backgroundColor: isDarkMode ? DARKMODE.BACKGROUNDCOLOR : LIGHTMODE.BACKGROUNDCOLOR,

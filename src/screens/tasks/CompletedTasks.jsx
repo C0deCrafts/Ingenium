@@ -6,6 +6,29 @@ import {useDatabase} from "../../context/DatabaseContext";
 import TaskPreview from "../../components/taskComponents/TaskPreview";
 import {formatDate, groupTasksByCompletionDate, sortTasksByDoneDate} from "../../utils/utils";
 
+/**
+ * ### Completed Tasks Component
+ *
+ * This component displays
+ *
+ * #### Functionality:
+ * **Theme Adjustment**: Uses the `useTheme` hook to check if the theme is dark or light and changes
+ * the display to match.
+ *
+ *
+ * #### Structure:
+ * 1. **Header with Navigation Drawer**: Includes a button that lets users open the navigation menu.
+ * 2. ** **:
+ * #### Elements:
+ * - **CustomDrawerHeader**: A custom header component for opening the drawer navigation.
+ *
+ *
+ * @example
+ *  * // Import the CourseItemForAgenda component
+ *  * import CourseItemForAgenda from "../../components/CourseItemForAgenda";
+ *  *
+ *  * // Inside your component's render method, use the NextTaskBox component like this:
+ */
 function CompletedTasks({navigation}){
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;

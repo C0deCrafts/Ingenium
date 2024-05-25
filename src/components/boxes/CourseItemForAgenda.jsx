@@ -6,13 +6,34 @@ import * as Linking from "expo-linking";
 import Icon from "../Icon";
 import {ICONS} from "../../constants/icons";
 
-function CourseItemForAgenda(props) {
+
+/**
+ * ### Course Item For Agenda Component
+ *
+ * Renders courseItems for a day in the Agenda displaying the course title, time, and a details button
+ * which leads to a web resource on ILIAS platform, with further details about the course.
+ *
+ * @param courses {[]} An array holding all the courseItem objects which should be rendered for a single day.
+ *
+ * @example
+ * // Import the CourseItemForAgenda component
+ * import CourseItemForAgenda from "../../components/boxes/CourseItemForAgenda";
+ *
+ * // Inside your component's render method, use the CourseItemForAgenda component like this:
+ *  <CourseItemForAgenda courses={coursesOfDay}/>
+ *
+ */
+function CourseItemForAgenda({courses}) {
 
     const { theme } = useTheme();
     const isDarkMode = theme === DARKMODE;
 
-    const {courses} = props;
-
+    /**
+     * Handler which gets called when the user presses the
+     *
+     * @param courseURL {URL} URL leading to a resource for more information about the courseObject.
+     * @returns {Promise<void>}
+     */
     const handleOpenCourseLink = async (courseURL) => {
         //canOpenURL checks if the given URL can be opened, the Promise resolves either to true or false
         const supportedURL = await Linking.canOpenURL(courseURL);

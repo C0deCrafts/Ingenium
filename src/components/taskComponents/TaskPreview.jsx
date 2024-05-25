@@ -9,10 +9,12 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  *## TaskPreview Component
  *
  * This component is used to render a customizable Preview of a task's title with toggle button and due- / completion-date
- * and the notes belonging to a task.
+ * and the notes belonging to a task. It is responsible for updating the tasks isDone property on click of the toggleIcon
+ * displayed next to the tasks. The UI will respond with a short effect, showing a message 'the task is being moved to
+ * completed tasks', after the user clicked on the toggle button, to ensure a seamless user experience.
  *
  * Display Options:
- * - It can be controlled whether the whole title or just a preview are shown (prop: isTaskTitlePreview)
+ * - It can be controlled whether the whole title or just a preview are shown (prop: isTaskTitlePreview).
  * - It can be controlled whether the date is shown (props: showDate and dateText)
  * - It can be controlled whether:
  *      - the task is displayed as a ContentCard with background (toggleIcon, title, date, notes)
@@ -31,10 +33,9 @@ import ToggleDoneIcon from "./ToggleDoneIcon";
  * @param showDate {boolean} Flag which controls whether a due date or completion date is shown.
  * @param dateText For adding the text and date indicating when the task is due / when it was completed.
  *                 Will only be visible if showDate is set to true.
- * @param isTaskCardWithNotes {boolean} Option true: The Task is displayed in a Box with border radius and the toggle Icon
- *                             the title the date and the notes are displayed.
- *                            Option false: Only the toggle Icon the title and the date are displayed.
- * @constructor
+ * @param isTaskCardWithNotes {boolean} **Option true**: The Task is displayed in a Box with border radius and the toggle Icon
+ *                                                      the title the date and the notes are displayed.
+ *                                      **Option false**: Only the toggle Icon the title and the date are displayed.
  */
 
 //If there is time: make it possible to undo the toggling - when UI effect 'task is being moved' is active user should still
@@ -53,6 +54,16 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
     const isInitialRender = useRef(true);
 
     //effect will execute whenever one of the dependencies changes
+    /**
+     * UseEffect which executes whenever the parameters togglingIsActive, p_taskId, p_taskIsDone change.
+     * It is responsible for setting a short timeout before a tasks isDone property is updated.
+     * This is necessary as the expected behaviour is, that the user sees a message that the task is
+     * being moved, before the property is actually updated.
+     *
+     * The property isDone is updated by calling the method updateTaskIsDone from the Database Context
+     * which expects the parameters 'isDone' and 'taskId', which are props that have to be passed to the TaskPreview
+     * component.
+     */
     useEffect( () => {
 
         if(isInitialRender.current) {
@@ -86,15 +97,20 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
     //add all props and states the effect depends on to the dependency array
     }, [togglingIsActive, p_taskIsDone, p_taskId]);
 
+    /**
+     * This event handler is called on press of the toggle icon next to the task. It sets
+     * the state 'togglingIsActive' to true, which controls, if the user sees the task, or a
+     * message that the task is being moved.
+     */
     function handleToggleTask() {
         setTogglingIsActive(true);
         console.log("Handle toggle task was pressed");
     }
 
     /**
-     * Renders the correct title:
-     * - Normally it shows the title of the task
-     * - If the user clicks on the toggle button, it shows '...Aufgabe wird verschoben'
+     * This method renders the correct title for a task:
+     * - Normally it shows the title of the task.
+     * - If the user clicks on the toggle button, it shows '...Aufgabe wird verschoben'.
      */
     const showTitleOrUpdate = () => {
         if(togglingIsActive) {
@@ -120,8 +136,8 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
     }
 
     /**
-     * Renders the taskContent which is same for all Screens:
-     * toggleIcon, title and date
+     * This method renders the taskContent which is same for all Screens:
+     * toggleIcon, title and date.
      */
     const showTaskContent = () => {
         {/*Icon and title are aligned on the same height when only a preview title is shown
@@ -158,8 +174,8 @@ function TaskPreview({p_taskId, p_taskIsDone, taskTitle, taskNotes,
 
     /**
      * The prop isTaskCardWithNotes controls the final JSX returned by the component:
-     * - if it is set to false: only the toggleIcon, title and date are shown
-     * - if it is set to true: a whole content card with rounded borders and the taskNotes is shown
+     * - if it is set to false: only the toggleIcon, title and date are shown.
+     * - if it is set to true: a whole content card with rounded borders and the taskNotes is shown.
      */
     return (
             isTaskCardWithNotes ? (

@@ -19,7 +19,7 @@ import {SIZES} from "../constants/styleSettings";
  * @param size - Optional. Set the size of the SquareIcon Component
  * @param customIconSize - Optional. Set the size of the icon inside the SquareIcon Component.
  * @example
- * // Inside your component, use the BoxIcon component like this:
+ * // Inside your component, use SquareIcon component like this:
  * <SquareIcon
  *   name="example-icon"
  *   color="#FFFFFF"

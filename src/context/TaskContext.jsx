@@ -2,6 +2,8 @@ import {createContext, useContext, useState} from "react";
 
 const TaskContext = createContext({});
 
+// das kommt in den DatabaseContext, weil da alle Taskmethoden und states sind
+
 export const useTask = () => useContext(TaskContext);
 
 export const TaskProvider = ({children}) => {
