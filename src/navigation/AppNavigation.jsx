@@ -15,9 +15,9 @@ import {TaskProvider} from "../context/TaskContext";
 
 function AppNavigation() {
     const {initialized, isAuthenticated} = useAuth();
-    //Darkmode - Lightmode
+    // Dark mode - Light mode
     const {theme} = useTheme();
-    //Ladezustand
+    // Loading state
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -26,13 +26,13 @@ function AppNavigation() {
         }
     }, [initialized]);
 
-    // Statusbar-Stil basierend auf dem aktuellen Thema einstellen
+    // Set status bar style based on the current theme
     const statusBarStyle = theme === LIGHTMODE ? 'dark-content' : 'light-content';
 
     if (loading) {
-        // Ladebildschirm anzeigen, während die Authentifizierungsprüfung läuft
-        // verhindert, dass man zuerst am Loginscreen landet - so ist es optisch schöner
-        // könnte ersetzt werden durch Splashscreen
+        // Show loading screen while authentication check is running
+        // Prevents landing on the login screen first - looks nicer this way
+        // Could be replaced by a splash screen
         return (
             <LoadingComponent message={"Initialisierung läuft..."}/>
         );
@@ -42,7 +42,7 @@ function AppNavigation() {
         <NavigationContainer ref={navigationRef}>
             <StatusBar barStyle={statusBarStyle}/>
             {
-                //Nur initialisieren, wenn Benutzer authentifiziert ist
+                // Only initialize if user is authenticated
                 isAuthenticated ? (
                     <DatabaseProvider>
                         <LocationProvider>

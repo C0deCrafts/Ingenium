@@ -412,8 +412,8 @@ export default TasksMain;
 const windowWidth = Dimensions.get("window").width;
 
 function getStyles(insets) {
-    // Bestimme einen Schwellenwert für den unteren Inset. Wenn der Inset größer als dieser Wert ist,
-    // bedeutet das, dass das Gerät eine Home-Indikatorleiste oder ähnliche Features hat.
+    // Determine a threshold for the bottom inset. If the inset is greater than this value,
+    // it means the device has a home indicator bar or similar features.
     const bottomInsetAdjustment = insets.bottom > 0 ? insets.bottom - 20 : 10;
 
     return StyleSheet.create({

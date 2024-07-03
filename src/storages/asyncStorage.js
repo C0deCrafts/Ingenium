@@ -18,7 +18,7 @@ export const loadProfileImage = async () => {
     } catch (err) {
         console.error("Fehler beim Laden des Profilbildes: ", err);
     }
-    return null; // Falls kein Bild gefunden wurde oder ein Fehler aufgetreten ist
+    return null; // If no image was found or an error occurred
 };
 
 export const saveThemeMode = async (themeMode) => {
@@ -45,8 +45,8 @@ export const loadThemeMode = async () => {
 //helper function
 export const logAllStoredData = async () => {
     try {
-        const keys = await AsyncStorage.getAllKeys(); // Alle Schlüssel abrufen
-        const items = await AsyncStorage.multiGet(keys); // Alle Werte für die Schlüssel abrufen
+        const keys = await AsyncStorage.getAllKeys(); // Get all keys
+        const items = await AsyncStorage.multiGet(keys); // Get all values for the keys
         console.log('Gespeicherte Daten im AsyncStorage:', items);
     } catch (error) {
         console.error('Fehler beim Abrufen der AsyncStorage Daten:', error);
