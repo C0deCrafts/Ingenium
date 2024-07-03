@@ -30,3 +30,20 @@ Die Ingenium Education App ist ein Diplomarbeitsprojekt, das von Sabrina Huber, 
 - `react-navigation/stack`
 
 Dieses Projekt wurde im Rahmen einer Diplomarbeit an einem berufsbegleitenden IT-Kolleg bei Ingenium Education durchgeführt.
+
+### Beispiele
+Diese Bilder sind Beispiele aus der Ingenium Education App und zeigen verschiedene Funktionen und Designs der Anwendung.
+
+<p align="center">
+  <img src="src/assets/images/Group 2.png" alt="Group 2" width="200"/>
+  <img src="src/assets/images/Group 1-3.png" alt="Group 1-3" width="200"/>
+  <img src="src/assets/images/Group 8.png" alt="Group 8" width="200"/>
+  <img src="src/assets/images/Group 9.png" alt="Group 9" width="200"/>
+</p>
+<p align="center">
+  <img src="src/assets/images/Group 7-2.png" alt="Group 7-2" width="200"/>
+  <img src="src/assets/images/Group 3-2.png" alt="Group 3-2" width="200"/>
+  <img src="src/assets/images/Group 5.png" alt="Group 5" width="200"/>
+  <img src="src/assets/images/Group 4.png" alt="Group 4" width="200"/>
+</p>
+
