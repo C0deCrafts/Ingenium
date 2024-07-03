@@ -10,8 +10,8 @@ import SquareIcon from "../../components/SquareIcon";
 import {useDatabase} from "../../context/DatabaseContext";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 
-//ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
-//und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
+// NOTE: It would be great if we didn't need Save and Cancel buttons
+// and could handle this with the keyboard instead - unfortunately, that's not possible yet.
 
 /**
  * CreateList component for creating a new list.

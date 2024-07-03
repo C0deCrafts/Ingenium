@@ -18,8 +18,8 @@ import {useDatabase} from "../../context/DatabaseContext";
 import CustomButtonSmall from "../../components/buttons/CustomButtonSmall";
 import {useTask} from "../../context/TaskContext";
 
-//ACHTUNG: Hier wäre optional super, wenn wir keinen Speichern und Abbrechen Button benötigen würden
-//und das stattdessen mit der Tastatur lösen könnten - leider ist das bis jetzt noch nicht möglich
+// NOTE: It would be great if we didn't need Save and Cancel buttons
+// and could handle this with the keyboard instead - unfortunately, that's not possible yet.
 
 function CreateTask({navigation, route}) {
     const {theme} = useTheme();
@@ -48,7 +48,7 @@ function CreateTask({navigation, route}) {
     const defaultListName = lists.find(list => list.listId === defaultListId).listName;
     const [selectedListName, setSelectedListName] = useState(defaultListName); // Default list name
 
-    //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
+    // An ID used to link this with specified TextInput(s) in InputAccessoryView
     const inputAccessoryViewID = 'uniqueID'; //?
 
     // Reference for the select list modal
@@ -56,8 +56,8 @@ function CreateTask({navigation, route}) {
 
     useEffect(() => {
         updateTaskDetails({
-            listId: defaultListId, // Verwende listId aus den Parametern oder setze default auf 1
-            taskId: null, // Keine taskId, da es ein neuer Task ist
+            listId: defaultListId, // Use listId from the parameters or set default to 1
+            taskId: null, // No taskId, since it's a new task
             taskTitle: '',
             taskNotes: '',
             dueDate: '',
@@ -117,7 +117,7 @@ function CreateTask({navigation, route}) {
         selectListModalRef.current?.present();
     }
 
-    // Funktion zum Auswählen einer Liste aus dem Modal
+    // Function to select a list from the modal
     const handleListSelection = (selectedList) => {
         //setListId(selectedList.listId);
         handleChangeListId(selectedList.listId);
@@ -246,7 +246,7 @@ function CreateTask({navigation, route}) {
             <SelectListModal
                 ref={selectListModalRef}
                 onSelect={handleListSelection} // Prop for the callback function
-                lists={lists} // Liste der verfügbaren Listen zur Auswahl
+                lists={lists} // List of available lists to choose from
             />
         </View>
     )

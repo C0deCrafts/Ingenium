@@ -14,14 +14,14 @@ function CreateTaskDetails({navigation}){
     const insets = useSafeAreaInsets();
     const styles = getStyles(insets);
 
-    //taskDetails evtl. für calenderpicker anzeige des tags dueDate wenn vorhanden
+    // taskDetails possibly for calendar picker to display the due date if available
     const { taskDetails, updateTaskDetails } = useTask();
 
     const handleGoBack = async () => {
         navigation.goBack();
     };
 
-    // Funktion, um das Datum vom Kalender zu empfangen
+    // Function to receive the date from the calendar
     const handleSelectedDate = (date) => {
         updateTaskDetails({
             dueDate: date

@@ -24,14 +24,14 @@ function EditTask({navigation, route}){
     const listOfTaskToEdit = lists.find(list => list.listId === taskToEdit.listId);
     const [selectedListName, setSelectedListName] = useState(listOfTaskToEdit.listName); // Default list name
 
-    //Eine ID, die verwendet wird, um dies mit angegebenen TextInput(s) zu verknüpfen.InputAccessoryView
+    // An ID used to link this with specified TextInput(s) in InputAccessoryView
     const inputAccessoryViewID = 'uniqueID'; //?
     // Reference for the select list modal
     const selectListModalRef = useRef(null); //?
 
     const {taskDetails, updateTaskDetails} = useTask();
 
-    // Update-Funktionen, die du anstelle der lokalen set-Funktionen verwenden kannst - TaskContext wird aktualisiert
+    // Update functions that you can use instead of local set functions - TaskContext will be updated
     const handleChangeTaskTitle = (title) => {
         updateTaskDetails({ taskTitle: title });
     };
@@ -46,12 +46,12 @@ function EditTask({navigation, route}){
 
     useEffect(() => {
         if(taskToEdit){
-            updateTaskDetails(taskToEdit);// Hier wird die initialen Daten in den Context geladen
+            updateTaskDetails(taskToEdit); // Load initial data into the context
         }
     }, [taskToEdit]);
 
     const handleGoBack = () => {
-        //Evtl Abfrage ob wirklich alle Änderungen nicht gepseichert werden sollen
+        // Possibly check if all changes should really be discarded
         if (taskDetails.taskTitle.trim() === "") {
             navigation.goBack();
             return;
@@ -100,7 +100,7 @@ function EditTask({navigation, route}){
         selectListModalRef.current?.present();
     }
 
-    // Funktion zum Auswählen einer Liste aus dem Modal
+    // Function to select a list from the modal
     const handleListSelection = (selectedList) => {
         handleChangeListId(selectedList.listId);
         setSelectedListName(selectedList.listName);
@@ -203,7 +203,7 @@ function EditTask({navigation, route}){
             <SelectListModal
                 ref={selectListModalRef}
                 onSelect={handleListSelection} // Prop for the callback function
-                lists={lists} // Liste der verfügbaren Listen zur Auswahl
+                lists={lists} // List of available lists to choose from
             />
         </View>
     )
