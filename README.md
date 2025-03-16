@@ -1,21 +1,21 @@
 # Ingenium Education App
 
-## Überblick
-Die Ingenium Education App ist ein Diplomarbeitsprojekt, das von Sabrina Huber, Markus Mayerhofer und Jelena Turk im Rahmen eines berufsbegleitenden IT-Kollegs bei Ingenium Education entwickelt wurde. Ziel des Projekts ist es, die Studienorganisation für Studierende und Lehrende zu verbessern, indem eine zentrale mobile Plattform bereitgestellt wird.
+## Overview
+The Ingenium Education App is a diploma project developed by Sabrina Huber, Markus Mayerhofer, and Jelena Turk as part of a part-time IT college program at Ingenium Education. The goal of this project is to improve study organization for students and teachers by providing a central mobile platform.
 
-## Hauptfunktionen
-- **Login:** Benutzer können sich mit ihren ILIAS-Zugangsdaten einloggen, um personalisierte Daten abzurufen.
-- **Dashboard:** Bietet eine Übersicht über Kurse, Prüfungstermine und Aufgaben.
-- **Aufgabenverwaltung:** Ermöglicht das Erstellen und Verwalten von To-Do-Listen.
-- **Stundenplan:** Zeigt den aktuellen Stundenplan an.
-- **Personalisierung:** Funktionen wie persönliche Begrüßung, Profilbild, Motivationsnachrichten und aktuelles Wetter am Standort des Nutzers.
-- **Kontakt:** Ermöglicht die Navigation zur Schule über Apple Karten oder Google Maps.
-- **Dark/Light Mode:** Unterstützung für sowohl dunklen als auch hellen Modus zur Anpassung an die Benutzerpräferenz.
+## Main Features
+- **Login:** Users can log in with their ILIAS credentials to access personal data.
+- **Dashboard:** Provides an overview of courses, exam dates, and tasks.
+- **Task Management:** Allows users to create and manage to-do lists.
+- **Timetable:** Displays the current class schedule.
+- **Personalization:** Includes a personal greeting, profile picture, motivational messages, and current weather at the user's location.
+- **Contact:** Users can navigate to the school using Apple Maps or Google Maps.
+- **Dark/Light Mode:** Supports both dark and light modes for user preference.
 
-## Technologien
-- **Frontend:** Entwickelt mit React Native und Expo.
+## Technologies
+- **Frontend:** Developed with React Native and Expo.
 
-## Wichtige Abhängigkeiten
+## Important Dependencies
 - `axios`
 - `expo-file-system`
 - `expo-image-picker`
@@ -29,10 +29,10 @@ Die Ingenium Education App ist ein Diplomarbeitsprojekt, das von Sabrina Huber, 
 - `react-navigation/native`
 - `react-navigation/stack`
 
-Dieses Projekt wurde im Rahmen einer Diplomarbeit an einem berufsbegleitenden IT-Kolleg bei Ingenium Education durchgeführt.
+This project was developed as part of a diploma thesis at a part-time IT college program at Ingenium Education.
 
-### Beispiele
-Diese Bilder sind Beispiele aus der Ingenium Education App und zeigen verschiedene Funktionen und Designs der Anwendung.
+## Examples
+These images are examples from the Ingenium Education App, showing different functions and designs of the application.
 
 <p align="center">
   <img src="src/assets/images/Group 2.png" alt="Group 2" width="200"/>
